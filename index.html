@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HeadHunters — Гильдия RF Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #05070d;
+  --bg-secondary: #0a0f1c;
+  --bg-tertiary: #111827;
+  --accent-cyan: #00e5ff;
+  --accent-magenta: #ff00aa;
+  --accent-gold: #ffb800;
+  --accent-green: #00ff88;
+  --accent-red: #ff3366;
+  --text-primary: #e8f0ff;
+  --text-secondary: #8899b8;
+  --border-glow: rgba(0, 229, 255, 0.4);
+  --gradient-main: linear-gradient(135deg, #00e5ff 0%, #ff00aa 100%);
+  --gradient-gold: linear-gradient(135deg, #ffb800 0%, #ff6b00 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animated background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 0, 170, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 184, 0, 0.04) 0%, transparent 70%);
+  z-index: -2;
+  animation: bgPulse 15s ease-in-out infinite;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes bgPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* HEADER */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(5, 7, 13, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-glow);
+  box-shadow: 0 4px 30px rgba(0, 229, 255, 0.15);
+}
+
+.header-inner {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--gradient-main);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--bg-primary);
+  animation: logoSpin 20s linear infinite;
+  position: relative;
+}
+
+.logo-icon::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--bg-primary);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.logo-icon span {
+  position: relative;
+  z-index: 1;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes logoSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.logo-text h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+}
+
+.logo-text p {
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+nav {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  padding: 10px 18px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+
+.nav-btn:hover {
+  color: var(--accent-cyan);
+  background: rgba(0, 229, 255, 0.1);
+}
+
+.nav-btn.active {
+  color: var(--accent-cyan);
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+}
+
+.user-panel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 15px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid var(--border-glow);
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.user-panel .status {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* MAIN */
+main {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 30px;
+  min-height: calc(100vh - 100px);
+}
+
+.page { display: none; animation: fadeIn 0.5s; }
+.page.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-glow);
+  position: relative;
+}
+
+.page-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100px;
+  height: 2px;
+  background: var(--gradient-main);
+  box-shadow: 0 0 10px var(--accent-cyan);
+}
+
+.page-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+
+/* CARDS */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(10, 15, 28, 0.8) 100%);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  padding: 25px;
+  position: relative;
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  border-top: 2px solid var(--accent-cyan);
+  border-left: 2px solid var(--accent-cyan);
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  border-bottom: 2px solid var(--accent-magenta);
+  border-right: 2px solid var(--accent-magenta);
+}
+
+.card:hover {
+  border-color: var(--accent-cyan);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(0, 229, 255, 0.2);
+}
+
+.card-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+.card-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 5px;
+}
+
+.card-label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* TABLES */
+.table-container {
+  background: rgba(10, 15, 28, 0.6);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead {
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.15) 0%, rgba(255, 0, 170, 0.1) 100%);
+}
+
+th {
+  padding: 15px;
+  text-align: left;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border-glow);
+  white-space: nowrap;
+}
+
+td {
+  padding: 12px 15px;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.08);
+  color: var(--text-primary);
+}
+
+tbody tr {
+  transition: all 0.2s;
+}
+
+tbody tr:hover {
+  background: rgba(0, 229, 255, 0.05);
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* BADGES */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.badge-admin { background: var(--gradient-main); color: var(--bg-primary); }
+.badge-player { background: rgba(0, 229, 255, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+.badge-success { background: rgba(0, 255, 136, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+.badge-warning { background: rgba(255, 184, 0, 0.15); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+.badge-danger { background: rgba(255, 51, 102, 0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
+.badge-info { background: rgba(0, 229, 255, 0.15); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+
+/* STATS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat-box {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(10, 15, 28, 0.8) 100%);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  padding: 20px;
+  position: relative;
+}
+
+.stat-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--gradient-main);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+/* PLAYER PROFILE */
+.player-card {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(10, 15, 28, 0.9) 100%);
+  border: 1px solid var(--border-glow);
+  padding: 30px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.player-header {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-glow);
+}
+
+.player-avatar {
+  width: 100px;
+  height: 100px;
+  background: var(--gradient-main);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--bg-primary);
+  flex-shrink: 0;
+}
+
+.player-info h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  color: var(--accent-cyan);
+  letter-spacing: 2px;
+}
+
+.player-info .meta {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.player-info .meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.equip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.equip-slot {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  padding: 15px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.equip-slot:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.equip-slot .slot-name {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.equip-slot .slot-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  color: var(--accent-cyan);
+  word-break: break-word;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.stat-item {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 15px;
+  text-align: center;
+  border-left: 3px solid var(--accent-cyan);
+}
+
+.stat-item .stat-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.stat-item .stat-name {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
+
+/* BUTTONS */
+.btn {
+  background: transparent;
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  padding: 10px 20px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+  box-shadow: 0 0 20px var(--accent-cyan);
+}
+
+.btn-primary {
+  background: var(--gradient-main);
+  border: none;
+  color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+}
+
+/* LOADING */
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(0, 229, 255, 0.1);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loader-text {
+  color: var(--text-secondary);
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* EMPTY STATE */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+.empty-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.05) 0%, rgba(255, 0, 170, 0.05) 100%);
+  border: 1px solid var(--border-glow);
+  margin-bottom: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(0, 229, 255, 0.1), transparent, rgba(255, 0, 170, 0.1), transparent);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 5px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat .num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+}
+
+.hero-stat .lbl {
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+
+/* LOGIN MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.active { display: flex; }
+
+.modal-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--accent-cyan);
+  padding: 40px;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 0 50px rgba(0, 229, 255, 0.3);
+}
+
+.modal-content h3 {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--accent-cyan);
+  margin-bottom: 25px;
+  letter-spacing: 2px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  color: var(--text-primary);
+  padding: 12px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  transition: all 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--accent-cyan);
+  padding: 15px 25px;
+  color: var(--text-primary);
+  z-index: 2000;
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+  transform: translateX(400px);
+  transition: transform 0.3s;
+}
+
+.toast.show { transform: translateX(0); }
+
+.toast.error { border-color: var(--accent-red); }
+.toast.success { border-color: var(--accent-green); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .header-inner { flex-direction: column; align-items: stretch; }
+  nav { justify-content: center; }
+  .hero h2 { font-size: 32px; }
+  .page-title { font-size: 24px; }
+  main { padding: 15px; }
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-cyan); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-magenta); }
+
+/* DKP BAR */
+.dkp-bar {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.dkp-bar-fill {
+  height: 100%;
+  background: var(--gradient-main);
+  border-radius: 4px;
+  transition: width 1s;
+}
+
+/* AUCTION */
+.auction-item {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(10, 15, 28, 0.9) 100%);
+  border: 1px solid rgba(255, 184, 0, 0.3);
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 15px;
+  transition: all 0.3s;
+}
+
+.auction-item:hover {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+}
+
+.auction-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--gradient-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+}
+
+.auction-info { flex: 1; }
+.auction-info h4 {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--accent-gold);
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+.auction-info p { color: var(--text-secondary); font-size: 13px; }
+
+.auction-price {
+  text-align: right;
+}
+
+.auction-price .current {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px;
+  color: var(--accent-gold);
+}
+
+.auction-price .label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* CONFIG PANEL */
+.config-panel {
+  background: rgba(255, 184, 0, 0.05);
+  border: 1px solid var(--accent-gold);
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.config-panel h3 {
+  color: var(--accent-gold);
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 15px;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.config-panel input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 184, 0, 0.3);
+  color: var(--text-primary);
+  padding: 10px;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.config-panel .hint {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+.config-panel .hint a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="navigate('home')">
+      <div class="logo-icon"><span>HH</span></div>
+      <div class="logo-text">
+        <h1>HEADHUNTERS</h1>
+        <p>RF Online Guild System</p>
+      </div>
+    </div>
+    <nav id="mainNav">
+      <button class="nav-btn active" data-page="home">Главная</button>
+      <button class="nav-btn" data-page="players">Игроки</button>
+      <button class="nav-btn" data-page="dkp">DKP</button>
+      <button class="nav-btn" data-page="auction">Аукцион</button>
+      <button class="nav-btn" data-page="queues">Очереди</button>
+      <button class="nav-btn" data-page="events">Рейды</button>
+      <button class="nav-btn" data-page="loot">Лут</button>
+      <button class="nav-btn" data-page="activity">Активность</button>
+    </nav>
+    <div class="user-panel" id="userPanel">
+      <span class="status"></span>
+      <span id="userName">Гость</span>
+      <button class="btn" style="padding: 5px 12px; font-size: 11px;" onclick="showLogin()" id="loginBtn">Вход</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-content">
+      <h2>HEADHUNTERS</h2>
+      <p>Элитная гильдия RF Online · Единая экосистема управления</p>
+      <div class="hero-stats" id="heroStats">
+        <div class="hero-stat"><div class="num" id="statPlayers">—</div><div class="lbl">Игроков</div></div>
+        <div class="hero-stat"><div class="num" id="statEvents">—</div><div class="lbl">Рейдов</div></div>
+        <div class="hero-stat"><div class="num" id="statLoot">—</div><div class="lbl">Предметов</div></div>
+        <div class="hero-stat"><div class="num" id="statAuction">—</div><div class="lbl">Аукционов</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-grid" id="quickStats"></div>
+
+  <div class="grid" id="recentActivity">
+    <div class="card">
+      <div class="card-title">Последние рейды</div>
+      <div id="recentEvents"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Топ DKP</div>
+      <div id="topDkp"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Активные аукционы</div>
+      <div id="activeAuctions"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYERS -->
+<div class="page" id="page-players">
+  <div class="page-header">
+    <div class="page-title">Состав гильдии</div>
+    <div class="page-subtitle">Реестр бойцов · Экипировка · Характеристики</div>
+  </div>
+  <div class="table-container">
+    <div class="table-scroll">
+      <table id="playersTable">
+        <thead><tr>
+          <th>Никнейм</th><th>БМ</th><th>Уровень</th><th>Профессия</th><th>Оружие</th>
+          <th>Атака</th><th>Защита</th><th>Меткость</th><th>Уклонение</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="playerDetail"></div>
+</div>
+
+<!-- DKP -->
+<div class="page" id="page-dkp">
+  <div class="page-header">
+    <div class="page-title">Система DKP</div>
+    <div class="page-subtitle">Dragon Kill Points · Баланс · История операций</div>
+  </div>
+  <div class="stats-grid" id="dkpStats"></div>
+  <div class="table-container">
+    <div class="table-scroll">
+      <table id="dkpTable">
+        <thead><tr>
+          <th>Никнейм</th><th>Текущий баланс</th><th>Заработано</th><th>Потрачено</th><th>Последний рейд</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <h3 style="font-family: Orbitron; color: var(--accent-cyan); margin: 30px 0 15px; letter-spacing: 2px;">ИСТОРИЯ ОПЕРАЦИЙ</h3>
+  <div class="table-container">
+    <div class="table-scroll">
+      <table id="dkpHistoryTable">
+        <thead><tr>
+          <th>Дата</th><th>Никнейм</th><th>Тип</th><th>Сумма</th><th>Причина</th><th>Админ</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- AUCTION -->
+<div class="page" id="page-auction">
+  <div class="page-header">
+    <div class="page-title">Аукцион</div>
+    <div class="page-subtitle">Торговая площадка гильдии</div>
+  </div>
+  <div id="auctionList"></div>
+</div>
+
+<!-- QUEUES -->
+<div class="page" id="page-queues">
+  <div class="page-header">
+    <div class="page-title">Очереди</div>
+    <div class="page-subtitle">Регистрация на мероприятия · Распределение слотов</div>
+  </div>
+  <div id="queuesList"></div>
+</div>
+
+<!-- EVENTS -->
+<div class="page" id="page-events">
+  <div class="page-header">
+    <div class="page-title">Мероприятия</div>
+    <div class="page-subtitle">Рейды · Базовые DKP · Статистика посещений</div>
+  </div>
+  <div class="table-container">
+    <div class="table-scroll">
+      <table id="eventsTable">
+        <thead><tr>
+          <th>ID</th><th>Название</th><th>Базовые DKP</th><th>Дата</th><th>Создатель</th><th>Статус</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <h3 style="font-family: Orbitron; color: var(--accent-cyan); margin: 30px 0 15px; letter-spacing: 2px;">ПОСЕЩЕНИЯ</h3>
+  <div class="table-container">
+    <div class="table-scroll">
+      <table id="attendanceTable">
+        <thead><tr>
+          <th>Мероприятие</th><th>Ник</th><th>БМ</th><th>Коэффициент</th><th>Начислено DKP</th><th>Дата</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- LOOT -->
+<div class="page" id="page-loot">
+  <div class="page-header">
+    <div class="page-title">Статистика лута</div>
+    <div class="page-subtitle">Распределение добычи · Источники</div>
+  </div>
+  <div class="table-container">
+    <div class="table-scroll">
+      <table id="lootTable">
+        <thead><tr>
+          <th>Дата</th><th>Ник</th><th>Тип</th><th>Название</th><th>Источник</th><th>Детали</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ACTIVITY -->
+<div class="page" id="page-activity">
+  <div class="page-header">
+    <div class="page-title">Активность</div>
+    <div class="page-subtitle">Лог действий участников</div>
+  </div>
+  <div class="table-container">
+    <div class="table-scroll">
+      <table id="activityTable">
+        <thead><tr>
+          <th>Дата</th><th>Ник</th><th>Тип действия</th><th>Описание</th><th>Детали</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIG (admin) -->
+<div class="page" id="page-config">
+  <div class="page-header">
+    <div class="page-title">Настройки</div>
+    <div class="page-subtitle">Подключение к Google Sheets</div>
+  </div>
+  <div class="config-panel">
+    <h3>⚙ ИСТОЧНИК ДАННЫХ</h3>
+    <label style="color: var(--text-secondary); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 8px;">ID Google Таблицы</label>
+    <input type="text" id="sheetIdInput" placeholder="Например: 1A2B3cD4eF5gH6iJ7kL8mN9oP0qR...">
+    <div class="hint">
+      <p style="margin-top: 10px;">📌 <strong>Как подключить:</strong></p>
+      <p>1. Открой свою Google Таблицу "HeadHunters — База данных"</p>
+      <p>2. Нажми <strong>«Файл» → «Поделиться» → «Опубликовать в интернете»</strong> (или сделай доступ "Все, у кого есть ссылка")</p>
+      <p>3. Скопируй ID из адресной строки: <code>docs.google.com/spreadsheets/d/<strong style="color: var(--accent-gold);">ЭТОТ_ID</strong>/edit</code></p>
+      <p>4. Вставь ID выше и нажми «Сохранить»</p>
+      <p style="margin-top: 10px;">⚠ Важно: названия листов должны точно совпадать: <code>Пользователи</code>, <code>Игроки_норма</code>, <code>Аукцион</code>, <code>Очереди</code>, <code>Очередь_Участники</code>, <code>DKP_Баланс</code>, <code>DKP_История</code>, <code>Мероприятия</code>, <code>Посещения</code>, <code>Статистика_лута</code>, <code>Активность</code></p>
+    </div>
+    <button class="btn btn-primary" style="margin-top: 20px;" onclick="saveConfig()">Сохранить и загрузить</button>
+  </div>
+</div>
+
+</main>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <h3>⚡ Авторизация</h3>
+    <div class="form-group">
+      <label>Никнейм</label>
+      <input type="text" id="loginNick" placeholder="Введите никнейм">
+    </div>
+    <div class="form-group">
+      <label>Пароль</label>
+      <input type="password" id="loginPass" placeholder="Введите пароль">
+    </div>
+    <button class="btn btn-primary" style="width: 100%;" onclick="doLogin()">Войти в систему</button>
+    <button class="btn" style="width: 100%; margin-top: 10px;" onclick="hideLogin()">Отмена</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ КОНФИГУРАЦИЯ ============
+const CONFIG = {
+  sheetId: localStorage.getItem('hh_sheet_id') || '',
+  sheets: ['Пользователи','Игроки_норма','Аукцион','Очереди','Очередь_Участники','DKP_Баланс','DKP_История','Мероприятия','Посещения','Скриншоты','Активность','История_БМ','Статистика_лута']
+};
+
+let DATA = {};
+let currentUser = JSON.parse(localStorage.getItem('hh_user') || 'null');
+
+// ============ GOOGLE SHEETS API ============
+async function fetchSheet(sheetName) {
+  if (!CONFIG.sheetId) return [];
+  const url = `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+  try {
+    const res = await fetch(url);
+    const text = await res.text();
+    const json = JSON.parse(text.substring(47, text.length - 2));
+    if (!json.table || !json.table.cols) return [];
+    const headers = json.table.cols.map(c => c.label || c.id);
+    return json.table.rows.map(r => {
+      const obj = {};
+      headers.forEach((h, i) => {
+        const cell = r.c[i];
+        obj[h] = cell ? (cell.f || cell.v || '') : '';
+      });
+      return obj;
+    });
+  } catch (e) {
+    console.error(`Error loading ${sheetName}:`, e);
+    return [];
+  }
+}
+
+async function loadAllData() {
+  if (!CONFIG.sheetId) {
+    showToast('Укажи ID Google Таблицы в настройках', 'error');
+    navigate('config');
+    return;
+  }
+  showLoader();
+  const results = await Promise.all(CONFIG.sheets.map(s => fetchSheet(s)));
+  CONFIG.sheets.forEach((name, i) => DATA[name] = results[i]);
+  renderAll();
+  showToast('Данные загружены', 'success');
+}
+
+function showLoader() {
+  document.querySelectorAll('.page.active').forEach(p => {
+    if (!p.querySelector('.loader')) {
+      const l = document.createElement('div');
+      l.className = 'loader';
+      l.innerHTML = '<div class="spinner"></div><div class="loader-text">Загрузка данных...</div>';
+      p.prepend(l);
+      setTimeout(() => l.remove(), 1500);
+    }
+  });
+}
+
+// ============ НАВИГАЦИЯ ============
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+  const btn = document.querySelector(`.nav-btn[data-page="${page}"]`);
+  if (btn) btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => navigate(btn.dataset.page));
+});
+
+// ============ РЕНДЕРИНГ ============
+function renderAll() {
+  renderHome();
+  renderPlayers();
+  renderDkp();
+  renderAuction();
+  renderQueues();
+  renderEvents();
+  renderLoot();
+  renderActivity();
+}
+
+function renderHome() {
+  const players = DATA['Игроки_норма'] || [];
+  const events = DATA['Мероприятия'] || [];
+  const loot = DATA['Статистика_лута'] || [];
+  const auction = DATA['Аукцион'] || [];
+  const dkp = DATA['DKP_Баланс'] || [];
+
+  document.getElementById('statPlayers').textContent = players.length;
+  document.getElementById('statEvents').textContent = events.length;
+  document.getElementById('statLoot').textContent = loot.length;
+  document.getElementById('statAuction').textContent = auction.length;
+
+  const totalDkp = dkp.reduce((s, d) => s + (parseFloat(d['Всего заработано']) || 0), 0);
+  const activeQueues = (DATA['Очереди'] || []).filter(q => q['Статус'] === 'Активна' || q['Статус'] === 'active').length;
+
+  document.getElementById('quickStats').innerHTML = `
+    <div class="stat-box"><div class="stat-label">Общий DKP</div><div class="stat-value">${totalDkp.toLocaleString()}</div></div>
+    <div class="stat-box"><div class="stat-label">Активных очередей</div><div class="stat-value">${activeQueues}</div></div>
+    <div class="stat-box"><div class="stat-label">Всего лута</div><div class="stat-value">${loot.length}</div></div>
+    <div class="stat-box"><div class="stat-label">Рейдов проведено</div><div class="stat-value">${events.filter(e => e['Статус'] === 'Завершено' || e['Статус'] === 'Завершен').length}</div></div>
+  `;
+
+  // Recent events
+  const recent = events.slice(-5).reverse();
+  document.getElementById('recentEvents').innerHTML = recent.length ? recent.map(e => `
+    <div style="padding: 10px 0; border-bottom: 1px solid rgba(0,229,255,0.1);">
+      <div style="color: var(--accent-cyan); font-weight: 600;">${e['Название'] || '—'}</div>
+      <div style="font-size: 12px; color: var(--text-secondary);">${e['Дата'] || ''} · ${e['Базовые DKP'] || 0} DKP</div>
+    </div>
+  `).join('') : '<div class="empty">Нет данных</div>';
+
+  // Top DKP
+  const top = [...dkp].sort((a, b) => (parseFloat(b['Текущий баланс']) || 0) - (parseFloat(a['Текущий баланс']) || 0)).slice(0, 5);
+  const maxDkp = top[0] ? parseFloat(top[0]['Текущий баланс']) || 1 : 1;
+  document.getElementById('topDkp').innerHTML = top.length ? top.map(d => `
+    <div style="padding: 10px 0; border-bottom: 1px solid rgba(0,229,255,0.1);">
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--accent-gold); font-weight: 600;">${d['Никнейм']}</span>
+        <span style="color: var(--accent-cyan); font-family: Orbitron;">${parseFloat(d['Текущий баланс']) || 0}</span>
+      </div>
+      <div class="dkp-bar"><div class="dkp-bar-fill" style="width: ${(parseFloat(d['Текущий баланс']) / maxDkp * 100)}%"></div></div>
+    </div>
+  `).join('') : '<div class="empty">Нет данных</div>';
+
+  // Active auctions
+  const active = auction.slice(0, 5);
+  document.getElementById('activeAuctions').innerHTML = active.length ? active.map(a => `
+    <div style="padding: 10px 0; border-bottom: 1px solid rgba(0,229,255,0.1);">
+      <div style="color: var(--accent-gold); font-weight: 600;">${a['Предмет'] || '—'}</div>
+      <div style="font-size: 12px; color: var(--text-secondary);">Ставка: ${a['Текущая ставка'] || a['Стартовая цена'] || 0} · ${a['Лучший игрок'] || 'Нет ставок'}</div>
+    </div>
+  `).join('') : '<div class="empty">Нет активных аукционов</div>';
+}
+
+function renderPlayers() {
+  const players = DATA['Игроки_норма'] || [];
+  const tbody = document.querySelector('#playersTable tbody');
+  tbody.innerHTML = players.length ? players.map((p, i) => `
+    <tr onclick="showPlayer(${i})" style="cursor: pointer;">
+      <td><strong style="color: var(--accent-cyan);">${p['Никнейм'] || '—'}</strong></td>
+      <td>${p['БМ'] || '—'}</td>
+      <td>${p['Уровень'] || '—'}</td>
+      <td>${p['Профессия'] || '—'}</td>
+      <td>${p['Оружие'] || '—'}</td>
+      <td style="color: var(--accent-red);">${p['Атака'] || 0}</td>
+      <td style="color: var(--accent-cyan);">${p['Защита'] || 0}</td>
+      <td style="color: var(--accent-gold);">${p['Меткость'] || 0}</td>
+      <td style="color: var(--accent-green);">${p['Уклонение'] || 0}</td>
+    </tr>
+  `).join('') : '<tr><td colspan="9" class="empty">Нет данных об игроках</td></tr>';
+}
+
+function showPlayer(idx) {
+  const p = (DATA['Игроки_норма'] || [])[idx];
+  if (!p) return;
+  const equipSlots = ['Шея','Грудь','Штаны','Колени','Венец','Серьга','Ожерелье','Браслет','Кольцо','Привод','Звездочет','Nona','Биокостюм','Ровер'];
+  const initial = (p['Никнейм'] || '?')[0].toUpperCase();
+  document.getElementById('playerDetail').innerHTML = `
+    <div class="player-card">
+      <div class="player-header">
+        <div class="player-avatar">${initial}</div>
+        <div class="player-info">
+          <h2>${p['Никнейм'] || '—'}</h2>
+          <div class="meta">
+            <div class="meta-item">⚔ <strong>${p['Профессия'] || '—'}</strong></div>
+            <div class="meta-item">🎖 Уровень: <strong>${p['Уровень'] || '—'}</strong></div>
+            <div class="meta-item">🛡 БМ: <strong>${p['БМ'] || '—'}</strong></div>
+            <div class="meta-item">🗡 ${p['Оружие'] || '—'}</div>
+          </div>
+        </div>
+      </div>
+      <h3 style="font-family: Orbitron; color: var(--accent-cyan); margin-bottom: 15px; letter-spacing: 2px;">ЭКИПИРОВКА</h3>
+      <div class="equip-grid">
+        ${equipSlots.map(s => `
+          <div class="equip-slot">
+            <div class="slot-name">${s}</div>
+            <div class="slot-value">${p[s] || '—'}</div>
+          </div>
+        `).join('')}
+      </div>
+      <h3 style="font-family: Orbitron; color: var(--accent-cyan); margin: 25px 0 15px; letter-spacing: 2px;">ХАРАКТЕРИСТИКИ</h3>
+      <div class="stats-row">
+        <div class="stat-item"><div class="stat-num">${p['Атака'] || 0}</div><div class="stat-name">Атака</div></div>
+        <div class="stat-item"><div class="stat-num">${p['Защита'] || 0}</div><div class="stat-name">Защита</div></div>
+        <div class="stat-item"><div class="stat-num">${p['Меткость'] || 0}</div><div class="stat-name">Меткость</div></div>
+        <div class="stat-item"><div class="stat-num">${p['Уклонение'] || 0}</div><div class="stat-name">Уклонение</div></div>
+      </div>
+    </div>
+  `;
+  document.getElementById('playerDetail').scrollIntoView({behavior: 'smooth'});
+}
+
+function renderDkp() {
+  const dkp = DATA['DKP_Баланс'] || [];
+  const history = DATA['DKP_История'] || [];
+  const totalEarned = dkp.reduce((s, d) => s + (parseFloat(d['Всего заработано']) || 0), 0);
+  const totalSpent = dkp.reduce((s, d) => s + (parseFloat(d['Всего потрачено']) || 0), 0);
+
+  document.getElementById('dkpStats').innerHTML = `
+    <div class="stat-box"><div class="stat-label">Всего игроков</div><div class="stat-value">${dkp.length}</div></div>
+    <div class="stat-box"><div class="stat-label">Заработано DKP</div><div class="stat-value">${totalEarned.toLocaleString()}</div></div>
+    <div class="stat-box"><div class="stat-label">Потрачено DKP</div><div class="stat-value">${totalSpent.toLocaleString()}</div></div>
+    <div class="stat-box"><div class="stat-label">Операций</div><div class="stat-value">${history.length}</div></div>
+  `;
+
+  document.querySelector('#dkpTable tbody').innerHTML = dkp.length ? [...dkp].sort((a,b) => (parseFloat(b['Текущий баланс'])||0) - (parseFloat(a['Текущий баланс'])||0)).map(d => `
+    <tr>
+      <td><strong style="color: var(--accent-cyan);">${d['Никнейм']}</strong></td>
+      <td style="font-family: Orbitron; color: var(--accent-gold); font-size: 18px;">${parseFloat(d['Текущий баланс']) || 0}</td>
+      <td style="color: var(--accent-green);">+${parseFloat(d['Всего заработано']) || 0}</td>
+      <td style="color: var(--accent-red);">-${parseFloat(d['Всего потрачено']) || 0}</td>
+      <td>${d['Последний рейд'] || '—'}</td>
+    </tr>
+  `).join('') : '<tr><td colspan="5" class="empty">Нет данных</td></tr>';
+
+  document.querySelector('#dkpHistoryTable tbody').innerHTML = history.length ? history.map(h => {
+    const type = (h['Тип операции'] || '').toLowerCase();
+    const sum = parseFloat(h['Сумма']) || 0;
+    const badge = type.includes('потрач') || type.includes('списан') || sum < 0 ? 'badge-danger' : 'badge-success';
+    return `
+      <tr>
+        <td>${h['Дата'] || '—'}</td>
+        <td><strong style="color: var(--accent-cyan);">${h['Никнейм']}</strong></td>
+        <td><span class="badge ${badge}">${h['Тип операции']}</span></td>
+        <td style="font-family: Orbitron; color: ${sum < 0 ? 'var(--accent-red)' : 'var(--accent-green)'};">${sum > 0 ? '+' : ''}${sum}</td>
+        <td>${h['Причина'] || '—'}</td>
+        <td>${h['Админ'] || '—'}</td>
+      </tr>
+    `;
+  }).join('') : '<tr><td colspan="6" class="empty">Нет данных</td></tr>';
+}
+
+function renderAuction() {
+  const auction = DATA['Аукцион'] || [];
+  const list = document.getElementById('auctionList');
+  list.innerHTML = auction.length ? auction.map(a => `
+    <div class="auction-item">
+      <div class="auction-icon">💎</div>
+      <div class="auction-info">
+        <h4>${a['Предмет'] || '—'}</h4>
+        <p>${a['Описание'] || ''}</p>
+        <p style="margin-top: 5px;">Продавец: <strong style="color: var(--accent-cyan);">${a['Продавец'] || '—'}</strong> · Статус: <span class="badge badge-info">${a['Статус'] || '—'}</span></p>
+      </div>
+      <div class="auction-price">
+        <div class="label">Текущая ставка</div>
+        <div class="current">${a['Текущая ставка'] || a['Стартовая цена'] || 0}</div>
+        <div class="label" style="margin-top: 5px;">Лидер: ${a['Лучший игрок'] || '—'}</div>
+        <div class="label">До: ${a['Время окончания'] || '—'}</div>
+      </div>
+    </div>
+  `).join('') : '<div class="empty"><div class="empty-icon">🏛</div>Аукцион пуст</div>';
+}
+
+function renderQueues() {
+  const queues = DATA['Очереди'] || [];
+  const members = DATA['Очередь_Участники'] || [];
+  const list = document.getElementById('queuesList');
+  list.innerHTML = queues.length ? queues.map((q, i) => {
+    const qMembers = members.filter(m => String(m['ID очереди']) === String(q['ID']));
+    return `
+      <div class="player-card">
+        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+          <div>
+            <h3 style="font-family: Orbitron; color: var(--accent-cyan); font-size: 20px;">${q['Название'] || '—'}</h3>
+            <p style="color: var(--text-secondary); margin-top: 5px;">${q['Описание'] || ''}</p>
+            <p style="margin-top: 10px;">Создатель: <strong style="color: var(--accent-gold);">${q['Создатель'] || '—'}</strong> · ${q['Дата'] || ''}</p>
+          </div>
+          <div style="text-align: right;">
+            <span class="badge badge-info">${q['Статус'] || '—'}</span>
+            <div style="margin-top: 10px; font-size: 12px; color: var(--text-secondary);">Мин. тир: <strong style="color: var(--accent-cyan);">${q['Мин. тир'] || '—'}</strong></div>
+            <div style="font-size: 12px; color: var(--text-secondary);">Авто-DKP: <strong style="color: var(--accent-green);">${q['Авто-DKP'] || '—'}</strong></div>
+          </div>
+        </div>
+        <h4 style="font-family: Orbitron; color: var(--accent-gold); font-size: 13px; letter-spacing: 2px; margin-bottom: 10px;">УЧАСТНИКИ (${qMembers.length})</h4>
+        <div class="table-container">
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>#</th><th>Ник</th><th>Статус</th><th>Дата записи</th><th>Комментарий</th></tr></thead>
+              <tbody>
+                ${qMembers.length ? qMembers.map(m => `
+                  <tr>
+                    <td>${m['Позиция'] || '—'}</td>
+                    <td><strong style="color: var(--accent-cyan);">${m['Ник']}</strong></td>
+                    <td><span class="badge badge-info">${m['Статус'] || '—'}</span></td>
+                    <td>${m['Дата записи'] || '—'}</td>
+                    <td>${m['Комментарий'] || '—'}</td>
+                  </tr>
+                `).join('') : '<tr><td colspan="5" class="empty">Пока нет записавшихся</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('') : '<div class="empty"><div class="empty-icon">📋</div>Нет активных очередей</div>';
+}
+
+function renderEvents() {
+  const events = DATA['Мероприятия'] || [];
+  const attendance = DATA['Посещения'] || [];
+  document.querySelector('#eventsTable tbody').innerHTML = events.length ? events.map(e => {
+    const status = (e['Статус'] || '').toLowerCase();
+    const badge = status.includes('заверш') ? 'badge-success' : status.includes('актив') ? 'badge-warning' : 'badge-info';
+    return `
+      <tr>
+        <td>${e['ID'] || '—'}</td>
+        <td><strong style="color: var(--accent-cyan);">${e['Название'] || '—'}</strong></td>
+        <td style="font-family: Orbitron; color: var(--accent-gold);">${e['Базовые DKP'] || 0}</td>
+        <td>${e['Дата'] || '—'}</td>
+        <td>${e['Создатель'] || '—'}</td>
+        <td><span class="badge ${badge}">${e['Статус'] || '—'}</span></td>
+      </tr>
+    `;
+  }).join('') : '<tr><td colspan="6" class="empty">Нет мероприятий</td></tr>';
+
+  document.querySelector('#attendanceTable tbody').innerHTML = attendance.length ? attendance.map(a => `
+    <tr>
+      <td>${a['Название'] || '—'}</td>
+      <td><strong style="color: var(--accent-cyan);">${a['Ник'] || '—'}</strong></td>
+      <td>${a['БМ'] || '—'}</td>
+      <td style="color: var(--accent-gold);">x${a['Коэффициент'] || 1}</td>
+      <td style="font-family: Orbitron; color: var(--accent-green);">+${a['Начислено DKP'] || 0}</td>
+      <td>${a['Дата'] || '—'}</td>
+    </tr>
+  `).join('') : '<tr><td colspan="6" class="empty">Нет посещений</td></tr>';
+}
+
+function renderLoot() {
+  const loot = DATA['Статистика_лута'] || [];
+  document.querySelector('#lootTable tbody').innerHTML = loot.length ? loot.map(l => `
+    <tr>
+      <td>${l['Дата'] || '—'}</td>
+      <td><strong style="color: var(--accent-cyan);">${l['Ник'] || '—'}</strong></td>
+      <td><span class="badge badge-warning">${l['Тип предмета'] || '—'}</span></td>
+      <td style="color: var(--accent-gold);">${l['Название'] || '—'}</td>
+      <td>${l['Источник'] || '—'}</td>
+      <td style="color: var(--text-secondary); font-size: 12px;">${l['Детали'] || '—'}</td>
+    </tr>
+  `).join('') : '<tr><td colspan="6" class="empty">Нет данных о луте</td></tr>';
+}
+
+function renderActivity() {
+  const act = DATA['Активность'] || [];
+  document.querySelector('#activityTable tbody').innerHTML = act.length ? act.map(a => `
+    <tr>
+      <td>${a['Дата'] || '—'}</td>
+      <td><strong style="color: var(--accent-cyan);">${a['Ник'] || '—'}</strong></td>
+      <td><span class="badge badge-info">${a['Тип действия'] || '—'}</span></td>
+      <td>${a['Описание'] || '—'}</td>
+      <td style="color: var(--text-secondary); font-size: 12px;">${a['Детали'] || '—'}</td>
+    </tr>
+  `).join('') : '<tr><td colspan="5" class="empty">Нет активности</td></tr>';
+}
+
+// ============ АВТОРИЗАЦИЯ ============
+function showLogin() { document.getElementById('loginModal').classList.add('active'); }
+function hideLogin() { document.getElementById('loginModal').classList.remove('active'); }
+
+async function doLogin() {
+  const nick = document.getElementById('loginNick').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  if (!nick || !pass) { showToast('Заполни все поля', 'error'); return; }
+  const users = DATA['Пользователи'] || [];
+  if (!users.length) {
+    // Попробуем загрузить пользователей
+    DATA['Пользователи'] = await fetchSheet('Пользователи');
+  }
+  const user = (DATA['Пользователи'] || []).find(u => u['Никнейм'] === nick && String(u['Пароль']) === pass);
+  if (!user) { showToast('Неверный никнейм или пароль', 'error'); return; }
+  currentUser = user;
+  localStorage.setItem('hh_user', JSON.stringify(user));
+  updateUserPanel();
+  hideLogin();
+  showToast(`Добро пожаловать, ${nick}!`, 'success');
+  // Добавим кнопку настроек для админа
+  if (user['Роль'] === 'admin' && !document.querySelector('[data-page="config"]')) {
+    const nav = document.getElementById('mainNav');
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn';
+    btn.dataset.page = 'config';
+    btn.textContent = 'Настройки';
+    btn.onclick = () => navigate('config');
+    nav.appendChild(btn);
+  }
+}
+
+function updateUserPanel() {
+  const name = document.getElementById('userName');
+  const btn = document.getElementById('loginBtn');
+  if (currentUser) {
+    name.textContent = `${currentUser['Никнейм']} [${currentUser['Роль']}]`;
+    btn.textContent = 'Выход';
+    btn.onclick = logout;
+  } else {
+    name.textContent = 'Гость';
+    btn.textContent = 'Вход';
+    btn.onclick = showLogin;
+  }
+}
+
+function logout() {
+  currentUser = null;
+  localStorage.removeItem('hh_user');
+  updateUserPanel();
+  showToast('Вы вышли из системы', 'success');
+}
+
+// ============ КОНФИГ ============
+function saveConfig() {
+  const id = document.getElementById('sheetIdInput').value.trim();
+  if (!id) { showToast('Введи ID таблицы', 'error'); return; }
+  CONFIG.sheetId = id;
+  localStorage.setItem('hh_sheet_id', id);
+  showToast('Конфигурация сохранена. Загружаю данные...', 'success');
+  loadAllData();
+}
+
+// ============ TOAST ============
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ============ ИНИЦИАЛИЗАЦИЯ ============
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('sheetIdInput').value = CONFIG.sheetId;
+  updateUserPanel();
+  if (currentUser && currentUser['Роль'] === 'admin') {
+    const nav = document.getElementById('mainNav');
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn';
+    btn.dataset.page = 'config';
+    btn.textContent = 'Настройки';
+    btn.onclick = () => navigate('config');
+    nav.appendChild(btn);
+  }
+  if (CONFIG.sheetId) {
+    loadAllData();
+  } else {
+    navigate('config');
+    showToast('Настрой подключение к Google Таблице', 'error');
+  }
+});
+</script>
+
+</body>
+</html>
