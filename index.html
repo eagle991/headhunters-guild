@@ -814,7 +814,7 @@
         <img id="modalImage" src="" alt="Screenshot">
     </div>
 </div>
-<script>
+    <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSBRJR_D4j-1oe6fkXb98myAm-m6Tk3205evDXBMR8swstpGQDb4y_-EFqqy5jjZuk/exec';
     let currentUser = null;
     let currentRole = null;
@@ -1445,6 +1445,7 @@
         renderScreenshotsPreview();
     }
 
+    // ✅ ИСПРАВЛЕННАЯ ПРЕДОБРАБОТКА ИЗОБРАЖЕНИЯ (бинаризация)
     async function preprocessImage(base64) {
         return new Promise((resolve) => {
             const img = new Image();
@@ -1463,11 +1464,10 @@
                     const g = data[i + 1];
                     const b = data[i + 2];
                     
-                    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-                    const inverted = 255 - gray;
-                    const contrast = 1.8;
-                    const adjusted = ((inverted / 255 - 0.5) * contrast + 0.5) * 255;
-                    const final = Math.max(0, Math.min(255, adjusted));
+                    const brightness = (r + g + b) / 3;
+                    const threshold = 100;
+                    const final = brightness > threshold ? 255 : 0;
+                    
                     data[i] = data[i + 1] = data[i + 2] = final;
                     data[i + 3] = 255;
                 }
@@ -1480,6 +1480,7 @@
         });
     }
 
+    // ✅ ИСПРАВЛЕННЫЙ OCR С ОТЛАДКОЙ
     async function runOcrOnScreenshots() {
         const doneScreenshots = uploadedScreenshots.filter(s => s.status === 'done' && s.base64);
         if (doneScreenshots.length === 0) return;
@@ -1521,6 +1522,7 @@
             });
             
             const allNicks = new Set();
+            let fullText = '';
             
             for (let i = 0; i < doneScreenshots.length; i++) {
                 progressText.innerText = `Обработка скриншота ${i + 1} из ${doneScreenshots.length}...`;
@@ -1528,6 +1530,7 @@
                 const processedImage = await preprocessImage(doneScreenshots[i].base64);
                 
                 const { data: { text } } = await worker.recognize(processedImage);
+                fullText += text + '\n';
                 
                 const extractedNicks = extractNicksFromText(text);
                 extractedNicks.forEach(n => allNicks.add(n));
@@ -1536,6 +1539,9 @@
             }
 
             await worker.terminate();
+            
+            // Отладочный вывод в консоль
+            showAllRecognizedWords(fullText);
             
             recognizedNicks = Array.from(allNicks).filter(n => n.length >= 2 && n.length <= 20);
             progressText.innerText = `✅ Распознано ников: ${recognizedNicks.length}`;
@@ -1555,20 +1561,29 @@
         }
     }
 
+    // ✅ УЛУЧШЕННАЯ ФУНКЦИЯ ИЗВЛЕЧЕНИЯ НИКОВ
     function extractNicksFromText(text) {
         if (!text || typeof text !== 'string') return [];
+        
+        const skipWords = new Set([
+            'управление', 'группой', 'рейдовая', 'группа', 'команда', 'неа',
+            'гильдия', 'клан', 'альянс', 'рейд', 'пати', 'отряд',
+            'headhunters', 'guild', 'clan', 'alliance', 'raid', 'party', 'team',
+            'squad', 'group', 'management', 'control',
+            'headhuntersguild', 'hh', 'rf', 'online', 'next', 'game', 'play'
+        ]);
         
         const lines = text.split(/\n|\r/);
         const allWords = [];
         const wordFrequency = {};
         
         lines.forEach(line => {
-            const tokens = line.split(/[\s\t]+/);
+            const tokens = line.split(/[\s\t\|\/\\]+/);
             tokens.forEach(token => {
                 const clean = token.replace(/[^\w\u0400-\u04FF\-_]/g, '');
                 if (clean.length >= 2 && clean.length <= 20) {
                     allWords.push(clean);
-                    wordFrequency[clean] = (wordFrequency[clean] || 0) + 1;
+                    wordFrequency[clean.toLowerCase()] = (wordFrequency[clean.toLowerCase()] || 0) + 1;
                 }
             });
         });
@@ -1577,18 +1592,47 @@
         const seen = new Set();
         
         allWords.forEach(word => {
-            if (seen.has(word)) return;
-            if (wordFrequency[word] > 1) return;
-            if (/^\d+$/.test(word)) return;
-            if (!/[A-Za-z\u0410-\u044F\u0400-\u04FF]/.test(word)) return;
-            const skipWords = ['headhunters', 'гильдия', 'команда', 'рейдовая', 'группа', 'управление', 'неа'];
-            if (skipWords.includes(word.toLowerCase())) return;
+            const lowerWord = word.toLowerCase();
             
-            seen.add(word);
+            if (seen.has(lowerWord)) return;
+            if (wordFrequency[lowerWord] > 2) return;
+            if (skipWords.has(lowerWord)) return;
+            if (/^\d+$/.test(word)) return;
+            if (word.length < 2 || word.length > 20) return;
+            if (!/[A-Za-z\u0410-\u044F\u0400-\u04FF]/.test(word)) return;
+            if (/^(.)\1{2,}$/.test(word)) return;
+            
+            seen.add(lowerWord);
             nicks.push(word);
         });
         
         return nicks;
+    }
+
+    // ✅ ОТЛАДОЧНАЯ ФУНКЦИЯ
+    function showAllRecognizedWords(text) {
+        if (!text) return;
+        
+        const lines = text.split(/\n|\r/);
+        const allWords = [];
+        const wordFrequency = {};
+        
+        lines.forEach(line => {
+            const tokens = line.split(/[\s\t\|\/\\]+/);
+            tokens.forEach(token => {
+                const clean = token.replace(/[^\w\u0400-\u04FF\-_]/g, '');
+                if (clean.length >= 2) {
+                    allWords.push(clean);
+                    wordFrequency[clean.toLowerCase()] = (wordFrequency[clean.toLowerCase()] || 0) + 1;
+                }
+            });
+        });
+        
+        console.log('=== ВСЕ РАСПОЗНАННЫЕ СЛОВА ===');
+        console.log(allWords);
+        console.log('=== ЧАСТОТА СЛОВ ===');
+        console.log(wordFrequency);
+        console.log('===========================');
     }
 
     function renderRecognizedNicks() {
@@ -1712,8 +1756,7 @@
             }
         } catch (error) { console.error(error); }
     }
-
-    async function loadAdminEvents() {
+            async function loadAdminEvents() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' });
             const result = await response.json();
