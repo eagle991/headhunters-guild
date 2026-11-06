@@ -214,10 +214,7 @@
             border: 1px solid var(--border-color); border-radius: 8px; flex-wrap: wrap; gap: 10px;
         }
         .user-info { color: var(--neon-cyan); font-family: 'Orbitron', sans-serif; font-size: 13px; letter-spacing: 1px; }
-        .user-info .role-badge {
-            display: inline-block; padding: 3px 10px; margin-left: 10px; font-size: 10px;
-            border-radius: 3px;
-        }
+        .user-info .role-badge { display: inline-block; padding: 3px 10px; margin-left: 10px; font-size: 10px; border-radius: 3px; }
         .user-info .role-badge.role-admin { background: rgba(255, 42, 74, 0.2); border: 1px solid var(--neon-red); color: var(--neon-red); }
         .user-info .role-badge.role-mod { background: rgba(255, 140, 0, 0.2); border: 1px solid var(--neon-orange); color: var(--neon-orange); }
         .user-info .role-badge.role-player { background: rgba(0, 240, 255, 0.2); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); }
@@ -369,7 +366,7 @@
         ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--neon-cyan), var(--neon-purple)); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
 
-        /* ===== СТИЛИ ДЛЯ ЭКИПИРОВКИ ===== */
+        /* ЭКИПИРОВКА */
         .equipment-section-tabs {
             display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 15px;
             padding: 10px; background: rgba(0, 0, 0, 0.3); border-radius: 6px;
@@ -388,7 +385,6 @@
             color: var(--neon-cyan); border-color: var(--neon-cyan);
             box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
         }
-
         .item-card {
             background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color);
             padding: 12px; border-radius: 6px; margin-bottom: 8px;
@@ -435,7 +431,6 @@
         }
         .approved-eq-name { flex: 1; font-size: 13px; color: var(--text-main); }
 
-        /* Форма добавления предмета */
         .add-item-form {
             background: rgba(0, 0, 0, 0.3); border: 1px dashed var(--border-color);
             padding: 15px; border-radius: 6px; margin-bottom: 15px;
@@ -586,7 +581,6 @@
             <div id="skillsMessage" class="message"></div>
         </div>
 
-        <!-- НОВЫЙ БЛОК: ЭКИПИРОВКА -->
         <div class="cabinet-section">
             <div class="panel-title">🛡 Экипировка <span id="equipmentStatus"></span></div>
             <div id="equipmentApprovedMessage" class="hidden">
@@ -1044,17 +1038,14 @@
     // ===== ЭКИПИРОВКА =====
     async function loadPlayerItems() {
         try {
-            // Загружаем разделы
             const sectionsRes = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentSections' }), redirect: 'follow' });
             const sectionsResult = await sectionsRes.json();
             if (sectionsResult.success) equipmentSections = sectionsResult.sections;
 
-            // Загружаем все предметы
             const itemsRes = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' });
             const itemsResult = await itemsRes.json();
             if (itemsResult.success) allItems = itemsResult.items;
 
-            // Загружаем выбор игрока
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerItems', nickname: currentUser }), redirect: 'follow' });
             const result = await response.json();
             const form = document.getElementById('equipmentForm');
@@ -1070,9 +1061,24 @@
                     statusSpan.innerHTML = '<span class="status-badge status-approved">Подтверждено</span>';
                     form.classList.add('hidden');
                     approvedMsg.classList.remove('hidden');
-                    renderApprovedEquipment(result.data.selections);
-                    approvedList.classList.remove('hidden');
-                    emptyState.classList.add('hidden');
+                    
+                    // Проверяем, есть ли реально выбранные предметы
+                    const selections = result.data.selections || {};
+                    const validSelections = Object.entries(selections).filter(([section, itemId]) => {
+                        if (!itemId || itemId === null || itemId === undefined) return false;
+                        const item = allItems.find(i => i.id === itemId);
+                        return item !== undefined;
+                    });
+                    
+                    if (validSelections.length > 0) {
+                        renderApprovedEquipment(selections);
+                        approvedList.classList.remove('hidden');
+                        emptyState.classList.add('hidden');
+                    } else {
+                        renderApprovedEquipment(selections);
+                        approvedList.classList.remove('hidden');
+                        emptyState.classList.add('hidden');
+                    }
                 } else if (result.data.status === 'pending') {
                     statusSpan.innerHTML = '<span class="status-badge status-pending">На проверке</span>';
                     form.classList.remove('hidden');
@@ -1104,11 +1110,24 @@
 
     function renderApprovedEquipment(selections) {
         const list = document.getElementById('approvedEquipmentList');
-        if (!selections || Object.keys(selections).length === 0) {
-            list.innerHTML = '<div class="empty-state">Экипировка не выбрана</div>';
+        
+        if (!selections || typeof selections !== 'object' || Object.keys(selections).length === 0) {
+            list.innerHTML = '<div class="empty-state" style="padding: 20px;">🛡 Экипировка не выбрана.<br><span style="font-size: 12px; color: var(--text-dim);">Нажмите "Изменить экипировку" чтобы выбрать предметы.</span></div>';
             return;
         }
-        list.innerHTML = Object.entries(selections).map(([section, itemId]) => {
+        
+        const validEntries = Object.entries(selections).filter(([section, itemId]) => {
+            if (!itemId || itemId === null || itemId === undefined) return false;
+            const item = allItems.find(i => i.id === itemId);
+            return item !== undefined;
+        });
+        
+        if (validEntries.length === 0) {
+            list.innerHTML = '<div class="empty-state" style="padding: 20px;">🛡 Экипировка не выбрана.<br><span style="font-size: 12px; color: var(--text-dim);">Нажмите "Изменить экипировку" чтобы выбрать предметы.</span></div>';
+            return;
+        }
+        
+        list.innerHTML = validEntries.map(([section, itemId]) => {
             const item = allItems.find(i => i.id === itemId);
             if (!item) return '';
             return `
@@ -1271,6 +1290,10 @@
     // ===== АДМИН: ЭКИПИРОВКА НА ПРОВЕРКЕ =====
     async function loadPendingEquipment() {
         try {
+            const itemsRes = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' });
+            const itemsResult = await itemsRes.json();
+            if (itemsResult.success) allItems = itemsResult.items;
+
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingItems' }), redirect: 'follow' });
             const result = await response.json();
             const list = document.getElementById('pendingEquipmentList');
@@ -1331,22 +1354,18 @@
     // ===== АДМИН: УПРАВЛЕНИЕ ПРЕДМЕТАМИ =====
     async function loadAdminItems() {
         try {
-            // Загружаем разделы если ещё не загружены
             if (equipmentSections.length === 0) {
                 const sectionsRes = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentSections' }), redirect: 'follow' });
                 const sectionsResult = await sectionsRes.json();
                 if (sectionsResult.success) equipmentSections = sectionsResult.sections;
             }
-            // Загружаем все предметы
             const itemsRes = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' });
             const itemsResult = await itemsRes.json();
             if (itemsResult.success) allItems = itemsResult.items;
 
-            // Заполняем селект раздела в форме
             const sectionSelect = document.getElementById('newItemSection');
             sectionSelect.innerHTML = equipmentSections.map(s => `<option value="${s}">${s}</option>`).join('');
 
-            // Строим табы разделов
             const tabs = document.getElementById('adminItemSectionTabs');
             tabs.innerHTML = equipmentSections.map(section => 
                 `<button type="button" class="eq-tab ${section === currentAdminItemSection ? 'active' : ''}" onclick="selectAdminItemSection('${section}')">${section}</button>`
@@ -1361,7 +1380,6 @@
 
     function selectAdminItemSection(section) {
         currentAdminItemSection = section;
-        // Обновляем табы
         document.querySelectorAll('#adminItemSectionTabs .eq-tab').forEach(t => {
             t.classList.toggle('active', t.innerText === section);
         });
