@@ -204,7 +204,7 @@
         .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .submit-btn.dkp-btn { border-color: var(--dkp-color); color: var(--dkp-color); background: linear-gradient(90deg, rgba(255,204,0,0.15), rgba(255,140,0,0.15)); }
         .submit-btn.dkp-btn:hover { background: linear-gradient(90deg, rgba(255,204,0,0.3), rgba(255,140,0,0.3)); box-shadow: 0 0 20px rgba(255, 204, 0, 0.5); }
-        .message { margin-top: 12px; padding: 10px; text-align: center; font-size: 13px; border: 1px solid transparent; display: none; border-radius: 4px; }
+        .message { margin-top: 12px; padding: 10px; text-align: center; font-size: 13px; border: 1px solid transparent; display: none; border-radius: 4px; white-space: pre-wrap; }
         .message.success { display: block; color: var(--neon-green); border-color: var(--neon-green); background: rgba(0, 255, 136, 0.1); }
         .message.error { display: block; color: var(--neon-red); border-color: var(--neon-red); background: rgba(255, 42, 74, 0.1); }
         .hidden { display: none !important; }
@@ -436,7 +436,7 @@
 
         .screenshots-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-bottom: 15px; }
         .screenshot-thumb { position: relative; aspect-ratio: 16/10; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; background: rgba(0, 0, 0, 0.4); }
-        .screenshot-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .screenshot-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
         .screenshot-thumb .remove-btn { position: absolute; top: 4px; right: 4px; background: rgba(255, 42, 74, 0.9); color: white; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; }
         .screenshot-thumb .remove-btn:hover { background: var(--neon-red); }
         .screenshot-thumb .upload-progress { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0, 0, 0, 0.7); color: var(--neon-cyan); font-size: 10px; padding: 3px; text-align: center; font-family: 'Orbitron', sans-serif; }
@@ -458,8 +458,8 @@
         .submission-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .submission-event { font-family: 'Orbitron', sans-serif; font-size: 14px; color: var(--dkp-color); letter-spacing: 1px; }
         .submission-meta { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
-        .submission-screenshots { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
-        .submission-screenshots img { width: 80px; height: 50px; object-fit: cover; border-radius: 3px; border: 1px solid var(--border-color); cursor: pointer; transition: 0.3s; }
+        .submission-screenshots { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+        .submission-screenshots img { width: 200px; height: auto; max-height: 150px; object-fit: cover; border-radius: 3px; border: 1px solid var(--border-color); cursor: pointer; transition: 0.3s; }
         .submission-screenshots img:hover { border-color: var(--neon-cyan); transform: scale(1.05); }
         .submission-nicks { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
         .submission-nick-tag { background: rgba(0, 240, 255, 0.15); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); padding: 3px 10px; border-radius: 3px; font-size: 11px; font-family: 'Orbitron', sans-serif; }
@@ -477,7 +477,7 @@
         .history-amount.negative { color: var(--neon-red); }
 
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
-        .modal-content { max-width: 90%; max-height: 90%; background: var(--panel-bg); border: 1px solid var(--neon-cyan); border-radius: 8px; padding: 20px; position: relative; box-shadow: 0 0 50px rgba(0, 240, 255, 0.3); }
+        .modal-content { max-width: 90%; max-height: 90%; background: var(--panel-bg); border: 1px solid var(--neon-cyan); border-radius: 8px; padding: 20px; position: relative; box-shadow: 0 0 50px rgba(0, 240, 255, 0.3); overflow-y: auto; }
         .modal-close { position: absolute; top: 10px; right: 10px; background: transparent; border: 1px solid var(--neon-red); color: var(--neon-red); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; }
         .modal-close:hover { background: rgba(255, 42, 74, 0.2); }
         .modal-content img { max-width: 100%; max-height: 80vh; border-radius: 4px; }
@@ -509,7 +509,7 @@
             <div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div>
         </div>
     </div>
-    <div class="footer">© RF Online Next | Terminal System v4.2</div>
+    <div class="footer">© RF Online Next | Terminal System v5.0</div>
 </div>
 
 <div id="authScreen" class="screen">
@@ -815,7 +815,7 @@
     </div>
 </div>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOb1Q_B6SKZg9c8p3Y1gK_bFBe0S7-r4dtp5oML1LHiMB2WXFJPjlYHWir1LH0SR3L/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzWoBbGqwnCWiMunpCFzUjFfLzZW7dXIkTHKI7-NtWzTkDIL119Y71BCqZrGKQPGuRt/exec';
     let currentUser = null;
     let currentRole = null;
     let myPlayerData = null;
@@ -832,12 +832,8 @@
     let uploadedScreenshots = [];
     let recognizedNicks = [];
 
-    window.addEventListener('error', (e) => {
-        console.error('ГЛОБАЛЬНАЯ ОШИБКА:', e.error);
-    });
-    window.addEventListener('unhandledrejection', (e) => {
-        console.error('НЕОБРАБОТАННЫЙ PROMISE:', e.reason);
-    });
+    window.addEventListener('error', (e) => { console.error('ГЛОБАЛЬНАЯ ОШИБКА:', e.error); });
+    window.addEventListener('unhandledrejection', (e) => { console.error('НЕОБРАБОТАННЫЙ PROMISE:', e.reason); });
 
     function showAuthScreen() {
         try {
@@ -1328,14 +1324,25 @@
             const isPositive = h.amount > 0;
             let typeLabel = '';
             let itemClass = h.type;
-            if (h.type === 'earn') typeLabel = `🏆 ${h.event || 'Мероприятие'}`;
+            let details = '';
+            
+            if (h.type === 'earn') {
+                typeLabel = `🏆 ${h.event || 'Мероприятие'}`;
+                if (h.coefficient && h.baseAmount !== undefined) {
+                    details = `<div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">
+                        Базовые: ${h.baseAmount} DKP × Коэф: ${h.coefficient.toFixed(2)} (БМ: ${h.playerBm || 0})
+                    </div>`;
+                }
+            }
             else if (h.type === 'manual_add') typeLabel = `💵 Начисление: ${h.reason || ''}`;
             else if (h.type === 'manual_sub') typeLabel = `💸 Списание: ${h.reason || ''}`;
             else typeLabel = h.reason || h.event || 'Операция';
+            
             return `
                 <div class="dkp-history-item ${itemClass}">
                     <div class="history-info">
                         <div class="history-event">${typeLabel}</div>
+                        ${details}
                         <div class="history-date">${date}</div>
                     </div>
                     <div class="history-amount ${isPositive ? 'positive' : 'negative'}">
@@ -1502,7 +1509,7 @@
             
             return `
                 <div class="screenshot-thumb">
-                    ${s.base64 ? `<img src="${s.base64}" alt="screenshot">` : ''}
+                    ${s.base64 ? `<img src="${s.base64}" alt="screenshot" onclick="openImageModal('${s.base64}')" style="cursor: pointer;">` : ''}
                     <button class="remove-btn" onclick="removeScreenshot('${s.id}')">✕</button>
                     ${statusHtml}
                 </div>
@@ -1515,14 +1522,13 @@
         renderScreenshotsPreview();
     }
 
-    // ✅ УЛУЧШЕННАЯ ПРЕДОБРАБОТКА: АПСКЕЙЛ + КОНТРАСТ
+    // ✅ ИНВЕРТИРОВАНИЕ + АПСКЕЙЛ + КОНТРАСТ
     async function preprocessImage(base64) {
         return new Promise((resolve) => {
             const img = new Image();
             img.onload = () => {
                 const canvas = document.createElement('canvas');
                 
-                // Апскейл в 3 раза для лучшего распознавания
                 const scale = 3;
                 canvas.width = img.width * scale;
                 canvas.height = img.height * scale;
@@ -1535,7 +1541,6 @@
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const data = imageData.data;
                 
-                // Увеличение контраста вместо бинаризации
                 const contrast = 1.5;
                 const brightness = 20;
                 
@@ -1544,10 +1549,17 @@
                     let g = data[i + 1];
                     let b = data[i + 2];
                     
+                    // ИНВЕРТИРОВАНИЕ
+                    r = 255 - r;
+                    g = 255 - g;
+                    b = 255 - b;
+                    
+                    // Яркость
                     r = Math.min(255, r + brightness);
                     g = Math.min(255, g + brightness);
                     b = Math.min(255, b + brightness);
                     
+                    // Контраст
                     r = Math.min(255, Math.max(0, (r - 128) * contrast + 128));
                     g = Math.min(255, Math.max(0, (g - 128) * contrast + 128));
                     b = Math.min(255, Math.max(0, (b - 128) * contrast + 128));
@@ -1566,7 +1578,6 @@
         });
     }
 
-    // ✅ УЛУЧШЕННЫЙ OCR С WHITELIST И PSM 6
     async function runOcrOnScreenshots() {
         try {
             const doneScreenshots = uploadedScreenshots.filter(s => s.status === 'done' && s.base64);
@@ -1598,7 +1609,6 @@
             
             let worker;
             try {
-                // Whitelist символов — только то, что может быть в никах
                 const whitelist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя0123456789_-[]';
                 
                 worker = await Tesseract.createWorker('rus+eng', 1, {
@@ -1611,7 +1621,7 @@
                     },
                     params: {
                         tessedit_char_whitelist: whitelist,
-                        tessedit_pageseg_mode: 6, // SINGLE_BLOCK - лучше для списков
+                        tessedit_pageseg_mode: 6,
                         preserve_interword_spaces: '1',
                     }
                 });
@@ -1680,7 +1690,6 @@
         }
     }
 
-    // ✅ УЛУЧШЕННАЯ ФИЛЬТРАЦИЯ НИКОВ
     function extractNicksFromText(text) {
         try {
             if (!text || typeof text !== 'string') return [];
@@ -1804,6 +1813,7 @@
         }, 100);
     }
 
+    // ✅ С ВАЛИДАЦИЕЙ НИКОВ
     async function submitDkpSubmission() {
         const select = document.getElementById('dkpEventSelect');
         const selectedOption = select.options[select.selectedIndex];
@@ -1822,15 +1832,50 @@
             return;
         }
         
-        const screenshotIds = uploadedScreenshots
-            .filter(s => s.status === 'done' && s.screenshotId)
-            .map(s => s.screenshotId);
-        
         const btn = document.getElementById('submitDkpBtn');
         btn.disabled = true;
-        btn.innerHTML = '<span class="loader"></span> Отправка...';
+        btn.innerHTML = '<span class="loader"></span> Проверка ников...';
         
         try {
+            const validationResponse = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'getAllPlayersForValidation' }),
+                redirect: 'follow'
+            });
+            const validationResult = await validationResponse.json();
+            
+            if (!validationResult.success) {
+                throw new Error('Не удалось получить список игроков');
+            }
+            
+            const allSiteNicks = validationResult.nicks.map(n => String(n).toLowerCase());
+            
+            const invalidNicks = [];
+            const validNicksLower = [];
+            
+            validNicks.forEach(nick => {
+                const nickLower = nick.toLowerCase().trim();
+                if (allSiteNicks.includes(nickLower)) {
+                    validNicksLower.push(nick);
+                } else {
+                    invalidNicks.push(nick);
+                }
+            });
+            
+            if (invalidNicks.length > 0) {
+                const errorMsg = `Следующие ники не найдены на сайте:\n\n${invalidNicks.join('\n')}\n\nПроверьте правописание или удалите их.`;
+                showDkpSubmitMessage(errorMsg, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '📤 Отправить на проверку';
+                return;
+            }
+            
+            btn.innerHTML = '<span class="loader"></span> Отправка...';
+            
+            const screenshotIds = uploadedScreenshots
+                .filter(s => s.status === 'done' && s.screenshotId)
+                .map(s => s.screenshotId);
+            
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -1840,13 +1885,13 @@
                     eventName: eventName,
                     eventDkp: Number(eventDkp),
                     screenshotIds: screenshotIds,
-                    recognizedNicks: validNicks
+                    recognizedNicks: validNicksLower
                 }),
                 redirect: 'follow'
             });
             const result = await response.json();
             if (result.success) {
-                showDkpSubmitMessage(result.message + ` (${validNicks.length} игроков)`, 'success');
+                showDkpSubmitMessage(result.message + ` (${validNicksLower.length} игроков)`, 'success');
                 uploadedScreenshots = [];
                 recognizedNicks = [];
                 renderScreenshotsPreview();
@@ -1857,7 +1902,7 @@
                 showDkpSubmitMessage(result.message, 'error');
             }
         } catch (error) {
-            showDkpSubmitMessage('Ошибка связи с сервером', 'error');
+            showDkpSubmitMessage('Ошибка: ' + error.message, 'error');
         } finally {
             btn.disabled = false;
             btn.innerHTML = '📤 Отправить на проверку';
@@ -1869,7 +1914,7 @@
         msg.className = `message ${type}`;
         msg.innerText = text;
         msg.style.display = 'block';
-        setTimeout(() => { msg.style.display = 'none'; }, 5000);
+        setTimeout(() => { msg.style.display = 'none'; }, 8000);
     }
 
     async function loadDkpRating() {
@@ -1987,6 +2032,7 @@
         }
     }
 
+    // ✅ С БОЛЬШИМИ СКРИНШОТАМИ И КНОПКАМИ РЕДАКТИРОВАНИЯ
     async function loadPendingDkp() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' });
@@ -1997,12 +2043,14 @@
                     <div class="dkp-submission-card">
                         <div class="submission-header">
                             <div>
-                                <div class="submission-event">🏆 ${sub.eventName} (+${sub.eventDkp} DKP)</div>
+                                <div class="submission-event">🏆 ${sub.eventName} (+${sub.eventDkp} DKP базовых)</div>
                                 <div class="submission-meta">От: ${sub.submitter} | ${sub.date}</div>
                             </div>
                             <div class="action-buttons">
                                 <button class="btn-approve" onclick="approveDkp('${sub.id}')">✓ Подтвердить</button>
                                 <button class="btn-reject" onclick="rejectDkp('${sub.id}')">✕ Отклонить</button>
+                                <button class="btn-edit" onclick="editDkpSubmission('${sub.id}')" style="width: auto; margin-top: 0;">✎ Редактировать</button>
+                                <button class="btn-remove" onclick="deleteDkpSubmission('${sub.id}')">🗑 Удалить</button>
                             </div>
                         </div>
                         ${sub.screenshots && sub.screenshots.length > 0 ? `
@@ -2022,8 +2070,9 @@
         } catch (error) { console.error(error); }
     }
 
+    // ✅ С ДЕТАЛИЗАЦИЕЙ КОЭФФИЦИЕНТОВ
     async function approveDkp(submissionId) {
-        if (!confirm('Подтвердить заявку и начислить DKP всем игрокам?')) return;
+        if (!confirm('Подтвердить заявку и начислить DKP всем игрокам с учётом коэффициентов БМ?')) return;
         const msg = document.getElementById('adminDkpPendingMessage');
         try {
             const response = await fetch(SCRIPT_URL, {
@@ -2033,6 +2082,14 @@
             });
             const result = await response.json();
             if (result.success) {
+                let details = result.message + '\n\n';
+                if (result.results && result.results.length > 0) {
+                    details += 'Детализация начислений:\n';
+                    result.results.forEach(r => {
+                        details += `• ${r.nick}: БМ=${r.bm}, коэф=${r.coefficient.toFixed(2)}, начислено=${r.finalDkp} DKP\n`;
+                    });
+                }
+                alert(details);
                 msg.className = 'message success';
                 msg.innerText = result.message;
                 setTimeout(() => { loadPendingDkp(); msg.style.display = 'none'; }, 1500);
@@ -2064,6 +2121,173 @@
                 setTimeout(() => { loadPendingDkp(); msg.style.display = 'none'; }, 1000);
             }
         } catch (error) { console.error(error); }
+    }
+
+    // ✅ РЕДАКТИРОВАНИЕ ЗАЯВКИ
+    async function editDkpSubmission(submissionId) {
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'getDkpSubmission', submissionId: submissionId }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            
+            if (!result.success) {
+                alert('Ошибка: ' + result.message);
+                return;
+            }
+            
+            const sub = result.submission;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.id = 'editDkpModal';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+                    <button class="modal-close" onclick="closeEditDkpModal()">✕</button>
+                    <h3 style="color: var(--neon-cyan); font-family: 'Orbitron', sans-serif; margin-bottom: 15px;">
+                        ✎ Редактирование заявки: ${sub.eventName}
+                    </h3>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 5px;">Отправитель:</div>
+                        <div style="font-size: 14px; color: var(--text-main);">${sub.submitter}</div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 5px;">Базовые DKP за мероприятие:</div>
+                        <div style="font-size: 18px; color: var(--dkp-color); font-family: 'Orbitron', sans-serif;">${sub.eventDkp} DKP</div>
+                    </div>
+                    
+                    ${sub.screenshots && sub.screenshots.length > 0 ? `
+                        <div style="margin-bottom: 15px;">
+                            <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px;">Скриншоты:</div>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                ${sub.screenshots.map((img, idx) => `
+                                    <img src="${img}" onclick="openImageModal('${img}')" 
+                                         style="width: 250px; height: auto; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;">
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px;">Участники (${sub.nicks.length}):</div>
+                        <div id="editDkpNicksList" style="display: flex; flex-direction: column; gap: 6px;">
+                            ${sub.nicks.map((nick, idx) => `
+                                <div class="nick-item">
+                                    <input type="text" value="${nick.replace(/"/g, '&quot;')}" id="editNick_${idx}" placeholder="Ник игрока...">
+                                    <button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button type="button" class="btn-edit" onclick="addEditNickField()" style="margin-top: 10px; width: auto;">+ Добавить участника</button>
+                    </div>
+                    
+                    <button type="button" class="submit-btn dkp-btn" onclick="saveDkpSubmission('${sub.id}')">
+                        💾 Сохранить изменения
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            window.currentEditDkp = {
+                id: sub.id,
+                nicks: [...sub.nicks]
+            };
+        } catch (error) {
+            console.error('Ошибка редактирования:', error);
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    function closeEditDkpModal() {
+        const modal = document.getElementById('editDkpModal');
+        if (modal) modal.remove();
+        window.currentEditDkp = null;
+    }
+
+    function removeEditNick(idx) {
+        const input = document.getElementById('editNick_' + idx);
+        if (input) {
+            input.parentElement.remove();
+        }
+    }
+
+    function addEditNickField() {
+        const list = document.getElementById('editDkpNicksList');
+        const idx = list.children.length;
+        const div = document.createElement('div');
+        div.className = 'nick-item';
+        div.innerHTML = `
+            <input type="text" value="" id="editNick_${idx}" placeholder="Ник игрока...">
+            <button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button>
+        `;
+        list.appendChild(div);
+        div.querySelector('input').focus();
+    }
+
+    async function saveDkpSubmission(submissionId) {
+        const list = document.getElementById('editDkpNicksList');
+        const inputs = list.querySelectorAll('input');
+        const nicks = [];
+        
+        inputs.forEach(input => {
+            const val = input.value.trim();
+            if (val) nicks.push(val);
+        });
+        
+        if (nicks.length === 0) {
+            alert('Добавьте хотя бы одного участника');
+            return;
+        }
+        
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'updateDkpSubmission',
+                    submissionId: submissionId,
+                    nicks: nicks
+                }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('Заявка обновлена!');
+                closeEditDkpModal();
+                loadPendingDkp();
+            } else {
+                alert('Ошибка: ' + result.message);
+            }
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+    async function deleteDkpSubmission(submissionId) {
+        if (!confirm('Удалить эту заявку DKP?')) return;
+        
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'deleteDkpSubmission', submissionId: submissionId }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('Заявка удалена');
+                loadPendingDkp();
+            } else {
+                alert('Ошибка: ' + result.message);
+            }
+        } catch (error) {
+            alert('Ошибка: ' + error.message);
+        }
     }
 
     async function adjustDkp(e) {
@@ -2501,8 +2725,10 @@
     }
 
     function openImageModal(url) {
-        document.getElementById('modalImage').src = url;
-        document.getElementById('imageModal').classList.remove('hidden');
+        const modal = document.getElementById('imageModal');
+        const img = document.getElementById('modalImage');
+        img.src = url;
+        modal.classList.remove('hidden');
     }
     function closeImageModal() {
         document.getElementById('imageModal').classList.add('hidden');
