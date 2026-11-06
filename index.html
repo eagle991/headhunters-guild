@@ -368,6 +368,17 @@
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 2px;
         }
+
+        .cabinet-section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .cabinet-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -383,15 +394,12 @@
         </div>
 
         <div class="top-containers">
-            <!-- Топ-10 по БМ -->
             <div class="top-panel">
                 <div class="top-panel-title">Топ-10 по Боевой Мощи</div>
                 <div id="topBmList" class="top-list">
                     <div class="loading-overlay"><span class="loader"></span> Загрузка...</div>
                 </div>
             </div>
-
-            <!-- Топ-10 по Уровню -->
             <div class="top-panel">
                 <div class="top-panel-title">Топ-10 по Уровню</div>
                 <div id="topLevelList" class="top-list">
@@ -455,8 +463,6 @@
         <div class="tabs">
             <button class="tab-btn active" id="tabHome" onclick="switchPlayerTab('home')">Главная</button>
             <button class="tab-btn" id="tabCabinet" onclick="switchPlayerTab('cabinet')">Личный кабинет</button>
-            <button class="tab-btn" id="tabIdentification" onclick="switchPlayerTab('identification')">Идентификация</button>
-            <button class="tab-btn" id="tabSkills" onclick="switchPlayerTab('skills')">Навыки</button>
             <button class="tab-btn" id="tabPlayers" onclick="switchPlayerTab('players')">Игроки</button>
         </div>
 
@@ -478,81 +484,82 @@
             </div>
         </div>
 
+        <!-- Личный кабинет (объединенный) -->
         <div id="cabinetContent" class="panel hidden">
-            <div class="panel-title">Подтвержденные данные персонажа</div>
-            <div id="approvedDataGrid" class="data-grid"></div>
-            <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют или находятся на проверке.</div>
-            
-            <div id="approvedSkillsSection" class="hidden" style="margin-top: 30px;">
-                <div class="panel-title">Подтвержденные навыки</div>
+            <!-- Блок характеристик -->
+            <div class="cabinet-section">
+                <div class="panel-title">Характеристики персонажа <span id="playerStatus"></span></div>
+                
+                <div id="approvedMessage" class="hidden">
+                    <div class="message success" style="display: block; margin-bottom: 20px;">
+                        Ваши данные успешно подтверждены Администратором.
+                    </div>
+                    <p style="color: var(--text-dim); text-align: center; margin-bottom: 20px;">
+                        Для внесения изменений нажмите кнопку ниже.
+                    </p>
+                    <button class="btn-edit" onclick="showEditForm()">Запросить изменение данных</button>
+                </div>
+
+                <div id="approvedDataGrid" class="data-grid"></div>
+                <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют или находятся на проверке.</div>
+
+                <form id="playerDataForm" class="hidden" onsubmit="savePlayerData(event)">
+                    <div class="data-grid">
+                        <div class="form-group"><label>БМ (Боевая Мощь)</label><input type="number" id="bm" required placeholder="Например: 150000"></div>
+                        <div class="form-group"><label>Уровень персонажа</label><input type="number" id="level" required placeholder="Например: 60"></div>
+                        <div class="form-group"><label>Атака</label><input type="number" id="attack" required placeholder="Например: 5000"></div>
+                        <div class="form-group"><label>Защита</label><input type="number" id="defense" required placeholder="Например: 3000"></div>
+                        <div class="form-group"><label>Меткость</label><input type="number" id="accuracy" required placeholder="Например: 2000"></div>
+                        <div class="form-group"><label>Уклонение</label><input type="number" id="evasion" required placeholder="Например: 1500"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Закрытые коллекции</label>
+                        <input type="text" id="collections" required placeholder="Перечислите закрытые коллекции...">
+                    </div>
+                    <div class="form-group">
+                        <label>Профессия</label>
+                        <select id="profession" required>
+                            <option value="">Выберите профессию...</option>
+                            <option value="Демолишер">Демолишер</option>
+                            <option value="Арбитр">Арбитр</option>
+                            <option value="Каратель">Каратель</option>
+                            <option value="Фантом">Фантом</option>
+                            <option value="Дредноут">Дредноут</option>
+                            <option value="Сайфер">Сайфер</option>
+                            <option value="Техник">Техник</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn" id="saveDataBtn">Отправить на проверку</button>
+                </form>
+                <div id="playerMessage" class="message"></div>
+            </div>
+
+            <!-- Блок навыков -->
+            <div class="cabinet-section">
+                <div class="panel-title">Навыки персонажа <span id="skillsStatus"></span></div>
+                
+                <div id="skillsApprovedMessage" class="hidden">
+                    <div class="message success" style="display: block; margin-bottom: 20px;">
+                        Ваши навыки успешно подтверждены.
+                    </div>
+                    <p style="color: var(--text-dim); text-align: center; margin-bottom: 20px;">
+                        Для внесения изменений нажмите кнопку ниже.
+                    </p>
+                    <button class="btn-edit" onclick="showSkillsEditForm()">Изменить навыки</button>
+                </div>
+
                 <div id="approvedSkillsList" class="approved-skills"></div>
+                <div id="skillsEmpty" class="empty-state hidden">Навыки отсутствуют или находятся на проверке.</div>
+
+                <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)">
+                    <div id="skillsList" class="skills-list"></div>
+                    <button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 20px;">Отправить на проверку</button>
+                </form>
+                <div id="skillsMessage" class="message"></div>
             </div>
         </div>
 
-        <div id="identificationContent" class="panel hidden">
-            <div class="panel-title">Идентификация персонажа <span id="playerStatus"></span></div>
-            
-            <div id="approvedMessage" class="hidden">
-                <div class="message success" style="display: block; margin-bottom: 20px;">
-                    Ваши данные успешно подтверждены Администратором.
-                </div>
-                <p style="color: var(--text-dim); text-align: center; margin-bottom: 20px;">
-                    Для внесения изменений нажмите кнопку ниже.
-                </p>
-                <button class="btn-edit" onclick="showEditForm()">Запросить изменение данных</button>
-            </div>
-
-            <form id="playerDataForm" class="hidden" onsubmit="savePlayerData(event)">
-                <div class="data-grid">
-                    <div class="form-group"><label>БМ (Боевая Мощь)</label><input type="number" id="bm" required placeholder="Например: 150000"></div>
-                    <div class="form-group"><label>Уровень персонажа</label><input type="number" id="level" required placeholder="Например: 60"></div>
-                    <div class="form-group"><label>Атака</label><input type="number" id="attack" required placeholder="Например: 5000"></div>
-                    <div class="form-group"><label>Защита</label><input type="number" id="defense" required placeholder="Например: 3000"></div>
-                    <div class="form-group"><label>Меткость</label><input type="number" id="accuracy" required placeholder="Например: 2000"></div>
-                    <div class="form-group"><label>Уклонение</label><input type="number" id="evasion" required placeholder="Например: 1500"></div>
-                </div>
-                <div class="form-group">
-                    <label>Закрытые коллекции</label>
-                    <input type="text" id="collections" required placeholder="Перечислите закрытые коллекции...">
-                </div>
-                <div class="form-group">
-                    <label>Профессия</label>
-                    <select id="profession" required>
-                        <option value="">Выберите профессию...</option>
-                        <option value="Демолишер">Демолишер</option>
-                        <option value="Арбитр">Арбитр</option>
-                        <option value="Каратель">Каратель</option>
-                        <option value="Фантом">Фантом</option>
-                        <option value="Дредноут">Дредноут</option>
-                        <option value="Сайфер">Сайфер</option>
-                        <option value="Техник">Техник</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-btn" id="saveDataBtn">Отправить на проверку</button>
-            </form>
-            <div id="playerMessage" class="message"></div>
-        </div>
-
-        <div id="skillsContent" class="panel hidden">
-            <div class="panel-title">Навыки персонажа <span id="skillsStatus"></span></div>
-            
-            <div id="skillsApprovedMessage" class="hidden">
-                <div class="message success" style="display: block; margin-bottom: 20px;">
-                    Ваши навыки успешно подтверждены.
-                </div>
-                <p style="color: var(--text-dim); text-align: center; margin-bottom: 20px;">
-                    Для внесения изменений нажмите кнопку ниже.
-                </p>
-                <button class="btn-edit" onclick="showSkillsEditForm()">Изменить навыки</button>
-            </div>
-
-            <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)">
-                <div id="skillsList" class="skills-list"></div>
-                <button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 20px;">Отправить на проверку</button>
-            </form>
-            <div id="skillsMessage" class="message"></div>
-        </div>
-
+        <!-- Игроки -->
         <div id="playersContent" class="panel hidden">
             <div id="playersList">
                 <div class="panel-title">Рейтинг игроков</div>
@@ -638,11 +645,7 @@
                 if (result.success && result.players.length > 0) {
                     const players = result.players;
 
-                    // Топ-10 по БМ
-                    const topBm = [...players]
-                        .sort((a, b) => Number(b.bm) - Number(a.bm))
-                        .slice(0, 10);
-                    
+                    const topBm = [...players].sort((a, b) => Number(b.bm) - Number(a.bm)).slice(0, 10);
                     const topBmHtml = topBm.map((p, i) => {
                         const rank = i + 1;
                         const rankClass = rank <= 3 ? `rank-${rank}` : '';
@@ -658,11 +661,7 @@
                     document.getElementById('topBmList').innerHTML = topBmHtml;
                     document.getElementById('playerTopBmList').innerHTML = topBmHtml;
 
-                    // Топ-10 по Уровню
-                    const topLevel = [...players]
-                        .sort((a, b) => Number(b.level) - Number(a.level))
-                        .slice(0, 10);
-                    
+                    const topLevel = [...players].sort((a, b) => Number(b.level) - Number(a.level)).slice(0, 10);
                     const topLevelHtml = topLevel.map((p, i) => {
                         const rank = i + 1;
                         const rankClass = rank <= 3 ? `rank-${rank}` : '';
@@ -694,7 +693,6 @@
             }
         }
 
-        // Загружаем топы при старте
         loadPublicTops();
 
         // ===== АВТОРИЗАЦИЯ =====
@@ -714,18 +712,13 @@
         function switchPlayerTab(tab) {
             document.getElementById('tabHome').classList.toggle('active', tab === 'home');
             document.getElementById('tabCabinet').classList.toggle('active', tab === 'cabinet');
-            document.getElementById('tabIdentification').classList.toggle('active', tab === 'identification');
-            document.getElementById('tabSkills').classList.toggle('active', tab === 'skills');
             document.getElementById('tabPlayers').classList.toggle('active', tab === 'players');
             document.getElementById('homeContent').classList.toggle('hidden', tab !== 'home');
             document.getElementById('cabinetContent').classList.toggle('hidden', tab !== 'cabinet');
-            document.getElementById('identificationContent').classList.toggle('hidden', tab !== 'identification');
-            document.getElementById('skillsContent').classList.toggle('hidden', tab !== 'skills');
             document.getElementById('playersContent').classList.toggle('hidden', tab !== 'players');
             
             if (tab === 'home') loadPublicTops();
             if (tab === 'players') loadAllPlayers();
-            if (tab === 'skills') loadSkillsForm();
         }
 
         function switchAdminTab(tab) {
@@ -742,11 +735,13 @@
 
         function showEditForm() {
             document.getElementById('approvedMessage').classList.add('hidden');
+            document.getElementById('approvedDataGrid').classList.add('hidden');
             document.getElementById('playerDataForm').classList.remove('hidden');
         }
 
         function showSkillsEditForm() {
             document.getElementById('skillsApprovedMessage').classList.add('hidden');
+            document.getElementById('approvedSkillsList').classList.add('hidden');
             document.getElementById('skillsForm').classList.remove('hidden');
         }
 
@@ -799,7 +794,6 @@
             loadPlayerData();
             loadPlayerSkills();
             loadPublicTops();
-            // По умолчанию открываем главную с топами
             switchPlayerTab('home');
         }
 
@@ -917,8 +911,8 @@
                 const form = document.getElementById('skillsForm');
                 const approvedMsg = document.getElementById('skillsApprovedMessage');
                 const statusSpan = document.getElementById('skillsStatus');
-                const approvedSection = document.getElementById('approvedSkillsSection');
                 const approvedList = document.getElementById('approvedSkillsList');
+                const skillsEmpty = document.getElementById('skillsEmpty');
 
                 if (result.success) {
                     myPlayerSkills = result.data;
@@ -930,40 +924,36 @@
                         
                         if (result.data.skills && result.data.skills.length > 0) {
                             approvedList.innerHTML = result.data.skills.map(s => `<div class="approved-skill-badge">${s}</div>`).join('');
-                            approvedSection.classList.remove('hidden');
+                            approvedList.classList.remove('hidden');
+                            skillsEmpty.classList.add('hidden');
                         } else {
-                            approvedSection.classList.add('hidden');
+                            approvedList.classList.add('hidden');
+                            skillsEmpty.classList.remove('hidden');
                         }
                     } 
                     else if (result.data.status === 'pending') {
                         statusSpan.innerHTML = '<span class="status-badge status-pending">На проверке</span>';
                         form.classList.remove('hidden');
                         approvedMsg.classList.add('hidden');
-                        approvedSection.classList.add('hidden');
+                        approvedList.classList.add('hidden');
+                        skillsEmpty.classList.remove('hidden');
                     } 
                     else {
                         statusSpan.innerHTML = '<span class="status-badge status-rejected">Отклонено</span>';
                         form.classList.remove('hidden');
                         approvedMsg.classList.add('hidden');
-                        approvedSection.classList.add('hidden');
+                        approvedList.classList.add('hidden');
+                        skillsEmpty.classList.remove('hidden');
                     }
                 } else {
                     statusSpan.innerHTML = '';
                     form.classList.remove('hidden');
                     approvedMsg.classList.add('hidden');
-                    approvedSection.classList.add('hidden');
+                    approvedList.classList.add('hidden');
+                    skillsEmpty.classList.remove('hidden');
                     myPlayerSkills = { skills: [], status: '' };
                 }
                 
-                buildSkillsForm();
-            } catch (error) { console.error(error); }
-        }
-
-        async function loadSkillsForm() {
-            try {
-                const skillsResponse = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkills' }), redirect: 'follow' });
-                const skillsResult = await skillsResponse.json();
-                if (skillsResult.success) allSkills = skillsResult.skills;
                 buildSkillsForm();
             } catch (error) { console.error(error); }
         }
@@ -1091,7 +1081,7 @@
             }
         }
 
-                async function loadPendingSkills() {
+        async function loadPendingSkills() {
             try {
                 const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingSkills' }), redirect: 'follow' });
                 const result = await response.json();
