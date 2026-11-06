@@ -453,13 +453,32 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" id="tabCabinet" onclick="switchPlayerTab('cabinet')">Личный кабинет</button>
+            <button class="tab-btn active" id="tabHome" onclick="switchPlayerTab('home')">Главная</button>
+            <button class="tab-btn" id="tabCabinet" onclick="switchPlayerTab('cabinet')">Личный кабинет</button>
             <button class="tab-btn" id="tabIdentification" onclick="switchPlayerTab('identification')">Идентификация</button>
             <button class="tab-btn" id="tabSkills" onclick="switchPlayerTab('skills')">Навыки</button>
             <button class="tab-btn" id="tabPlayers" onclick="switchPlayerTab('players')">Игроки</button>
         </div>
 
-        <div id="cabinetContent" class="panel">
+        <!-- Главная с топами -->
+        <div id="homeContent" class="panel">
+            <div class="top-containers">
+                <div class="top-panel">
+                    <div class="top-panel-title">Топ-10 по Боевой Мощи</div>
+                    <div id="playerTopBmList" class="top-list">
+                        <div class="loading-overlay"><span class="loader"></span> Загрузка...</div>
+                    </div>
+                </div>
+                <div class="top-panel">
+                    <div class="top-panel-title">Топ-10 по Уровню</div>
+                    <div id="playerTopLevelList" class="top-list">
+                        <div class="loading-overlay"><span class="loader"></span> Загрузка...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cabinetContent" class="panel hidden">
             <div class="panel-title">Подтвержденные данные персонажа</div>
             <div id="approvedDataGrid" class="data-grid"></div>
             <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют или находятся на проверке.</div>
@@ -624,7 +643,7 @@
                         .sort((a, b) => Number(b.bm) - Number(a.bm))
                         .slice(0, 10);
                     
-                    document.getElementById('topBmList').innerHTML = topBm.map((p, i) => {
+                    const topBmHtml = topBm.map((p, i) => {
                         const rank = i + 1;
                         const rankClass = rank <= 3 ? `rank-${rank}` : '';
                         return `
@@ -635,13 +654,16 @@
                             </div>
                         `;
                     }).join('');
+                    
+                    document.getElementById('topBmList').innerHTML = topBmHtml;
+                    document.getElementById('playerTopBmList').innerHTML = topBmHtml;
 
                     // Топ-10 по Уровню
                     const topLevel = [...players]
                         .sort((a, b) => Number(b.level) - Number(a.level))
                         .slice(0, 10);
                     
-                    document.getElementById('topLevelList').innerHTML = topLevel.map((p, i) => {
+                    const topLevelHtml = topLevel.map((p, i) => {
                         const rank = i + 1;
                         const rankClass = rank <= 3 ? `rank-${rank}` : '';
                         return `
@@ -652,14 +674,23 @@
                             </div>
                         `;
                     }).join('');
+                    
+                    document.getElementById('topLevelList').innerHTML = topLevelHtml;
+                    document.getElementById('playerTopLevelList').innerHTML = topLevelHtml;
                 } else {
-                    document.getElementById('topBmList').innerHTML = '<div class="empty-state">Нет данных</div>';
-                    document.getElementById('topLevelList').innerHTML = '<div class="empty-state">Нет данных</div>';
+                    const emptyHtml = '<div class="empty-state">Нет данных</div>';
+                    document.getElementById('topBmList').innerHTML = emptyHtml;
+                    document.getElementById('topLevelList').innerHTML = emptyHtml;
+                    document.getElementById('playerTopBmList').innerHTML = emptyHtml;
+                    document.getElementById('playerTopLevelList').innerHTML = emptyHtml;
                 }
             } catch (error) {
                 console.error(error);
-                document.getElementById('topBmList').innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
-                document.getElementById('topLevelList').innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
+                const errorHtml = '<div class="empty-state">Ошибка загрузки</div>';
+                document.getElementById('topBmList').innerHTML = errorHtml;
+                document.getElementById('topLevelList').innerHTML = errorHtml;
+                document.getElementById('playerTopBmList').innerHTML = errorHtml;
+                document.getElementById('playerTopLevelList').innerHTML = errorHtml;
             }
         }
 
@@ -681,15 +712,18 @@
         }
 
         function switchPlayerTab(tab) {
+            document.getElementById('tabHome').classList.toggle('active', tab === 'home');
             document.getElementById('tabCabinet').classList.toggle('active', tab === 'cabinet');
             document.getElementById('tabIdentification').classList.toggle('active', tab === 'identification');
             document.getElementById('tabSkills').classList.toggle('active', tab === 'skills');
             document.getElementById('tabPlayers').classList.toggle('active', tab === 'players');
+            document.getElementById('homeContent').classList.toggle('hidden', tab !== 'home');
             document.getElementById('cabinetContent').classList.toggle('hidden', tab !== 'cabinet');
             document.getElementById('identificationContent').classList.toggle('hidden', tab !== 'identification');
             document.getElementById('skillsContent').classList.toggle('hidden', tab !== 'skills');
             document.getElementById('playersContent').classList.toggle('hidden', tab !== 'players');
             
+            if (tab === 'home') loadPublicTops();
             if (tab === 'players') loadAllPlayers();
             if (tab === 'skills') loadSkillsForm();
         }
@@ -764,6 +798,9 @@
             document.getElementById('playerNick').innerText = currentUser;
             loadPlayerData();
             loadPlayerSkills();
+            loadPublicTops();
+            // По умолчанию открываем главную с топами
+            switchPlayerTab('home');
         }
 
         function showAdminScreen() {
@@ -1054,7 +1091,7 @@
             }
         }
 
-        async function loadPendingSkills() {
+                async function loadPendingSkills() {
             try {
                 const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingSkills' }), redirect: 'follow' });
                 const result = await response.json();
@@ -1255,7 +1292,6 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('publicScreen').classList.add('active');
             document.getElementById('authMessage').style.display = 'none';
-            // Обновляем топы при выходе
             loadPublicTops();
         }
     </script>
