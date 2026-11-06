@@ -29,7 +29,7 @@
             background-size: 40px 40px;
         }
 
-        .screen { display: none; width: 100%; max-width: 900px; padding: 20px; }
+        .screen { display: none; width: 100%; max-width: 1000px; padding: 20px; }
         .screen.active { display: block; }
 
         .terminal-container {
@@ -129,7 +129,7 @@
         .player-nick { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 16px; }
         .action-buttons { display: flex; gap: 10px; }
 
-        .btn-approve, .btn-reject, .btn-edit {
+        .btn-approve, .btn-reject, .btn-edit, .btn-compare, .btn-back {
             padding: 8px 15px; border: none; cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 12px; text-transform: uppercase; transition: 0.3s;
         }
         .btn-approve { background: rgba(0, 255, 136, 0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
@@ -138,8 +138,51 @@
         .btn-reject:hover { background: rgba(255, 42, 42, 0.4); }
         .btn-edit { background: rgba(0, 240, 255, 0.1); color: var(--neon-cyan); border: 1px solid var(--neon-cyan); width: 100%; margin-top: 10px; }
         .btn-edit:hover { background: rgba(0, 240, 255, 0.3); }
+        .btn-compare { background: rgba(255, 140, 0, 0.2); color: var(--neon-orange); border: 1px solid var(--neon-orange); }
+        .btn-compare:hover { background: rgba(255, 140, 0, 0.4); }
+        .btn-back { background: rgba(0, 240, 255, 0.1); color: var(--neon-cyan); border: 1px solid var(--neon-cyan); margin-bottom: 20px; }
+        .btn-back:hover { background: rgba(0, 240, 255, 0.3); }
 
         .empty-state { text-align: center; color: var(--text-dim); padding: 40px 0; font-size: 16px; }
+
+        /* Стили для рейтинга игроков */
+        .ranking-list { display: flex; flex-direction: column; gap: 10px; }
+        .ranking-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: 0.3s;
+        }
+        .ranking-item:hover { border-color: var(--neon-cyan); background: rgba(0, 240, 255, 0.05); }
+        .ranking-position {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: var(--neon-orange);
+            min-width: 50px;
+            text-align: center;
+        }
+        .ranking-position.top-1 { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+        .ranking-position.top-2 { color: #c0c0c0; text-shadow: 0 0 10px #c0c0c0; }
+        .ranking-position.top-3 { color: #cd7f32; text-shadow: 0 0 10px #cd7f32; }
+        .ranking-info { flex: 1; }
+        .ranking-nick { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 16px; margin-bottom: 5px; }
+        .ranking-stats { font-size: 12px; color: var(--text-dim); }
+        .ranking-bm { font-size: 18px; color: var(--neon-green); font-weight: bold; }
+
+        /* Стили для сравнения */
+        .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .compare-column { background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); padding: 20px; }
+        .compare-title { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 16px; margin-bottom: 15px; text-align: center; }
+        .compare-stat { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        .compare-stat:last-child { border-bottom: none; }
+        .compare-label { color: var(--text-dim); font-size: 14px; }
+        .compare-value { font-size: 16px; font-weight: bold; }
+        .compare-value.better { color: var(--neon-green); }
+        .compare-value.worse { color: var(--neon-red); }
+        .compare-value.equal { color: var(--neon-orange); }
     </style>
 </head>
 <body>
@@ -199,6 +242,7 @@
         <div class="tabs">
             <button class="tab-btn active" id="tabCabinet" onclick="switchPlayerTab('cabinet')">Личный кабинет</button>
             <button class="tab-btn" id="tabIdentification" onclick="switchPlayerTab('identification')">Идентификация</button>
+            <button class="tab-btn" id="tabPlayers" onclick="switchPlayerTab('players')">Игроки</button>
         </div>
 
         <!-- Содержимое: Личный кабинет -->
@@ -212,7 +256,6 @@
         <div id="identificationContent" class="panel hidden">
             <div class="panel-title">Идентификация персонажа <span id="playerStatus"></span></div>
             
-            <!-- Сообщение для подтвержденных данных -->
             <div id="approvedMessage" class="hidden">
                 <div class="message success" style="display: block; margin-bottom: 20px;">
                     Ваши данные успешно подтверждены Администратором.
@@ -223,7 +266,6 @@
                 <button class="btn-edit" onclick="showEditForm()">Запросить изменение данных</button>
             </div>
 
-            <!-- Форма ввода (скрыта по умолчанию, если данные подтверждены) -->
             <form id="playerDataForm" class="hidden" onsubmit="savePlayerData(event)">
                 <div class="data-grid">
                     <div class="form-group"><label>БМ (Боевая Мощь)</label><input type="number" id="bm" required placeholder="Например: 150000"></div>
@@ -254,6 +296,29 @@
             </form>
             <div id="playerMessage" class="message"></div>
         </div>
+
+        <!-- Содержимое: Игроки -->
+        <div id="playersContent" class="panel hidden">
+            <div id="playersList">
+                <div class="panel-title">Рейтинг игроков</div>
+                <div id="rankingList" class="ranking-list"></div>
+            </div>
+            
+            <div id="compareView" class="hidden">
+                <button class="btn-back" onclick="backToRanking()">← Назад к рейтингу</button>
+                <div class="panel-title">Сравнение персонажей</div>
+                <div class="compare-container">
+                    <div class="compare-column">
+                        <div class="compare-title" id="myNick">Мой персонаж</div>
+                        <div id="myStats"></div>
+                    </div>
+                    <div class="compare-column">
+                        <div class="compare-title" id="compareNick">Противник</div>
+                        <div id="compareStats"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ЭКРАН АДМИНА -->
@@ -270,10 +335,10 @@
     </div>
 
     <script>
-        // Твоя ссылка уже вставлена сюда!
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwgs6YrBF0veTlUBT8brGPuF2KVw5zXedJDhjhBrP1hnW4PFhgIHECYS5NXj0JetnNe/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzH4HyHJYWMraTDZ4zsGx20_o7XrxeSJiv4SUUNm5A9UnJsmsL3mmqQl7DKHdv_AMZS/exec';
         let currentUser = null;
         let currentRole = null;
+        let myPlayerData = null;
 
         function switchAuthTab(tab) {
             const tabs = document.querySelectorAll('#authScreen .tab-btn');
@@ -290,8 +355,14 @@
         function switchPlayerTab(tab) {
             document.getElementById('tabCabinet').classList.toggle('active', tab === 'cabinet');
             document.getElementById('tabIdentification').classList.toggle('active', tab === 'identification');
+            document.getElementById('tabPlayers').classList.toggle('active', tab === 'players');
             document.getElementById('cabinetContent').classList.toggle('hidden', tab !== 'cabinet');
             document.getElementById('identificationContent').classList.toggle('hidden', tab !== 'identification');
+            document.getElementById('playersContent').classList.toggle('hidden', tab !== 'players');
+            
+            if (tab === 'players') {
+                loadAllPlayers();
+            }
         }
 
         function showEditForm() {
@@ -367,8 +438,8 @@
 
                 if (result.success) {
                     const data = result.data;
+                    myPlayerData = data;
                     
-                    // Заполняем форму на всякий случай
                     document.getElementById('bm').value = data.bm || '';
                     document.getElementById('level').value = data.level || '';
                     document.getElementById('attack').value = data.attack || '';
@@ -379,7 +450,6 @@
                     document.getElementById('profession').value = data.profession || '';
 
                     if (data.status === 'approved') {
-                        // ПОДТВЕРЖДЕНО: показываем личный кабинет, скрываем форму
                         statusSpan.innerHTML = '<span class="status-badge status-approved">Подтверждено</span>';
                         approvedGrid.innerHTML = `
                             <div class="data-item"><div class="data-label">БМ</div><div class="data-value">${data.bm}</div></div>
@@ -393,12 +463,8 @@
                         `;
                         cabinetEmpty.classList.add('hidden');
                         approvedGrid.classList.remove('hidden');
-                        
-                        // Скрываем форму, показываем сообщение об успехе и кнопку редактирования
                         form.classList.add('hidden');
                         approvedMsg.classList.remove('hidden');
-                        
-                        // По умолчанию открываем вкладку Личный кабинет
                         switchPlayerTab('cabinet');
                     } 
                     else if (data.status === 'pending') {
@@ -406,7 +472,7 @@
                         cabinetEmpty.classList.remove('hidden');
                         approvedGrid.classList.add('hidden');
                         approvedMsg.classList.add('hidden');
-                        form.classList.remove('hidden'); // Показываем форму, чтобы игрок видел, что отправил (или мог исправить)
+                        form.classList.remove('hidden');
                         switchPlayerTab('identification');
                     } 
                     else {
@@ -418,7 +484,6 @@
                         switchPlayerTab('identification');
                     }
                 } else {
-                    // Данных нет вообще
                     cabinetEmpty.classList.remove('hidden');
                     approvedGrid.classList.add('hidden');
                     approvedMsg.classList.add('hidden');
@@ -515,8 +580,92 @@
             } catch (error) { console.error(error); }
         }
 
+        // НОВАЯ ФУНКЦИЯ: Загрузить всех игроков
+        async function loadAllPlayers() {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayers' }), redirect: 'follow' });
+                const result = await response.json();
+                const list = document.getElementById('rankingList');
+                
+                if (result.success && result.players.length > 0) {
+                    list.innerHTML = result.players.map((player, index) => {
+                        const position = index + 1;
+                        let positionClass = '';
+                        if (position === 1) positionClass = 'top-1';
+                        else if (position === 2) positionClass = 'top-2';
+                        else if (position === 3) positionClass = 'top-3';
+                        
+                        return `
+                            <div class="ranking-item">
+                                <div class="ranking-position ${positionClass}">#${position}</div>
+                                <div class="ranking-info">
+                                    <div class="ranking-nick">${player.nickname}</div>
+                                    <div class="ranking-stats">
+                                        Ур. ${player.level} | ${player.profession} | Атака: ${player.attack} | Защита: ${player.defense}
+                                    </div>
+                                </div>
+                                <div class="ranking-bm">БМ: ${player.bm}</div>
+                                <button class="btn-compare" onclick="compareWithPlayer('${player.nickname}')">Сравнить</button>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    list.innerHTML = '<div class="empty-state">Нет игроков с подтвержденными данными</div>';
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        // НОВАЯ ФУНКЦИЯ: Сравнить с выбранным игроком
+        async function compareWithPlayer(nickname) {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerForCompare', nickname: nickname }), redirect: 'follow' });
+                const result = await response.json();
+                
+                if (result.success && myPlayerData && myPlayerData.status === 'approved') {
+                    document.getElementById('playersList').classList.add('hidden');
+                    document.getElementById('compareView').classList.remove('hidden');
+                    
+                    document.getElementById('myNick').innerText = currentUser;
+                    document.getElementById('compareNick').innerText = result.data.nickname;
+                    
+                    const myStats = document.getElementById('myStats');
+                    const compareStats = document.getElementById('compareStats');
+                    
+                    const stats = [
+                        { label: 'БМ', my: myPlayerData.bm, other: result.data.bm },
+                        { label: 'Уровень', my: myPlayerData.level, other: result.data.level },
+                        { label: 'Атака', my: myPlayerData.attack, other: result.data.attack },
+                        { label: 'Защита', my: myPlayerData.defense, other: result.data.defense },
+                        { label: 'Меткость', my: myPlayerData.accuracy, other: result.data.accuracy },
+                        { label: 'Уклонение', my: myPlayerData.evasion, other: result.data.evasion }
+                    ];
+                    
+                    myStats.innerHTML = stats.map(stat => {
+                        let className = 'equal';
+                        if (Number(stat.my) > Number(stat.other)) className = 'better';
+                        else if (Number(stat.my) < Number(stat.other)) className = 'worse';
+                        
+                        return `<div class="compare-stat"><span class="compare-label">${stat.label}</span><span class="compare-value ${className}">${stat.my}</span></div>`;
+                    }).join('') + `<div class="compare-stat"><span class="compare-label">Коллекции</span><span class="compare-value equal">${myPlayerData.collections}</span></div>`;
+                    
+                    compareStats.innerHTML = stats.map(stat => {
+                        let className = 'equal';
+                        if (Number(stat.other) > Number(stat.my)) className = 'better';
+                        else if (Number(stat.other) < Number(stat.my)) className = 'worse';
+                        
+                        return `<div class="compare-stat"><span class="compare-label">${stat.label}</span><span class="compare-value ${className}">${stat.other}</span></div>`;
+                    }).join('') + `<div class="compare-stat"><span class="compare-label">Коллекции</span><span class="compare-value equal">${result.data.collections}</span></div>`;
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        function backToRanking() {
+            document.getElementById('playersList').classList.remove('hidden');
+            document.getElementById('compareView').classList.add('hidden');
+        }
+
         function logout() {
-            currentUser = null; currentRole = null;
+            currentUser = null; currentRole = null; myPlayerData = null;
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('authScreen').classList.add('active');
             document.getElementById('authMessage').style.display = 'none';
