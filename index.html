@@ -13,9 +13,13 @@
             --neon-red: #ff2a2a;
             --neon-orange: #ff8c00;
             --neon-green: #00ff88;
+            --neon-purple: #b14aed;
             --text-main: #e0e6ed;
             --text-dim: #7a8b99;
             --border-color: #1f2d40;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
         }
 
         body {
@@ -29,7 +33,7 @@
             background-size: 40px 40px;
         }
 
-        .screen { display: none; width: 100%; max-width: 1000px; padding: 20px; }
+        .screen { display: none; width: 100%; max-width: 1200px; padding: 20px; }
         .screen.active { display: block; }
 
         .terminal-container {
@@ -52,7 +56,129 @@
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
-        .subtitle { text-align: center; color: var(--text-dim); font-size: 14px; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+        .public-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        .public-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+        }
+        .public-subtitle {
+            color: var(--text-dim);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .login-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .login-link:hover {
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+        }
+
+        .top-containers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        @media (max-width: 768px) {
+            .top-containers { grid-template-columns: 1fr; }
+            .public-title { font-size: 24px; letter-spacing: 3px; }
+            .login-link { position: static; margin-top: 20px; display: inline-block; }
+        }
+
+        .top-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            position: relative;
+        }
+        .top-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+        }
+        .top-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .top-list { display: flex; flex-direction: column; gap: 8px; }
+        .top-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
+        }
+        .top-item:hover { border-color: var(--neon-cyan); background: rgba(0, 240, 255, 0.05); }
+        .top-item.rank-1 { border-color: var(--gold); background: rgba(255, 215, 0, 0.08); }
+        .top-item.rank-2 { border-color: var(--silver); background: rgba(192, 192, 192, 0.06); }
+        .top-item.rank-3 { border-color: var(--bronze); background: rgba(205, 127, 50, 0.06); }
+
+        .top-rank {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            min-width: 45px;
+            text-align: center;
+            color: var(--text-dim);
+        }
+        .top-rank.rank-1 { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+        .top-rank.rank-2 { color: var(--silver); text-shadow: 0 0 10px var(--silver); }
+        .top-rank.rank-3 { color: var(--bronze); text-shadow: 0 0 10px var(--bronze); }
+
+        .top-nick {
+            flex: 1;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-main);
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+        .top-item.rank-1 .top-nick { color: var(--gold); }
+        .top-item.rank-2 .top-nick { color: var(--silver); }
+        .top-item.rank-3 .top-nick { color: var(--bronze); }
+
+        .top-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--neon-green);
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+        }
 
         .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
         .tab-btn {
@@ -104,6 +230,7 @@
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 30px; padding: 15px;
             background: var(--panel-bg); border: 1px solid var(--border-color);
+            flex-wrap: wrap; gap: 10px;
         }
         .user-info { color: var(--neon-cyan); font-family: 'Orbitron', sans-serif; }
         .logout-btn {
@@ -167,9 +294,9 @@
             min-width: 50px;
             text-align: center;
         }
-        .ranking-position.top-1 { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
-        .ranking-position.top-2 { color: #c0c0c0; text-shadow: 0 0 10px #c0c0c0; }
-        .ranking-position.top-3 { color: #cd7f32; text-shadow: 0 0 10px #cd7f32; }
+        .ranking-position.top-1 { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+        .ranking-position.top-2 { color: var(--silver); text-shadow: 0 0 10px var(--silver); }
+        .ranking-position.top-3 { color: var(--bronze); text-shadow: 0 0 10px var(--bronze); }
         .ranking-info { flex: 1; min-width: 200px; }
         .ranking-nick { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 16px; margin-bottom: 5px; }
         .ranking-stats { font-size: 12px; color: var(--text-dim); }
@@ -186,7 +313,6 @@
         .compare-value.worse { color: var(--neon-red); }
         .compare-value.equal { color: var(--neon-orange); }
 
-        /* Стили для навыков */
         .skills-list { display: flex; flex-direction: column; gap: 10px; }
         .skill-item {
             background: rgba(0, 0, 0, 0.3);
@@ -234,12 +360,49 @@
             border: 1px solid var(--neon-orange);
             margin-left: 10px;
         }
+
+        .loading-overlay {
+            text-align: center;
+            padding: 40px;
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
 
+    <!-- ПУБЛИЧНЫЙ ЭКРАН (ГЛАВНАЯ) -->
+    <div id="publicScreen" class="screen active">
+        <div class="public-header">
+            <div class="corner top-left"></div><div class="corner top-right"></div>
+            <div class="corner bottom-left"></div><div class="corner bottom-right"></div>
+            <div class="public-title">RF Online Next</div>
+            <div class="public-subtitle">Глобальный рейтинг пилотов</div>
+            <button class="login-link" onclick="showAuthScreen()">Войти в систему</button>
+        </div>
+
+        <div class="top-containers">
+            <!-- Топ-10 по БМ -->
+            <div class="top-panel">
+                <div class="top-panel-title">Топ-10 по Боевой Мощи</div>
+                <div id="topBmList" class="top-list">
+                    <div class="loading-overlay"><span class="loader"></span> Загрузка...</div>
+                </div>
+            </div>
+
+            <!-- Топ-10 по Уровню -->
+            <div class="top-panel">
+                <div class="top-panel-title">Топ-10 по Уровню</div>
+                <div id="topLevelList" class="top-list">
+                    <div class="loading-overlay"><span class="loader"></span> Загрузка...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ЭКРАН ВХОДА/РЕГИСТРАЦИИ -->
-    <div id="authScreen" class="screen active">
+    <div id="authScreen" class="screen">
         <div class="terminal-container">
             <div class="corner top-left"></div><div class="corner top-right"></div>
             <div class="corner bottom-left"></div><div class="corner bottom-right"></div>
@@ -296,7 +459,6 @@
             <button class="tab-btn" id="tabPlayers" onclick="switchPlayerTab('players')">Игроки</button>
         </div>
 
-        <!-- Личный кабинет -->
         <div id="cabinetContent" class="panel">
             <div class="panel-title">Подтвержденные данные персонажа</div>
             <div id="approvedDataGrid" class="data-grid"></div>
@@ -308,7 +470,6 @@
             </div>
         </div>
 
-        <!-- Идентификация -->
         <div id="identificationContent" class="panel hidden">
             <div class="panel-title">Идентификация персонажа <span id="playerStatus"></span></div>
             
@@ -353,7 +514,6 @@
             <div id="playerMessage" class="message"></div>
         </div>
 
-        <!-- Навыки -->
         <div id="skillsContent" class="panel hidden">
             <div class="panel-title">Навыки персонажа <span id="skillsStatus"></span></div>
             
@@ -374,7 +534,6 @@
             <div id="skillsMessage" class="message"></div>
         </div>
 
-        <!-- Игроки -->
         <div id="playersContent" class="panel hidden">
             <div id="playersList">
                 <div class="panel-title">Рейтинг игроков</div>
@@ -444,6 +603,70 @@
         let myPlayerData = null;
         let myPlayerSkills = null;
         let allSkills = [];
+
+        // ===== ПУБЛИЧНЫЙ ЭКРАН =====
+
+        function showAuthScreen() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('authScreen').classList.add('active');
+        }
+
+        async function loadPublicTops() {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayers' }), redirect: 'follow' });
+                const result = await response.json();
+                
+                if (result.success && result.players.length > 0) {
+                    const players = result.players;
+
+                    // Топ-10 по БМ
+                    const topBm = [...players]
+                        .sort((a, b) => Number(b.bm) - Number(a.bm))
+                        .slice(0, 10);
+                    
+                    document.getElementById('topBmList').innerHTML = topBm.map((p, i) => {
+                        const rank = i + 1;
+                        const rankClass = rank <= 3 ? `rank-${rank}` : '';
+                        return `
+                            <div class="top-item ${rankClass}">
+                                <div class="top-rank ${rankClass}">#${rank}</div>
+                                <div class="top-nick">${p.nickname}</div>
+                                <div class="top-value">${Number(p.bm).toLocaleString('ru-RU')}</div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    // Топ-10 по Уровню
+                    const topLevel = [...players]
+                        .sort((a, b) => Number(b.level) - Number(a.level))
+                        .slice(0, 10);
+                    
+                    document.getElementById('topLevelList').innerHTML = topLevel.map((p, i) => {
+                        const rank = i + 1;
+                        const rankClass = rank <= 3 ? `rank-${rank}` : '';
+                        return `
+                            <div class="top-item ${rankClass}">
+                                <div class="top-rank ${rankClass}">#${rank}</div>
+                                <div class="top-nick">${p.nickname}</div>
+                                <div class="top-value">Ур. ${p.level}</div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    document.getElementById('topBmList').innerHTML = '<div class="empty-state">Нет данных</div>';
+                    document.getElementById('topLevelList').innerHTML = '<div class="empty-state">Нет данных</div>';
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('topBmList').innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
+                document.getElementById('topLevelList').innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
+            }
+        }
+
+        // Загружаем топы при старте
+        loadPublicTops();
+
+        // ===== АВТОРИЗАЦИЯ =====
 
         function switchAuthTab(tab) {
             const tabs = document.querySelectorAll('#authScreen .tab-btn');
@@ -536,7 +759,7 @@
         }
 
         function showPlayerScreen() {
-            document.getElementById('authScreen').classList.remove('active');
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('playerScreen').classList.add('active');
             document.getElementById('playerNick').innerText = currentUser;
             loadPlayerData();
@@ -544,7 +767,7 @@
         }
 
         function showAdminScreen() {
-            document.getElementById('authScreen').classList.remove('active');
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('adminScreen').classList.add('active');
             loadPendingPlayers();
         }
@@ -643,18 +866,14 @@
             }
         }
 
-        // ===== ФУНКЦИИ ДЛЯ НАВЫКОВ =====
+        // ===== НАВЫКИ =====
 
         async function loadPlayerSkills() {
             try {
-                // Загружаем список всех навыков
                 const skillsResponse = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkills' }), redirect: 'follow' });
                 const skillsResult = await skillsResponse.json();
-                if (skillsResult.success) {
-                    allSkills = skillsResult.skills;
-                }
+                if (skillsResult.success) allSkills = skillsResult.skills;
 
-                // Загружаем навыки игрока
                 const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerSkills', nickname: currentUser }), redirect: 'follow' });
                 const result = await response.json();
                 
@@ -672,7 +891,6 @@
                         form.classList.add('hidden');
                         approvedMsg.classList.remove('hidden');
                         
-                        // Показываем в личном кабинете
                         if (result.data.skills && result.data.skills.length > 0) {
                             approvedList.innerHTML = result.data.skills.map(s => `<div class="approved-skill-badge">${s}</div>`).join('');
                             approvedSection.classList.remove('hidden');
@@ -700,7 +918,6 @@
                     myPlayerSkills = { skills: [], status: '' };
                 }
                 
-                // Строим форму навыков
                 buildSkillsForm();
             } catch (error) { console.error(error); }
         }
@@ -709,9 +926,7 @@
             try {
                 const skillsResponse = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkills' }), redirect: 'follow' });
                 const skillsResult = await skillsResponse.json();
-                if (skillsResult.success) {
-                    allSkills = skillsResult.skills;
-                }
+                if (skillsResult.success) allSkills = skillsResult.skills;
                 buildSkillsForm();
             } catch (error) { console.error(error); }
         }
@@ -1038,8 +1253,10 @@
         function logout() {
             currentUser = null; currentRole = null; myPlayerData = null; myPlayerSkills = null;
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('authScreen').classList.add('active');
+            document.getElementById('publicScreen').classList.add('active');
             document.getElementById('authMessage').style.display = 'none';
+            // Обновляем топы при выходе
+            loadPublicTops();
         }
     </script>
 </body>
