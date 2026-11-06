@@ -833,8 +833,13 @@
     let recognizedNicks = [];
 
     function showAuthScreen() {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('authScreen').classList.add('active');
+        try {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const authScreen = document.getElementById('authScreen');
+            if (authScreen) authScreen.classList.add('active');
+        } catch (error) {
+            console.error('Ошибка showAuthScreen:', error);
+        }
     }
     function getRoleBadge(role) {
         if (role === 'Админ') return ' <span style="color: var(--neon-red); font-size: 10px;">[АДМИН]</span>';
@@ -847,7 +852,6 @@
     }
 
     async function loadPublicTops() {
-        // Загружаем топы по БМ и Уровню
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayers' }), redirect: 'follow' });
             const result = await response.json();
@@ -883,7 +887,6 @@
             });
         }
 
-        // Загружаем топ DKP отдельно
         try {
             const dkpResponse = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllDKP' }), redirect: 'follow' });
             const dkpResult = await dkpResponse.json();
@@ -1420,6 +1423,7 @@
                 ctx.drawImage(img, 0, 0, width, height);
                 resolve(canvas.toDataURL('image/jpeg', quality));
             };
+            img.onerror = () => resolve(base64);
             img.src = base64;
         });
     }
@@ -1441,6 +1445,41 @@
         renderScreenshotsPreview();
     }
 
+    async function preprocessImage(base64) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    
+                    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    const inverted = 255 - gray;
+                    const contrast = 1.8;
+                    const adjusted = ((inverted / 255 - 0.5) * contrast + 0.5) * 255;
+                    const final = Math.max(0, Math.min(255, adjusted));
+                    data[i] = data[i + 1] = data[i + 2] = final;
+                    data[i + 3] = 255;
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+                resolve(canvas.toDataURL('image/png'));
+            };
+            img.onerror = () => resolve(base64);
+            img.src = base64;
+        });
+    }
+
     async function runOcrOnScreenshots() {
         const doneScreenshots = uploadedScreenshots.filter(s => s.status === 'done' && s.base64);
         if (doneScreenshots.length === 0) return;
@@ -1451,53 +1490,105 @@
         const nicksBlock = document.getElementById('recognizedNicksBlock');
         
         progressBlock.classList.remove('hidden');
+        progressBar.style.width = '0%';
         recognizedNicks = [];
         
+        if (typeof Tesseract === 'undefined') {
+            progressText.innerText = '⚠️ Tesseract не загружен. Добавьте ники вручную.';
+            nicksBlock.classList.remove('hidden');
+            renderRecognizedNicks();
+            return;
+        }
+        
         try {
-            const worker = await Tesseract.createWorker('rus+eng');
+            progressText.innerText = 'Загрузка OCR-модели (русский + английский)...';
+            progressBar.style.width = '10%';
+            
+            const worker = await Tesseract.createWorker('rus+eng', 1, {
+                logger: m => {
+                    if (m.status === 'loading tesseract core') {
+                        progressText.innerText = 'Загрузка ядра Tesseract...';
+                    } else if (m.status === 'initializing tesseract') {
+                        progressText.innerText = 'Инициализация...';
+                    } else if (m.status === 'loading language traineddata') {
+                        progressText.innerText = 'Загрузка языковых данных...';
+                    } else if (m.status === 'recognizing text') {
+                        const percent = Math.round(m.progress * 100);
+                        progressBar.style.width = (10 + percent * 0.85) + '%';
+                        progressText.innerText = `Распознавание... ${percent}%`;
+                    }
+                }
+            });
+            
             const allNicks = new Set();
+            
             for (let i = 0; i < doneScreenshots.length; i++) {
                 progressText.innerText = `Обработка скриншота ${i + 1} из ${doneScreenshots.length}...`;
-                const { data: { text, progress } } = await worker.recognize(doneScreenshots[i].base64);
-                progressBar.style.width = Math.round(progress * 100) + '%';
+                
+                const processedImage = await preprocessImage(doneScreenshots[i].base64);
+                
+                const { data: { text } } = await worker.recognize(processedImage);
+                
                 const extractedNicks = extractNicksFromText(text);
                 extractedNicks.forEach(n => allNicks.add(n));
+                
+                progressBar.style.width = (10 + ((i + 1) / doneScreenshots.length) * 85) + '%';
             }
+
             await worker.terminate();
             
             recognizedNicks = Array.from(allNicks).filter(n => n.length >= 2 && n.length <= 20);
-            progressText.innerText = `Распознано ников: ${recognizedNicks.length}`;
+            progressText.innerText = `✅ Распознано ников: ${recognizedNicks.length}`;
             progressBar.style.width = '100%';
             
             renderRecognizedNicks();
             nicksBlock.classList.remove('hidden');
+            
+            if (recognizedNicks.length === 0) {
+                progressText.innerText = '⚠️ Ники не распознаны. Добавьте вручную.';
+            }
         } catch (error) {
-            console.error(error);
-            progressText.innerText = 'Ошибка распознавания. Добавьте ники вручную.';
+            console.error('OCR ошибка:', error);
+            progressText.innerText = '❌ Ошибка распознавания. Добавьте ники вручную.';
             nicksBlock.classList.remove('hidden');
             renderRecognizedNicks();
         }
     }
 
-    // ⚠️ ИСПРАВЛЕННАЯ ФУНКЦИЯ — главная причина ошибки
     function extractNicksFromText(text) {
+        if (!text || typeof text !== 'string') return [];
+        
         const lines = text.split(/\n|\r/);
-        const nicks = [];
-        // ✅ ИСПРАВЛЕНО: используем Unicode-диапазон \u0410-\u044F вместо А-Яа-я
-        const nickPattern = /^[\u0410-\u044F\u0400-\u04FFA-Za-z0-9][\u0410-\u044F\u0400-\u04FFA-Za-z0-9_\-\[\]]{1,15}$/;
+        const allWords = [];
+        const wordFrequency = {};
         
         lines.forEach(line => {
-            const words = line.trim().split(/\s+/);
-            words.forEach(word => {
-                // ✅ ИСПРАВЛЕНО: используем Unicode-диапазон
-                const cleanWord = word.replace(/[^\u0410-\u044F\u0400-\u04FF\w\-\[\]]/g, '');
-                if (nickPattern.test(cleanWord) && cleanWord.length >= 3) {
-                    nicks.push(cleanWord);
+            const tokens = line.split(/[\s\t]+/);
+            tokens.forEach(token => {
+                const clean = token.replace(/[^\w\u0400-\u04FF\-_]/g, '');
+                if (clean.length >= 2 && clean.length <= 20) {
+                    allWords.push(clean);
+                    wordFrequency[clean] = (wordFrequency[clean] || 0) + 1;
                 }
             });
         });
         
-        return [...new Set(nicks)];
+        const nicks = [];
+        const seen = new Set();
+        
+        allWords.forEach(word => {
+            if (seen.has(word)) return;
+            if (wordFrequency[word] > 1) return;
+            if (/^\d+$/.test(word)) return;
+            if (!/[A-Za-z\u0410-\u044F\u0400-\u04FF]/.test(word)) return;
+            const skipWords = ['headhunters', 'гильдия', 'команда', 'рейдовая', 'группа', 'управление', 'неа'];
+            if (skipWords.includes(word.toLowerCase())) return;
+            
+            seen.add(word);
+            nicks.push(word);
+        });
+        
+        return nicks;
     }
 
     function renderRecognizedNicks() {
