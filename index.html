@@ -54,11 +54,12 @@
 
         .subtitle { text-align: center; color: var(--text-dim); font-size: 14px; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
         .tab-btn {
             flex: 1; background: transparent; border: none; color: var(--text-dim);
-            font-family: 'Orbitron', sans-serif; font-size: 14px; padding: 10px;
+            font-family: 'Orbitron', sans-serif; font-size: 13px; padding: 10px;
             cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+            min-width: 120px;
         }
         .tab-btn.active { color: var(--neon-cyan); border-bottom: 2px solid var(--neon-cyan); text-shadow: 0 0 8px var(--neon-cyan); }
 
@@ -125,9 +126,9 @@
         .data-value { font-size: 18px; color: var(--neon-cyan); font-weight: bold; }
 
         .player-card { background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); padding: 20px; margin-bottom: 15px; }
-        .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
         .player-nick { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 16px; }
-        .action-buttons { display: flex; gap: 10px; }
+        .action-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
 
         .btn-approve, .btn-reject, .btn-edit, .btn-compare, .btn-back, .btn-remove {
             padding: 8px 15px; border: none; cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 12px; text-transform: uppercase; transition: 0.3s;
@@ -156,6 +157,7 @@
             align-items: center;
             gap: 15px;
             transition: 0.3s;
+            flex-wrap: wrap;
         }
         .ranking-item:hover { border-color: var(--neon-cyan); background: rgba(0, 240, 255, 0.05); }
         .ranking-position {
@@ -168,7 +170,7 @@
         .ranking-position.top-1 { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
         .ranking-position.top-2 { color: #c0c0c0; text-shadow: 0 0 10px #c0c0c0; }
         .ranking-position.top-3 { color: #cd7f32; text-shadow: 0 0 10px #cd7f32; }
-        .ranking-info { flex: 1; }
+        .ranking-info { flex: 1; min-width: 200px; }
         .ranking-nick { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 16px; margin-bottom: 5px; }
         .ranking-stats { font-size: 12px; color: var(--text-dim); }
         .ranking-bm { font-size: 18px; color: var(--neon-green); font-weight: bold; }
@@ -196,14 +198,14 @@
             transition: 0.3s;
         }
         .skill-item:hover { border-color: var(--neon-cyan); }
+        .skill-item.checked { border-color: var(--neon-green); background: rgba(0, 255, 136, 0.05); }
         .skill-checkbox {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             cursor: pointer;
             accent-color: var(--neon-cyan);
         }
         .skill-name { flex: 1; font-size: 16px; }
-        .skill-remove { margin-left: auto; }
 
         .approved-skills { display: flex; flex-wrap: wrap; gap: 10px; }
         .approved-skill-badge {
@@ -222,6 +224,15 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 10px;
+        }
+        .admin-skill-name { font-size: 16px; }
+        .admin-skill-tag {
+            font-size: 10px;
+            padding: 3px 8px;
+            background: rgba(255, 140, 0, 0.2);
+            color: var(--neon-orange);
+            border: 1px solid var(--neon-orange);
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -281,6 +292,7 @@
         <div class="tabs">
             <button class="tab-btn active" id="tabCabinet" onclick="switchPlayerTab('cabinet')">Личный кабинет</button>
             <button class="tab-btn" id="tabIdentification" onclick="switchPlayerTab('identification')">Идентификация</button>
+            <button class="tab-btn" id="tabSkills" onclick="switchPlayerTab('skills')">Навыки</button>
             <button class="tab-btn" id="tabPlayers" onclick="switchPlayerTab('players')">Игроки</button>
         </div>
 
@@ -341,7 +353,7 @@
             <div id="playerMessage" class="message"></div>
         </div>
 
-        <!-- Навыки (отдельная секция в Идентификации) -->
+        <!-- Навыки -->
         <div id="skillsContent" class="panel hidden">
             <div class="panel-title">Навыки персонажа <span id="skillsStatus"></span></div>
             
@@ -349,12 +361,15 @@
                 <div class="message success" style="display: block; margin-bottom: 20px;">
                     Ваши навыки успешно подтверждены.
                 </div>
+                <p style="color: var(--text-dim); text-align: center; margin-bottom: 20px;">
+                    Для внесения изменений нажмите кнопку ниже.
+                </p>
                 <button class="btn-edit" onclick="showSkillsEditForm()">Изменить навыки</button>
             </div>
 
             <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)">
                 <div id="skillsList" class="skills-list"></div>
-                <button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 20px;">Сохранить навыки</button>
+                <button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 20px;">Отправить на проверку</button>
             </form>
             <div id="skillsMessage" class="message"></div>
         </div>
@@ -391,8 +406,8 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" id="tabAdminPlayers" onclick="switchAdminTab('players')">Игроки на проверке</button>
-            <button class="tab-btn" id="tabAdminSkills" onclick="switchAdminTab('skills')">Управление навыками</button>
+            <button class="tab-btn active" id="tabAdminPlayers" onclick="switchAdminTab('players')">Игроки</button>
+            <button class="tab-btn" id="tabAdminSkills" onclick="switchAdminTab('skills')">Список навыков</button>
             <button class="tab-btn" id="tabAdminSkillsPending" onclick="switchAdminTab('skillsPending')">Навыки на проверке</button>
         </div>
 
@@ -416,7 +431,7 @@
         </div>
 
         <div id="adminSkillsPendingContent" class="panel hidden">
-            <div class="panel-title">Навыки на проверке</div>
+            <div class="panel-title">Навыки игроков на проверке</div>
             <div id="pendingSkillsList"></div>
             <div id="adminSkillsPendingMessage" class="message"></div>
         </div>
@@ -445,13 +460,15 @@
         function switchPlayerTab(tab) {
             document.getElementById('tabCabinet').classList.toggle('active', tab === 'cabinet');
             document.getElementById('tabIdentification').classList.toggle('active', tab === 'identification');
+            document.getElementById('tabSkills').classList.toggle('active', tab === 'skills');
             document.getElementById('tabPlayers').classList.toggle('active', tab === 'players');
             document.getElementById('cabinetContent').classList.toggle('hidden', tab !== 'cabinet');
             document.getElementById('identificationContent').classList.toggle('hidden', tab !== 'identification');
-            document.getElementById('skillsContent').classList.add('hidden');
+            document.getElementById('skillsContent').classList.toggle('hidden', tab !== 'skills');
             document.getElementById('playersContent').classList.toggle('hidden', tab !== 'players');
             
             if (tab === 'players') loadAllPlayers();
+            if (tab === 'skills') loadSkillsForm();
         }
 
         function switchAdminTab(tab) {
@@ -572,7 +589,6 @@
                         approvedGrid.classList.remove('hidden');
                         form.classList.add('hidden');
                         approvedMsg.classList.remove('hidden');
-                        switchPlayerTab('cabinet');
                     } 
                     else if (data.status === 'pending') {
                         statusSpan.innerHTML = '<span class="status-badge status-pending">На проверке</span>';
@@ -580,7 +596,6 @@
                         approvedGrid.classList.add('hidden');
                         approvedMsg.classList.add('hidden');
                         form.classList.remove('hidden');
-                        switchPlayerTab('identification');
                     } 
                     else {
                         statusSpan.innerHTML = '<span class="status-badge status-rejected">Отклонено</span>';
@@ -588,14 +603,12 @@
                         approvedGrid.classList.add('hidden');
                         approvedMsg.classList.add('hidden');
                         form.classList.remove('hidden');
-                        switchPlayerTab('identification');
                     }
                 } else {
                     cabinetEmpty.classList.remove('hidden');
                     approvedGrid.classList.add('hidden');
                     approvedMsg.classList.add('hidden');
                     form.classList.remove('hidden');
-                    switchPlayerTab('identification');
                 }
             } catch (error) { console.error(error); }
         }
@@ -630,7 +643,7 @@
             }
         }
 
-        // ФУНКЦИИ ДЛЯ НАВЫКОВ
+        // ===== ФУНКЦИИ ДЛЯ НАВЫКОВ =====
 
         async function loadPlayerSkills() {
             try {
@@ -641,4 +654,393 @@
                     allSkills = skillsResult.skills;
                 }
 
-                // Загру
+                // Загружаем навыки игрока
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerSkills', nickname: currentUser }), redirect: 'follow' });
+                const result = await response.json();
+                
+                const form = document.getElementById('skillsForm');
+                const approvedMsg = document.getElementById('skillsApprovedMessage');
+                const statusSpan = document.getElementById('skillsStatus');
+                const approvedSection = document.getElementById('approvedSkillsSection');
+                const approvedList = document.getElementById('approvedSkillsList');
+
+                if (result.success) {
+                    myPlayerSkills = result.data;
+                    
+                    if (result.data.status === 'approved') {
+                        statusSpan.innerHTML = '<span class="status-badge status-approved">Подтверждено</span>';
+                        form.classList.add('hidden');
+                        approvedMsg.classList.remove('hidden');
+                        
+                        // Показываем в личном кабинете
+                        if (result.data.skills && result.data.skills.length > 0) {
+                            approvedList.innerHTML = result.data.skills.map(s => `<div class="approved-skill-badge">${s}</div>`).join('');
+                            approvedSection.classList.remove('hidden');
+                        } else {
+                            approvedSection.classList.add('hidden');
+                        }
+                    } 
+                    else if (result.data.status === 'pending') {
+                        statusSpan.innerHTML = '<span class="status-badge status-pending">На проверке</span>';
+                        form.classList.remove('hidden');
+                        approvedMsg.classList.add('hidden');
+                        approvedSection.classList.add('hidden');
+                    } 
+                    else {
+                        statusSpan.innerHTML = '<span class="status-badge status-rejected">Отклонено</span>';
+                        form.classList.remove('hidden');
+                        approvedMsg.classList.add('hidden');
+                        approvedSection.classList.add('hidden');
+                    }
+                } else {
+                    statusSpan.innerHTML = '';
+                    form.classList.remove('hidden');
+                    approvedMsg.classList.add('hidden');
+                    approvedSection.classList.add('hidden');
+                    myPlayerSkills = { skills: [], status: '' };
+                }
+                
+                // Строим форму навыков
+                buildSkillsForm();
+            } catch (error) { console.error(error); }
+        }
+
+        async function loadSkillsForm() {
+            try {
+                const skillsResponse = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkills' }), redirect: 'follow' });
+                const skillsResult = await skillsResponse.json();
+                if (skillsResult.success) {
+                    allSkills = skillsResult.skills;
+                }
+                buildSkillsForm();
+            } catch (error) { console.error(error); }
+        }
+
+        function buildSkillsForm() {
+            const list = document.getElementById('skillsList');
+            const playerSkills = (myPlayerSkills && myPlayerSkills.skills) ? myPlayerSkills.skills : [];
+            
+            list.innerHTML = allSkills.map(skill => {
+                const isChecked = playerSkills.includes(skill.name);
+                return `
+                    <div class="skill-item ${isChecked ? 'checked' : ''}" onclick="toggleSkill(this, '${skill.name.replace(/'/g, "\\'")}')">
+                        <input type="checkbox" class="skill-checkbox" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation(); toggleSkill(this.parentElement, '${skill.name.replace(/'/g, "\\'")}');">
+                        <div class="skill-name">${skill.name}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleSkill(element, skillName) {
+            const checkbox = element.querySelector('.skill-checkbox');
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('checked', checkbox.checked);
+        }
+
+        async function savePlayerSkills(e) {
+            e.preventDefault();
+            const btn = document.getElementById('saveSkillsBtn');
+            const msg = document.getElementById('skillsMessage');
+            btn.disabled = true; btn.innerHTML = '<span class="loader"></span> Отправка...';
+            
+            const checkboxes = document.querySelectorAll('#skillsList .skill-checkbox');
+            const selectedSkills = [];
+            checkboxes.forEach((cb, idx) => {
+                if (cb.checked) selectedSkills.push(allSkills[idx].name);
+            });
+            
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ 
+                    action: 'savePlayerSkills', 
+                    nickname: currentUser, 
+                    skills: selectedSkills 
+                }), redirect: 'follow' });
+                const result = await response.json();
+                if (result.success) {
+                    msg.className = 'message success'; msg.innerText = result.message;
+                    setTimeout(() => loadPlayerSkills(), 1500);
+                } else {
+                    msg.className = 'message error'; msg.innerText = result.message;
+                }
+            } catch (error) {
+                msg.className = 'message error'; msg.innerText = 'Ошибка связи с сервером.';
+            } finally {
+                btn.disabled = false; btn.innerText = 'Отправить на проверку'; msg.style.display = 'block';
+            }
+        }
+
+        // ===== АДМИН: НАВЫКИ =====
+
+        async function loadAdminSkills() {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkills' }), redirect: 'follow' });
+                const result = await response.json();
+                const list = document.getElementById('adminSkillsList');
+                
+                if (result.success && result.skills.length > 0) {
+                    list.innerHTML = result.skills.map(skill => `
+                        <div class="admin-skill-item">
+                            <div>
+                                <span class="admin-skill-name">${skill.name}</span>
+                                ${skill.isAdminCreated ? '<span class="admin-skill-tag">Создан админом</span>' : '<span class="admin-skill-tag" style="background: rgba(0,240,255,0.2); color: var(--neon-cyan); border-color: var(--neon-cyan);">Стандартный</span>'}
+                            </div>
+                            ${skill.isAdminCreated ? `<button class="btn-remove" onclick="removeSkill('${skill.name.replace(/'/g, "\\'")}')">Удалить</button>` : ''}
+                        </div>
+                    `).join('');
+                } else {
+                    list.innerHTML = '<div class="empty-state">Список навыков пуст</div>';
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        async function addSkill(e) {
+            e.preventDefault();
+            const input = document.getElementById('newSkillName');
+            const msg = document.getElementById('adminSkillsMessage');
+            
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ 
+                    action: 'addSkill', skillName: input.value 
+                }), redirect: 'follow' });
+                const result = await response.json();
+                if (result.success) {
+                    msg.className = 'message success'; msg.innerText = result.message;
+                    input.value = '';
+                    setTimeout(() => { loadAdminSkills(); msg.style.display = 'none'; }, 1000);
+                } else {
+                    msg.className = 'message error'; msg.innerText = result.message;
+                    msg.style.display = 'block';
+                }
+            } catch (error) {
+                msg.className = 'message error'; msg.innerText = 'Ошибка связи с сервером.';
+                msg.style.display = 'block';
+            }
+        }
+
+        async function removeSkill(skillName) {
+            if (!confirm(`Удалить навык "${skillName}"?`)) return;
+            const msg = document.getElementById('adminSkillsMessage');
+            
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ 
+                    action: 'removeSkill', skillName: skillName 
+                }), redirect: 'follow' });
+                const result = await response.json();
+                if (result.success) {
+                    msg.className = 'message success'; msg.innerText = result.message;
+                    setTimeout(() => { loadAdminSkills(); msg.style.display = 'none'; }, 1000);
+                } else {
+                    msg.className = 'message error'; msg.innerText = result.message;
+                    msg.style.display = 'block';
+                }
+            } catch (error) {
+                msg.className = 'message error'; msg.innerText = 'Ошибка связи с сервером.';
+                msg.style.display = 'block';
+            }
+        }
+
+        async function loadPendingSkills() {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingSkills' }), redirect: 'follow' });
+                const result = await response.json();
+                const list = document.getElementById('pendingSkillsList');
+                
+                if (result.success && result.players.length > 0) {
+                    list.innerHTML = result.players.map(player => `
+                        <div class="player-card">
+                            <div class="player-card-header">
+                                <div class="player-nick">${player.nickname}</div>
+                                <div class="action-buttons">
+                                    <button class="btn-approve" onclick="approveSkills('${player.nickname}')">Подтвердить</button>
+                                    <button class="btn-reject" onclick="rejectSkills('${player.nickname}')">Отклонить</button>
+                                </div>
+                            </div>
+                            <div class="approved-skills">
+                                ${player.skills.length > 0 
+                                    ? player.skills.map(s => `<div class="approved-skill-badge">${s}</div>`).join('')
+                                    : '<div style="color: var(--text-dim);">Игрок не выбрал ни одного навыка</div>'}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    list.innerHTML = '<div class="empty-state">Нет навыков на проверке</div>';
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        async function approveSkills(nickname) {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveSkills', nickname: nickname }), redirect: 'follow' });
+                const result = await response.json();
+                const msg = document.getElementById('adminSkillsPendingMessage');
+                if (result.success) {
+                    msg.className = 'message success'; msg.innerText = result.message;
+                    setTimeout(() => { loadPendingSkills(); msg.style.display = 'none'; }, 1000);
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        async function rejectSkills(nickname) {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectSkills', nickname: nickname }), redirect: 'follow' });
+                const result = await response.json();
+                const msg = document.getElementById('adminSkillsPendingMessage');
+                if (result.success) {
+                    msg.className = 'message error'; msg.innerText = result.message;
+                    setTimeout(() => { loadPendingSkills(); msg.style.display = 'none'; }, 1000);
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        // ===== АДМИН: ИГРОКИ =====
+
+        async function loadPendingPlayers() {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingPlayers' }), redirect: 'follow' });
+                const result = await response.json();
+                const list = document.getElementById('pendingPlayersList');
+                if (result.success && result.players.length > 0) {
+                    list.innerHTML = result.players.map(player => `
+                        <div class="player-card">
+                            <div class="player-card-header">
+                                <div class="player-nick">${player.nickname}</div>
+                                <div class="action-buttons">
+                                    <button class="btn-approve" onclick="approvePlayer('${player.nickname}')">Подтвердить</button>
+                                    <button class="btn-reject" onclick="rejectPlayer('${player.nickname}')">Отклонить</button>
+                                </div>
+                            </div>
+                            <div class="data-grid">
+                                <div class="data-item"><div class="data-label">БМ</div><div class="data-value">${player.bm}</div></div>
+                                <div class="data-item"><div class="data-label">Уровень</div><div class="data-value">${player.level}</div></div>
+                                <div class="data-item"><div class="data-label">Атака</div><div class="data-value">${player.attack}</div></div>
+                                <div class="data-item"><div class="data-label">Защита</div><div class="data-value">${player.defense}</div></div>
+                                <div class="data-item"><div class="data-label">Меткость</div><div class="data-value">${player.accuracy}</div></div>
+                                <div class="data-item"><div class="data-label">Уклонение</div><div class="data-value">${player.evasion}</div></div>
+                                <div class="data-item"><div class="data-label">Коллекции</div><div class="data-value">${player.collections}</div></div>
+                                <div class="data-item"><div class="data-label">Профессия</div><div class="data-value">${player.profession}</div></div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    list.innerHTML = '<div class="empty-state">Нет игроков на проверке</div>';
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        async function approvePlayer(nickname) {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approvePlayer', nickname: nickname }), redirect: 'follow' });
+                const result = await response.json();
+                const msg = document.getElementById('adminMessage');
+                if (result.success) {
+                    msg.className = 'message success'; msg.innerText = result.message;
+                    setTimeout(() => { loadPendingPlayers(); msg.style.display = 'none'; }, 1000);
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        async function rejectPlayer(nickname) {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectPlayer', nickname: nickname }), redirect: 'follow' });
+                const result = await response.json();
+                const msg = document.getElementById('adminMessage');
+                if (result.success) {
+                    msg.className = 'message error'; msg.innerText = result.message;
+                    setTimeout(() => { loadPendingPlayers(); msg.style.display = 'none'; }, 1000);
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        // ===== ИГРОКИ / СРАВНЕНИЕ =====
+
+        async function loadAllPlayers() {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayers' }), redirect: 'follow' });
+                const result = await response.json();
+                const list = document.getElementById('rankingList');
+                
+                if (result.success && result.players.length > 0) {
+                    list.innerHTML = result.players.map((player, index) => {
+                        const position = index + 1;
+                        let positionClass = '';
+                        if (position === 1) positionClass = 'top-1';
+                        else if (position === 2) positionClass = 'top-2';
+                        else if (position === 3) positionClass = 'top-3';
+                        
+                        return `
+                            <div class="ranking-item">
+                                <div class="ranking-position ${positionClass}">#${position}</div>
+                                <div class="ranking-info">
+                                    <div class="ranking-nick">${player.nickname}</div>
+                                    <div class="ranking-stats">
+                                        Ур. ${player.level} | ${player.profession} | Атака: ${player.attack} | Защита: ${player.defense}
+                                    </div>
+                                </div>
+                                <div class="ranking-bm">БМ: ${player.bm}</div>
+                                <button class="btn-compare" onclick="compareWithPlayer('${player.nickname}')">Сравнить</button>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    list.innerHTML = '<div class="empty-state">Нет игроков с подтвержденными данными</div>';
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        async function compareWithPlayer(nickname) {
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerForCompare', nickname: nickname }), redirect: 'follow' });
+                const result = await response.json();
+                
+                if (result.success && myPlayerData && myPlayerData.status === 'approved') {
+                    document.getElementById('playersList').classList.add('hidden');
+                    document.getElementById('compareView').classList.remove('hidden');
+                    
+                    document.getElementById('myNick').innerText = currentUser;
+                    document.getElementById('compareNick').innerText = result.data.nickname;
+                    
+                    const myStats = document.getElementById('myStats');
+                    const compareStats = document.getElementById('compareStats');
+                    
+                    const stats = [
+                        { label: 'БМ', my: myPlayerData.bm, other: result.data.bm },
+                        { label: 'Уровень', my: myPlayerData.level, other: result.data.level },
+                        { label: 'Атака', my: myPlayerData.attack, other: result.data.attack },
+                        { label: 'Защита', my: myPlayerData.defense, other: result.data.defense },
+                        { label: 'Меткость', my: myPlayerData.accuracy, other: result.data.accuracy },
+                        { label: 'Уклонение', my: myPlayerData.evasion, other: result.data.evasion }
+                    ];
+                    
+                    myStats.innerHTML = stats.map(stat => {
+                        let className = 'equal';
+                        if (Number(stat.my) > Number(stat.other)) className = 'better';
+                        else if (Number(stat.my) < Number(stat.other)) className = 'worse';
+                        return `<div class="compare-stat"><span class="compare-label">${stat.label}</span><span class="compare-value ${className}">${stat.my}</span></div>`;
+                    }).join('') + `<div class="compare-stat"><span class="compare-label">Коллекции</span><span class="compare-value equal">${myPlayerData.collections}</span></div>`;
+                    
+                    compareStats.innerHTML = stats.map(stat => {
+                        let className = 'equal';
+                        if (Number(stat.other) > Number(stat.my)) className = 'better';
+                        else if (Number(stat.other) < Number(stat.my)) className = 'worse';
+                        return `<div class="compare-stat"><span class="compare-label">${stat.label}</span><span class="compare-value ${className}">${stat.other}</span></div>`;
+                    }).join('') + `<div class="compare-stat"><span class="compare-label">Коллекции</span><span class="compare-value equal">${result.data.collections}</span></div>`;
+                } else {
+                    alert('Сравнение доступно только при подтвержденных данных.');
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        function backToRanking() {
+            document.getElementById('playersList').classList.remove('hidden');
+            document.getElementById('compareView').classList.add('hidden');
+        }
+
+        function logout() {
+            currentUser = null; currentRole = null; myPlayerData = null; myPlayerSkills = null;
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('authScreen').classList.add('active');
+            document.getElementById('authMessage').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
