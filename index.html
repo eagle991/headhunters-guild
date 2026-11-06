@@ -509,7 +509,7 @@
             <div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div>
         </div>
     </div>
-    <div class="footer">© RF Online Next | Terminal System v4.0</div>
+    <div class="footer">© RF Online Next | Terminal System v4.1</div>
 </div>
 
 <div id="authScreen" class="screen">
@@ -660,7 +660,7 @@
         <div id="dkpSubmitContent" class="hidden">
             <div class="panel-title">📸 Загрузка скриншотов мероприятия</div>
             <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 15px;">
-                Загрузите скриншоты с мероприятия (до 5 штук, макс. 5 МБ каждый). Система автоматически распознает ники игроков.
+                Загрузите скриншоты с мероприятия (до 5 штук, макс. 2 МБ каждый). Система автоматически распознает ники игроков.
             </p>
             <div class="form-group">
                 <label>Выберите мероприятие</label>
@@ -671,7 +671,7 @@
             <div class="screenshot-upload-area" id="screenshotUploadArea" onclick="document.getElementById('screenshotInput').click()">
                 <div class="upload-icon">📷</div>
                 <div class="upload-text">Нажмите для выбора скриншотов или перетащите их сюда</div>
-                <div class="upload-hint">Максимум 5 изображений (JPG, PNG), до 5 МБ каждое</div>
+                <div class="upload-hint">Максимум 5 изображений (JPG, PNG), до 2 МБ каждое</div>
                 <input type="file" id="screenshotInput" accept="image/*" multiple style="display: none;" onchange="handleScreenshotSelect(event)">
             </div>
             <div class="screenshots-preview" id="screenshotsPreview"></div>
@@ -815,7 +815,7 @@
     </div>
 </div>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvCwMEfFu44M5K2gsSmHYFDp81rV8uqtDNC5mB7UBZ2EnrUCDKCM3UN3HV-T0kgUZE/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOb1Q_B6SKZg9c8p3Y1gK_bFBe0S7-r4dtp5oML1LHiMB2WXFJPjlYHWir1LH0SR3L/exec';
     let currentUser = null;
     let currentRole = null;
     let myPlayerData = null;
@@ -831,6 +831,13 @@
     let allEvents = [];
     let uploadedScreenshots = [];
     let recognizedNicks = [];
+
+    window.addEventListener('error', (e) => {
+        console.error('ГЛОБАЛЬНАЯ ОШИБКА:', e.error);
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+        console.error('НЕОБРАБОТАННЫЙ PROMISE:', e.reason);
+    });
 
     function showAuthScreen() {
         try {
@@ -1358,7 +1365,7 @@
         event.target.value = '';
     }
 
-    // ✅ НОВАЯ ВЕРСИЯ С ПРОВЕРКОЙ РАЗМЕРА
+    // ✅ ОБНОВЛЁННАЯ ФУНКЦИЯ С ПРОВЕРКОЙ РАЗМЕРА
     function addScreenshots(files) {
         const remaining = 5 - uploadedScreenshots.length;
         if (remaining <= 0) {
@@ -1366,10 +1373,9 @@
             return;
         }
         
-        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 МБ
-        const MAX_TOTAL_SIZE = 20 * 1024 * 1024; // 20 МБ суммарно
+        const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2 МБ
+        const MAX_TOTAL_SIZE = 8 * 1024 * 1024; // 8 МБ суммарно
         
-        // Считаем уже загруженные
         let existingSize = uploadedScreenshots.reduce((sum, s) => sum + (s.file ? s.file.size : 0), 0);
         
         const toAdd = [];
@@ -1380,12 +1386,12 @@
             if (!file.type.startsWith('image/')) continue;
             
             if (file.size > MAX_FILE_SIZE) {
-                showDkpSubmitMessage(`Файл "${file.name}" слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимум 5 МБ`, 'error');
+                showDkpSubmitMessage(`Файл "${file.name}" слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимум 2 МБ.`, 'error');
                 continue;
             }
             
             if (existingSize + totalNewSize + file.size > MAX_TOTAL_SIZE) {
-                showDkpSubmitMessage(`Превышен общий размер (${MAX_TOTAL_SIZE / 1024 / 1024} МБ). Удалите часть скриншотов`, 'error');
+                showDkpSubmitMessage(`Превышен общий размер (8 МБ).`, 'error');
                 continue;
             }
             
@@ -1393,66 +1399,79 @@
             totalNewSize += file.size;
         }
         
+        if (toAdd.length === 0) return;
+        
         toAdd.forEach(file => {
             const id = 'ss_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
             const reader = new FileReader();
-            const screenshotObj = { id, file, base64: null, url: null, status: 'uploading' };
+            const screenshotObj = { id, file, base64: null, url: null, screenshotId: null, status: 'uploading', error: null };
             uploadedScreenshots.push(screenshotObj);
             renderScreenshotsPreview();
             
             reader.onload = async (e) => {
-                screenshotObj.base64 = e.target.result;
-                const compressed = await compressImage(e.target.result, 1200, 0.8);
-                screenshotObj.base64 = compressed;
                 try {
+                    screenshotObj.base64 = e.target.result;
+                    const compressed = await compressImage(e.target.result, 800, 0.6);
+                    screenshotObj.base64 = compressed;
+                    
+                    console.log('Размер сжатого изображения:', Math.round(compressed.length / 1024), 'КБ');
+                    
                     const response = await fetch(SCRIPT_URL, {
                         method: 'POST',
                         body: JSON.stringify({ action: 'saveScreenshot', imageData: compressed, filename: file.name }),
                         redirect: 'follow'
                     });
+                    
+                    if (!response.ok) {
+                        throw new Error('HTTP ошибка: ' + response.status);
+                    }
+                    
                     const result = await response.json();
+                    console.log('Ответ сервера:', result);
+                    
                     if (result.success) {
-                        screenshotObj.url = result.url;
+                        screenshotObj.screenshotId = result.screenshotId;
+                        screenshotObj.url = compressed;
                         screenshotObj.status = 'done';
                     } else {
                         screenshotObj.status = 'error';
+                        screenshotObj.error = result.message || 'Неизвестная ошибка';
+                        console.error('Ошибка сервера:', result.message);
                     }
                 } catch (err) {
                     screenshotObj.status = 'error';
+                    screenshotObj.error = err.message;
+                    console.error('Ошибка загрузки файла:', err);
                 }
                 renderScreenshotsPreview();
                 if (uploadedScreenshots.every(s => s.status !== 'uploading')) {
                     runOcrOnScreenshots();
                 }
             };
+            reader.onerror = () => {
+                screenshotObj.status = 'error';
+                screenshotObj.error = 'Ошибка чтения файла';
+                renderScreenshotsPreview();
+            };
             reader.readAsDataURL(file);
         });
     }
 
-    // ✅ НОВАЯ ВЕРСИЯ С АДАПТИВНЫМ СЖАТИЕМ
+    // ✅ ОБНОВЛЁННАЯ ФУНКЦИЯ С АДАПТИВНЫМ СЖАТИЕМ
     function compressImage(base64, maxSize, quality) {
         return new Promise((resolve) => {
             const img = new Image();
             img.onload = () => {
                 let { width, height } = img;
                 
-                // Адаптивное уменьшение в зависимости от размера
-                let targetMax = maxSize;
-                let targetQuality = quality;
-                
-                if (width > 2000 || height > 2000) {
-                    targetMax = 800;
-                    targetQuality = 0.7;
-                } else if (width > 1500 || height > 1500) {
-                    targetMax = 1000;
-                    targetQuality = 0.75;
-                }
+                let targetMax = Math.min(maxSize, 800);
+                let targetQuality = Math.min(quality, 0.6);
                 
                 if (width > height && width > targetMax) {
-                    height = (height * targetMax) / width;
+                    height = Math.round((height * targetMax) / width);
                     width = targetMax;
                 } else if (height > targetMax) {
-                    width = (width * targetMax) / height;
+                    width = Math.round((width * targetMax) / height);
                     height = targetMax;
                 }
                 
@@ -1461,26 +1480,37 @@
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
-                resolve(canvas.toDataURL('image/jpeg', targetQuality));
+                
+                const result = canvas.toDataURL('image/jpeg', targetQuality);
+                console.log(`Сжатие: ${width}x${height}, качество ${targetQuality}, размер ${Math.round(result.length / 1024)} КБ`);
+                resolve(result);
             };
-            img.onerror = () => resolve(base64);
+            img.onerror = () => {
+                console.error('Ошибка загрузки изображения для сжатия');
+                resolve(base64);
+            };
             img.src = base64;
         });
     }
 
+    // ✅ ОБНОВЛЁННАЯ ФУНКЦИЯ С ПОКАЗОМ ОШИБОК
     function renderScreenshotsPreview() {
         const preview = document.getElementById('screenshotsPreview');
         preview.innerHTML = uploadedScreenshots.map(s => {
-            const sizeInfo = s.file ? ` <span style="font-size: 9px; color: var(--text-dim);">(${(s.file.size / 1024 / 1024).toFixed(2)} МБ)</span>` : '';
+            const sizeInfo = s.file ? ` <span style="font-size: 9px; color: var(--text-dim);">(${(s.file.size / 1024).toFixed(0)} КБ)</span>` : '';
+            let statusHtml = '';
+            if (s.status === 'uploading') statusHtml = '<div class="upload-progress">Загрузка...</div>';
+            else if (s.status === 'error') statusHtml = `<div class="upload-progress" style="color: var(--neon-red);">✕ ${s.error || 'Ошибка'}</div>`;
+            else if (s.status === 'done') statusHtml = `<div class="upload-progress" style="color: var(--neon-green);">✓${sizeInfo}</div>`;
+            
             return `
-            <div class="screenshot-thumb">
-                ${s.base64 ? `<img src="${s.base64}" alt="screenshot">` : ''}
-                <button class="remove-btn" onclick="removeScreenshot('${s.id}')">✕</button>
-                ${s.status === 'uploading' ? '<div class="upload-progress">Загрузка...</div>' : ''}
-                ${s.status === 'error' ? '<div class="upload-progress" style="color: var(--neon-red);">Ошибка</div>' : ''}
-                ${s.status === 'done' ? `<div class="upload-progress" style="color: var(--neon-green);">✓${sizeInfo}</div>` : ''}
-            </div>
-        `}).join('');
+                <div class="screenshot-thumb">
+                    ${s.base64 ? `<img src="${s.base64}" alt="screenshot">` : ''}
+                    <button class="remove-btn" onclick="removeScreenshot('${s.id}')">✕</button>
+                    ${statusHtml}
+                </div>
+            `;
+        }).join('');
     }
 
     function removeScreenshot(id) {
@@ -1740,6 +1770,7 @@
         }, 100);
     }
 
+    // ✅ ОБНОВЛЁННАЯ ФУНКЦИЯ - отправляет screenshotIds вместо screenshotUrls
     async function submitDkpSubmission() {
         const select = document.getElementById('dkpEventSelect');
         const selectedOption = select.options[select.selectedIndex];
@@ -1758,7 +1789,9 @@
             return;
         }
         
-        const doneScreenshots = uploadedScreenshots.filter(s => s.status === 'done' && s.url);
+        const screenshotIds = uploadedScreenshots
+            .filter(s => s.status === 'done' && s.screenshotId)
+            .map(s => s.screenshotId);
         
         const btn = document.getElementById('submitDkpBtn');
         btn.disabled = true;
@@ -1773,7 +1806,7 @@
                     eventId: eventId,
                     eventName: eventName,
                     eventDkp: Number(eventDkp),
-                    screenshotUrls: doneScreenshots.map(s => s.url),
+                    screenshotIds: screenshotIds,
                     recognizedNicks: validNicks
                 }),
                 redirect: 'follow'
@@ -1833,7 +1866,8 @@
             }
         } catch (error) { console.error(error); }
     }
-        async function loadAdminEvents() {
+
+    async function loadAdminEvents() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' });
             const result = await response.json();
@@ -1920,6 +1954,7 @@
         }
     }
 
+    // ✅ ОБНОВЛЁННАЯ ФУНКЦИЯ - отображает base64 скриншоты
     async function loadPendingDkp() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' });
@@ -1940,7 +1975,7 @@
                         </div>
                         ${sub.screenshots && sub.screenshots.length > 0 ? `
                             <div class="submission-screenshots">
-                                ${sub.screenshots.map(url => `<img src="${url}" onclick="openImageModal('${url}')" alt="screenshot">`).join('')}
+                                ${sub.screenshots.map((imgData, idx) => `<img src="${imgData}" onclick="openImageModal('${imgData}')" alt="screenshot ${idx + 1}">`).join('')}
                             </div>
                         ` : ''}
                         <div style="font-size: 11px; color: var(--text-dim); margin-top: 8px;">Игроки (${sub.nicks.length}):</div>
