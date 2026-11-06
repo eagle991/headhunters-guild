@@ -37,7 +37,6 @@
             position: relative;
         }
 
-        /* Анимированный фон */
         body::before {
             content: '';
             position: fixed;
@@ -73,7 +72,6 @@
             100% { transform: translate(50px, 50px); }
         }
 
-        /* Сканлайн эффект */
         .scanline {
             position: fixed;
             top: 0; left: 0; right: 0;
@@ -97,7 +95,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ПУБЛИЧНАЯ ГЛАВНАЯ */
         .public-hero {
             position: relative;
             height: 400px;
@@ -202,7 +199,6 @@
             transform: translateY(-2px);
         }
 
-        /* СЕКЦИИ */
         .section-title {
             font-family: 'Orbitron', sans-serif;
             color: var(--neon-cyan);
@@ -333,7 +329,6 @@
             text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
         }
 
-        /* ВКЛАДКИ */
         .tabs { 
             display: flex; 
             margin-bottom: 20px; 
@@ -373,7 +368,6 @@
             box-shadow: 0 0 10px var(--neon-cyan);
         }
 
-        /* ФОРМЫ */
         .form-group { margin-bottom: 15px; position: relative; }
         label { 
             display: block; 
@@ -466,7 +460,6 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* HEADER */
         .header-bar {
             display: flex; 
             justify-content: space-between; 
@@ -514,7 +507,6 @@
             box-shadow: 0 0 15px rgba(255, 42, 74, 0.4);
         }
 
-        /* ПАНЕЛИ */
         .panel { 
             background: var(--panel-bg);
             backdrop-filter: blur(10px);
@@ -565,7 +557,6 @@
         .status-approved { background: rgba(0, 255, 136, 0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
         .status-rejected { background: rgba(255, 42, 74, 0.2); color: var(--neon-red); border: 1px solid var(--neon-red); }
 
-        /* DATA GRID */
         .data-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
@@ -597,7 +588,6 @@
             font-family: 'Orbitron', sans-serif;
         }
 
-        /* PLAYER CARD */
         .player-card { 
             background: rgba(0, 0, 0, 0.4); 
             border: 1px solid var(--border-color); 
@@ -658,7 +648,6 @@
 
         .empty-state { text-align: center; color: var(--text-dim); padding: 30px 0; font-size: 14px; }
 
-        /* RANKING */
         .ranking-list { display: flex; flex-direction: column; gap: 8px; }
         .ranking-item {
             background: rgba(0, 0, 0, 0.4);
@@ -691,7 +680,6 @@
         .ranking-stats { font-size: 11px; color: var(--text-dim); }
         .ranking-bm { font-size: 15px; color: var(--neon-green); font-weight: bold; font-family: 'Orbitron', sans-serif; }
 
-        /* COMPARE */
         .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media (max-width: 600px) { .compare-container { grid-template-columns: 1fr; } }
         .compare-column { 
@@ -722,7 +710,6 @@
         .compare-value.worse { color: var(--neon-red); text-shadow: 0 0 8px rgba(255, 42, 74, 0.5); }
         .compare-value.equal { color: var(--neon-orange); }
 
-        /* SKILLS */
         .skills-list { display: flex; flex-direction: column; gap: 6px; }
         .skill-item {
             background: rgba(0, 0, 0, 0.4);
@@ -774,9 +761,7 @@
             border-radius: 4px;
             transition: 0.3s;
         }
-        .admin-skill-item:hover {
-            border-color: var(--neon-cyan);
-        }
+        .admin-skill-item:hover { border-color: var(--neon-cyan); }
         .admin-skill-name { font-size: 14px; }
         .admin-skill-tag {
             font-size: 9px;
@@ -808,7 +793,6 @@
             padding-bottom: 0;
         }
 
-        /* AUTH SCREEN */
         .auth-container {
             max-width: 420px;
             margin: 60px auto;
@@ -858,7 +842,6 @@
             letter-spacing: 2px;
         }
 
-        /* FOOTER */
         .footer {
             text-align: center;
             padding: 20px;
@@ -869,7 +852,6 @@
             margin-top: 40px;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-darker); }
         ::-webkit-scrollbar-thumb { 
@@ -883,7 +865,6 @@
 
 <div class="scanline"></div>
 
-<!-- ПУБЛИЧНЫЙ ЭКРАН -->
 <div id="publicScreen" class="screen active">
     <div class="public-hero">
         <div class="public-hero-content">
@@ -911,7 +892,6 @@
     <div class="footer">© RF Online Next | Terminal System v2.0</div>
 </div>
 
-<!-- ЭКРАН ВХОДА -->
 <div id="authScreen" class="screen">
     <div class="auth-container">
         <div class="auth-title">RF Online</div>
@@ -953,7 +933,6 @@
     </div>
 </div>
 
-<!-- ЭКРАН ИГРОКА / АДМИНА -->
 <div id="mainScreen" class="screen">
     <div class="header-bar">
         <div class="user-info">
@@ -970,7 +949,6 @@
         <button class="tab-btn hidden" data-tab="admin" id="tabAdmin" onclick="switchMainTab('admin', event)">⚙ Админ-панель</button>
     </div>
 
-    <!-- Главная -->
     <div id="homeContent" class="panel">
         <div class="top-containers">
             <div class="top-panel">
@@ -988,7 +966,6 @@
         </div>
     </div>
 
-    <!-- Личный кабинет -->
     <div id="cabinetContent" class="panel hidden">
         <div class="cabinet-section">
             <div class="panel-title">⚡ Характеристики персонажа <span id="playerStatus"></span></div>
@@ -1055,7 +1032,6 @@
         </div>
     </div>
 
-    <!-- Игроки -->
     <div id="playersContent" class="panel hidden">
         <div id="playersList">
             <div class="panel-title">🏅 Рейтинг игроков</div>
@@ -1078,7 +1054,6 @@
         </div>
     </div>
 
-    <!-- Админ-панель -->
     <div id="adminContent" class="panel hidden">
         <div class="tabs">
             <button class="tab-btn active" id="tabAdminPlayers" onclick="switchAdminTab('players', event)">Игроки</button>
@@ -1114,18 +1089,22 @@
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdBFK_a_lw0FF3HD3KYJ56LtFjfaY5-h7rtY-K8BogYD4g2bb_JKAykPz5d3Cj80hC/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWCeyX4Dyl2OrFIOh6QUPnyc73HEQm_VBRUEFItGGwOibGngga0BRSZ9GL7joDXWkc/exec';
     let currentUser = null;
     let currentRole = null;
     let myPlayerData = null;
     let myPlayerSkills = null;
     let allSkills = [];
 
-    // ===== ПУБЛИЧНЫЙ ЭКРАН =====
-
     function showAuthScreen() {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById('authScreen').classList.add('active');
+    }
+
+    function getRoleBadge(role) {
+        if (role === 'Админ') return ' <span style="color: var(--neon-purple); font-size: 10px;">[АДМИН]</span>';
+        if (role === 'Модератор') return ' <span style="color: var(--neon-orange); font-size: 10px;">[МОД]</span>';
+        return '';
     }
 
     async function loadPublicTops() {
@@ -1143,7 +1122,7 @@
                     return `
                         <div class="top-item ${rankClass}">
                             <div class="top-rank ${rankClass}">#${rank}</div>
-                            <div class="top-nick">${p.nickname}</div>
+                            <div class="top-nick">${p.nickname}${getRoleBadge(p.role)}</div>
                             <div class="top-value">${Number(p.bm).toLocaleString('ru-RU')}</div>
                         </div>
                     `;
@@ -1159,7 +1138,7 @@
                     return `
                         <div class="top-item ${rankClass}">
                             <div class="top-rank ${rankClass}">#${rank}</div>
-                            <div class="top-nick">${p.nickname}</div>
+                            <div class="top-nick">${p.nickname}${getRoleBadge(p.role)}</div>
                             <div class="top-value">Ур. ${p.level}</div>
                         </div>
                     `;
@@ -1183,8 +1162,6 @@
     }
 
     loadPublicTops();
-
-    // ===== АВТОРИЗАЦИЯ =====
 
     function switchAuthTab(tab, e) {
         document.querySelectorAll('#authScreen .tab-btn').forEach(t => t.classList.remove('active'));
@@ -1260,9 +1237,7 @@
                 if (action === 'login') {
                     currentUser = payload.nickname;
                     currentRole = result.role;
-                    setTimeout(() => {
-                        showMainScreen();
-                    }, 800);
+                    setTimeout(() => { showMainScreen(); }, 800);
                 }
             } else {
                 msg.className = 'message error'; msg.innerText = result.message;
@@ -1280,7 +1255,6 @@
         document.getElementById('playerNick').innerText = currentUser;
         document.getElementById('roleBadge').innerText = currentRole;
         
-        // Показываем вкладку админа если роль Админ
         const tabAdmin = document.getElementById('tabAdmin');
         if (currentRole === 'Админ') {
             tabAdmin.classList.remove('hidden');
@@ -1387,8 +1361,6 @@
             btn.disabled = false; btn.innerText = 'Отправить на проверку'; msg.style.display = 'block';
         }
     }
-
-    // ===== НАВЫКИ =====
 
     async function loadPlayerSkills() {
         try {
@@ -1501,8 +1473,6 @@
             btn.disabled = false; btn.innerText = 'Отправить на проверку'; msg.style.display = 'block';
         }
     }
-
-    // ===== АДМИН =====
 
     async function loadAdminSkills() {
         try {
@@ -1682,8 +1652,6 @@
         } catch (error) { console.error(error); }
     }
 
-    // ===== ИГРОКИ =====
-
     async function loadAllPlayers() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayers' }), redirect: 'follow' });
@@ -1702,7 +1670,7 @@
                         <div class="ranking-item">
                             <div class="ranking-position ${positionClass}">#${position}</div>
                             <div class="ranking-info">
-                                <div class="ranking-nick">${player.nickname}</div>
+                                <div class="ranking-nick">${player.nickname}${getRoleBadge(player.role)}</div>
                                 <div class="ranking-stats">
                                     Ур. ${player.level} | ${player.profession} | Ат: ${player.attack} | Защ: ${player.defense}
                                 </div>
