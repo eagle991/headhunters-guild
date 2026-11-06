@@ -19,18 +19,13 @@
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Rajdhani', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
-            background-image: 
-                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
@@ -38,13 +33,9 @@
         .screen.active { display: block; }
 
         .terminal-container {
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            padding: 30px;
-            position: relative;
+            width: 100%; max-width: 450px; margin: 0 auto;
+            background: var(--panel-bg); border: 1px solid var(--border-color);
+            padding: 30px; position: relative;
             clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
             box-shadow: 0 0 30px rgba(0, 240, 255, 0.1), inset 0 0 20px rgba(0,0,0,0.5);
         }
@@ -56,252 +47,99 @@
         .corner.bottom-right { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
 
         h1 {
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            color: var(--neon-cyan);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 5px;
-            font-size: 24px;
+            font-family: 'Orbitron', sans-serif; text-align: center; color: var(--neon-cyan);
+            text-transform: uppercase; letter-spacing: 3px; margin-bottom: 5px; font-size: 24px;
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
-        .subtitle {
-            text-align: center;
-            color: var(--text-dim);
-            font-size: 14px;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .subtitle { text-align: center; color: var(--text-dim); font-size: 14px; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
 
         .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); }
         .tab-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-dim);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            padding: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            flex: 1; background: transparent; border: none; color: var(--text-dim);
+            font-family: 'Orbitron', sans-serif; font-size: 14px; padding: 10px;
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
         }
-        .tab-btn.active {
-            color: var(--neon-cyan);
-            border-bottom: 2px solid var(--neon-cyan);
-            text-shadow: 0 0 8px var(--neon-cyan);
-        }
+        .tab-btn.active { color: var(--neon-cyan); border-bottom: 2px solid var(--neon-cyan); text-shadow: 0 0 8px var(--neon-cyan); }
 
         .form-group { margin-bottom: 20px; position: relative; }
-        label {
-            display: block;
-            font-size: 12px;
-            color: var(--neon-cyan);
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
+        label { display: block; font-size: 12px; color: var(--neon-cyan); text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
 
         input, select {
-            width: 100%;
-            box-sizing: border-box;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 12px 15px;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 16px;
-            transition: 0.3s;
-            outline: none;
+            width: 100%; box-sizing: border-box; background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color); color: var(--text-main);
+            padding: 12px 15px; font-family: 'Rajdhani', sans-serif; font-size: 16px;
+            transition: 0.3s; outline: none;
         }
-
-        input:focus, select:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
-            background: rgba(0, 240, 255, 0.05);
-        }
-
+        input:focus, select:focus { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); background: rgba(0, 240, 255, 0.05); }
         select { cursor: pointer; }
         select option { background: var(--panel-bg); color: var(--text-main); }
 
         .submit-btn {
-            width: 100%;
-            padding: 15px;
+            width: 100%; padding: 15px;
             background: linear-gradient(90deg, rgba(0,240,255,0.1), rgba(0,240,255,0.2));
-            border: 1px solid var(--neon-cyan);
-            color: var(--neon-cyan);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: 0.3s;
+            border: 1px solid var(--neon-cyan); color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s;
             clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
         }
-
-        .submit-btn:hover {
-            background: rgba(0, 240, 255, 0.3);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
-            color: #fff;
-        }
-
+        .submit-btn:hover { background: rgba(0, 240, 255, 0.3); box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); color: #fff; }
         .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .message {
-            margin-top: 15px;
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            border: 1px solid transparent;
-            display: none;
-        }
-
+        .message { margin-top: 15px; padding: 10px; text-align: center; font-size: 14px; border: 1px solid transparent; display: none; }
         .message.success { display: block; color: var(--neon-green); border-color: var(--neon-green); background: rgba(0, 255, 136, 0.1); }
         .message.error { display: block; color: var(--neon-red); border-color: var(--neon-red); background: rgba(255, 42, 42, 0.1); }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
         
         .loader {
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            border: 2px solid var(--neon-cyan);
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-            vertical-align: middle;
+            display: inline-block; width: 15px; height: 15px;
+            border: 2px solid var(--neon-cyan); border-radius: 50%; border-top-color: transparent;
+            animation: spin 1s linear infinite; margin-right: 10px; vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 15px;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding: 15px;
+            background: var(--panel-bg); border: 1px solid var(--border-color);
         }
-
         .user-info { color: var(--neon-cyan); font-family: 'Orbitron', sans-serif; }
         .logout-btn {
-            background: transparent;
-            border: 1px solid var(--neon-red);
-            color: var(--neon-red);
-            padding: 8px 15px;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            transition: 0.3s;
+            background: transparent; border: 1px solid var(--neon-red); color: var(--neon-red);
+            padding: 8px 15px; cursor: pointer; font-family: 'Orbitron', sans-serif; transition: 0.3s;
         }
         .logout-btn:hover { background: rgba(255, 42, 42, 0.2); }
 
-        .panel {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            padding: 25px;
-            margin-bottom: 20px;
-        }
+        .panel { background: var(--panel-bg); border: 1px solid var(--border-color); padding: 25px; margin-bottom: 20px; }
+        .panel-title { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 18px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
 
-        .panel-title {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--neon-cyan);
-            font-size: 18px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-left: 10px;
-        }
-
+        .status-badge { display: inline-block; padding: 5px 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-left: 10px; }
         .status-pending { background: rgba(255, 140, 0, 0.2); color: var(--neon-orange); border: 1px solid var(--neon-orange); }
         .status-approved { background: rgba(0, 255, 136, 0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
         .status-rejected { background: rgba(255, 42, 42, 0.2); color: var(--neon-red); border: 1px solid var(--neon-red); }
 
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+        .data-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+        .data-item { background: rgba(0, 0, 0, 0.3); padding: 15px; border: 1px solid var(--border-color); }
+        .data-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px; }
+        .data-value { font-size: 18px; color: var(--neon-cyan); font-weight: bold; }
 
-        .data-item {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border: 1px solid var(--border-color);
-        }
-
-        .data-label {
-            font-size: 11px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        .data-value {
-            font-size: 18px;
-            color: var(--neon-cyan);
-            font-weight: bold;
-        }
-
-        .player-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-
-        .player-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .player-nick {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--neon-cyan);
-            font-size: 16px;
-        }
-
+        .player-card { background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); padding: 20px; margin-bottom: 15px; }
+        .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .player-nick { font-family: 'Orbitron', sans-serif; color: var(--neon-cyan); font-size: 16px; }
         .action-buttons { display: flex; gap: 10px; }
 
-        .btn-approve, .btn-reject {
-            padding: 8px 15px;
-            border: none;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-            text-transform: uppercase;
-            transition: 0.3s;
+        .btn-approve, .btn-reject, .btn-edit {
+            padding: 8px 15px; border: none; cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 12px; text-transform: uppercase; transition: 0.3s;
         }
-
-        .btn-approve {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--neon-green);
-            border: 1px solid var(--neon-green);
-        }
-
+        .btn-approve { background: rgba(0, 255, 136, 0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
         .btn-approve:hover { background: rgba(0, 255, 136, 0.4); }
-
-        .btn-reject {
-            background: rgba(255, 42, 42, 0.2);
-            color: var(--neon-red);
-            border: 1px solid var(--neon-red);
-        }
-
+        .btn-reject { background: rgba(255, 42, 42, 0.2); color: var(--neon-red); border: 1px solid var(--neon-red); }
         .btn-reject:hover { background: rgba(255, 42, 42, 0.4); }
+        .btn-edit { background: rgba(0, 240, 255, 0.1); color: var(--neon-cyan); border: 1px solid var(--neon-cyan); width: 100%; margin-top: 10px; }
+        .btn-edit:hover { background: rgba(0, 240, 255, 0.3); }
+
+        .empty-state { text-align: center; color: var(--text-dim); padding: 40px 0; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -309,17 +147,14 @@
     <!-- ЭКРАН ВХОДА/РЕГИСТРАЦИИ -->
     <div id="authScreen" class="screen active">
         <div class="terminal-container">
-            <div class="corner top-left"></div>
-            <div class="corner top-right"></div>
-            <div class="corner bottom-left"></div>
-            <div class="corner bottom-right"></div>
-
+            <div class="corner top-left"></div><div class="corner top-right"></div>
+            <div class="corner bottom-left"></div><div class="corner bottom-right"></div>
             <h1>RF Online</h1>
             <div class="subtitle">Система идентификации личности</div>
 
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('login')">Вход</button>
-                <button class="tab-btn" onclick="switchTab('register')">Регистрация</button>
+                <button class="tab-btn active" onclick="switchAuthTab('login')">Вход</button>
+                <button class="tab-btn" onclick="switchAuthTab('register')">Регистрация</button>
             </div>
 
             <form id="loginForm" onsubmit="handleAuth(event, 'login')">
@@ -349,7 +184,6 @@
                 </div>
                 <button type="submit" class="submit-btn" id="regBtn">Зарегистрироваться</button>
             </form>
-
             <div id="authMessage" class="message"></div>
         </div>
     </div>
@@ -361,35 +195,43 @@
             <button class="logout-btn" onclick="logout()">Выход</button>
         </div>
 
-        <div class="panel">
+        <!-- Вкладки игрока -->
+        <div class="tabs">
+            <button class="tab-btn active" id="tabCabinet" onclick="switchPlayerTab('cabinet')">Личный кабинет</button>
+            <button class="tab-btn" id="tabIdentification" onclick="switchPlayerTab('identification')">Идентификация</button>
+        </div>
+
+        <!-- Содержимое: Личный кабинет -->
+        <div id="cabinetContent" class="panel">
+            <div class="panel-title">Подтвержденные данные персонажа</div>
+            <div id="approvedDataGrid" class="data-grid"></div>
+            <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют или находятся на проверке.</div>
+        </div>
+
+        <!-- Содержимое: Идентификация -->
+        <div id="identificationContent" class="panel hidden">
             <div class="panel-title">Идентификация персонажа <span id="playerStatus"></span></div>
             
-            <form id="playerDataForm" onsubmit="savePlayerData(event)">
+            <!-- Сообщение для подтвержденных данных -->
+            <div id="approvedMessage" class="hidden">
+                <div class="message success" style="display: block; margin-bottom: 20px;">
+                    Ваши данные успешно подтверждены Администратором.
+                </div>
+                <p style="color: var(--text-dim); text-align: center; margin-bottom: 20px;">
+                    Для внесения изменений нажмите кнопку ниже. Новые данные будут отправлены на повторную проверку.
+                </p>
+                <button class="btn-edit" onclick="showEditForm()">Запросить изменение данных</button>
+            </div>
+
+            <!-- Форма ввода (скрыта по умолчанию, если данные подтверждены) -->
+            <form id="playerDataForm" class="hidden" onsubmit="savePlayerData(event)">
                 <div class="data-grid">
-                    <div class="form-group">
-                        <label>БМ (Боевая Мощь)</label>
-                        <input type="number" id="bm" required placeholder="Например: 150000">
-                    </div>
-                    <div class="form-group">
-                        <label>Уровень персонажа</label>
-                        <input type="number" id="level" required placeholder="Например: 60">
-                    </div>
-                    <div class="form-group">
-                        <label>Атака</label>
-                        <input type="number" id="attack" required placeholder="Например: 5000">
-                    </div>
-                    <div class="form-group">
-                        <label>Защита</label>
-                        <input type="number" id="defense" required placeholder="Например: 3000">
-                    </div>
-                    <div class="form-group">
-                        <label>Меткость</label>
-                        <input type="number" id="accuracy" required placeholder="Например: 2000">
-                    </div>
-                    <div class="form-group">
-                        <label>Уклонение</label>
-                        <input type="number" id="evasion" required placeholder="Например: 1500">
-                    </div>
+                    <div class="form-group"><label>БМ (Боевая Мощь)</label><input type="number" id="bm" required placeholder="Например: 150000"></div>
+                    <div class="form-group"><label>Уровень персонажа</label><input type="number" id="level" required placeholder="Например: 60"></div>
+                    <div class="form-group"><label>Атака</label><input type="number" id="attack" required placeholder="Например: 5000"></div>
+                    <div class="form-group"><label>Защита</label><input type="number" id="defense" required placeholder="Например: 3000"></div>
+                    <div class="form-group"><label>Меткость</label><input type="number" id="accuracy" required placeholder="Например: 2000"></div>
+                    <div class="form-group"><label>Уклонение</label><input type="number" id="evasion" required placeholder="Например: 1500"></div>
                 </div>
                 <div class="form-group">
                     <label>Закрытые коллекции</label>
@@ -412,11 +254,6 @@
             </form>
             <div id="playerMessage" class="message"></div>
         </div>
-
-        <div id="approvedDataPanel" class="panel hidden">
-            <div class="panel-title">Подтвержденные данные</div>
-            <div class="data-grid" id="approvedDataGrid"></div>
-        </div>
     </div>
 
     <!-- ЭКРАН АДМИНА -->
@@ -425,7 +262,6 @@
             <div class="user-info">Админ-панель</div>
             <button class="logout-btn" onclick="logout()">Выход</button>
         </div>
-
         <div class="panel">
             <div class="panel-title">Игроки на проверке</div>
             <div id="pendingPlayersList"></div>
@@ -434,44 +270,45 @@
     </div>
 
     <script>
+        // Твоя ссылка уже вставлена сюда!
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwgs6YrBF0veTlUBT8brGPuF2KVw5zXedJDhjhBrP1hnW4PFhgIHECYS5NXj0JetnNe/exec';
         let currentUser = null;
         let currentRole = null;
 
-        function switchTab(tab) {
-            const tabs = document.querySelectorAll('.tab-btn');
+        function switchAuthTab(tab) {
+            const tabs = document.querySelectorAll('#authScreen .tab-btn');
             tabs.forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
             const msg = document.getElementById('authMessage');
-            
-            msg.className = 'message';
-            msg.style.display = 'none';
+            msg.className = 'message'; msg.style.display = 'none';
+            if (tab === 'login') { loginForm.classList.remove('hidden'); registerForm.classList.add('hidden'); } 
+            else { loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); }
+        }
 
-            if (tab === 'login') {
-                loginForm.classList.remove('hidden');
-                registerForm.classList.add('hidden');
-            } else {
-                loginForm.classList.add('hidden');
-                registerForm.classList.remove('hidden');
-            }
+        function switchPlayerTab(tab) {
+            document.getElementById('tabCabinet').classList.toggle('active', tab === 'cabinet');
+            document.getElementById('tabIdentification').classList.toggle('active', tab === 'identification');
+            document.getElementById('cabinetContent').classList.toggle('hidden', tab !== 'cabinet');
+            document.getElementById('identificationContent').classList.toggle('hidden', tab !== 'identification');
+        }
+
+        function showEditForm() {
+            document.getElementById('approvedMessage').classList.add('hidden');
+            document.getElementById('playerDataForm').classList.remove('hidden');
         }
 
         async function handleAuth(e, action) {
             e.preventDefault();
             const msg = document.getElementById('authMessage');
             const btn = action === 'login' ? document.getElementById('loginBtn') : document.getElementById('regBtn');
-            
             btn.disabled = true;
             const originalText = btn.innerText;
             btn.innerHTML = '<span class="loader"></span> Обработка...';
-            msg.className = 'message';
-            msg.style.display = 'none';
+            msg.className = 'message'; msg.style.display = 'none';
 
             let payload = { action: action };
-
             if (action === 'login') {
                 payload.nickname = document.getElementById('loginNick').value;
                 payload.password = document.getElementById('loginPass').value;
@@ -482,42 +319,25 @@
             }
 
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload),
-                    redirect: 'follow' 
-                });
-                
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), redirect: 'follow' });
                 const result = await response.json();
-
                 if (result.success) {
-                    msg.className = 'message success';
-                    msg.innerText = result.message;
-                    
+                    msg.className = 'message success'; msg.innerText = result.message;
                     if (action === 'login') {
                         currentUser = payload.nickname;
                         currentRole = result.role;
-                        
                         setTimeout(() => {
-                            if (currentRole === 'Админ') {
-                                showAdminScreen();
-                            } else {
-                                showPlayerScreen();
-                            }
+                            if (currentRole === 'Админ') showAdminScreen();
+                            else showPlayerScreen();
                         }, 1000);
                     }
                 } else {
-                    msg.className = 'message error';
-                    msg.innerText = result.message;
+                    msg.className = 'message error'; msg.innerText = result.message;
                 }
             } catch (error) {
-                msg.className = 'message error';
-                msg.innerText = 'Ошибка связи с сервером.';
-                console.error(error);
+                msg.className = 'message error'; msg.innerText = 'Ошибка связи с сервером.';
             } finally {
-                btn.disabled = false;
-                btn.innerText = originalText;
-                msg.style.display = 'block';
+                btn.disabled = false; btn.innerText = originalText; msg.style.display = 'block';
             }
         }
 
@@ -536,18 +356,19 @@
 
         async function loadPlayerData() {
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'getPlayerData', nickname: currentUser }),
-                    redirect: 'follow'
-                });
-                
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerData', nickname: currentUser }), redirect: 'follow' });
                 const result = await response.json();
                 
+                const form = document.getElementById('playerDataForm');
+                const approvedMsg = document.getElementById('approvedMessage');
+                const cabinetEmpty = document.getElementById('cabinetEmpty');
+                const approvedGrid = document.getElementById('approvedDataGrid');
+                const statusSpan = document.getElementById('playerStatus');
+
                 if (result.success) {
                     const data = result.data;
                     
-                    // Заполняем форму
+                    // Заполняем форму на всякий случай
                     document.getElementById('bm').value = data.bm || '';
                     document.getElementById('level').value = data.level || '';
                     document.getElementById('attack').value = data.attack || '';
@@ -556,100 +377,92 @@
                     document.getElementById('evasion').value = data.evasion || '';
                     document.getElementById('collections').value = data.collections || '';
                     document.getElementById('profession').value = data.profession || '';
-                    
-                    // Показываем статус
-                    const statusSpan = document.getElementById('playerStatus');
-                    if (data.status === 'pending') {
-                        statusSpan.innerHTML = '<span class="status-badge status-pending">На проверке</span>';
-                    } else if (data.status === 'approved') {
-                        statusSpan.innerHTML = '<span class="status-badge status-approved">Подтверждено</span>';
-                        showApprovedData(data);
-                    } else if (data.status === 'rejected') {
-                        statusSpan.innerHTML = '<span class="status-badge status-rejected">Отклонено</span>';
-                    }
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        }
 
-        function showApprovedData(data) {
-            const panel = document.getElementById('approvedDataPanel');
-            const grid = document.getElementById('approvedDataGrid');
-            
-            grid.innerHTML = `
-                <div class="data-item"><div class="data-label">БМ</div><div class="data-value">${data.bm}</div></div>
-                <div class="data-item"><div class="data-label">Уровень</div><div class="data-value">${data.level}</div></div>
-                <div class="data-item"><div class="data-label">Атака</div><div class="data-value">${data.attack}</div></div>
-                <div class="data-item"><div class="data-label">Защита</div><div class="data-value">${data.defense}</div></div>
-                <div class="data-item"><div class="data-label">Меткость</div><div class="data-value">${data.accuracy}</div></div>
-                <div class="data-item"><div class="data-label">Уклонение</div><div class="data-value">${data.evasion}</div></div>
-                <div class="data-item"><div class="data-label">Закрытые коллекции</div><div class="data-value">${data.collections}</div></div>
-                <div class="data-item"><div class="data-label">Профессия</div><div class="data-value">${data.profession}</div></div>
-            `;
-            
-            panel.classList.remove('hidden');
+                    if (data.status === 'approved') {
+                        // ПОДТВЕРЖДЕНО: показываем личный кабинет, скрываем форму
+                        statusSpan.innerHTML = '<span class="status-badge status-approved">Подтверждено</span>';
+                        approvedGrid.innerHTML = `
+                            <div class="data-item"><div class="data-label">БМ</div><div class="data-value">${data.bm}</div></div>
+                            <div class="data-item"><div class="data-label">Уровень</div><div class="data-value">${data.level}</div></div>
+                            <div class="data-item"><div class="data-label">Атака</div><div class="data-value">${data.attack}</div></div>
+                            <div class="data-item"><div class="data-label">Защита</div><div class="data-value">${data.defense}</div></div>
+                            <div class="data-item"><div class="data-label">Меткость</div><div class="data-value">${data.accuracy}</div></div>
+                            <div class="data-item"><div class="data-label">Уклонение</div><div class="data-value">${data.evasion}</div></div>
+                            <div class="data-item"><div class="data-label">Закрытые коллекции</div><div class="data-value">${data.collections}</div></div>
+                            <div class="data-item"><div class="data-label">Профессия</div><div class="data-value">${data.profession}</div></div>
+                        `;
+                        cabinetEmpty.classList.add('hidden');
+                        approvedGrid.classList.remove('hidden');
+                        
+                        // Скрываем форму, показываем сообщение об успехе и кнопку редактирования
+                        form.classList.add('hidden');
+                        approvedMsg.classList.remove('hidden');
+                        
+                        // По умолчанию открываем вкладку Личный кабинет
+                        switchPlayerTab('cabinet');
+                    } 
+                    else if (data.status === 'pending') {
+                        statusSpan.innerHTML = '<span class="status-badge status-pending">На проверке</span>';
+                        cabinetEmpty.classList.remove('hidden');
+                        approvedGrid.classList.add('hidden');
+                        approvedMsg.classList.add('hidden');
+                        form.classList.remove('hidden'); // Показываем форму, чтобы игрок видел, что отправил (или мог исправить)
+                        switchPlayerTab('identification');
+                    } 
+                    else {
+                        statusSpan.innerHTML = '<span class="status-badge status-rejected">Отклонено</span>';
+                        cabinetEmpty.classList.remove('hidden');
+                        approvedGrid.classList.add('hidden');
+                        approvedMsg.classList.add('hidden');
+                        form.classList.remove('hidden');
+                        switchPlayerTab('identification');
+                    }
+                } else {
+                    // Данных нет вообще
+                    cabinetEmpty.classList.remove('hidden');
+                    approvedGrid.classList.add('hidden');
+                    approvedMsg.classList.add('hidden');
+                    form.classList.remove('hidden');
+                    switchPlayerTab('identification');
+                }
+            } catch (error) { console.error(error); }
         }
 
         async function savePlayerData(e) {
             e.preventDefault();
             const btn = document.getElementById('saveDataBtn');
             const msg = document.getElementById('playerMessage');
-            
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loader"></span> Отправка...';
+            btn.disabled = true; btn.innerHTML = '<span class="loader"></span> Отправка...';
             
             const payload = {
-                action: 'savePlayerData',
-                nickname: currentUser,
-                bm: document.getElementById('bm').value,
-                level: document.getElementById('level').value,
-                attack: document.getElementById('attack').value,
-                defense: document.getElementById('defense').value,
-                accuracy: document.getElementById('accuracy').value,
-                evasion: document.getElementById('evasion').value,
-                collections: document.getElementById('collections').value,
-                profession: document.getElementById('profession').value
+                action: 'savePlayerData', nickname: currentUser,
+                bm: document.getElementById('bm').value, level: document.getElementById('level').value,
+                attack: document.getElementById('attack').value, defense: document.getElementById('defense').value,
+                accuracy: document.getElementById('accuracy').value, evasion: document.getElementById('evasion').value,
+                collections: document.getElementById('collections').value, profession: document.getElementById('profession').value
             };
             
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload),
-                    redirect: 'follow'
-                });
-                
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), redirect: 'follow' });
                 const result = await response.json();
-                
                 if (result.success) {
-                    msg.className = 'message success';
-                    msg.innerText = result.message;
-                    setTimeout(() => loadPlayerData(), 1000);
+                    msg.className = 'message success'; msg.innerText = result.message;
+                    setTimeout(() => loadPlayerData(), 1500);
                 } else {
-                    msg.className = 'message error';
-                    msg.innerText = result.message;
+                    msg.className = 'message error'; msg.innerText = result.message;
                 }
             } catch (error) {
-                msg.className = 'message error';
-                msg.innerText = 'Ошибка связи с сервером.';
+                msg.className = 'message error'; msg.innerText = 'Ошибка связи с сервером.';
             } finally {
-                btn.disabled = false;
-                btn.innerText = 'Отправить на проверку';
-                msg.style.display = 'block';
+                btn.disabled = false; btn.innerText = 'Отправить на проверку'; msg.style.display = 'block';
             }
         }
 
         async function loadPendingPlayers() {
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'getPendingPlayers' }),
-                    redirect: 'follow'
-                });
-                
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingPlayers' }), redirect: 'follow' });
                 const result = await response.json();
                 const list = document.getElementById('pendingPlayersList');
-                
                 if (result.success && result.players.length > 0) {
                     list.innerHTML = result.players.map(player => `
                         <div class="player-card">
@@ -673,66 +486,40 @@
                         </div>
                     `).join('');
                 } else {
-                    list.innerHTML = '<div style="text-align: center; color: var(--text-dim);">Нет игроков на проверке</div>';
+                    list.innerHTML = '<div class="empty-state">Нет игроков на проверке</div>';
                 }
-            } catch (error) {
-                console.error(error);
-            }
+            } catch (error) { console.error(error); }
         }
 
         async function approvePlayer(nickname) {
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'approvePlayer', nickname: nickname }),
-                    redirect: 'follow'
-                });
-                
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approvePlayer', nickname: nickname }), redirect: 'follow' });
                 const result = await response.json();
                 const msg = document.getElementById('adminMessage');
-                
                 if (result.success) {
-                    msg.className = 'message success';
-                    msg.innerText = result.message;
-                    setTimeout(() => {
-                        loadPendingPlayers();
-                        msg.style.display = 'none';
-                    }, 1000);
+                    msg.className = 'message success'; msg.innerText = result.message;
+                    setTimeout(() => { loadPendingPlayers(); msg.style.display = 'none'; }, 1000);
                 }
-            } catch (error) {
-                console.error(error);
-            }
+            } catch (error) { console.error(error); }
         }
 
         async function rejectPlayer(nickname) {
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'rejectPlayer', nickname: nickname }),
-                    redirect: 'follow'
-                });
-                
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectPlayer', nickname: nickname }), redirect: 'follow' });
                 const result = await response.json();
                 const msg = document.getElementById('adminMessage');
-                
                 if (result.success) {
-                    msg.className = 'message error';
-                    msg.innerText = result.message;
-                    setTimeout(() => {
-                        loadPendingPlayers();
-                        msg.style.display = 'none';
-                    }, 1000);
+                    msg.className = 'message error'; msg.innerText = result.message;
+                    setTimeout(() => { loadPendingPlayers(); msg.style.display = 'none'; }, 1000);
                 }
-            } catch (error) {
-                console.error(error);
-            }
+            } catch (error) { console.error(error); }
         }
 
         function logout() {
-            currentUser = null;
-            currentRole = null;
+            currentUser = null; currentRole = null;
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('authScreen').classList.add('active');
+            document.getElementById('authMessage').style.display = 'none';
         }
     </script>
 </body>
