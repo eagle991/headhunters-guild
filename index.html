@@ -660,7 +660,7 @@
         <div id="dkpSubmitContent" class="hidden">
             <div class="panel-title">📸 Загрузка скриншотов мероприятия</div>
             <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 15px;">
-                Загрузите скриншоты с мероприятия (до 5 штук). Система автоматически распознает ники игроков. Вы сможете отредактировать распознанные ники вручную перед отправкой на проверку.
+                Загрузите скриншоты с мероприятия (до 5 штук, макс. 5 МБ каждый). Система автоматически распознает ники игроков.
             </p>
             <div class="form-group">
                 <label>Выберите мероприятие</label>
@@ -671,7 +671,7 @@
             <div class="screenshot-upload-area" id="screenshotUploadArea" onclick="document.getElementById('screenshotInput').click()">
                 <div class="upload-icon">📷</div>
                 <div class="upload-text">Нажмите для выбора скриншотов или перетащите их сюда</div>
-                <div class="upload-hint">Максимум 5 изображений (JPG, PNG)</div>
+                <div class="upload-hint">Максимум 5 изображений (JPG, PNG), до 5 МБ каждое</div>
                 <input type="file" id="screenshotInput" accept="image/*" multiple style="display: none;" onchange="handleScreenshotSelect(event)">
             </div>
             <div class="screenshots-preview" id="screenshotsPreview"></div>
@@ -814,8 +814,8 @@
         <img id="modalImage" src="" alt="Screenshot">
     </div>
 </div>
-    <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSBRJR_D4j-1oe6fkXb98myAm-m6Tk3205evDXBMR8swstpGQDb4y_-EFqqy5jjZuk/exec';
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvCwMEfFu44M5K2gsSmHYFDp81rV8uqtDNC5mB7UBZ2EnrUCDKCM3UN3HV-T0kgUZE/exec';
     let currentUser = null;
     let currentRole = null;
     let myPlayerData = null;
@@ -837,9 +837,7 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             const authScreen = document.getElementById('authScreen');
             if (authScreen) authScreen.classList.add('active');
-        } catch (error) {
-            console.error('Ошибка showAuthScreen:', error);
-        }
+        } catch (error) { console.error('Ошибка showAuthScreen:', error); }
     }
     function getRoleBadge(role) {
         if (role === 'Админ') return ' <span style="color: var(--neon-red); font-size: 10px;">[АДМИН]</span>';
@@ -1360,15 +1358,42 @@
         event.target.value = '';
     }
 
+    // ✅ НОВАЯ ВЕРСИЯ С ПРОВЕРКОЙ РАЗМЕРА
     function addScreenshots(files) {
         const remaining = 5 - uploadedScreenshots.length;
         if (remaining <= 0) {
             showDkpSubmitMessage('Максимум 5 скриншотов', 'error');
             return;
         }
-        const toAdd = files.slice(0, remaining);
+        
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 МБ
+        const MAX_TOTAL_SIZE = 20 * 1024 * 1024; // 20 МБ суммарно
+        
+        // Считаем уже загруженные
+        let existingSize = uploadedScreenshots.reduce((sum, s) => sum + (s.file ? s.file.size : 0), 0);
+        
+        const toAdd = [];
+        let totalNewSize = 0;
+        
+        for (let i = 0; i < Math.min(files.length, remaining); i++) {
+            const file = files[i];
+            if (!file.type.startsWith('image/')) continue;
+            
+            if (file.size > MAX_FILE_SIZE) {
+                showDkpSubmitMessage(`Файл "${file.name}" слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимум 5 МБ`, 'error');
+                continue;
+            }
+            
+            if (existingSize + totalNewSize + file.size > MAX_TOTAL_SIZE) {
+                showDkpSubmitMessage(`Превышен общий размер (${MAX_TOTAL_SIZE / 1024 / 1024} МБ). Удалите часть скриншотов`, 'error');
+                continue;
+            }
+            
+            toAdd.push(file);
+            totalNewSize += file.size;
+        }
+        
         toAdd.forEach(file => {
-            if (!file.type.startsWith('image/')) return;
             const id = 'ss_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
             const reader = new FileReader();
             const screenshotObj = { id, file, base64: null, url: null, status: 'uploading' };
@@ -1404,24 +1429,39 @@
         });
     }
 
+    // ✅ НОВАЯ ВЕРСИЯ С АДАПТИВНЫМ СЖАТИЕМ
     function compressImage(base64, maxSize, quality) {
         return new Promise((resolve) => {
             const img = new Image();
             img.onload = () => {
                 let { width, height } = img;
-                if (width > height && width > maxSize) {
-                    height = (height * maxSize) / width;
-                    width = maxSize;
-                } else if (height > maxSize) {
-                    width = (width * maxSize) / height;
-                    height = maxSize;
+                
+                // Адаптивное уменьшение в зависимости от размера
+                let targetMax = maxSize;
+                let targetQuality = quality;
+                
+                if (width > 2000 || height > 2000) {
+                    targetMax = 800;
+                    targetQuality = 0.7;
+                } else if (width > 1500 || height > 1500) {
+                    targetMax = 1000;
+                    targetQuality = 0.75;
                 }
+                
+                if (width > height && width > targetMax) {
+                    height = (height * targetMax) / width;
+                    width = targetMax;
+                } else if (height > targetMax) {
+                    width = (width * targetMax) / height;
+                    height = targetMax;
+                }
+                
                 const canvas = document.createElement('canvas');
                 canvas.width = width;
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
-                resolve(canvas.toDataURL('image/jpeg', quality));
+                resolve(canvas.toDataURL('image/jpeg', targetQuality));
             };
             img.onerror = () => resolve(base64);
             img.src = base64;
@@ -1430,14 +1470,17 @@
 
     function renderScreenshotsPreview() {
         const preview = document.getElementById('screenshotsPreview');
-        preview.innerHTML = uploadedScreenshots.map(s => `
+        preview.innerHTML = uploadedScreenshots.map(s => {
+            const sizeInfo = s.file ? ` <span style="font-size: 9px; color: var(--text-dim);">(${(s.file.size / 1024 / 1024).toFixed(2)} МБ)</span>` : '';
+            return `
             <div class="screenshot-thumb">
                 ${s.base64 ? `<img src="${s.base64}" alt="screenshot">` : ''}
                 <button class="remove-btn" onclick="removeScreenshot('${s.id}')">✕</button>
                 ${s.status === 'uploading' ? '<div class="upload-progress">Загрузка...</div>' : ''}
                 ${s.status === 'error' ? '<div class="upload-progress" style="color: var(--neon-red);">Ошибка</div>' : ''}
+                ${s.status === 'done' ? `<div class="upload-progress" style="color: var(--neon-green);">✓${sizeInfo}</div>` : ''}
             </div>
-        `).join('');
+        `}).join('');
     }
 
     function removeScreenshot(id) {
@@ -1445,7 +1488,6 @@
         renderScreenshotsPreview();
     }
 
-    // ✅ ИСПРАВЛЕННАЯ ПРЕДОБРАБОТКА ИЗОБРАЖЕНИЯ (бинаризация)
     async function preprocessImage(base64) {
         return new Promise((resolve) => {
             const img = new Image();
@@ -1480,70 +1522,86 @@
         });
     }
 
-    // ✅ ИСПРАВЛЕННЫЙ OCR С ОТЛАДКОЙ
     async function runOcrOnScreenshots() {
-        const doneScreenshots = uploadedScreenshots.filter(s => s.status === 'done' && s.base64);
-        if (doneScreenshots.length === 0) return;
-
-        const progressBlock = document.getElementById('ocrProgressBlock');
-        const progressText = document.getElementById('ocrProgressText');
-        const progressBar = document.getElementById('ocrProgressBar');
-        const nicksBlock = document.getElementById('recognizedNicksBlock');
-        
-        progressBlock.classList.remove('hidden');
-        progressBar.style.width = '0%';
-        recognizedNicks = [];
-        
-        if (typeof Tesseract === 'undefined') {
-            progressText.innerText = '⚠️ Tesseract не загружен. Добавьте ники вручную.';
-            nicksBlock.classList.remove('hidden');
-            renderRecognizedNicks();
-            return;
-        }
-        
         try {
-            progressText.innerText = 'Загрузка OCR-модели (русский + английский)...';
+            const doneScreenshots = uploadedScreenshots.filter(s => s.status === 'done' && s.base64);
+            if (doneScreenshots.length === 0) return;
+
+            const progressBlock = document.getElementById('ocrProgressBlock');
+            const progressText = document.getElementById('ocrProgressText');
+            const progressBar = document.getElementById('ocrProgressBar');
+            const nicksBlock = document.getElementById('recognizedNicksBlock');
+            
+            if (!progressBlock || !progressText || !progressBar || !nicksBlock) {
+                console.error('Не найдены элементы OCR');
+                return;
+            }
+            
+            progressBlock.classList.remove('hidden');
+            progressBar.style.width = '0%';
+            recognizedNicks = [];
+            
+            if (typeof Tesseract === 'undefined') {
+                progressText.innerText = '⚠️ Tesseract не загружен. Добавьте ники вручную.';
+                nicksBlock.classList.remove('hidden');
+                renderRecognizedNicks();
+                return;
+            }
+            
+            progressText.innerText = 'Загрузка OCR-модели...';
             progressBar.style.width = '10%';
             
-            const worker = await Tesseract.createWorker('rus+eng', 1, {
-                logger: m => {
-                    if (m.status === 'loading tesseract core') {
-                        progressText.innerText = 'Загрузка ядра Tesseract...';
-                    } else if (m.status === 'initializing tesseract') {
-                        progressText.innerText = 'Инициализация...';
-                    } else if (m.status === 'loading language traineddata') {
-                        progressText.innerText = 'Загрузка языковых данных...';
-                    } else if (m.status === 'recognizing text') {
-                        const percent = Math.round(m.progress * 100);
-                        progressBar.style.width = (10 + percent * 0.85) + '%';
-                        progressText.innerText = `Распознавание... ${percent}%`;
+            let worker;
+            try {
+                worker = await Tesseract.createWorker('rus+eng', 1, {
+                    logger: m => {
+                        if (m.status === 'recognizing text' && m.progress) {
+                            const percent = Math.round(m.progress * 100);
+                            progressBar.style.width = (10 + percent * 0.85) + '%';
+                            progressText.innerText = `Распознавание... ${percent}%`;
+                        }
                     }
-                }
-            });
+                });
+            } catch (workerError) {
+                console.error('Ошибка создания worker:', workerError);
+                progressText.innerText = '❌ Не удалось загрузить OCR. Добавьте ники вручную.';
+                nicksBlock.classList.remove('hidden');
+                renderRecognizedNicks();
+                return;
+            }
             
             const allNicks = new Set();
             let fullText = '';
             
             for (let i = 0; i < doneScreenshots.length; i++) {
-                progressText.innerText = `Обработка скриншота ${i + 1} из ${doneScreenshots.length}...`;
-                
-                const processedImage = await preprocessImage(doneScreenshots[i].base64);
-                
-                const { data: { text } } = await worker.recognize(processedImage);
-                fullText += text + '\n';
-                
-                const extractedNicks = extractNicksFromText(text);
-                extractedNicks.forEach(n => allNicks.add(n));
-                
-                progressBar.style.width = (10 + ((i + 1) / doneScreenshots.length) * 85) + '%';
+                try {
+                    progressText.innerText = `Обработка скриншота ${i + 1} из ${doneScreenshots.length}...`;
+                    
+                    const processedImage = await preprocessImage(doneScreenshots[i].base64);
+                    
+                    const result = await worker.recognize(processedImage);
+                    const text = result && result.data && result.data.text ? result.data.text : '';
+                    fullText += text + '\n';
+                    
+                    const extractedNicks = extractNicksFromText(text);
+                    extractedNicks.forEach(n => allNicks.add(n));
+                    
+                    progressBar.style.width = (10 + ((i + 1) / doneScreenshots.length) * 85) + '%';
+                } catch (imgError) {
+                    console.error(`Ошибка обработки скриншота ${i + 1}:`, imgError);
+                    progressText.innerText = `⚠️ Ошибка на скриншоте ${i + 1}. Продолжаем...`;
+                }
             }
 
-            await worker.terminate();
+            try {
+                await worker.terminate();
+            } catch (e) {
+                console.error('Ошибка завершения worker:', e);
+            }
             
-            // Отладочный вывод в консоль
             showAllRecognizedWords(fullText);
             
-            recognizedNicks = Array.from(allNicks).filter(n => n.length >= 2 && n.length <= 20);
+            recognizedNicks = Array.from(allNicks).filter(n => n && n.length >= 2 && n.length <= 25);
             progressText.innerText = `✅ Распознано ников: ${recognizedNicks.length}`;
             progressBar.style.width = '100%';
             
@@ -1554,85 +1612,104 @@
                 progressText.innerText = '⚠️ Ники не распознаны. Добавьте вручную.';
             }
         } catch (error) {
-            console.error('OCR ошибка:', error);
-            progressText.innerText = '❌ Ошибка распознавания. Добавьте ники вручную.';
-            nicksBlock.classList.remove('hidden');
-            renderRecognizedNicks();
+            console.error('Критическая ошибка OCR:', error);
+            const progressText = document.getElementById('ocrProgressText');
+            const nicksBlock = document.getElementById('recognizedNicksBlock');
+            if (progressText) progressText.innerText = '❌ Ошибка распознавания. Добавьте ники вручную.';
+            if (nicksBlock) {
+                nicksBlock.classList.remove('hidden');
+                renderRecognizedNicks();
+            }
         }
     }
 
-    // ✅ УЛУЧШЕННАЯ ФУНКЦИЯ ИЗВЛЕЧЕНИЯ НИКОВ
     function extractNicksFromText(text) {
-        if (!text || typeof text !== 'string') return [];
-        
-        const skipWords = new Set([
-            'управление', 'группой', 'рейдовая', 'группа', 'команда', 'неа',
-            'гильдия', 'клан', 'альянс', 'рейд', 'пати', 'отряд',
-            'headhunters', 'guild', 'clan', 'alliance', 'raid', 'party', 'team',
-            'squad', 'group', 'management', 'control',
-            'headhuntersguild', 'hh', 'rf', 'online', 'next', 'game', 'play'
-        ]);
-        
-        const lines = text.split(/\n|\r/);
-        const allWords = [];
-        const wordFrequency = {};
-        
-        lines.forEach(line => {
-            const tokens = line.split(/[\s\t\|\/\\]+/);
-            tokens.forEach(token => {
-                const clean = token.replace(/[^\w\u0400-\u04FF\-_]/g, '');
-                if (clean.length >= 2 && clean.length <= 20) {
-                    allWords.push(clean);
-                    wordFrequency[clean.toLowerCase()] = (wordFrequency[clean.toLowerCase()] || 0) + 1;
-                }
+        try {
+            if (!text || typeof text !== 'string') return [];
+            
+            const skipWords = new Set([
+                'headhunters', 'неа', 'управление', 'группой', 'рейдовая', 'группа',
+                'проверить', 'готовность', 'пригласить', 'набор', 'настройки',
+                'команда', 'команда1', 'команда2', 'команда3', 'команда4', 'команда5',
+                'команда6', 'команда7', 'команда8', 'команда9', 'команда10',
+                'guild', 'clan', 'alliance', 'raid', 'party', 'team', 'squad',
+                'group', 'management', 'control', 'hh', 'rf', 'online', 'next',
+                '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
+            ]);
+            
+            const lines = text.split(/\n|\r/);
+            const allWords = [];
+            const wordFrequency = {};
+            
+            lines.forEach(line => {
+                const tokens = line.split(/[\s\t\|\/\\:\+\=]+/);
+                tokens.forEach(token => {
+                    let clean = token.trim();
+                    clean = clean.replace(/^[\[\(\{]+|[\]\)\}]+$/g, '');
+                    clean = clean.replace(/[^\w\u0400-\u04FF\-_]/g, '');
+                    
+                    if (clean.length >= 2 && clean.length <= 25) {
+                        allWords.push(clean);
+                        const lower = clean.toLowerCase();
+                        wordFrequency[lower] = (wordFrequency[lower] || 0) + 1;
+                    }
+                });
             });
-        });
-        
-        const nicks = [];
-        const seen = new Set();
-        
-        allWords.forEach(word => {
-            const lowerWord = word.toLowerCase();
             
-            if (seen.has(lowerWord)) return;
-            if (wordFrequency[lowerWord] > 2) return;
-            if (skipWords.has(lowerWord)) return;
-            if (/^\d+$/.test(word)) return;
-            if (word.length < 2 || word.length > 20) return;
-            if (!/[A-Za-z\u0410-\u044F\u0400-\u04FF]/.test(word)) return;
-            if (/^(.)\1{2,}$/.test(word)) return;
+            const nicks = [];
+            const seen = new Set();
             
-            seen.add(lowerWord);
-            nicks.push(word);
-        });
-        
-        return nicks;
+            allWords.forEach(word => {
+                const lowerWord = word.toLowerCase();
+                
+                if (seen.has(lowerWord)) return;
+                if (skipWords.has(lowerWord)) return;
+                if (wordFrequency[lowerWord] > 2) return;
+                if (/^\d+$/.test(word)) return;
+                if (!/[A-Za-z\u0410-\u044F\u0400-\u04FF]/.test(word)) return;
+                if (/^(.)\1{3,}$/.test(word)) return;
+                
+                seen.add(lowerWord);
+                nicks.push(word);
+            });
+            
+            return nicks;
+        } catch (error) {
+            console.error('Ошибка в extractNicksFromText:', error);
+            return [];
+        }
     }
 
-    // ✅ ОТЛАДОЧНАЯ ФУНКЦИЯ
     function showAllRecognizedWords(text) {
-        if (!text) return;
-        
-        const lines = text.split(/\n|\r/);
-        const allWords = [];
-        const wordFrequency = {};
-        
-        lines.forEach(line => {
-            const tokens = line.split(/[\s\t\|\/\\]+/);
-            tokens.forEach(token => {
-                const clean = token.replace(/[^\w\u0400-\u04FF\-_]/g, '');
-                if (clean.length >= 2) {
-                    allWords.push(clean);
-                    wordFrequency[clean.toLowerCase()] = (wordFrequency[clean.toLowerCase()] || 0) + 1;
-                }
+        try {
+            if (!text) return;
+            
+            const lines = text.split(/\n|\r/);
+            const allWords = [];
+            const wordFrequency = {};
+            
+            lines.forEach(line => {
+                const tokens = line.split(/[\s\t\|\/\\:\+\=]+/);
+                tokens.forEach(token => {
+                    let clean = token.trim();
+                    clean = clean.replace(/^[\[\(\{]+|[\]\)\}]+$/g, '');
+                    clean = clean.replace(/[^\w\u0400-\u04FF\-_]/g, '');
+                    if (clean.length >= 2) {
+                        allWords.push(clean);
+                        const lower = clean.toLowerCase();
+                        wordFrequency[lower] = (wordFrequency[lower] || 0) + 1;
+                    }
+                });
             });
-        });
-        
-        console.log('=== ВСЕ РАСПОЗНАННЫЕ СЛОВА ===');
-        console.log(allWords);
-        console.log('=== ЧАСТОТА СЛОВ ===');
-        console.log(wordFrequency);
-        console.log('===========================');
+            
+            console.log('=== ВСЕ РАСПОЗНАННЫЕ СЛОВА ===');
+            console.log(allWords);
+            console.log('=== ЧАСТОТА СЛОВ ===');
+            console.log(wordFrequency);
+            console.log('===========================');
+        } catch (error) {
+            console.error('Ошибка в showAllRecognizedWords:', error);
+        }
     }
 
     function renderRecognizedNicks() {
@@ -1756,7 +1833,7 @@
             }
         } catch (error) { console.error(error); }
     }
-            async function loadAdminEvents() {
+        async function loadAdminEvents() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' });
             const result = await response.json();
