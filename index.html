@@ -3,452 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RF Online Next | Terminal Access</title>
+    <title>RF Online Next</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         :root {
-            --bg-main: #faf9f6;
-            --bg-panel: #ffffff;
-            --bg-soft: #f5f3ef;
-            --bg-hover: #eeeae3;
-            --text-main: #2c3e50;
-            --text-dim: #7a8599;
-            --border: #d8d4cb;
-            --accent: #5b7c99;
-            --accent-soft: #e8eef3;
-            --success: #5a8a6b;
-            --success-soft: #e3efe6;
-            --warning: #b8864a;
-            --warning-soft: #f3ead9;
-            --danger: #a85454;
-            --danger-soft: #f0e0e0;
-            --gold: #a68a3e;
-            --silver: #7a7a7a;
-            --bronze: #8a6a3e;
-            --dkp: #b8864a;
+            --bg-main: #faf9f6; --bg-panel: #ffffff; --bg-soft: #f5f3ef; --bg-hover: #eeeae3;
+            --text-main: #2c3e50; --text-dim: #7a8599; --border: #d8d4cb;
+            --accent: #5b7c99; --accent-soft: #e8eef3;
+            --success: #5a8a6b; --success-soft: #e3efe6;
+            --warning: #b8864a; --warning-soft: #f3ead9;
+            --danger: #a85454; --danger-soft: #f0e0e0;
+            --gold: #a68a3e; --silver: #7a7a7a; --bronze: #8a6a3e; --dkp: #b8864a;
             --shadow-sm: 0 1px 3px rgba(44, 62, 80, 0.06);
             --shadow-md: 0 2px 6px rgba(44, 62, 80, 0.08);
             --shadow-lg: 0 4px 12px rgba(44, 62, 80, 0.1);
-            --radius-sm: 4px;
-            --radius-md: 6px;
-            --radius-lg: 8px;
+            --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px;
         }
         body[data-theme="dark"] {
-            --bg-main: #1a1d23;
-            --bg-panel: #242830;
-            --bg-soft: #2a2e36;
-            --bg-hover: #333842;
-            --text-main: #e4e6eb;
-            --text-dim: #8a92a3;
-            --border: #3a3f47;
-            --accent: #6b8cae;
-            --accent-soft: #2a3540;
-            --success: #6a9a7b;
-            --success-soft: #2a3a2e;
-            --warning: #c89660;
-            --warning-soft: #3a3020;
-            --danger: #b86464;
-            --danger-soft: #3a2525;
-            --gold: #b89a4e;
-            --silver: #9a9a9a;
-            --bronze: #9a7a4e;
-            --dkp: #c89660;
+            --bg-main: #1a1d23; --bg-panel: #242830; --bg-soft: #2a2e36; --bg-hover: #333842;
+            --text-main: #e4e6eb; --text-dim: #8a92a3; --border: #3a3f47;
+            --accent: #6b8cae; --accent-soft: #2a3540;
+            --success: #6a9a7b; --success-soft: #2a3a2e;
+            --warning: #c89660; --warning-soft: #3a3020;
+            --danger: #b86464; --danger-soft: #3a2525;
+            --gold: #b89a4e; --silver: #9a9a9a; --bronze: #9a7a4e; --dkp: #c89660;
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
             --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4);
             --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
         * { box-sizing: border-box; }
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Times New Roman', Times, Georgia, serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            min-height: 100vh;
-            font-size: 14px;
-            line-height: 1.5;
-            transition: background-color 0.3s, color 0.3s;
-        }
+        body { margin: 0; padding: 0; font-family: 'Times New Roman', Times, Georgia, serif; background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background-color 0.3s, color 0.3s; }
         .screen { display: none; width: 100%; max-width: 1280px; padding: 15px; margin: 0 auto; }
         .screen.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .public-hero {
-            position: relative; height: 280px; margin-bottom: 20px;
-            border-radius: var(--radius-lg); overflow: hidden;
-            background: linear-gradient(135deg, var(--accent) 0%, #4a5d73 100%);
-            box-shadow: var(--shadow-md);
-        }
-        body[data-theme="dark"] .public-hero {
-            background: linear-gradient(135deg, #2a3540 0%, #1a2530 100%);
-        }
-        .public-hero-content {
-            position: relative; z-index: 2; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 20px;
-        }
-        .public-title {
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 42px; font-weight: 700;
-            color: #ffffff; letter-spacing: 4px;
-            margin: 0 0 8px 0;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        }
-        .public-subtitle {
-            color: rgba(255,255,255,0.85);
-            font-size: 14px; letter-spacing: 2px;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-        .login-link {
-            background: #ffffff; border: none; color: var(--accent);
-            padding: 8px 24px; cursor: pointer;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 13px; letter-spacing: 1px;
-            transition: 0.2s; border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-sm);
-            font-weight: 600;
-        }
+        .public-hero { position: relative; height: 260px; margin-bottom: 20px; border-radius: var(--radius-lg); overflow: hidden; background: linear-gradient(135deg, var(--accent) 0%, #4a5d73 100%); box-shadow: var(--shadow-md); }
+        body[data-theme="dark"] .public-hero { background: linear-gradient(135deg, #2a3540 0%, #1a2530 100%); }
+        .public-hero-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .public-title { font-family: 'Times New Roman', Times, serif; font-size: 40px; font-weight: 700; color: #ffffff; letter-spacing: 3px; margin: 0 0 6px 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+        .public-subtitle { color: rgba(255,255,255,0.85); font-size: 13px; letter-spacing: 2px; margin-bottom: 18px; font-style: italic; }
+        .login-link { background: #ffffff; border: none; color: var(--accent); padding: 7px 22px; cursor: pointer; font-family: 'Times New Roman', Times, serif; font-size: 12px; letter-spacing: 1px; transition: 0.2s; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); font-weight: 600; }
         .login-link:hover { background: #f5f3ef; transform: translateY(-1px); box-shadow: var(--shadow-md); }
-        .top-containers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .top-containers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         @media (max-width: 900px) { .top-containers { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) { .public-title { font-size: 28px; } .public-hero { height: 220px; } }
-        .top-panel {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 14px;
-            box-shadow: var(--shadow-sm);
-            transition: 0.2s;
-        }
+        @media (max-width: 768px) { .public-title { font-size: 26px; } .public-hero { height: 200px; } }
+        .top-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; box-shadow: var(--shadow-sm); transition: 0.2s; }
         .top-panel:hover { box-shadow: var(--shadow-md); }
         .top-panel.dkp-panel { border-top: 2px solid var(--dkp); }
-        .top-panel-title {
-            font-family: 'Times New Roman', Times, serif;
-            color: var(--accent);
-            font-size: 13px; letter-spacing: 1px;
-            margin-bottom: 10px; text-align: center;
-            font-weight: 700;
-        }
+        .top-panel-title { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 12px; letter-spacing: 1px; margin-bottom: 8px; text-align: center; font-weight: 700; }
         .top-panel.dkp-panel .top-panel-title { color: var(--dkp); }
-        .top-list { display: flex; flex-direction: column; gap: 4px; }
-        .top-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 6px 10px;
-            background: var(--bg-soft);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            transition: 0.2s; font-size: 13px;
-        }
+        .top-list { display: flex; flex-direction: column; gap: 3px; }
+        .top-item { display: flex; align-items: center; gap: 8px; padding: 5px 8px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.2s; font-size: 12px; }
         .top-item:hover { background: var(--bg-hover); }
         .top-item.rank-1 { border-left: 3px solid var(--gold); background: var(--warning-soft); }
         .top-item.rank-2 { border-left: 3px solid var(--silver); }
         .top-item.rank-3 { border-left: 3px solid var(--bronze); }
-        .top-rank { font-family: 'Times New Roman', Times, serif; font-size: 15px; font-weight: 700; min-width: 30px; text-align: center; color: var(--text-dim); }
-        .top-rank.rank-1 { color: var(--gold); }
-        .top-rank.rank-2 { color: var(--silver); }
-        .top-rank.rank-3 { color: var(--bronze); }
-        .top-nick { flex: 1; font-family: 'Times New Roman', Times, serif; color: var(--text-main); font-size: 13px; font-weight: 600; }
-        .top-item.rank-1 .top-nick { color: var(--gold); }
-        .top-item.rank-2 .top-nick { color: var(--silver); }
-        .top-item.rank-3 .top-nick { color: var(--bronze); }
-        .top-value { font-family: 'Times New Roman', Times, serif; font-size: 13px; font-weight: 700; color: var(--success); }
+        .top-rank { font-family: 'Times New Roman', Times, serif; font-size: 14px; font-weight: 700; min-width: 28px; text-align: center; color: var(--text-dim); }
+        .top-rank.rank-1 { color: var(--gold); } .top-rank.rank-2 { color: var(--silver); } .top-rank.rank-3 { color: var(--bronze); }
+        .top-nick { flex: 1; font-family: 'Times New Roman', Times, serif; color: var(--text-main); font-size: 12px; font-weight: 600; }
+        .top-item.rank-1 .top-nick { color: var(--gold); } .top-item.rank-2 .top-nick { color: var(--silver); } .top-item.rank-3 .top-nick { color: var(--bronze); }
+        .top-value { font-family: 'Times New Roman', Times, serif; font-size: 12px; font-weight: 700; color: var(--success); }
         .top-value.dkp { color: var(--dkp); }
 
-        .tabs { display: flex; margin-bottom: 15px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 2px; }
-        .tab-btn {
-            background: transparent; border: none;
-            color: var(--text-dim);
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 12px;
-            padding: 8px 14px;
-            cursor: pointer; transition: 0.2s;
-            letter-spacing: 0.5px; font-weight: 600;
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-            position: relative;
-        }
+        .tabs { display: flex; margin-bottom: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 2px; }
+        .tab-btn { background: transparent; border: none; color: var(--text-dim); font-family: 'Times New Roman', Times, serif; font-size: 12px; padding: 6px 12px; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; font-weight: 600; border-radius: var(--radius-sm) var(--radius-sm) 0 0; position: relative; }
         .tab-btn:hover { color: var(--accent); background: var(--accent-soft); }
-        .tab-btn.active {
-            color: var(--accent);
-            background: var(--bg-panel);
-            border-bottom: 1px solid var(--bg-panel);
-            margin-bottom: -1px;
-        }
-        .tab-btn.active::after {
-            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-            background: var(--accent);
-        }
-        .form-group { margin-bottom: 10px; position: relative; }
-        label { display: block; font-size: 11px; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; font-weight: 700; }
-        input, select, textarea {
-            width: 100%; background: var(--bg-panel);
-            border: 1px solid var(--border); color: var(--text-main);
-            padding: 7px 10px;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 13px;
-            transition: 0.2s; outline: none;
-            border-radius: var(--radius-sm);
-        }
-        textarea { resize: vertical; min-height: 60px; }
+        .tab-btn.active { color: var(--accent); background: var(--bg-panel); border-bottom: 1px solid var(--bg-panel); margin-bottom: -1px; }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--accent); }
+        .form-group { margin-bottom: 8px; position: relative; }
+        label { display: block; font-size: 11px; color: var(--accent); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 0.5px; font-weight: 700; }
+        input, select, textarea { width: 100%; background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-main); padding: 6px 9px; font-family: 'Times New Roman', Times, serif; font-size: 13px; transition: 0.2s; outline: none; border-radius: var(--radius-sm); }
+        textarea { resize: vertical; min-height: 50px; }
         input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
         select { cursor: pointer; }
         select option { background: var(--bg-panel); color: var(--text-main); }
-
-        /* ✅ КОМПАКТНЫЕ КНОПКИ */
-        .submit-btn {
-            width: 100%; padding: 7px 14px;
-            background: var(--accent);
-            border: none; color: #ffffff;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 12px; font-weight: 600;
-            letter-spacing: 0.5px; cursor: pointer;
-            transition: 0.2s;
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-sm);
-        }
+        .submit-btn { width: 100%; padding: 6px 12px; background: var(--accent); border: none; color: #ffffff; font-family: 'Times New Roman', Times, serif; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; transition: 0.2s; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
         .submit-btn:hover { background: #4a6880; box-shadow: var(--shadow-md); }
         body[data-theme="dark"] .submit-btn:hover { background: #5a7a9a; }
         .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .submit-btn.dkp-btn { background: var(--dkp); }
         .submit-btn.dkp-btn:hover { background: #a07030; }
-
-        .message { margin-top: 8px; padding: 8px 12px; text-align: center; font-size: 12px; border-radius: var(--radius-sm); display: none; white-space: pre-wrap; }
+        .message { margin-top: 6px; padding: 6px 10px; text-align: center; font-size: 12px; border-radius: var(--radius-sm); display: none; white-space: pre-wrap; }
         .message.success { display: block; color: var(--success); background: var(--success-soft); border: 1px solid var(--success); }
         .message.error { display: block; color: var(--danger); background: var(--danger-soft); border: 1px solid var(--danger); }
         .hidden { display: none !important; }
-        .loader {
-            display: inline-block; width: 12px; height: 12px;
-            border: 2px solid var(--accent); border-radius: 50%; border-top-color: transparent;
-            animation: spin 1s linear infinite; margin-right: 6px; vertical-align: middle;
-        }
+        .loader { display: inline-block; width: 11px; height: 11px; border: 2px solid var(--accent); border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-right: 5px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .header-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px; padding: 10px 15px;
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            flex-wrap: wrap; gap: 8px;
-            box-shadow: var(--shadow-sm);
-        }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 8px 12px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); flex-wrap: wrap; gap: 6px; box-shadow: var(--shadow-sm); }
         .user-info { color: var(--accent); font-family: 'Times New Roman', Times, serif; font-size: 13px; font-weight: 700; }
-        .user-info .role-badge { display: inline-block; padding: 2px 8px; margin-left: 8px; font-size: 10px; border-radius: var(--radius-sm); font-weight: 700; }
+        .user-info .role-badge { display: inline-block; padding: 2px 7px; margin-left: 6px; font-size: 10px; border-radius: var(--radius-sm); font-weight: 700; }
         .user-info .role-badge.role-admin { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); }
         .user-info .role-badge.role-mod { background: var(--warning-soft); border: 1px solid var(--warning); color: var(--warning); }
         .user-info .role-badge.role-player { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); }
-        .user-info .dkp-badge {
-            display: inline-block; padding: 2px 8px; margin-left: 6px; font-size: 11px;
-            background: var(--warning-soft); border: 1px solid var(--dkp);
-            color: var(--dkp); border-radius: var(--radius-sm); font-weight: 700;
-        }
-        .logout-btn {
-            background: transparent; border: 1px solid var(--danger); color: var(--danger);
-            padding: 5px 12px; cursor: pointer;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 11px; letter-spacing: 0.5px;
-            transition: 0.2s; border-radius: var(--radius-sm); font-weight: 600;
-        }
+        .user-info .dkp-badge { display: inline-block; padding: 2px 7px; margin-left: 5px; font-size: 11px; background: var(--warning-soft); border: 1px solid var(--dkp); color: var(--dkp); border-radius: var(--radius-sm); font-weight: 700; }
+        .logout-btn, .theme-toggle { background: transparent; border: 1px solid var(--border); color: var(--text-main); padding: 4px 10px; cursor: pointer; font-family: 'Times New Roman', Times, serif; font-size: 11px; transition: 0.2s; border-radius: var(--radius-sm); margin-left: 4px; }
+        .logout-btn { border-color: var(--danger); color: var(--danger); }
         .logout-btn:hover { background: var(--danger-soft); }
-
-        .theme-toggle {
-            background: transparent; border: 1px solid var(--border); color: var(--text-main);
-            padding: 5px 10px; cursor: pointer;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 11px;
-            transition: 0.2s; border-radius: var(--radius-sm);
-            margin-left: 6px;
-        }
         .theme-toggle:hover { background: var(--bg-soft); border-color: var(--accent); }
 
-        .panel {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            padding: 18px;
-            margin-bottom: 15px;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-        }
-        .panel-title {
-            font-family: 'Times New Roman', Times, serif;
-            color: var(--accent);
-            font-size: 15px;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-            display: flex; align-items: center; gap: 8px;
-            font-weight: 700;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 6px;
-        }
-        .status-badge { display: inline-block; padding: 2px 8px; font-size: 10px; letter-spacing: 0.5px; border-radius: var(--radius-sm); font-weight: 700; }
+        .panel { background: var(--bg-panel); border: 1px solid var(--border); padding: 15px; margin-bottom: 12px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+        .panel-title { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 14px; margin-bottom: 10px; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .status-badge { display: inline-block; padding: 2px 7px; font-size: 10px; letter-spacing: 0.5px; border-radius: var(--radius-sm); font-weight: 700; }
         .status-pending { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
         .status-approved { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
         .status-rejected { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
-        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-bottom: 10px; }
-        .data-item { background: var(--bg-soft); padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.2s; }
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; margin-bottom: 10px; }
+        .data-item { background: var(--bg-soft); padding: 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.2s; }
         .data-item:hover { border-color: var(--accent); }
-        .data-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 0.5px; font-weight: 700; }
-        .data-value { font-size: 16px; color: var(--accent); font-weight: 700; font-family: 'Times New Roman', Times, serif; }
+        .data-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px; font-weight: 700; }
+        .data-value { font-size: 15px; color: var(--accent); font-weight: 700; font-family: 'Times New Roman', Times, serif; }
 
-        .player-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; margin-bottom: 8px; border-radius: var(--radius-sm); transition: 0.2s; }
+        .player-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; margin-bottom: 6px; border-radius: var(--radius-sm); transition: 0.2s; }
         .player-card:hover { box-shadow: var(--shadow-sm); border-color: var(--accent); }
-        .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
-        .player-nick { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 14px; font-weight: 700; }
-        .action-buttons { display: flex; gap: 5px; flex-wrap: wrap; }
-
-        /* ✅ КОМПАКТНЫЕ КНОПКИ ДЕЙСТВИЙ */
-        .btn-approve, .btn-reject, .btn-edit, .btn-compare, .btn-back, .btn-remove, .btn-role {
-            padding: 4px 10px;
-            border: none; cursor: pointer;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 11px;
-            transition: 0.2s;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
+        .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+        .player-nick { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 13px; font-weight: 700; }
+        .action-buttons { display: flex; gap: 4px; flex-wrap: wrap; }
+        .btn-approve, .btn-reject, .btn-edit, .btn-compare, .btn-back, .btn-remove, .btn-role { padding: 3px 8px; border: none; cursor: pointer; font-family: 'Times New Roman', Times, serif; font-size: 11px; transition: 0.2s; border-radius: var(--radius-sm); font-weight: 600; letter-spacing: 0.3px; }
         .btn-approve { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
         .btn-approve:hover { background: var(--success); color: #fff; }
         .btn-reject { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
         .btn-reject:hover { background: var(--danger); color: #fff; }
-        .btn-edit { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); width: 100%; margin-top: 8px; }
+        .btn-edit { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); width: 100%; margin-top: 6px; }
         .btn-edit:hover { background: var(--accent); color: #fff; }
         .btn-compare { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
         .btn-compare:hover { background: var(--warning); color: #fff; }
-        .btn-back { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-bottom: 10px; }
+        .btn-back { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-bottom: 8px; }
         .btn-back:hover { background: var(--accent); color: #fff; }
-        .btn-remove { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); font-size: 10px; padding: 3px 8px; }
+        .btn-remove { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); font-size: 10px; padding: 2px 6px; }
         .btn-remove:hover { background: var(--danger); color: #fff; }
-        .btn-role { padding: 3px 8px; font-size: 10px; }
+        .btn-role { padding: 2px 6px; font-size: 10px; }
         .btn-role-admin { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
         .btn-role-admin:hover { background: var(--danger); color: #fff; }
         .btn-role-mod { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
         .btn-role-mod:hover { background: var(--warning); color: #fff; }
         .btn-role-player { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
         .btn-role-player:hover { background: var(--accent); color: #fff; }
-
-        .user-role-tag { display: inline-block; padding: 2px 8px; font-size: 10px; border-radius: var(--radius-sm); margin-left: 6px; font-weight: 700; }
+        .user-role-tag { display: inline-block; padding: 2px 7px; font-size: 10px; border-radius: var(--radius-sm); margin-left: 5px; font-weight: 700; }
         .user-role-tag.admin { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
         .user-role-tag.mod { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
         .user-role-tag.player { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
-        .empty-state { text-align: center; color: var(--text-dim); padding: 25px 15px; font-size: 13px; font-style: italic; }
-        .ranking-list { display: flex; flex-direction: column; gap: 6px; }
-        .ranking-item {
-            background: var(--bg-soft); border: 1px solid var(--border);
-            padding: 10px 12px;
-            display: flex; align-items: center; gap: 10px;
-            transition: 0.2s; flex-wrap: wrap;
-            border-radius: var(--radius-sm);
-        }
+        .empty-state { text-align: center; color: var(--text-dim); padding: 20px 10px; font-size: 12px; font-style: italic; }
+        .ranking-list { display: flex; flex-direction: column; gap: 5px; }
+        .ranking-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; display: flex; align-items: center; gap: 8px; transition: 0.2s; flex-wrap: wrap; border-radius: var(--radius-sm); }
         .ranking-item:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
-        .ranking-position { font-family: 'Times New Roman', Times, serif; font-size: 17px; font-weight: 700; min-width: 35px; text-align: center; color: var(--text-dim); }
-        .ranking-position.top-1 { color: var(--gold); }
-        .ranking-position.top-2 { color: var(--silver); }
-        .ranking-position.top-3 { color: var(--bronze); }
-        .ranking-info { flex: 1; min-width: 180px; }
-        .ranking-nick { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 14px; font-weight: 700; }
+        .ranking-position { font-family: 'Times New Roman', Times, serif; font-size: 16px; font-weight: 700; min-width: 32px; text-align: center; color: var(--text-dim); }
+        .ranking-position.top-1 { color: var(--gold); } .ranking-position.top-2 { color: var(--silver); } .ranking-position.top-3 { color: var(--bronze); }
+        .ranking-info { flex: 1; min-width: 160px; }
+        .ranking-nick { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 13px; font-weight: 700; }
         .ranking-stats { font-size: 11px; color: var(--text-dim); }
-        .ranking-bm { font-size: 14px; color: var(--success); font-weight: 700; font-family: 'Times New Roman', Times, serif; }
-        .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .ranking-bm { font-size: 13px; color: var(--success); font-weight: 700; font-family: 'Times New Roman', Times, serif; }
+        .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         @media (max-width: 600px) { .compare-container { grid-template-columns: 1fr; } }
-        .compare-column { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); }
-        .compare-title { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 14px; margin-bottom: 10px; text-align: center; font-weight: 700; }
-        .compare-stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+        .compare-column { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); }
+        .compare-title { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 13px; margin-bottom: 8px; text-align: center; font-weight: 700; }
+        .compare-stat { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
         .compare-stat:last-child { border-bottom: none; }
         .compare-label { color: var(--text-dim); }
         .compare-value { font-size: 13px; font-weight: 700; font-family: 'Times New Roman', Times, serif; }
-        .compare-value.better { color: var(--success); }
-        .compare-value.worse { color: var(--danger); }
-        .compare-value.equal { color: var(--warning); }
+        .compare-value.better { color: var(--success); } .compare-value.worse { color: var(--danger); } .compare-value.equal { color: var(--warning); }
 
-        .skills-list { display: flex; flex-direction: column; gap: 5px; }
-        .skill-item {
-            background: var(--bg-soft); border: 1px solid var(--border);
-            padding: 8px 10px;
-            display: flex; align-items: center; gap: 10px;
-            transition: 0.2s; border-radius: var(--radius-sm); cursor: pointer;
-        }
+        .skills-list { display: flex; flex-direction: column; gap: 4px; }
+        .skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 6px 8px; display: flex; align-items: center; gap: 8px; transition: 0.2s; border-radius: var(--radius-sm); cursor: pointer; }
         .skill-item:hover { border-color: var(--accent); }
         .skill-item.checked { border-color: var(--success); background: var(--success-soft); }
-        .skill-checkbox { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
+        .skill-checkbox { width: 15px; height: 15px; cursor: pointer; accent-color: var(--accent); }
         .skill-name { flex: 1; font-size: 13px; font-weight: 600; }
-        .approved-skills { display: flex; flex-wrap: wrap; gap: 5px; }
-        .approved-skill-badge {
-            background: var(--success-soft);
-            border: 1px solid var(--success); color: var(--success);
-            padding: 4px 10px; font-size: 11px;
-            border-radius: var(--radius-sm);
-            transition: 0.2s; font-weight: 600;
-        }
+        .approved-skills { display: flex; flex-wrap: wrap; gap: 4px; }
+        .approved-skill-badge { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 3px 8px; font-size: 11px; border-radius: var(--radius-sm); transition: 0.2s; font-weight: 600; }
         .approved-skill-badge:hover { background: var(--success); color: #fff; }
-        .admin-skill-item {
-            background: var(--bg-soft); border: 1px solid var(--border);
-            padding: 8px 10px;
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 6px; border-radius: var(--radius-sm); transition: 0.2s;
-        }
+        .admin-skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 7px 9px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; border-radius: var(--radius-sm); transition: 0.2s; }
         .admin-skill-item:hover { border-color: var(--accent); }
         .admin-skill-name { font-size: 13px; font-weight: 600; }
-        .admin-skill-tag {
-            font-size: 9px; padding: 2px 6px;
-            background: var(--warning-soft);
-            color: var(--warning); border: 1px solid var(--warning);
-            margin-left: 6px; border-radius: var(--radius-sm); font-weight: 600;
-        }
-        .loading-overlay { text-align: center; padding: 25px; color: var(--accent); font-family: 'Times New Roman', Times, serif; letter-spacing: 1px; font-size: 12px; }
-        .cabinet-section { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
+        .admin-skill-tag { font-size: 9px; padding: 2px 5px; background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); margin-left: 5px; border-radius: var(--radius-sm); font-weight: 600; }
+        .loading-overlay { text-align: center; padding: 20px; color: var(--accent); font-family: 'Times New Roman', Times, serif; letter-spacing: 1px; font-size: 12px; }
+        .cabinet-section { margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
         .cabinet-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .auth-container {
-            max-width: 380px; margin: 50px auto;
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            padding: 25px;
-            position: relative;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg);
-        }
-        .auth-title { font-family: 'Times New Roman', Times, serif; text-align: center; color: var(--accent); letter-spacing: 2px; margin-bottom: 4px; font-size: 22px; font-weight: 700; }
-        .auth-subtitle { text-align: center; color: var(--text-dim); font-size: 12px; margin-bottom: 18px; font-style: italic; }
-        .footer { text-align: center; padding: 20px; color: var(--text-dim); font-size: 11px; letter-spacing: 1px; margin-top: 30px; font-style: italic; }
-        ::-webkit-scrollbar { width: 8px; }
+        .auth-container { max-width: 360px; margin: 40px auto; background: var(--bg-panel); border: 1px solid var(--border); padding: 22px; position: relative; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); }
+        .auth-title { font-family: 'Times New Roman', Times, serif; text-align: center; color: var(--accent); letter-spacing: 2px; margin-bottom: 3px; font-size: 20px; font-weight: 700; }
+        .auth-subtitle { text-align: center; color: var(--text-dim); font-size: 11px; margin-bottom: 15px; font-style: italic; }
+        .footer { text-align: center; padding: 15px; color: var(--text-dim); font-size: 10px; letter-spacing: 1px; margin-top: 20px; font-style: italic; }
+        ::-webkit-scrollbar { width: 7px; }
         ::-webkit-scrollbar-track { background: var(--bg-main); }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #4a6880; }
 
-        .equipment-section-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border); }
-        .eq-tab {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            color: var(--text-dim);
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 11px;
-            padding: 4px 8px;
-            cursor: pointer;
-            border-radius: var(--radius-sm);
-            transition: 0.2s;
-            font-weight: 600;
-        }
+        .equipment-section-tabs { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 8px; padding: 6px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        .eq-tab { background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-dim); font-family: 'Times New Roman', Times, serif; font-size: 11px; padding: 3px 7px; cursor: pointer; border-radius: var(--radius-sm); transition: 0.2s; font-weight: 600; }
         .eq-tab:hover { color: var(--accent); border-color: var(--accent); }
         .eq-tab.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
-        .item-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 6px;
-            transition: 0.2s; cursor: pointer; position: relative;
-        }
+        .item-card { background: var(--bg-panel); border: 1px solid var(--border); padding: 8px; border-radius: var(--radius-sm); margin-bottom: 5px; transition: 0.2s; cursor: pointer; position: relative; }
         .item-card:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
         .item-card.selected { border-color: var(--success); background: var(--success-soft); }
-        .item-card.selected::before { content: '✓'; position: absolute; top: 8px; right: 10px; color: var(--success); font-size: 16px; font-weight: bold; }
-        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 5px; }
+        .item-card.selected::before { content: '✓'; position: absolute; top: 6px; right: 8px; color: var(--success); font-size: 15px; font-weight: bold; }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; flex-wrap: wrap; gap: 4px; }
         .item-name { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: var(--text-main); font-weight: 700; }
-        .item-badges { display: flex; gap: 4px; flex-wrap: wrap; }
-        .item-badge {
-            font-size: 9px; padding: 2px 6px;
-            border-radius: var(--radius-sm);
-            letter-spacing: 0.3px;
-            font-weight: 600;
-        }
+        .item-badges { display: flex; gap: 3px; flex-wrap: wrap; }
+        .item-badge { font-size: 9px; padding: 1px 5px; border-radius: var(--radius-sm); letter-spacing: 0.3px; font-weight: 600; }
         .item-badge.prime { background: var(--warning-soft); color: var(--gold); border: 1px solid var(--gold); }
         .item-badge.boss { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
         .item-badge.enhance { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
@@ -460,233 +211,144 @@
         .item-badge.color-yellow { background: var(--warning-soft); color: var(--gold); border: 1px solid var(--gold); }
         .item-badge.color-red { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
 
-        .approved-equipment { display: flex; flex-direction: column; gap: 6px; }
-        .approved-eq-item {
-            background: var(--bg-soft);
-            border: 1px solid var(--border);
-            padding: 8px 10px;
-            border-radius: var(--radius-sm);
-            display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
-        }
-        .approved-eq-section { font-family: 'Times New Roman', Times, serif; font-size: 11px; color: var(--warning); text-transform: uppercase; letter-spacing: 0.5px; min-width: 80px; font-weight: 700; }
-        .approved-eq-name { flex: 1; font-size: 13px; color: var(--text-main); font-weight: 600; }
+        .approved-equipment { display: flex; flex-direction: column; gap: 5px; }
+        .approved-eq-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 7px 9px; border-radius: var(--radius-sm); display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+        .approved-eq-section { font-family: 'Times New Roman', Times, serif; font-size: 11px; color: var(--warning); text-transform: uppercase; letter-spacing: 0.5px; min-width: 70px; font-weight: 700; }
+        .approved-eq-name { flex: 1; font-size: 12px; color: var(--text-main); font-weight: 600; }
 
-        .add-item-form { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; }
-        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 8px; }
-        .checkbox-group { display: flex; align-items: center; gap: 6px; padding: 5px 0; }
-        .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+        .add-item-form { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 10px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; margin-bottom: 6px; }
+        .checkbox-group { display: flex; align-items: center; gap: 5px; padding: 4px 0; }
+        .checkbox-group input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
         .checkbox-group label { margin: 0; font-size: 12px; cursor: pointer; font-weight: 600; }
 
-        .admin-item-card {
-            background: var(--bg-soft);
-            border: 1px solid var(--border);
-            padding: 8px 10px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 6px;
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 8px;
-            transition: 0.2s;
-        }
+        .admin-item-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 7px 9px; border-radius: var(--radius-sm); margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; transition: 0.2s; }
         .admin-item-card:hover { border-color: var(--accent); }
-        .admin-item-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 180px; }
-        .admin-item-name { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: var(--text-main); font-weight: 700; }
-        .admin-item-meta { display: flex; gap: 4px; flex-wrap: wrap; }
+        .admin-item-info { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 160px; }
+        .admin-item-name { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: var(--text-main); font-weight: 700; }
+        .admin-item-meta { display: flex; gap: 3px; flex-wrap: wrap; }
 
         .dkp-highlight { color: var(--dkp); font-weight: 700; }
-        .event-card {
-            background: var(--bg-soft);
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 6px;
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 8px;
-            transition: 0.2s;
-        }
+        .event-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 9px; border-radius: var(--radius-sm); margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; transition: 0.2s; }
         .event-card:hover { box-shadow: var(--shadow-sm); }
-        .event-info { flex: 1; min-width: 180px; }
-        .event-name { font-family: 'Times New Roman', Times, serif; font-size: 14px; color: var(--text-main); font-weight: 700; margin-bottom: 2px; }
-        .event-meta { font-size: 11px; color: var(--text-dim); }
-        .event-dkp {
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 14px; font-weight: 700;
-            color: var(--dkp);
-            padding: 4px 12px;
-            border: 1px solid var(--dkp);
-            border-radius: var(--radius-sm);
-            background: var(--warning-soft);
-        }
+        .event-info { flex: 1; min-width: 160px; }
+        .event-name { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: var(--text-main); font-weight: 700; margin-bottom: 2px; }
+        .event-meta { font-size: 10px; color: var(--text-dim); }
+        .event-dkp { font-family: 'Times New Roman', Times, serif; font-size: 13px; font-weight: 700; color: var(--dkp); padding: 3px 9px; border: 1px solid var(--dkp); border-radius: var(--radius-sm); background: var(--warning-soft); }
 
-        .screenshot-upload-area {
-            border: 2px dashed var(--border);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            text-align: center; cursor: pointer;
-            transition: 0.2s;
-            background: var(--bg-soft);
-            margin-bottom: 12px;
-        }
+        .screenshot-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; background: var(--bg-soft); margin-bottom: 10px; }
         .screenshot-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); }
         .screenshot-upload-area.dragover { border-color: var(--accent); background: var(--accent-soft); }
-        .upload-icon { font-size: 32px; margin-bottom: 8px; }
-        .upload-text { color: var(--text-main); font-size: 13px; font-weight: 600; }
-        .upload-hint { color: var(--text-dim); font-size: 11px; margin-top: 4px; }
+        .upload-icon { font-size: 28px; margin-bottom: 5px; }
+        .upload-text { color: var(--text-main); font-size: 12px; font-weight: 600; }
+        .upload-hint { color: var(--text-dim); font-size: 10px; margin-top: 3px; }
 
-        .screenshots-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 12px; }
+        .screenshots-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 6px; margin-bottom: 10px; }
         .screenshot-thumb { position: relative; aspect-ratio: 16/10; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-soft); }
         .screenshot-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-        .screenshot-thumb .remove-btn { position: absolute; top: 3px; right: 3px; background: var(--danger); color: white; border: none; width: 18px; height: 18px; border-radius: 50%; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+        .screenshot-thumb .remove-btn { position: absolute; top: 2px; right: 2px; background: var(--danger); color: white; border: none; width: 16px; height: 16px; border-radius: 50%; cursor: pointer; font-size: 9px; display: flex; align-items: center; justify-content: center; }
         .screenshot-thumb .remove-btn:hover { background: #8a3a3a; }
-        .screenshot-thumb .upload-progress { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: var(--accent); font-size: 9px; padding: 2px; text-align: center; font-weight: 600; }
+        .screenshot-thumb .upload-progress { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: var(--accent); font-size: 8px; padding: 2px; text-align: center; font-weight: 600; }
 
-        .recognized-nicks-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
-        .nick-item { display: flex; align-items: center; gap: 8px; background: var(--bg-soft); border: 1px solid var(--border); padding: 6px 10px; border-radius: var(--radius-sm); }
-        .nick-item input { flex: 1; background: transparent; border: none; color: var(--text-main); font-size: 13px; padding: 3px; font-weight: 600; }
+        .recognized-nicks-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+        .nick-item { display: flex; align-items: center; gap: 6px; background: var(--bg-soft); border: 1px solid var(--border); padding: 5px 8px; border-radius: var(--radius-sm); }
+        .nick-item input { flex: 1; background: transparent; border: none; color: var(--text-main); font-size: 12px; padding: 2px; font-weight: 600; }
         .nick-item input:focus { background: var(--accent-soft); border-radius: var(--radius-sm); }
-        .nick-item .remove-nick-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 20px; height: 20px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+        .nick-item .remove-nick-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 18px; height: 18px; border-radius: var(--radius-sm); cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; }
         .nick-item .remove-nick-btn:hover { background: var(--danger-soft); }
 
-        .ocr-progress { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; }
-        .progress-bar { width: 100%; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+        .ocr-progress { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 10px; }
+        .progress-bar { width: 100%; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 5px; }
         .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #4a5d73); transition: width 0.3s; width: 0%; }
         .progress-text { font-family: 'Times New Roman', Times, serif; font-size: 11px; color: var(--accent); font-weight: 600; }
 
-        .dkp-submission-card {
-            background: var(--bg-soft);
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 8px;
-            transition: 0.2s;
-        }
+        .dkp-submission-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 7px; transition: 0.2s; }
         .dkp-submission-card:hover { box-shadow: var(--shadow-sm); }
-        .submission-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
-        .submission-event { font-family: 'Times New Roman', Times, serif; font-size: 14px; color: var(--dkp); font-weight: 700; }
-        .submission-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-        .submission-screenshots { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
-        .submission-screenshots img { width: 160px; height: auto; max-height: 120px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
+        .submission-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+        .submission-event { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: var(--dkp); font-weight: 700; }
+        .submission-meta { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        .submission-screenshots { display: flex; gap: 5px; flex-wrap: wrap; margin: 6px 0; }
+        .submission-screenshots img { width: 140px; height: auto; max-height: 100px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
         .submission-screenshots img:hover { box-shadow: var(--shadow-sm); transform: scale(1.02); }
-        .submission-nicks { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-        .submission-nick-tag {
-            background: var(--accent-soft);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 3px 8px;
-            border-radius: var(--radius-sm);
-            font-size: 11px;
-            font-weight: 600;
-        }
+        .submission-nicks { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px; }
+        .submission-nick-tag { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); padding: 2px 7px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
 
-        .dkp-history-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 10px;
-            background: var(--bg-soft);
-            border-left: 3px solid var(--border);
-            margin-bottom: 5px;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            font-size: 12px;
-        }
+        .dkp-history-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; background: var(--bg-soft); border-left: 3px solid var(--border); margin-bottom: 4px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 12px; }
         .dkp-history-item.earn { border-left-color: var(--success); }
         .dkp-history-item.spend { border-left-color: var(--danger); }
         .dkp-history-item.manual_add { border-left-color: var(--dkp); }
         .dkp-history-item.manual_sub { border-left-color: var(--warning); }
         .history-info { flex: 1; }
         .history-event { color: var(--text-main); font-size: 12px; font-weight: 600; }
-        .history-date { color: var(--text-dim); font-size: 10px; margin-top: 2px; }
-        .history-amount { font-family: 'Times New Roman', Times, serif; font-weight: 700; font-size: 13px; }
+        .history-date { color: var(--text-dim); font-size: 10px; margin-top: 1px; }
+        .history-amount { font-family: 'Times New Roman', Times, serif; font-weight: 700; font-size: 12px; }
         .history-amount.positive { color: var(--success); }
         .history-amount.negative { color: var(--danger); }
 
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 10000;
-            display: flex; align-items: center; justify-content: center;
-            padding: 15px;
-            backdrop-filter: blur(3px);
-        }
-        .modal-content {
-            max-width: 90%; max-height: 90%;
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            position: relative;
-            box-shadow: var(--shadow-lg);
-            overflow-y: auto;
-        }
-        .modal-close {
-            position: absolute; top: 10px; right: 10px;
-            background: transparent;
-            border: 1px solid var(--danger);
-            color: var(--danger);
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            cursor: pointer; font-size: 14px;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(3px); }
+        .modal-content { max-width: 90%; max-height: 90%; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; position: relative; box-shadow: var(--shadow-lg); overflow-y: auto; }
+        .modal-close { position: absolute; top: 8px; right: 8px; background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 13px; }
         .modal-close:hover { background: var(--danger-soft); }
         .modal-content img { max-width: 100%; max-height: 80vh; border-radius: var(--radius-sm); }
 
-        .calendar-day { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; }
-        .calendar-date { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 13px; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); font-weight: 700; }
-        .calendar-event { background: var(--bg-panel); border-left: 3px solid var(--dkp); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px; }
-        .calendar-event-title { font-size: 13px; color: var(--dkp); font-weight: 700; margin-bottom: 6px; font-family: 'Times New Roman', Times, serif; }
-        .calendar-players { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-        .calendar-nick-attended { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
-        .calendar-nick-missed { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
-        .calendar-label { font-size: 10px; margin-bottom: 4px; display: block; font-weight: 700; }
+        .calendar-day { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px; }
+        .calendar-date { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 12px; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border); font-weight: 700; }
+        .calendar-event { background: var(--bg-panel); border-left: 3px solid var(--dkp); border-radius: var(--radius-sm); padding: 8px; margin-bottom: 6px; }
+        .calendar-event-title { font-size: 12px; color: var(--dkp); font-weight: 700; margin-bottom: 5px; font-family: 'Times New Roman', Times, serif; }
+        .calendar-players { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
+        .calendar-nick-attended { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 2px 6px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
+        .calendar-nick-missed { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); padding: 2px 6px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
+        .calendar-label { font-size: 10px; margin-bottom: 3px; display: block; font-weight: 700; }
         .calendar-label.attended { color: var(--success); }
         .calendar-label.missed { color: var(--danger); }
 
-        .auction-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px; transition: 0.2s; }
+        .auction-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 8px; transition: 0.2s; }
         .auction-card:hover { box-shadow: var(--shadow-sm); }
-        .auction-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-        .auction-title { font-family: 'Times New Roman', Times, serif; font-size: 15px; color: var(--dkp); font-weight: 700; }
-        .auction-timer { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: var(--danger); font-weight: 700; padding: 3px 8px; background: var(--danger-soft); border-radius: var(--radius-sm); }
-        .auction-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; padding: 10px; background: var(--bg-panel); border-radius: var(--radius-sm); }
+        .auction-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+        .auction-title { font-family: 'Times New Roman', Times, serif; font-size: 14px; color: var(--dkp); font-weight: 700; }
+        .auction-timer { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: var(--danger); font-weight: 700; padding: 2px 7px; background: var(--danger-soft); border-radius: var(--radius-sm); }
+        .auction-info { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; padding: 8px; background: var(--bg-panel); border-radius: var(--radius-sm); }
         .auction-info-item { display: flex; flex-direction: column; }
         .auction-info-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; }
-        .auction-info-value { font-size: 15px; color: var(--text-main); font-family: 'Times New Roman', Times, serif; font-weight: 700; }
+        .auction-info-value { font-size: 14px; color: var(--text-main); font-family: 'Times New Roman', Times, serif; font-weight: 700; }
 
-        .icon-preview { width: 80px; height: 40px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
+        .icon-preview { width: 70px; height: 35px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
         .icon-preview img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-preview-small { width: 48px; height: 48px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-small { width: 42px; height: 42px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
         .icon-preview-small img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-preview-cabinet { width: 40px; height: 40px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-cabinet { width: 36px; height: 36px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .icon-preview-cabinet img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-preview-activity { width: 60px; height: 30px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-activity { width: 55px; height: 28px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .icon-preview-activity img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-placeholder { font-size: 9px; color: var(--text-dim); text-align: center; }
-        .icon-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; background: var(--bg-soft); margin: 12px 0; }
+        .icon-placeholder { font-size: 8px; color: var(--text-dim); text-align: center; }
+        .icon-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; background: var(--bg-soft); margin: 10px 0; }
         .icon-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); }
         .icon-upload-area.dragover { border-color: var(--accent); background: var(--accent-soft); }
-        .approved-skill-with-icon { display: flex; align-items: center; gap: 5px; background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 4px 10px; border-radius: var(--radius-sm); font-weight: 600; font-size: 11px; }
-        .approved-skill-with-icon img { width: 24px; height: 24px; object-fit: cover; border-radius: 3px; }
+        .approved-skill-with-icon { display: flex; align-items: center; gap: 4px; background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 3px 8px; border-radius: var(--radius-sm); font-weight: 600; font-size: 11px; }
+        .approved-skill-with-icon img { width: 22px; height: 22px; object-fit: cover; border-radius: 3px; }
 
-        .saved-indicator { display: inline-block; padding: 2px 8px; background: var(--success-soft); color: var(--success); border: 1px solid var(--success); border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
+        .saved-indicator { display: inline-block; padding: 2px 7px; background: var(--success-soft); color: var(--success); border: 1px solid var(--success); border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
 
-        /* Статистика мероприятий */
-        .event-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
-        .event-stat-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; transition: 0.2s; }
+        .event-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
+        .event-stat-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; transition: 0.2s; }
         .event-stat-card:hover { border-color: var(--accent); }
-        .event-stat-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-        .event-stat-name { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: var(--dkp); font-weight: 700; flex: 1; }
+        .event-stat-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+        .event-stat-name { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: var(--dkp); font-weight: 700; flex: 1; }
         .event-stat-total { font-size: 10px; color: var(--text-dim); }
-        .progress-row { margin-bottom: 6px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 2px; }
+        .progress-row { margin-bottom: 4px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 1px; }
         .progress-label span:first-child { color: var(--text-dim); }
         .progress-label span:last-child { font-weight: 700; }
-        .progress-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+        .progress-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
         .progress-fill.month { background: linear-gradient(90deg, var(--accent), #4a5d73); }
         .progress-fill.week { background: linear-gradient(90deg, var(--success), #4a7a5b); }
         .progress-fill.total { background: linear-gradient(90deg, var(--dkp), var(--warning)); }
-        .event-stat-footer { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; }
+        .event-stat-footer { margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; }
         .event-stat-footer .attended { color: var(--success); font-weight: 600; }
         .event-stat-footer .missed { color: var(--danger); font-weight: 600; }
 
-        /* Топ неактивных */
-        .absentee-rate { font-family: 'Times New Roman', Times, serif; font-weight: 700; font-size: 16px; }
+        .absentee-rate { font-family: 'Times New Roman', Times, serif; font-weight: 700; font-size: 15px; }
         .absentee-rate.critical { color: var(--danger); }
         .absentee-rate.warning { color: var(--warning); }
         .absentee-rate.good { color: var(--success); }
@@ -703,18 +365,18 @@
         </div>
     </div>
     <div class="top-containers">
-        <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по Боевой Мощи</div><div id="topBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+        <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по БМ</div><div id="topBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="topLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
     </div>
-    <div class="footer">© RF Online Next | Terminal System v9.0</div>
+    <div class="footer">© RF Online Next | v9.0</div>
 </div>
 
 <div id="authScreen" class="screen">
     <div class="auth-container">
         <div class="auth-title">RF Online</div>
         <div class="auth-subtitle">Система идентификации</div>
-        <div id="savedIndicator" style="text-align: center; margin-bottom: 8px; display: none;">
+        <div id="savedIndicator" style="text-align: center; margin-bottom: 6px; display: none;">
             <span class="saved-indicator">✓ Данные сохранены</span>
         </div>
         <div class="tabs">
@@ -724,13 +386,13 @@
         <form id="loginForm" onsubmit="handleAuth(event, 'login')">
             <div class="form-group"><label>Позывной</label><input type="text" id="loginNick" required placeholder="Введите позывной..."></div>
             <div class="form-group"><label>Код доступа</label><input type="password" id="loginPass" required placeholder="Введите код..."></div>
-            <div class="checkbox-group" style="margin-bottom: 10px;">
+            <div class="checkbox-group" style="margin-bottom: 8px;">
                 <input type="checkbox" id="rememberMe">
                 <label for="rememberMe" style="margin: 0; cursor: pointer;">🔒 Запомнить меня</label>
             </div>
             <button type="submit" class="submit-btn" id="loginBtn">Войти</button>
-            <div style="text-align: center; margin-top: 8px;">
-                <button type="button" class="btn-edit" style="width: auto; padding: 5px 12px; font-size: 10px;" onclick="clearSavedCredentials()">🗑 Очистить сохраненные</button>
+            <div style="text-align: center; margin-top: 6px;">
+                <button type="button" class="btn-edit" style="width: auto; padding: 4px 10px; font-size: 10px;" onclick="clearSavedCredentials()">🗑 Очистить сохраненные</button>
             </div>
         </form>
         <form id="registerForm" class="hidden" onsubmit="handleAuth(event, 'register')">
@@ -768,36 +430,20 @@
 
     <div id="homeContent" class="panel">
         <div class="top-containers">
-            <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по Боевой Мощи</div><div id="mainTopBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+            <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по БМ</div><div id="mainTopBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
             <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="mainTopLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
             <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="mainTopDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         </div>
-
-        <div style="margin-top: 20px;">
-            <div class="panel-title">📊 Статистика мероприятий гильдии</div>
-            <div id="eventStatsBlock"></div>
-        </div>
-
-        <div style="margin-top: 15px;">
-            <div class="panel-title">📊 Активность гильдии сегодня</div>
-            <div id="todayActivityBlock"></div>
-        </div>
-
-        <div style="margin-top: 15px;">
-            <div class="panel-title">📈 Активность за неделю</div>
-            <div id="weeklyActivityBlock"></div>
-        </div>
-
-        <div style="margin-top: 15px;">
-            <div class="panel-title">⚠️ Топ-10 наименее активных игроков (за месяц)</div>
-            <div id="topAbsenteesBlock"></div>
-        </div>
+        <div style="margin-top: 15px;"><div class="panel-title">📊 Статистика мероприятий</div><div id="eventStatsBlock"></div></div>
+        <div style="margin-top: 12px;"><div class="panel-title">📊 Активность сегодня</div><div id="todayActivityBlock"></div></div>
+        <div style="margin-top: 12px;"><div class="panel-title">📈 Активность за неделю</div><div id="weeklyActivityBlock"></div></div>
+        <div style="margin-top: 12px;"><div class="panel-title">⚠️ Топ-10 неактивных (за месяц)</div><div id="topAbsenteesBlock"></div></div>
     </div>
 
     <div id="cabinetContent" class="panel hidden">
         <div class="cabinet-section">
-            <div class="panel-title">⚡ Характеристики персонажа <span id="playerStatus"></span></div>
-            <div id="approvedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Данные подтверждены.</div><button class="btn-edit" onclick="showEditForm()">✎ Изменить</button></div>
+            <div class="panel-title">⚡ Характеристики <span id="playerStatus"></span></div>
+            <div id="approvedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 8px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEditForm()">✎ Изменить</button></div>
             <div id="approvedDataGrid" class="data-grid"></div>
             <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют или на проверке.</div>
             <form id="playerDataForm" class="hidden" onsubmit="savePlayerData(event)">
@@ -809,26 +455,26 @@
                     <div class="form-group"><label>Меткость</label><input type="number" id="accuracy" required placeholder="2000"></div>
                     <div class="form-group"><label>Уклонение</label><input type="number" id="evasion" required placeholder="1500"></div>
                 </div>
-                <div class="form-group"><label>Закрытые коллекции</label><input type="text" id="collections" required placeholder="Перечислите..."></div>
+                <div class="form-group"><label>Коллекции</label><input type="text" id="collections" required placeholder="Перечислите..."></div>
                 <div class="form-group"><label>Профессия</label><select id="profession" required><option value="">Выберите...</option><option value="Демолишер">Демолишер</option><option value="Арбитр">Арбитр</option><option value="Каратель">Каратель</option><option value="Фантом">Фантом</option><option value="Дредноут">Дредноут</option><option value="Сайфер">Сайфер</option><option value="Техник">Техник</option></select></div>
-                <button type="submit" class="submit-btn" id="saveDataBtn">Отправить на проверку</button>
+                <button type="submit" class="submit-btn" id="saveDataBtn">Отправить</button>
             </form>
             <div id="playerMessage" class="message"></div>
         </div>
         <div class="cabinet-section">
-            <div class="panel-title">🎯 Навыки персонажа <span id="skillsStatus"></span></div>
-            <div id="skillsApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Навыки подтверждены.</div><button class="btn-edit" onclick="showSkillsEditForm()">✎ Изменить</button></div>
+            <div class="panel-title">🎯 Навыки <span id="skillsStatus"></span></div>
+            <div id="skillsApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 8px;">✓ Подтверждено</div><button class="btn-edit" onclick="showSkillsEditForm()">✎ Изменить</button></div>
             <div id="approvedSkillsList" class="approved-skills"></div>
-            <div id="skillsEmpty" class="empty-state hidden">Навыки отсутствуют или на проверке.</div>
-            <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)"><div id="skillsList" class="skills-list"></div><button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 10px;">Отправить на проверку</button></form>
+            <div id="skillsEmpty" class="empty-state hidden">Навыки отсутствуют.</div>
+            <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)"><div id="skillsList" class="skills-list"></div><button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 8px;">Отправить</button></form>
             <div id="skillsMessage" class="message"></div>
         </div>
         <div class="cabinet-section">
             <div class="panel-title">🛡 Экипировка <span id="equipmentStatus"></span></div>
-            <div id="equipmentApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Экипировка подтверждена.</div><button class="btn-edit" onclick="showEquipmentEditForm()">✎ Изменить</button></div>
+            <div id="equipmentApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 8px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEquipmentEditForm()">✎ Изменить</button></div>
             <div id="approvedEquipmentList" class="approved-equipment"></div>
-            <div id="equipmentEmpty" class="empty-state hidden">Экипировка отсутствует или на проверке.</div>
-            <form id="equipmentForm" class="hidden" onsubmit="savePlayerItems(event)"><div class="equipment-section-tabs" id="equipmentSectionTabs"></div><div id="equipmentItemsList"></div><button type="submit" class="submit-btn" id="saveEquipmentBtn" style="margin-top: 10px;">Отправить на проверку</button></form>
+            <div id="equipmentEmpty" class="empty-state hidden">Экипировка отсутствует.</div>
+            <form id="equipmentForm" class="hidden" onsubmit="savePlayerItems(event)"><div class="equipment-section-tabs" id="equipmentSectionTabs"></div><div id="equipmentItemsList"></div><button type="submit" class="submit-btn" id="saveEquipmentBtn" style="margin-top: 8px;">Отправить</button></form>
             <div id="equipmentMessage" class="message"></div>
         </div>
     </div>
@@ -841,33 +487,33 @@
         </div>
         <div id="dkpMyContent">
             <div class="panel-title">💼 Мои DKP</div>
-            <div style="text-align: center; padding: 18px; background: var(--bg-soft); border-radius: var(--radius-md); margin-bottom: 15px; border: 1px solid var(--border);">
-                <div style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: 700;">Текущий баланс</div>
-                <div id="myDkpBalance" class="dkp-highlight" style="font-size: 36px; font-family: 'Times New Roman', Times, serif;">0</div>
-                <div style="font-size: 13px; color: var(--dkp); margin-top: 3px; font-weight: 700;">DKP</div>
+            <div style="text-align: center; padding: 15px; background: var(--bg-soft); border-radius: var(--radius-md); margin-bottom: 12px; border: 1px solid var(--border);">
+                <div style="font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; font-weight: 700;">Баланс</div>
+                <div id="myDkpBalance" class="dkp-highlight" style="font-size: 32px; font-family: 'Times New Roman', Times, serif;">0</div>
+                <div style="font-size: 12px; color: var(--dkp); margin-top: 2px; font-weight: 700;">DKP</div>
             </div>
             <div id="frozenDkpBlock"></div>
-            <div class="panel-title" style="font-size: 13px;">📜 История операций</div>
+            <div class="panel-title" style="font-size: 12px;">📜 История операций</div>
             <div id="myDkpHistory"></div>
         </div>
         <div id="dkpSubmitContent" class="hidden">
             <div class="panel-title">📸 Загрузка скриншотов</div>
-            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 10px;">Загрузите скриншоты с мероприятия (до 5 штук, макс. 2 МБ каждый).</p>
-            <div class="form-group"><label>Выберите мероприятие</label><select id="dkpEventSelect" required><option value="">— Выберите —</option></select></div>
+            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 8px;">До 5 скриншотов, макс. 2 МБ каждый.</p>
+            <div class="form-group"><label>Мероприятие</label><select id="dkpEventSelect" required><option value="">— Выберите —</option></select></div>
             <div class="screenshot-upload-area" id="screenshotUploadArea" onclick="document.getElementById('screenshotInput').click()">
                 <div class="upload-icon">📷</div>
-                <div class="upload-text">Нажмите для выбора или перетащите</div>
-                <div class="upload-hint">Максимум 5 изображений, до 2 МБ</div>
+                <div class="upload-text">Нажмите или перетащите</div>
+                <div class="upload-hint">До 5 изображений, до 2 МБ</div>
                 <input type="file" id="screenshotInput" accept="image/*" multiple style="display: none;" onchange="handleScreenshotSelect(event)">
             </div>
             <div class="screenshots-preview" id="screenshotsPreview"></div>
             <div id="ocrProgressBlock" class="ocr-progress hidden"><div class="progress-text" id="ocrProgressText">Распознавание...</div><div class="progress-bar"><div class="progress-bar-fill" id="ocrProgressBar"></div></div></div>
             <div id="recognizedNicksBlock" class="hidden">
-                <div class="panel-title" style="font-size: 12px;">👥 Распознанные ники <span style="font-size: 10px; color: var(--text-dim);">(можно редактировать)</span></div>
+                <div class="panel-title" style="font-size: 12px;">👥 Распознанные ники <span style="font-size: 9px; color: var(--text-dim);">(можно редактировать)</span></div>
                 <div class="recognized-nicks-list" id="recognizedNicksList"></div>
-                <button type="button" class="btn-edit" onclick="addEmptyNickField()" style="margin-bottom: 10px;">+ Добавить ник вручную</button>
+                <button type="button" class="btn-edit" onclick="addEmptyNickField()" style="margin-bottom: 8px;">+ Добавить ник</button>
             </div>
-            <button type="button" class="submit-btn dkp-btn" id="submitDkpBtn" onclick="submitDkpSubmission()" style="margin-top: 10px;">📤 Отправить на проверку</button>
+            <button type="button" class="submit-btn dkp-btn" id="submitDkpBtn" onclick="submitDkpSubmission()" style="margin-top: 8px;">📤 Отправить</button>
             <div id="dkpSubmitMessage" class="message"></div>
         </div>
         <div id="dkpRatingContent" class="hidden"><div class="panel-title">🏆 Рейтинг DKP</div><div id="dkpRatingList" class="ranking-list"></div></div>
@@ -904,9 +550,9 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label>Мин. посещаемость (%)</label><select id="auctionMinAttendance"><option value="0">Без ограничений</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="40">40%</option><option value="50">50%</option><option value="60">60%</option><option value="70">70%</option><option value="80">80%</option><option value="90">90%</option><option value="100">100%</option></select></div>
-                    <div class="checkbox-group" style="align-self: flex-end; padding-bottom: 10px;"><input type="checkbox" id="auctionPriorityOnly"><label for="auctionPriorityOnly">Только приоритет</label></div>
+                    <div class="checkbox-group" style="align-self: flex-end; padding-bottom: 8px;"><input type="checkbox" id="auctionPriorityOnly"><label for="auctionPriorityOnly">Только приоритет</label></div>
                 </div>
-                <div class="form-group"><label>Участники (пусто = все)</label><div id="auctionPlayersList" style="max-height: 180px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; background: var(--bg-soft);"></div></div>
+                <div class="form-group"><label>Участники (пусто = все)</label><div id="auctionPlayersList" style="max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px; background: var(--bg-soft);"></div></div>
                 <button type="button" class="submit-btn dkp-btn" onclick="createAuction()">🔨 Создать</button>
             </div>
             <div id="auctionCreateMessage" class="message"></div>
@@ -915,14 +561,14 @@
 
     <div id="calendarContent" class="panel hidden">
         <div class="panel-title">📅 Календарь посещений</div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; align-items: flex-end;">
-            <div class="form-group" style="flex: 1; min-width: 130px; margin-bottom: 0;"><label>С даты</label><input type="date" id="calendarStartDate"></div>
-            <div class="form-group" style="flex: 1; min-width: 130px; margin-bottom: 0;"><label>По дату</label><input type="date" id="calendarEndDate"></div>
-            <div class="form-group" style="flex: 1; min-width: 130px; margin-bottom: 0;"><label>Игрок</label><select id="calendarPlayerFilter"><option value="">Все</option></select></div>
-            <button class="submit-btn" style="width: auto; padding: 7px 14px;" onclick="loadCalendar()">🔍 Показать</button>
-            <button class="submit-btn dkp-btn" style="width: auto; padding: 7px 14px;" onclick="loadMyCalendar()">👤 Моя</button>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; align-items: flex-end;">
+            <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;"><label>С даты</label><input type="date" id="calendarStartDate"></div>
+            <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;"><label>По дату</label><input type="date" id="calendarEndDate"></div>
+            <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;"><label>Игрок</label><select id="calendarPlayerFilter"><option value="">Все</option></select></div>
+            <button class="submit-btn" style="width: auto; padding: 6px 12px;" onclick="loadCalendar()">🔍</button>
+            <button class="submit-btn dkp-btn" style="width: auto; padding: 6px 12px;" onclick="loadMyCalendar()">👤 Моя</button>
         </div>
-        <div id="calendarStats" style="margin-bottom: 15px;"></div>
+        <div id="calendarStats" style="margin-bottom: 12px;"></div>
         <div id="calendarGrid"></div>
     </div>
 
@@ -967,7 +613,7 @@
         </div>
         <div id="adminDkpAdjustContent" class="hidden">
             <div class="panel-title">💵 Ручное DKP</div>
-            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 10px;">Положительное — начисление, отрицательное — списание.</p>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 8px;">+ начисление, - списание.</p>
             <div class="add-item-form">
                 <div class="form-row">
                     <div class="form-group"><label>Ник</label><input type="text" id="adjustDkpNick" required placeholder="Ник..."></div>
@@ -980,7 +626,7 @@
         </div>
         <div id="adminSkillsContent" class="hidden">
             <div class="panel-title">🎯 Навыки</div>
-            <form onsubmit="addSkill(event)" style="margin-bottom: 10px;">
+            <form onsubmit="addSkill(event)" style="margin-bottom: 8px;">
                 <div class="form-group"><label>Новый навык</label><input type="text" id="newSkillName" required placeholder="Название..."></div>
                 <button type="submit" class="submit-btn">+ Добавить</button>
             </form>
@@ -1009,9 +655,9 @@
         </div>
         <div id="adminUsersContent" class="hidden">
             <div class="panel-title">👥 Пользователи</div>
-            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 10px;">Управление ролями и удаление.</p>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 8px;">Управление ролями и удаление.</p>
             <div id="usersList"></div><div id="adminUsersMessage" class="message"></div>
-            <div id="deletionRequestsSection" style="margin-top: 20px; display: none;">
+            <div id="deletionRequestsSection" style="margin-top: 15px; display: none;">
                 <div class="panel-title">🗑️ Заявки на удаление</div>
                 <div id="deletionRequestsList"></div><div id="deletionRequestsMessage" class="message"></div>
             </div>
@@ -1027,32 +673,32 @@
 </div>
 
 <div id="bidModal" class="modal-overlay hidden" onclick="closeBidModal()">
-    <div class="modal-content" style="max-width: 560px;" onclick="event.stopPropagation()">
+    <div class="modal-content" style="max-width: 540px;" onclick="event.stopPropagation()">
         <button class="modal-close" onclick="closeBidModal()">✕</button>
         <div id="bidModalContent"></div>
     </div>
 </div>
 
 <div id="iconModal" class="modal-overlay hidden" onclick="closeIconModal()">
-    <div class="modal-content" style="max-width: 460px;" onclick="event.stopPropagation()">
+    <div class="modal-content" style="max-width: 440px;" onclick="event.stopPropagation()">
         <button class="modal-close" onclick="closeIconModal()">✕</button>
-        <h3 id="iconModalTitle" style="color: var(--accent); font-family: 'Times New Roman', Times, serif; margin-bottom: 12px; font-size: 16px;">🖼 Иконка</h3>
-        <div id="iconPreview" style="text-align: center; margin-bottom: 12px; min-height: 80px; display: flex; align-items: center; justify-content: center; background: var(--bg-soft); border-radius: var(--radius-sm); border: 2px dashed var(--border);">
+        <h3 id="iconModalTitle" style="color: var(--accent); font-family: 'Times New Roman', Times, serif; margin-bottom: 10px; font-size: 15px;">🖼 Иконка</h3>
+        <div id="iconPreview" style="text-align: center; margin-bottom: 10px; min-height: 70px; display: flex; align-items: center; justify-content: center; background: var(--bg-soft); border-radius: var(--radius-sm); border: 2px dashed var(--border);">
             <div style="color: var(--text-dim);">Загрузка...</div>
         </div>
         <div class="icon-upload-area" id="iconUploadArea" onclick="document.getElementById('iconFileInput').click()">
-            <div style="font-size: 24px; margin-bottom: 5px;">📤</div>
+            <div style="font-size: 22px; margin-bottom: 4px;">📤</div>
             <div style="color: var(--text-main); font-size: 12px; font-weight: 600;">Выберите или перетащите</div>
-            <div id="iconSizeHint" style="color: var(--text-dim); font-size: 10px; margin-top: 3px;">JPG, PNG</div>
+            <div id="iconSizeHint" style="color: var(--text-dim); font-size: 10px; margin-top: 2px;">JPG, PNG</div>
             <input type="file" id="iconFileInput" accept="image/*" style="display: none;" onchange="handleIconFileSelect(event)">
         </div>
-        <div class="action-buttons" style="margin-top: 12px;">
-            <button class="btn-remove" onclick="deleteCurrentIcon()" style="width: 100%; padding: 6px;">🗑 Удалить</button>
+        <div class="action-buttons" style="margin-top: 10px;">
+            <button class="btn-remove" onclick="deleteCurrentIcon()" style="width: 100%; padding: 5px;">🗑 Удалить</button>
         </div>
     </div>
 </div>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxCwGB4u_HrNp0h1BLiSY-IMwUZ9XZ0ZJdR8L_12EgdyoYGlQ7bVTKRbIoa5RsBqYAx/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7-jUIejCa_lbdjDRjqOecm9aGCzdAbevKsT2kX3l66RJd3nVvoo55uusJDH3w1Zkf/exec';
     let currentUser = null; let currentRole = null;
     let myPlayerData = null; let myPlayerSkills = null; let myPlayerItems = null; let myDkpData = null;
     let allSkills = []; let allItems = []; let equipmentSections = [];
@@ -1062,12 +708,10 @@
     let countdownInterval = null; let currentAuctionItems = [];
     let currentIconType = null; let currentIconId = null; let currentIconName = null;
 
-    // ✅ ЗАГРУЗКА ТЕМЫ ПРИ СТАРТЕ
     window.addEventListener('DOMContentLoaded', () => {
         const savedTheme = localStorage.getItem('rf_theme') || 'light';
         document.body.setAttribute('data-theme', savedTheme);
         updateThemeButton(savedTheme);
-        
         const savedLogin = localStorage.getItem('rf_saved_login');
         const savedPassword = localStorage.getItem('rf_saved_password');
         if (savedLogin && savedPassword) {
@@ -1082,7 +726,6 @@
         }
     });
 
-    // ✅ ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
     function toggleTheme() {
         const current = document.body.getAttribute('data-theme') || 'light';
         const newTheme = current === 'light' ? 'dark' : 'light';
@@ -1095,7 +738,7 @@
         if (btn) btn.innerHTML = theme === 'light' ? '🌙 Темная' : '☀️ Светлая';
     }
 
-    window.addEventListener('error', (e) => { console.error('ГЛОБАЛЬНАЯ ОШИБКА:', e.error); });
+    window.addEventListener('error', (e) => { console.error('ОШИБКА:', e.error); });
     window.addEventListener('unhandledrejection', (e) => { console.error('PROMISE:', e.reason); });
 
     function getIconBorderColor(color) {
@@ -1196,7 +839,7 @@
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), redirect: 'follow' });
             const result = await response.json();
-            if (result.success) { msg.className = 'message success'; msg.innerText = result.message; if (action === 'login') { currentUser = payload.nickname; currentRole = result.role; setTimeout(() => { showMainScreen(); }, 600); } }
+            if (result.success) { msg.className = 'message success'; msg.innerText = result.message; if (action === 'login') { currentUser = payload.nickname; currentRole = result.role; setTimeout(() => { showMainScreen(); }, 500); } }
             else { msg.className = 'message error'; msg.innerText = result.message; }
         } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка связи.'; }
         finally { btn.disabled = false; btn.innerText = originalText; msg.style.display = 'block'; }
@@ -1268,7 +911,7 @@
                     if (result.data.skills && result.data.skills.length > 0) {
                         approvedList.innerHTML = result.data.skills.map((s, idx) => {
                             const safeName = s.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_');
-                            return `<div class="approved-skill-with-icon"><div id="approvedSkillIcon_${safeName}_${idx}" class="icon-preview-cabinet" style="width: 28px; height: 28px;"><span class="icon-placeholder" style="font-size: 7px;">...</span></div>✓ ${s}</div>`;
+                            return `<div class="approved-skill-with-icon"><div id="approvedSkillIcon_${safeName}_${idx}" class="icon-preview-cabinet" style="width: 26px; height: 26px;"><span class="icon-placeholder" style="font-size: 7px;">...</span></div>✓ ${s}</div>`;
                         }).join('');
                         approvedList.classList.remove('hidden'); skillsEmpty.classList.add('hidden');
                         result.data.skills.forEach((s, idx) => { const safeName = s.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_'); loadAndDisplayIcon('skill', s, `approvedSkillIcon_${safeName}_${idx}`, null); });
@@ -1326,9 +969,9 @@
 
     function renderApprovedEquipment(selections) {
         const list = document.getElementById('approvedEquipmentList');
-        if (!selections || typeof selections !== 'object' || Object.keys(selections).length === 0) { list.innerHTML = '<div class="empty-state" style="padding: 15px;">🛡 Экипировка не выбрана.</div>'; return; }
+        if (!selections || typeof selections !== 'object' || Object.keys(selections).length === 0) { list.innerHTML = '<div class="empty-state" style="padding: 12px;">🛡 Экипировка не выбрана.</div>'; return; }
         const validEntries = Object.entries(selections).filter(([section, itemId]) => { if (!itemId) return false; return allItems.find(i => i.id === itemId) !== undefined; });
-        if (validEntries.length === 0) { list.innerHTML = '<div class="empty-state" style="padding: 15px;">🛡 Экипировка не выбрана.</div>'; return; }
+        if (validEntries.length === 0) { list.innerHTML = '<div class="empty-state" style="padding: 12px;">🛡 Экипировка не выбрана.</div>'; return; }
         list.innerHTML = validEntries.map(([section, itemId]) => {
             const item = allItems.find(i => i.id === itemId);
             if (!item) return '';
@@ -1384,19 +1027,19 @@
     async function loadMyDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerDKP', nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { myDkpData = result.data; document.getElementById('myDkpBalance').innerText = Number(result.data.balance).toLocaleString('ru-RU'); document.getElementById('userDkpBadge').innerText = `💰 ${Number(result.data.balance).toLocaleString('ru-RU')} DKP`; renderDkpHistory(result.data.history || []); loadFrozenDkpInfo(); } } catch (error) { console.error(error); } }
     function renderDkpHistory(history) { const list = document.getElementById('myDkpHistory'); if (!history || history.length === 0) { list.innerHTML = '<div class="empty-state">История пуста</div>'; return; } const sorted = [...history].sort((a, b) => new Date(b.date) - new Date(a.date)); list.innerHTML = sorted.map(h => { const date = new Date(h.date).toLocaleString('ru-RU'); const isPositive = h.amount > 0; let typeLabel = ''; let itemClass = h.type; let details = ''; if (h.type === 'earn') { typeLabel = `🏆 ${h.event || 'Мероприятие'}`; if (h.coefficient && h.baseAmount !== undefined) details = `<div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${h.baseAmount} × ${h.coefficient.toFixed(2)} (БМ: ${h.playerBm || 0})</div>`; } else if (h.type === 'manual_add') typeLabel = `💵 ${h.reason || ''}`; else if (h.type === 'manual_sub') typeLabel = `💸 ${h.reason || ''}`; else if (h.type === 'auction_win') typeLabel = `🔨 ${h.reason || ''}`; else typeLabel = h.reason || h.event || 'Операция'; return `<div class="dkp-history-item ${itemClass}"><div class="history-info"><div class="history-event">${typeLabel}</div>${details}<div class="history-date">${date}</div></div><div class="history-amount ${isPositive ? 'positive' : 'negative'}">${isPositive ? '+' : ''}${h.amount}</div></div>`; }).join(''); }
 
-    async function loadFrozenDkpInfo() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerDkpInfo', nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success && result.data) { const { total, frozen, available, activeBids } = result.data; const dkpBadge = document.getElementById('userDkpBadge'); if (dkpBadge) { if (frozen > 0) dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} <span style="font-size: 9px; color: var(--warning);">(🔒${frozen})</span>`; else dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} DKP`; } const frozenBlock = document.getElementById('frozenDkpBlock'); if (frozenBlock && activeBids && activeBids.length > 0) { frozenBlock.innerHTML = `<div style="margin-bottom: 15px; padding: 12px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--warning);"><div style="font-size: 12px; color: var(--warning); font-weight: 700; margin-bottom: 8px;">🔒 ЗАМОРОЖЕНО: ${frozen} DKP</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px;"><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 14px; color: var(--accent); font-weight: 700;">${total}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 14px; color: var(--warning); font-weight: 700;">${frozen}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--success);">Своб.</div><div style="font-size: 14px; color: var(--success); font-weight: 700;">${available}</div></div></div>${activeBids.map(bid => `<div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm); margin-bottom: 3px; font-size: 11px; border-left: 2px solid ${bid.isLeader ? 'var(--success)' : 'var(--warning)'};"><div><div style="font-weight: 700;">${bid.isLeader ? '👑 ' : ''}${bid.itemName}</div><div style="font-size: 9px; color: var(--text-dim);">${bid.itemSection}</div></div><div style="color: var(--dkp); font-weight: 700;">${bid.bidAmount} DKP</div></div>`).join('')}</div>`; } else if (frozenBlock) { frozenBlock.innerHTML = ''; } } } catch (error) { console.error(error); } }
+    async function loadFrozenDkpInfo() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerDkpInfo', nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success && result.data) { const { total, frozen, available, activeBids } = result.data; const dkpBadge = document.getElementById('userDkpBadge'); if (dkpBadge) { if (frozen > 0) dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} <span style="font-size: 9px; color: var(--warning);">(🔒${frozen})</span>`; else dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} DKP`; } const frozenBlock = document.getElementById('frozenDkpBlock'); if (frozenBlock && activeBids && activeBids.length > 0) { frozenBlock.innerHTML = `<div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--warning);"><div style="font-size: 12px; color: var(--warning); font-weight: 700; margin-bottom: 6px;">🔒 ЗАМОРОЖЕНО: ${frozen} DKP</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px;"><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 13px; color: var(--accent); font-weight: 700;">${total}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 13px; color: var(--warning); font-weight: 700;">${frozen}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--success);">Своб.</div><div style="font-size: 13px; color: var(--success); font-weight: 700;">${available}</div></div></div>${activeBids.map(bid => `<div style="display: flex; justify-content: space-between; align-items: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm); margin-bottom: 3px; font-size: 11px; border-left: 2px solid ${bid.isLeader ? 'var(--success)' : 'var(--warning)'};"><div><div style="font-weight: 700;">${bid.isLeader ? '👑 ' : ''}${bid.itemName}</div><div style="font-size: 9px; color: var(--text-dim);">${bid.itemSection}</div></div><div style="color: var(--dkp); font-weight: 700;">${bid.bidAmount} DKP</div></div>`).join('')}</div>`; } else if (frozenBlock) { frozenBlock.innerHTML = ''; } } } catch (error) { console.error(error); } }
 
     async function loadEventsForSelect() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' }); const result = await response.json(); if (result.success) { allEvents = result.events; const select = document.getElementById('dkpEventSelect'); select.innerHTML = '<option value="">— Выберите —</option>' + allEvents.map(e => `<option value="${e.id}" data-dkp="${e.dkp}" data-name="${String(e.name).replace(/"/g, '&quot;')}">${e.name} (+${e.dkp})</option>`).join(''); } } catch (error) { console.error(error); } }
 
     function handleScreenshotSelect(event) { const files = Array.from(event.target.files); addScreenshots(files); event.target.value = ''; }
-    function addScreenshots(files) { const remaining = 5 - uploadedScreenshots.length; if (remaining <= 0) { showDkpSubmitMessage('Макс. 5', 'error'); return; } const MAX_FILE_SIZE = 2 * 1024 * 1024; const MAX_TOTAL_SIZE = 8 * 1024 * 1024; let existingSize = uploadedScreenshots.reduce((sum, s) => sum + (s.file ? s.file.size : 0), 0); const toAdd = []; let totalNewSize = 0; for (let i = 0; i < Math.min(files.length, remaining); i++) { const file = files[i]; if (!file.type.startsWith('image/')) continue; if (file.size > MAX_FILE_SIZE) { showDkpSubmitMessage(`Файл "${file.name}" > 2 МБ`, 'error'); continue; } if (existingSize + totalNewSize + file.size > MAX_TOTAL_SIZE) { showDkpSubmitMessage(`Общий > 8 МБ`, 'error'); continue; } toAdd.push(file); totalNewSize += file.size; } if (toAdd.length === 0) return; toAdd.forEach(file => { const id = 'ss_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5); const reader = new FileReader(); const screenshotObj = { id, file, base64: null, url: null, screenshotId: null, status: 'uploading', error: null }; uploadedScreenshots.push(screenshotObj); renderScreenshotsPreview(); reader.onload = async (e) => { try { screenshotObj.base64 = e.target.result; const compressed = await compressImage(e.target.result, 1200, 0.8); screenshotObj.base64 = compressed; const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'saveScreenshot', imageData: compressed, filename: file.name }), redirect: 'follow' }); if (!response.ok) throw new Error('HTTP ' + response.status); const result = await response.json(); if (result.success) { screenshotObj.screenshotId = result.screenshotId; screenshotObj.url = compressed; screenshotObj.status = 'done'; } else { screenshotObj.status = 'error'; screenshotObj.error = result.message; } } catch (err) { screenshotObj.status = 'error'; screenshotObj.error = err.message; } renderScreenshotsPreview(); if (uploadedScreenshots.every(s => s.status !== 'uploading')) runOcrOnScreenshots(); }; reader.onerror = () => { screenshotObj.status = 'error'; screenshotObj.error = 'Ошибка чтения'; renderScreenshotsPreview(); }; reader.readAsDataURL(file); }); }
+    function addScreenshots(files) { const remaining = 5 - uploadedScreenshots.length; if (remaining <= 0) { showDkpSubmitMessage('Макс. 5', 'error'); return; } const MAX_FILE_SIZE = 2 * 1024 * 1024; const MAX_TOTAL_SIZE = 8 * 1024 * 1024; let existingSize = uploadedScreenshots.reduce((sum, s) => sum + (s.file ? s.file.size : 0), 0); const toAdd = []; let totalNewSize = 0; for (let i = 0; i < Math.min(files.length, remaining); i++) { const file = files[i]; if (!file.type.startsWith('image/')) continue; if (file.size > MAX_FILE_SIZE) { showDkpSubmitMessage(`"${file.name}" > 2 МБ`, 'error'); continue; } if (existingSize + totalNewSize + file.size > MAX_TOTAL_SIZE) { showDkpSubmitMessage(`Общий > 8 МБ`, 'error'); continue; } toAdd.push(file); totalNewSize += file.size; } if (toAdd.length === 0) return; toAdd.forEach(file => { const id = 'ss_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5); const reader = new FileReader(); const screenshotObj = { id, file, base64: null, url: null, screenshotId: null, status: 'uploading', error: null }; uploadedScreenshots.push(screenshotObj); renderScreenshotsPreview(); reader.onload = async (e) => { try { screenshotObj.base64 = e.target.result; const compressed = await compressImage(e.target.result, 1200, 0.8); screenshotObj.base64 = compressed; const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'saveScreenshot', imageData: compressed, filename: file.name }), redirect: 'follow' }); if (!response.ok) throw new Error('HTTP ' + response.status); const result = await response.json(); if (result.success) { screenshotObj.screenshotId = result.screenshotId; screenshotObj.url = compressed; screenshotObj.status = 'done'; } else { screenshotObj.status = 'error'; screenshotObj.error = result.message; } } catch (err) { screenshotObj.status = 'error'; screenshotObj.error = err.message; } renderScreenshotsPreview(); if (uploadedScreenshots.every(s => s.status !== 'uploading')) runOcrOnScreenshots(); }; reader.onerror = () => { screenshotObj.status = 'error'; screenshotObj.error = 'Ошибка чтения'; renderScreenshotsPreview(); }; reader.readAsDataURL(file); }); }
     function compressImage(base64, maxSize, quality) { return new Promise((resolve) => { const img = new Image(); img.onload = () => { let { width, height } = img; let targetMax = Math.min(maxSize, 1200); let targetQuality = Math.min(quality, 0.8); if (width > height && width > targetMax) { height = Math.round((height * targetMax) / width); width = targetMax; } else if (height > targetMax) { width = Math.round((width * targetMax) / height); height = targetMax; } const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height); resolve(canvas.toDataURL('image/jpeg', targetQuality)); }; img.onerror = () => resolve(base64); img.src = base64; }); }
     function renderScreenshotsPreview() { const preview = document.getElementById('screenshotsPreview'); preview.innerHTML = uploadedScreenshots.map(s => { const sizeInfo = s.file ? ` <span style="font-size: 9px; color: var(--text-dim);">(${(s.file.size / 1024).toFixed(0)} КБ)</span>` : ''; let statusHtml = ''; if (s.status === 'uploading') statusHtml = '<div class="upload-progress">...</div>'; else if (s.status === 'error') statusHtml = `<div class="upload-progress" style="color: var(--danger);">✕</div>`; else if (s.status === 'done') statusHtml = `<div class="upload-progress" style="color: var(--success);">✓${sizeInfo}</div>`; return `<div class="screenshot-thumb">${s.base64 ? `<img src="${s.base64}" alt="screenshot" onclick="openImageModal('${s.base64}')" style="cursor: pointer;">` : ''}<button class="remove-btn" onclick="removeScreenshot('${s.id}')">✕</button>${statusHtml}</div>`; }).join(''); }
     function removeScreenshot(id) { uploadedScreenshots = uploadedScreenshots.filter(s => s.id !== id); renderScreenshotsPreview(); }
 
     async function preprocessImage(base64) { return new Promise((resolve) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const scale = 3; canvas.width = img.width * scale; canvas.height = img.height * scale; const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(img, 0, 0, canvas.width, canvas.height); const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height); const data = imageData.data; const contrast = 1.5; const brightness = 20; for (let i = 0; i < data.length; i += 4) { let r = data[i]; let g = data[i + 1]; let b = data[i + 2]; r = 255 - r; g = 255 - g; b = 255 - b; r = Math.min(255, r + brightness); g = Math.min(255, g + brightness); b = Math.min(255, b + brightness); r = Math.min(255, Math.max(0, (r - 128) * contrast + 128)); g = Math.min(255, Math.max(0, (g - 128) * contrast + 128)); b = Math.min(255, Math.max(0, (b - 128) * contrast + 128)); data[i] = r; data[i + 1] = g; data[i + 2] = b; data[i + 3] = 255; } ctx.putImageData(imageData, 0, 0); resolve(canvas.toDataURL('image/png')); }; img.onerror = () => resolve(base64); img.src = base64; }); }
 
-    async function runOcrOnScreenshots() { try { const doneScreenshots = uploadedScreenshots.filter(s => s.status === 'done' && s.base64); if (doneScreenshots.length === 0) return; const progressBlock = document.getElementById('ocrProgressBlock'); const progressText = document.getElementById('ocrProgressText'); const progressBar = document.getElementById('ocrProgressBar'); const nicksBlock = document.getElementById('recognizedNicksBlock'); if (!progressBlock || !progressText || !progressBar || !nicksBlock) return; progressBlock.classList.remove('hidden'); progressBar.style.width = '0%'; recognizedNicks = []; if (typeof Tesseract === 'undefined') { progressText.innerText = '⚠️ Tesseract не загружен'; nicksBlock.classList.remove('hidden'); renderRecognizedNicks(); return; } progressText.innerText = 'Загрузка OCR...'; progressBar.style.width = '10%'; let worker; try { const whitelist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя0123456789_-[]'; worker = await Tesseract.createWorker('rus+eng', 1, { logger: m => { if (m.status === 'recognizing text' && m.progress) { const percent = Math.round(m.progress * 100); progressBar.style.width = (10 + percent * 0.85) + '%'; progressText.innerText = `${percent}%`; } }, params: { tessedit_char_whitelist: whitelist, tessedit_pageseg_mode: 6, preserve_interword_spaces: '1' } }); } catch (workerError) { console.error(workerError); progressText.innerText = '❌ OCR ошибка'; nicksBlock.classList.remove('hidden'); renderRecognizedNicks(); return; } const allNicks = new Set(); for (let i = 0; i < doneScreenshots.length; i++) { try { progressText.innerText = `Скриншот ${i + 1}/${doneScreenshots.length}`; const processedImage = await preprocessImage(doneScreenshots[i].base64); const result = await worker.recognize(processedImage); const text = result && result.data && result.data.text ? result.data.text : ''; const extractedNicks = extractNicksFromText(text); extractedNicks.forEach(n => allNicks.add(n)); progressBar.style.width = (10 + ((i + 1) / doneScreenshots.length) * 85) + '%'; } catch (imgError) { console.error(imgError); } } try { await worker.terminate(); } catch (e) {} recognizedNicks = Array.from(allNicks).filter(n => n && n.length >= 2 && n.length <= 16); progressText.innerText = `✅ ${recognizedNicks.length} ников`; progressBar.style.width = '100%'; renderRecognizedNicks(); nicksBlock.classList.remove('hidden'); if (recognizedNicks.length === 0) progressText.innerText = '⚠️ Добавьте вручную'; } catch (error) { console.error(error); } }
+    async function runOcrOnScreenshots() { try { const doneScreenshots = uploadedScreenshots.filter(s => s.status === 'done' && s.base64); if (doneScreenshots.length === 0) return; const progressBlock = document.getElementById('ocrProgressBlock'); const progressText = document.getElementById('ocrProgressText'); const progressBar = document.getElementById('ocrProgressBar'); const nicksBlock = document.getElementById('recognizedNicksBlock'); if (!progressBlock || !progressText || !progressBar || !nicksBlock) return; progressBlock.classList.remove('hidden'); progressBar.style.width = '0%'; recognizedNicks = []; if (typeof Tesseract === 'undefined') { progressText.innerText = '⚠️ Tesseract не загружен'; nicksBlock.classList.remove('hidden'); renderRecognizedNicks(); return; } progressText.innerText = 'Загрузка OCR...'; progressBar.style.width = '10%'; let worker; try { const whitelist = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя0123456789_-[]'; worker = await Tesseract.createWorker('rus+eng', 1, { logger: m => { if (m.status === 'recognizing text' && m.progress) { const percent = Math.round(m.progress * 100); progressBar.style.width = (10 + percent * 0.85) + '%'; progressText.innerText = `${percent}%`; } }, params: { tessedit_char_whitelist: whitelist, tessedit_pageseg_mode: 6, preserve_interword_spaces: '1' } }); } catch (workerError) { console.error(workerError); progressText.innerText = '❌ OCR ошибка'; nicksBlock.classList.remove('hidden'); renderRecognizedNicks(); return; } const allNicks = new Set(); for (let i = 0; i < doneScreenshots.length; i++) { try { progressText.innerText = `Скрин ${i + 1}/${doneScreenshots.length}`; const processedImage = await preprocessImage(doneScreenshots[i].base64); const result = await worker.recognize(processedImage); const text = result && result.data && result.data.text ? result.data.text : ''; const extractedNicks = extractNicksFromText(text); extractedNicks.forEach(n => allNicks.add(n)); progressBar.style.width = (10 + ((i + 1) / doneScreenshots.length) * 85) + '%'; } catch (imgError) { console.error(imgError); } } try { await worker.terminate(); } catch (e) {} recognizedNicks = Array.from(allNicks).filter(n => n && n.length >= 2 && n.length <= 16); progressText.innerText = `✅ ${recognizedNicks.length} ников`; progressBar.style.width = '100%'; renderRecognizedNicks(); nicksBlock.classList.remove('hidden'); if (recognizedNicks.length === 0) progressText.innerText = '⚠️ Добавьте вручную'; } catch (error) { console.error(error); } }
 
     function extractNicksFromText(text) { try { if (!text || typeof text !== 'string') return []; const skipWords = new Set(['headhunters', 'неа', 'управление', 'группой', 'рейдовая', 'группа', 'проверить', 'готовность', 'пригласить', 'набор', 'настройки', 'команда', 'команда1', 'команда2', 'команда3', 'команда4', 'команда5', 'команда6', 'команда7', 'команда8', 'команда9', 'команда10', 'guild', 'clan', 'alliance', 'raid', 'party', 'team', 'squad', 'group', 'management', 'control', 'hh', 'rf', 'online', 'next', 'head', 'hunters', 'headhunter', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'иии', 'ллл', 'ннн', 'ааа', 'ооо', 'еее']); const lines = text.split(/\n|\r/); const allWords = []; const wordFrequency = {}; lines.forEach(line => { const cleanLine = line.trim(); if (!cleanLine) return; const tokens = cleanLine.split(/[\s\t\|\/\\:\+\=\[\]\(\)]+/); tokens.forEach(token => { let clean = token.trim(); clean = clean.replace(/^["'`\[\(\{]+|["'`\]\)\}]+$/g, ''); clean = clean.replace(/[^\w\u0400-\u04FF\-_]/g, ''); if (clean.length >= 2 && clean.length <= 16) { allWords.push(clean); const lower = clean.toLowerCase(); wordFrequency[lower] = (wordFrequency[lower] || 0) + 1; } }); }); const nicks = []; const seen = new Set(); allWords.forEach(word => { const lowerWord = word.toLowerCase(); if (seen.has(lowerWord)) return; if (skipWords.has(lowerWord)) return; if (wordFrequency[lowerWord] > 3) return; if (/^\d+$/.test(word)) return; if (!/[A-Za-z\u0410-\u044F\u0400-\u04FF]/.test(word)) return; if (/^(.)\1{2,}$/.test(word)) return; if (word.length === 2 && !/[A-Z\u0410-\u042F]/.test(word)) return; seen.add(lowerWord); nicks.push(word); }); return nicks; } catch (error) { console.error(error); return []; } }
 
@@ -1409,14 +1052,14 @@
     function showDkpSubmitMessage(text, type) { const msg = document.getElementById('dkpSubmitMessage'); msg.className = `message ${type}`; msg.innerText = text; msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 8000); }
 
     async function loadDkpRating() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('dkpRatingList'); if (result.success && result.players.length > 0) { list.innerHTML = result.players.map((player, index) => { const position = index + 1; let positionClass = ''; if (position === 1) positionClass = 'top-1'; else if (position === 2) positionClass = 'top-2'; else if (position === 3) positionClass = 'top-3'; return `<div class="ranking-item"><div class="ranking-position ${positionClass}">#${position}</div><div class="ranking-info"><div class="ranking-nick">${player.nickname}</div></div><div class="ranking-bm" style="color: var(--dkp);">${Number(player.balance).toLocaleString('ru-RU')} 💰</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет данных</div>'; } } catch (error) { console.error(error); } }
-     async function loadAdminEvents() {
+        async function loadAdminEvents() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' });
             const result = await response.json();
             const list = document.getElementById('adminEventsList');
             if (result.success && result.events.length > 0) {
                 allEvents = result.events;
-                list.innerHTML = result.events.map(event => `<div class="event-card"><div style="display: flex; align-items: center; gap: 10px; flex: 1;"><div id="eventIcon_${event.id}" class="icon-preview" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="event-info"><div class="event-name">${event.name}</div><div class="event-meta">${event.createdBy || '—'} | ${event.date}</div></div></div><div class="event-dkp">+${event.dkp}</div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button><button class="btn-remove" onclick="removeEvent('${event.id}')">✕</button></div></div>`).join('');
+                list.innerHTML = result.events.map(event => `<div class="event-card"><div style="display: flex; align-items: center; gap: 8px; flex: 1;"><div id="eventIcon_${event.id}" class="icon-preview" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="event-info"><div class="event-name">${event.name}</div><div class="event-meta">${event.createdBy || '—'} | ${event.date}</div></div></div><div class="event-dkp">+${event.dkp}</div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button><button class="btn-remove" onclick="removeEvent('${event.id}')">✕</button></div></div>`).join('');
                 result.events.forEach(event => loadEventIcon(event.id));
             } else { list.innerHTML = '<div class="empty-state">Нет мероприятий</div>'; }
         } catch (error) { console.error(error); }
@@ -1427,15 +1070,23 @@
     async function addEvent(e) { e.preventDefault(); const name = document.getElementById('newEventName').value; const dkp = document.getElementById('newEventDkp').value; const msg = document.getElementById('adminEventsMessage'); if (!name || !dkp) { msg.className = 'message error'; msg.innerText = 'Заполните все поля'; msg.style.display = 'block'; return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addEvent', name: name, dkp: Number(dkp), createdBy: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; document.getElementById('newEventName').value = ''; document.getElementById('newEventDkp').value = ''; setTimeout(() => { loadAdminEvents(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function removeEvent(eventId) { if (!confirm('Удалить?')) return; const msg = document.getElementById('adminEventsMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'removeEvent', eventId: eventId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { loadAdminEvents(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
 
-    async function loadPendingDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('pendingDkpList'); if (result.success && result.submissions.length > 0) { list.innerHTML = result.submissions.map(sub => `<div class="dkp-submission-card"><div class="submission-header"><div><div class="submission-event">🏆 ${sub.eventName} (+${sub.eventDkp})</div><div class="submission-meta">${sub.submitter} | ${sub.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDkp('${sub.id}')">✓</button><button class="btn-reject" onclick="rejectDkp('${sub.id}')">✕</button><button class="btn-edit" onclick="editDkpSubmission('${sub.id}')" style="width: auto; margin-top: 0;">✎</button><button class="btn-remove" onclick="deleteDkpSubmission('${sub.id}')">🗑</button></div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div class="submission-screenshots">${sub.screenshots.map((imgData, idx) => `<img src="${imgData}" onclick="openImageModal('${imgData}')" alt="${idx + 1}">`).join('')}</div>` : ''}<div style="font-size: 10px; color: var(--text-dim); margin-top: 6px;">Игроки (${sub.nicks.length}):</div><div class="submission-nicks">${sub.nicks.map(nick => `<span class="submission-nick-tag">${nick}</span>`).join('')}</div></div>`).join(''); } else { list.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (error) { console.error(error); } }
+    async function loadPendingDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('pendingDkpList'); if (result.success && result.submissions.length > 0) { list.innerHTML = result.submissions.map(sub => `<div class="dkp-submission-card"><div class="submission-header"><div><div class="submission-event">🏆 ${sub.eventName} (+${sub.eventDkp})</div><div class="submission-meta">${sub.submitter} | ${sub.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDkp('${sub.id}')">✓</button><button class="btn-reject" onclick="rejectDkp('${sub.id}')">✕</button><button class="btn-edit" onclick="editDkpSubmission('${sub.id}')" style="width: auto; margin-top: 0;">✎</button><button class="btn-remove" onclick="deleteDkpSubmission('${sub.id}')">🗑</button></div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div class="submission-screenshots">${sub.screenshots.map((imgData, idx) => `<img src="${imgData}" onclick="openImageModal('${imgData}')" alt="${idx + 1}">`).join('')}</div>` : ''}<div style="font-size: 10px; color: var(--text-dim); margin-top: 5px;">Игроки (${sub.nicks.length}):</div><div class="submission-nicks">${sub.nicks.map(nick => `<span class="submission-nick-tag">${nick}</span>`).join('')}</div></div>`).join(''); } else { list.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (error) { console.error(error); } }
 
     async function approveDkp(submissionId) { if (!confirm('Подтвердить и начислить DKP?')) return; const msg = document.getElementById('adminDkpPendingMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveDKP', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { let details = result.message + '\n\n'; if (result.results && result.results.length > 0) { details += 'Детализация:\n'; result.results.forEach(r => { details += `• ${r.nick}: БМ=${r.bm}, коэф=${r.coefficient.toFixed(2)}, +${r.finalDkp}\n`; }); } alert(details); msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { loadPendingDkp(); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function rejectDkp(submissionId) { if (!confirm('Отклонить?')) return; const msg = document.getElementById('adminDkpPendingMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectDKP', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message error'; msg.innerText = result.message; setTimeout(() => { loadPendingDkp(); msg.style.display = 'none'; }, 800); } } catch (error) { console.error(error); } }
 
-    async function editDkpSubmission(submissionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getDkpSubmission', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const sub = result.submission; const modal = document.createElement('div'); modal.className = 'modal-overlay'; modal.id = 'editDkpModal'; modal.innerHTML = `<div class="modal-content" style="max-width: 600px; max-height: 90vh; overflow-y: auto;"><button class="modal-close" onclick="closeEditDkpModal()">✕</button><h3 style="color: var(--accent); font-family: 'Times New Roman', Times, serif; margin-bottom: 12px; font-size: 15px;">✎ ${sub.eventName}</h3><div style="margin-bottom: 10px;"><div style="font-size: 11px; color: var(--text-dim);">Отправитель:</div><div style="font-size: 13px;">${sub.submitter}</div></div><div style="margin-bottom: 10px;"><div style="font-size: 11px; color: var(--text-dim);">Базовые DKP:</div><div style="font-size: 16px; color: var(--dkp); font-weight: 700;">${sub.eventDkp}</div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div style="margin-bottom: 10px;"><div style="font-size: 11px; color: var(--text-dim); margin-bottom: 5px;">Скриншоты:</div><div style="display: flex; gap: 6px; flex-wrap: wrap;">${sub.screenshots.map((img, idx) => `<img src="${img}" onclick="openImageModal('${img}')" style="width: 200px; height: auto; border-radius: 3px; border: 1px solid var(--border); cursor: pointer;">`).join('')}</div></div>` : ''}<div style="margin-bottom: 10px;"><div style="font-size: 11px; color: var(--text-dim); margin-bottom: 5px;">Участники (${sub.nicks.length}):</div><div id="editDkpNicksList" style="display: flex; flex-direction: column; gap: 4px;">${sub.nicks.map((nick, idx) => `<div class="nick-item"><input type="text" value="${nick.replace(/"/g, '&quot;')}" id="editNick_${idx}" placeholder="Ник..."><button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button></div>`).join('')}</div><button type="button" class="btn-edit" onclick="addEditNickField()" style="margin-top: 8px; width: auto;">+ Добавить</button></div><button type="button" class="submit-btn dkp-btn" onclick="saveDkpSubmission('${sub.id}')">💾 Сохранить</button></div>`; document.body.appendChild(modal); window.currentEditDkp = { id: sub.id, nicks: [...sub.nicks] }; } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
+    async function editDkpSubmission(submissionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getDkpSubmission', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const sub = result.submission; const modal = document.createElement('div'); modal.className = 'modal-overlay'; modal.id = 'editDkpModal'; modal.innerHTML = `<div class="modal-content" style="max-width: 580px; max-height: 90vh; overflow-y: auto;"><button class="modal-close" onclick="closeEditDkpModal()">✕</button><h3 style="color: var(--accent); font-family: 'Times New Roman', Times, serif; margin-bottom: 10px; font-size: 15px;">✎ ${sub.eventName}</h3><div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim);">Отправитель:</div><div style="font-size: 12px;">${sub.submitter}</div></div><div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim);">Базовые DKP:</div><div style="font-size: 15px; color: var(--dkp); font-weight: 700;">${sub.eventDkp}</div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">Скриншоты:</div><div style="display: flex; gap: 5px; flex-wrap: wrap;">${sub.screenshots.map((img, idx) => `<img src="${img}" onclick="openImageModal('${img}')" style="width: 180px; height: auto; border-radius: 3px; border: 1px solid var(--border); cursor: pointer;">`).join('')}</div></div>` : ''}<div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">Участники (${sub.nicks.length}):</div><div id="editDkpNicksList" style="display: flex; flex-direction: column; gap: 4px;">${sub.nicks.map((nick, idx) => `<div class="nick-item"><input type="text" value="${nick.replace(/"/g, '&quot;')}" id="editNick_${idx}" placeholder="Ник..."><button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button></div>`).join('')}</div><button type="button" class="btn-edit" onclick="addEditNickField()" style="margin-top: 6px; width: auto;">+ Добавить</button></div><button type="button" class="submit-btn dkp-btn" onclick="saveDkpSubmission('${sub.id}')">💾 Сохранить</button></div>`; document.body.appendChild(modal); window.currentEditDkp = { id: sub.id, nicks: [...sub.nicks] }; } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
     function closeEditDkpModal() { const modal = document.getElementById('editDkpModal'); if (modal) modal.remove(); window.currentEditDkp = null; }
     function removeEditNick(idx) { const input = document.getElementById('editNick_' + idx); if (input) input.parentElement.remove(); }
-    function addEditNickField() { const list = document.getElementById('editDkpNicksList'); const idx = list.children.length; const div = document.createElement('div'); div.className  'nick-item'; div.innerHTML = `<input type="text" value="" id="editNick_${idx}" placeholder="Ник..."><button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button>`; list.appendChild(div); div.querySelector('input').focus(); }
+    function addEditNickField() {
+        const list = document.getElementById('editDkpNicksList');
+        const idx = list.children.length;
+        const div = document.createElement('div');
+        div.className = 'nick-item';
+        div.innerHTML = `<input type="text" value="" id="editNick_${idx}" placeholder="Ник..."><button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button>`;
+        list.appendChild(div);
+        div.querySelector('input').focus();
+    }
     async function saveDkpSubmission(submissionId) { const list = document.getElementById('editDkpNicksList'); const inputs = list.querySelectorAll('input'); const nicks = []; inputs.forEach(input => { const val = input.value.trim(); if (val) nicks.push(val); }); if (nicks.length === 0) { alert('Добавьте участника'); return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateDkpSubmission', submissionId: submissionId, nicks: nicks }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert('Обновлено!'); closeEditDkpModal(); loadPendingDkp(); } else alert('Ошибка: ' + result.message); } catch (error) { alert('Ошибка: ' + error.message); } }
     async function deleteDkpSubmission(submissionId) { if (!confirm('Удалить заявку?')) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteDkpSubmission', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert('Удалена'); loadPendingDkp(); } else alert('Ошибка: ' + result.message); } catch (error) { alert('Ошибка: ' + error.message); } }
 
@@ -1449,7 +1100,7 @@
             if (result.success && result.skills.length > 0) {
                 list.innerHTML = result.skills.map(skill => {
                     const safeName = skill.name.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_');
-                    return `<div class="admin-skill-item"><div style="display: flex; align-items: center; gap: 8px; flex: 1;"><div id="skillIcon_${safeName}" class="icon-preview-small" onclick="openIconModal('skill', '${skill.name.replace(/'/g, "\\'")}', '${skill.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div><span class="admin-skill-name">${skill.name}</span>${skill.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">Станд.</span>'}</div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('skill', '${skill.name.replace(/'/g, "\\'")}', '${skill.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>${skill.isAdminCreated ? `<button class="btn-remove" onclick="removeSkill('${skill.name.replace(/'/g, "\\'")}')">✕</button>` : ''}</div></div>`;
+                    return `<div class="admin-skill-item"><div style="display: flex; align-items: center; gap: 7px; flex: 1;"><div id="skillIcon_${safeName}" class="icon-preview-small" onclick="openIconModal('skill', '${skill.name.replace(/'/g, "\\'")}', '${skill.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div><span class="admin-skill-name">${skill.name}</span>${skill.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">Станд.</span>'}</div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('skill', '${skill.name.replace(/'/g, "\\'")}', '${skill.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>${skill.isAdminCreated ? `<button class="btn-remove" onclick="removeSkill('${skill.name.replace(/'/g, "\\'")}')">✕</button>` : ''}</div></div>`;
                 }).join('');
                 result.skills.forEach(skill => loadSkillIcon(skill.name));
             } else { list.innerHTML = '<div class="empty-state">Пусто</div>'; }
@@ -1508,7 +1159,7 @@
         if (items.length === 0) { list.innerHTML = '<div class="empty-state">Нет</div>'; return; }
         list.innerHTML = items.map(item => {
             const borderColor = getIconBorderColor(item.color);
-            return `<div class="admin-item-card"><div style="display: flex; align-items: center; gap: 8px; flex: 1;"><div id="itemIcon_${item.id}" class="icon-preview-small" style="border: 2px solid ${borderColor};" onclick="openIconModal('item', ${item.id}, '${item.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="admin-item-info"><div class="admin-item-name">${item.name}</div><div class="admin-item-meta">${item.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${item.enhancement > 0 ? `<span class="item-badge enhance">+${item.enhancement}</span>` : ''}${item.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}${item.tier ? `<span class="item-badge ${getColorClass(item.color)}">${item.tier}</span>` : ''}<span class="item-badge ${getColorClass(item.color)}">${item.color}</span>${item.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">Станд.</span>'}</div></div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('item', ${item.id}, '${item.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>${item.isAdminCreated ? `<button class="btn-remove" onclick="removeItem(${item.id})">✕</button>` : ''}</div></div>`;
+            return `<div class="admin-item-card"><div style="display: flex; align-items: center; gap: 7px; flex: 1;"><div id="itemIcon_${item.id}" class="icon-preview-small" style="border: 2px solid ${borderColor};" onclick="openIconModal('item', ${item.id}, '${item.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="admin-item-info"><div class="admin-item-name">${item.name}</div><div class="admin-item-meta">${item.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${item.enhancement > 0 ? `<span class="item-badge enhance">+${item.enhancement}</span>` : ''}${item.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}${item.tier ? `<span class="item-badge ${getColorClass(item.color)}">${item.tier}</span>` : ''}<span class="item-badge ${getColorClass(item.color)}">${item.color}</span>${item.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">Станд.</span>'}</div></div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('item', ${item.id}, '${item.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>${item.isAdminCreated ? `<button class="btn-remove" onclick="removeItem(${item.id})">✕</button>` : ''}</div></div>`;
         }).join('');
         items.forEach(item => loadItemIcon(item.id));
     }
@@ -1545,7 +1196,7 @@
     async function setUserRole(nickname, newRole) { if (currentRole !== 'Админ') { alert('Только админ!'); return; } if (!confirm(`"${nickname}" → "${newRole}"?`)) return; const msg = document.getElementById('adminUsersMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'setUserRole', nickname: nickname, newRole: newRole }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { loadAllUsers(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function deleteUser(nickname) { if (!confirm(`Удалить "${nickname}"?\nВсе данные пропадут!`)) return; const msg = document.getElementById('adminUsersMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteUser', nickname: nickname, requestedBy: currentUser, role: currentRole }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; msg.style.display = 'block'; setTimeout(() => { loadAllUsers(); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function requestUserDeletion(nickname) { if (!confirm(`Запросить удаление "${nickname}"?`)) return; const msg = document.getElementById('adminUsersMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteUser', nickname: nickname, requestedBy: currentUser, role: currentRole }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 2000); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
-    async function loadDeletionRequests() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getDeletionRequests' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('deletionRequestsList'); if (result.success && result.requests.length > 0) { list.innerHTML = result.requests.map(req => `<div class="player-card"><div class="player-card-header"><div><div class="player-nick">🗑️ ${req.nickname}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">От: ${req.requestedBy} | ${req.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDeletion('${req.id}')">✓</button><button class="btn-reject" onclick="rejectDeletion('${req.id}')">✕</button></div></div><div style="font-size: 11px; color: var(--text-dim); margin-top: 6px;">${req.reason}</div></div>`).join(''); } else { list.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (error) { console.error(error); } }
+    async function loadDeletionRequests() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getDeletionRequests' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('deletionRequestsList'); if (result.success && result.requests.length > 0) { list.innerHTML = result.requests.map(req => `<div class="player-card"><div class="player-card-header"><div><div class="player-nick">🗑️ ${req.nickname}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">От: ${req.requestedBy} | ${req.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDeletion('${req.id}')">✓</button><button class="btn-reject" onclick="rejectDeletion('${req.id}')">✕</button></div></div><div style="font-size: 11px; color: var(--text-dim); margin-top: 5px;">${req.reason}</div></div>`).join(''); } else { list.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (error) { console.error(error); } }
     async function approveDeletion(requestId) { if (!confirm('Подтвердить удаление?')) return; const msg = document.getElementById('deletionRequestsMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveDeletion', requestId: requestId, approvedBy: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; msg.style.display = 'block'; setTimeout(() => { loadDeletionRequests(); loadAllUsers(); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function rejectDeletion(requestId) { if (!confirm('Отклонить?')) return; const msg = document.getElementById('deletionRequestsMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectDeletion', requestId: requestId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; setTimeout(() => { loadDeletionRequests(); msg.style.display = 'none'; }, 800); } } catch (error) { console.error(error); } }
 
@@ -1580,9 +1231,9 @@
             if (!block) return;
             if (result.success && result.events.length > 0) {
                 block.innerHTML = result.events.map(event => `
-                    <div class="player-card" style="margin-bottom: 8px;">
+                    <div class="player-card" style="margin-bottom: 6px;">
                         <div class="player-card-header">
-                            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
                                 ${event.eventId ? `<div id="todayEventIcon_${event.eventId}" class="icon-preview-activity" style="border-color: var(--dkp);"><span class="icon-placeholder">...</span></div>` : ''}
                                 <div>
                                     <div class="player-nick" style="color: var(--dkp);">🏆 ${event.name}</div>
@@ -1590,11 +1241,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-bottom: 6px;">
-                            <div style="font-size: 10px; color: var(--success); margin-bottom: 3px; font-weight: 700;">✓ Были (${event.attended.length}):</div>
+                        <div style="margin-bottom: 5px;">
+                            <div style="font-size: 10px; color: var(--success); margin-bottom: 2px; font-weight: 700;">✓ Были (${event.attended.length}):</div>
                             <div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.attended.map(p => `<span class="submission-nick-tag" style="background: var(--success-soft); border-color: var(--success); color: var(--success);">${p.nickname} <span style="font-size: 9px;">(+${p.dkpEarned})</span></span>`).join('')}</div>
                         </div>
-                        ${event.missed.length > 0 ? `<div><div style="font-size: 10px; color: var(--danger); margin-bottom: 3px; font-weight: 700;">✕ Пропустили (${event.missed.length}):</div><div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.missed.map(n => `<span class="submission-nick-tag" style="background: var(--danger-soft); border-color: var(--danger); color: var(--danger);">${n}</span>`).join('')}</div></div>` : ''}
+                        ${event.missed.length > 0 ? `<div><div style="font-size: 10px; color: var(--danger); margin-bottom: 2px; font-weight: 700;">✕ Пропустили (${event.missed.length}):</div><div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.missed.map(n => `<span class="submission-nick-tag" style="background: var(--danger-soft); border-color: var(--danger); color: var(--danger);">${n}</span>`).join('')}</div></div>` : ''}
                     </div>
                 `).join('');
                 result.events.forEach(event => { if (event.eventId) loadAndDisplayIcon('event', event.eventId, `todayEventIcon_${event.eventId}`, null); });
@@ -1611,24 +1262,23 @@
             if (result.success && result.days.length > 0) {
                 block.innerHTML = result.days.map(day => {
                     const eventsHtml = Object.values(day.events).map(event => `
-                        <div style="margin-bottom: 6px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm); border-left: 2px solid var(--dkp);">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                ${event.eventId ? `<div id="weekEventIcon_${event.eventId}_${day.date}" class="icon-preview-activity" style="width: 50px; height: 25px; border-color: var(--dkp);"><span class="icon-placeholder">...</span></div>` : ''}
+                        <div style="margin-bottom: 5px; padding: 7px; background: var(--bg-soft); border-radius: var(--radius-sm); border-left: 2px solid var(--dkp);">
+                            <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 3px;">
+                                ${event.eventId ? `<div id="weekEventIcon_${event.eventId}_${day.date}" class="icon-preview-activity" style="width: 45px; height: 22px; border-color: var(--dkp);"><span class="icon-placeholder">...</span></div>` : ''}
                                 <div>
-                                    <div style="font-size: 12px; color: var(--dkp); font-weight: 700;">🏆 ${event.name} (+${event.eventDkp})</div>
+                                    <div style="font-size: 11px; color: var(--dkp); font-weight: 700;">🏆 ${event.name} (+${event.eventDkp})</div>
                                     <div style="font-size: 10px; color: var(--success);">✓ ${event.attended.length} | ✕ ${event.missed.length}</div>
                                 </div>
                             </div>
                         </div>
                     `).join('');
-                    return `<div style="margin-bottom: 12px;"><div style="font-size: 12px; color: var(--accent); font-family: 'Times New Roman', Times, serif; margin-bottom: 6px; padding-bottom: 3px; border-bottom: 1px solid var(--border); font-weight: 700;">📅 ${day.date}</div>${eventsHtml}</div>`;
+                    return `<div style="margin-bottom: 10px;"><div style="font-size: 12px; color: var(--accent); font-family: 'Times New Roman', Times, serif; margin-bottom: 5px; padding-bottom: 3px; border-bottom: 1px solid var(--border); font-weight: 700;">📅 ${day.date}</div>${eventsHtml}</div>`;
                 }).join('');
                 result.days.forEach(day => { Object.values(day.events).forEach(event => { if (event.eventId) loadAndDisplayIcon('event', event.eventId, `weekEventIcon_${event.eventId}_${day.date}`, null); }); });
             } else { block.innerHTML = '<div class="empty-state">На неделе нет мероприятий</div>'; }
         } catch (error) { console.error(error); const block = document.getElementById('weeklyActivityBlock'); if (block) block.innerHTML = '<div class="empty-state">Ошибка</div>'; }
     }
 
-    // ===== НОВАЯ ФУНКЦИЯ: СТАТИСТИКА МЕРОПРИЯТИЙ =====
     async function loadEventStats() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEventStats' }), redirect: 'follow' });
@@ -1641,27 +1291,26 @@
                         const maxBar = Math.max(stat.month, stat.week, 1);
                         const monthPercent = (stat.month / maxBar) * 100;
                         const weekPercent = (stat.week / maxBar) * 100;
-                        const totalPercent = 100;
                         return `
                             <div class="event-stat-card">
                                 <div class="event-stat-header">
-                                    ${stat.iconData ? `<img src="${stat.iconData}" style="width: 50px; height: 25px; object-fit: cover; border-radius: 3px; border: 2px solid var(--dkp);">` : `<div style="width: 50px; height: 25px; background: var(--bg-panel); border: 2px solid var(--border); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 16px;">🏆</div>`}
+                                    ${stat.iconData ? `<img src="${stat.iconData}" style="width: 45px; height: 22px; object-fit: cover; border-radius: 3px; border: 2px solid var(--dkp);">` : `<div style="width: 45px; height: 22px; background: var(--bg-panel); border: 2px solid var(--border); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🏆</div>`}
                                     <div style="flex: 1;">
                                         <div class="event-stat-name">${stat.name}</div>
-                                        <div class="event-stat-total">Всего: ${stat.total} раз</div>
+                                        <div class="event-stat-total">Всего: ${stat.total}</div>
                                     </div>
                                 </div>
                                 <div class="progress-row">
-                                    <div class="progress-label"><span>За месяц</span><span style="color: var(--accent);">${stat.month}</span></div>
+                                    <div class="progress-label"><span>Месяц</span><span style="color: var(--accent);">${stat.month}</span></div>
                                     <div class="progress-track"><div class="progress-fill month" style="width: ${monthPercent}%;"></div></div>
                                 </div>
                                 <div class="progress-row">
-                                    <div class="progress-label"><span>За неделю</span><span style="color: var(--success);">${stat.week}</span></div>
+                                    <div class="progress-label"><span>Неделя</span><span style="color: var(--success);">${stat.week}</span></div>
                                     <div class="progress-track"><div class="progress-fill week" style="width: ${weekPercent}%;"></div></div>
                                 </div>
                                 <div class="progress-row">
                                     <div class="progress-label"><span>Всего</span><span style="color: var(--dkp);">${stat.total}</span></div>
-                                    <div class="progress-track"><div class="progress-fill total" style="width: ${Math.min(totalPercent, 100)}%;"></div></div>
+                                    <div class="progress-track"><div class="progress-fill total" style="width: 100%;"></div></div>
                                 </div>
                                 <div class="event-stat-footer">
                                     <span class="attended">✓ ${stat.attended}</span>
@@ -1674,7 +1323,6 @@
         } catch (error) { console.error(error); const block = document.getElementById('eventStatsBlock'); if (block) block.innerHTML = '<div class="empty-state">Ошибка</div>'; }
     }
 
-    // ===== НОВАЯ ФУНКЦИЯ: ТОП-10 НЕАКТИВНЫХ =====
     async function loadTopAbsentees() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getTopAbsentees' }), redirect: 'follow' });
@@ -1715,11 +1363,11 @@
     async function loadCalendarPlayers() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' }); const result = await response.json(); const select = document.getElementById('calendarPlayerFilter'); if (result.success && select) { const currentValue = select.value; select.innerHTML = '<option value="">Все</option>' + result.nicks.map(n => `<option value="${n}">${n}</option>`).join(''); select.value = currentValue; } const today = new Date(); const monthAgo = new Date(); monthAgo.setDate(today.getDate() - 30); const startInput = document.getElementById('calendarStartDate'); const endInput = document.getElementById('calendarEndDate'); if (startInput && !startInput.value) startInput.value = monthAgo.toISOString().split('T')[0]; if (endInput && !endInput.value) endInput.value = today.toISOString().split('T')[0]; } catch (error) { console.error(error); } }
     async function loadCalendar() { const startDate = document.getElementById('calendarStartDate').value; const endDate = document.getElementById('calendarEndDate').value; const playerFilter = document.getElementById('calendarPlayerFilter').value; if (!startDate || !endDate) { alert('Выберите даты'); return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAttendance', startDate: startDate, endDate: endDate, nickname: playerFilter || null }), redirect: 'follow' }); const result = await response.json(); if (result.success) renderCalendar(result.records, startDate, endDate, playerFilter); else alert('Ошибка: ' + result.message); } catch (error) { console.error(error); alert('Ошибка'); } }
     async function loadMyCalendar() { const startDate = document.getElementById('calendarStartDate').value; const endDate = document.getElementById('calendarEndDate').value; if (!startDate || !endDate) { alert('Выберите даты'); return; } document.getElementById('calendarPlayerFilter').value = currentUser; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAttendance', startDate: startDate, endDate: endDate, nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) renderCalendar(result.records, startDate, endDate, currentUser); else alert('Ошибка: ' + result.message); } catch (error) { console.error(error); alert('Ошибка'); } }
-    function renderCalendar(records, startDate, endDate, playerFilter) { const grid = document.getElementById('calendarGrid'); const stats = document.getElementById('calendarStats'); if (!records || records.length === 0) { grid.innerHTML = '<div class="empty-state">Нет данных</div>'; stats.innerHTML = ''; return; } const grouped = {}; records.forEach(r => { if (!grouped[r.date]) grouped[r.date] = {}; if (!grouped[r.date][r.eventName]) grouped[r.date][r.eventName] = { attended: [], missed: [], eventDkp: r.eventDkp }; if (r.status === 'attended') grouped[r.date][r.eventName].attended.push({ nickname: r.nickname, dkpEarned: r.dkpEarned }); else grouped[r.date][r.eventName].missed.push(r.nickname); }); let totalAttended = 0, totalMissed = 0, totalDkp = 0; records.forEach(r => { if (r.status === 'attended') { totalAttended++; totalDkp += r.dkpEarned; } else { totalMissed++; } }); const totalEvents = Object.keys(grouped).reduce((sum, date) => sum + Object.keys(grouped[date]).length, 0); const attendanceRate = totalAttended + totalMissed > 0 ? Math.round((totalAttended / (totalAttended + totalMissed)) * 100) : 0; stats.innerHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 15px;"><div class="data-item"><div class="data-label">Период</div><div class="data-value" style="font-size: 11px;">${startDate} — ${endDate}</div></div><div class="data-item"><div class="data-label">Мероприятий</div><div class="data-value">${totalEvents}</div></div><div class="data-item"><div class="data-label">Посещений</div><div class="data-value" style="color: var(--success);">${totalAttended}</div></div><div class="data-item"><div class="data-label">Пропусков</div><div class="data-value" style="color: var(--danger);">${totalMissed}</div></div><div class="data-item"><div class="data-label">Посещ.</div><div class="data-value" style="color: var(--dkp);">${attendanceRate}%</div></div><div class="data-item"><div class="data-label">DKP</div><div class="data-value" style="color: var(--dkp);">${totalDkp.toFixed(1)}</div></div></div>`; const dates = Object.keys(grouped).sort(); grid.innerHTML = dates.map(date => { const events = grouped[date]; const eventsHtml = Object.entries(events).map(([eventName, data]) => `<div class="calendar-event"><div class="calendar-event-title">🏆 ${eventName} <span style="font-size: 10px; color: var(--text-dim);">(+${data.eventDkp})</span></div>${data.attended.length > 0 ? `<div style="margin-bottom: 4px;"><span class="calendar-label attended">✓ (${data.attended.length}):</span><div class="calendar-players">${data.attended.map(p => `<span class="calendar-nick-attended">${p.nickname} <span style="font-size: 8px;">(+${p.dkpEarned})</span></span>`).join('')}</div></div>` : ''}${data.missed.length > 0 ? `<div><span class="calendar-label missed">✕ (${data.missed.length}):</span><div class="calendar-players">${data.missed.map(n => `<span class="calendar-nick-missed">${n}</span>`).join('')}</div></div>` : ''}</div>`).join(''); return `<div class="calendar-day"><div class="calendar-date">📅 ${date}</div>${eventsHtml}</div>`; }).join(''); }
+    function renderCalendar(records, startDate, endDate, playerFilter) { const grid = document.getElementById('calendarGrid'); const stats = document.getElementById('calendarStats'); if (!records || records.length === 0) { grid.innerHTML = '<div class="empty-state">Нет данных</div>'; stats.innerHTML = ''; return; } const grouped = {}; records.forEach(r => { if (!grouped[r.date]) grouped[r.date] = {}; if (!grouped[r.date][r.eventName]) grouped[r.date][r.eventName] = { attended: [], missed: [], eventDkp: r.eventDkp }; if (r.status === 'attended') grouped[r.date][r.eventName].attended.push({ nickname: r.nickname, dkpEarned: r.dkpEarned }); else grouped[r.date][r.eventName].missed.push(r.nickname); }); let totalAttended = 0, totalMissed = 0, totalDkp = 0; records.forEach(r => { if (r.status === 'attended') { totalAttended++; totalDkp += r.dkpEarned; } else { totalMissed++; } }); const totalEvents = Object.keys(grouped).reduce((sum, date) => sum + Object.keys(grouped[date]).length, 0); const attendanceRate = totalAttended + totalMissed > 0 ? Math.round((totalAttended / (totalAttended + totalMissed)) * 100) : 0; stats.innerHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; margin-bottom: 12px;"><div class="data-item"><div class="data-label">Период</div><div class="data-value" style="font-size: 10px;">${startDate} — ${endDate}</div></div><div class="data-item"><div class="data-label">Мероприятий</div><div class="data-value">${totalEvents}</div></div><div class="data-item"><div class="data-label">Посещений</div><div class="data-value" style="color: var(--success);">${totalAttended}</div></div><div class="data-item"><div class="data-label">Пропусков</div><div class="data-value" style="color: var(--danger);">${totalMissed}</div></div><div class="data-item"><div class="data-label">Посещ.</div><div class="data-value" style="color: var(--dkp);">${attendanceRate}%</div></div><div class="data-item"><div class="data-label">DKP</div><div class="data-value" style="color: var(--dkp);">${totalDkp.toFixed(1)}</div></div></div>`; const dates = Object.keys(grouped).sort(); grid.innerHTML = dates.map(date => { const events = grouped[date]; const eventsHtml = Object.entries(events).map(([eventName, data]) => `<div class="calendar-event"><div class="calendar-event-title">🏆 ${eventName} <span style="font-size: 10px; color: var(--text-dim);">(+${data.eventDkp})</span></div>${data.attended.length > 0 ? `<div style="margin-bottom: 3px;"><span class="calendar-label attended">✓ (${data.attended.length}):</span><div class="calendar-players">${data.attended.map(p => `<span class="calendar-nick-attended">${p.nickname} <span style="font-size: 8px;">(+${p.dkpEarned})</span></span>`).join('')}</div></div>` : ''}${data.missed.length > 0 ? `<div><span class="calendar-label missed">✕ (${data.missed.length}):</span><div class="calendar-players">${data.missed.map(n => `<span class="calendar-nick-missed">${n}</span>`).join('')}</div></div>` : ''}</div>`).join(''); return `<div class="calendar-day"><div class="calendar-date">📅 ${date}</div>${eventsHtml}</div>`; }).join(''); }
 
     // ===== АУКЦИОН =====
-    async function loadActiveAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActiveAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('activeAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const timeLeft = getTimeLeft(auction.endTime); const colorClass = getColorClass(auction.itemColor); const isAllowed = auction.allowedPlayers.length === 0 || auction.allowedPlayers.includes(currentUser); const canBid = isAllowed && auction.currentBidder !== currentUser; return `<div class="auction-card"><div class="auction-header"><div><div class="auction-title">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div class="auction-timer" id="timer_${auction.id}" data-end="${auction.endTime}">${timeLeft}</div></div><div class="auction-info"><div class="auction-info-item"><div class="auction-info-label">Текущая</div><div class="auction-info-value" style="color: var(--dkp);">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">${auction.currentBidder}</div>` : ''}</div><div class="auction-info-item"><div class="auction-info-label">Мин.</div><div class="auction-info-value" style="color: var(--success);">${auction.currentBid + 1} DKP</div></div></div>${auction.minAttendance > 0 ? `<div style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px;">📊 Мин. посещ.: ${auction.minAttendance}%</div>` : ''}${auction.priorityOnly ? `<div style="font-size: 10px; color: var(--warning); margin-bottom: 6px;">⚠️ Только приоритет</div>` : ''}<div class="action-buttons"><button class="btn-compare" onclick="openBidModal('${auction.id}')" ${!canBid ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>${(currentRole === 'Админ' || currentRole === 'Модератор') ? `<button class="btn-remove" onclick="cancelAuction('${auction.id}')">✕ Отмена</button>` : ''}${(currentRole === 'Админ') ? `<button class="btn-approve" onclick="completeAuction('${auction.id}')">✓ Завершить</button>` : ''}</div></div>`; }).join(''); startCountdowns(); } else { list.innerHTML = '<div class="empty-state">Нет активных</div>'; } } catch (error) { console.error(error); } }
-    async function loadCompletedAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getCompletedAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('completedAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const colorClass = getColorClass(auction.itemColor); const statusText = auction.status === 'completed' ? '✅ Завершён' : '❌ Отменён'; const statusColor = auction.status === 'completed' ? 'var(--success)' : 'var(--danger)'; return `<div class="player-card"><div class="player-card-header"><div><div class="player-nick" style="color: var(--dkp); font-size: 14px;">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span></div></div><div style="text-align: right;"><div style="font-size: 11px; color: var(--text-dim);">Цена:</div><div style="font-size: 16px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">🏆 ${auction.currentBidder}</div>` : '<div style="font-size: 10px; color: var(--text-dim);">Без ставок</div>'}</div></div><div style="font-size: 10px; color: ${statusColor}; font-weight: 700; margin-top: 6px;">${statusText} | ${auction.endTime}</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет</div>'; } } catch (error) { console.error(error); } }
+    async function loadActiveAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActiveAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('activeAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const timeLeft = getTimeLeft(auction.endTime); const colorClass = getColorClass(auction.itemColor); const isAllowed = auction.allowedPlayers.length === 0 || auction.allowedPlayers.includes(currentUser); const canBid = isAllowed && auction.currentBidder !== currentUser; return `<div class="auction-card"><div class="auction-header"><div><div class="auction-title">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div class="auction-timer" id="timer_${auction.id}" data-end="${auction.endTime}">${timeLeft}</div></div><div class="auction-info"><div class="auction-info-item"><div class="auction-info-label">Текущая</div><div class="auction-info-value" style="color: var(--dkp);">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">${auction.currentBidder}</div>` : ''}</div><div class="auction-info-item"><div class="auction-info-label">Мин.</div><div class="auction-info-value" style="color: var(--success);">${auction.currentBid + 1} DKP</div></div></div>${auction.minAttendance > 0 ? `<div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px;">📊 Мин. посещ.: ${auction.minAttendance}%</div>` : ''}${auction.priorityOnly ? `<div style="font-size: 10px; color: var(--warning); margin-bottom: 5px;">⚠️ Только приоритет</div>` : ''}<div class="action-buttons"><button class="btn-compare" onclick="openBidModal('${auction.id}')" ${!canBid ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>${(currentRole === 'Админ' || currentRole === 'Модератор') ? `<button class="btn-remove" onclick="cancelAuction('${auction.id}')">✕ Отмена</button>` : ''}${(currentRole === 'Админ') ? `<button class="btn-approve" onclick="completeAuction('${auction.id}')">✓ Завершить</button>` : ''}</div></div>`; }).join(''); startCountdowns(); } else { list.innerHTML = '<div class="empty-state">Нет активных</div>'; } } catch (error) { console.error(error); } }
+    async function loadCompletedAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getCompletedAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('completedAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const colorClass = getColorClass(auction.itemColor); const statusText = auction.status === 'completed' ? '✅ Завершён' : '❌ Отменён'; const statusColor = auction.status === 'completed' ? 'var(--success)' : 'var(--danger)'; return `<div class="player-card"><div class="player-card-header"><div><div class="player-nick" style="color: var(--dkp); font-size: 13px;">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span></div></div><div style="text-align: right;"><div style="font-size: 10px; color: var(--text-dim);">Цена:</div><div style="font-size: 15px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">🏆 ${auction.currentBidder}</div>` : '<div style="font-size: 10px; color: var(--text-dim);">Без ставок</div>'}</div></div><div style="font-size: 10px; color: ${statusColor}; font-weight: 700; margin-top: 5px;">${statusText} | ${auction.endTime}</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет</div>'; } } catch (error) { console.error(error); } }
 
     async function loadAuctionItems() { const section = document.getElementById('auctionItemSection').value; const select = document.getElementById('auctionItemSelect'); const tierInput = document.getElementById('auctionItemTier'); const colorInput = document.getElementById('auctionItemColor'); const enhanceInput = document.getElementById('auctionItemEnhancement'); const primeCheck = document.getElementById('auctionIsPrime'); const bossCheck = document.getElementById('auctionIsBoss'); const nameInput = document.getElementById('auctionItemName'); select.innerHTML = '<option value="">— Сначала раздел —</option>'; tierInput.value = ''; colorInput.value = ''; enhanceInput.value = ''; primeCheck.checked = false; bossCheck.checked = false; nameInput.value = ''; currentAuctionItems = []; if (!section) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems', section: section }), redirect: 'follow' }); const result = await response.json(); if (result.success && result.items && result.items.length > 0) { currentAuctionItems = result.items; select.innerHTML = '<option value="">— Выберите —</option>' + result.items.map((item, idx) => { const badges = []; if (item.isPrime) badges.push('Прайм'); if (item.isBoss) badges.push('Босс'); if (item.enhancement > 0) badges.push(`+${item.enhancement}`); const badgeStr = badges.length > 0 ? ` [${badges.join(', ')}]` : ''; return `<option value="${idx}">${item.name} (${item.tier || 'т0'}, ${item.color})${badgeStr}</option>`; }).join(''); } else { select.innerHTML = '<option value="">— Пусто —</option>'; } } catch (error) { console.error(error); select.innerHTML = '<option value="">— Ошибка —</option>'; } }
     function fillAuctionItemDetails() { const select = document.getElementById('auctionItemSelect'); const idx = select.value; const tierInput = document.getElementById('auctionItemTier'); const colorInput = document.getElementById('auctionItemColor'); const enhanceInput = document.getElementById('auctionItemEnhancement'); const primeCheck = document.getElementById('auctionIsPrime'); const bossCheck = document.getElementById('auctionIsBoss'); const nameInput = document.getElementById('auctionItemName'); if (idx === '' || !currentAuctionItems[idx]) { tierInput.value = ''; colorInput.value = ''; enhanceInput.value = ''; primeCheck.checked = false; bossCheck.checked = false; nameInput.value = ''; return; } const item = currentAuctionItems[idx]; nameInput.value = item.name; tierInput.value = item.tier || 'т0'; colorInput.value = item.color || 'Белый'; enhanceInput.value = item.enhancement || 0; primeCheck.checked = item.isPrime || false; bossCheck.checked = item.isBoss || false; }
@@ -1727,7 +1375,7 @@
     async function createAuction() { const itemName = document.getElementById('auctionItemName').value; const itemSection = document.getElementById('auctionItemSection').value; const itemTier = document.getElementById('auctionItemTier').value; const itemColor = document.getElementById('auctionItemColor').value; const itemEnhancement = document.getElementById('auctionItemEnhancement').value; const isPrime = document.getElementById('auctionIsPrime').checked; const isBoss = document.getElementById('auctionIsBoss').checked; const startPrice = document.getElementById('auctionStartPrice').value; const durationHours = document.getElementById('auctionDuration').value; const minAttendance = document.getElementById('auctionMinAttendance').value; const priorityOnly = document.getElementById('auctionPriorityOnly').checked; if (!itemName || !itemSection) { showAuctionCreateMessage('Выберите предмет', 'error'); return; } if (!startPrice || !durationHours) { showAuctionCreateMessage('Укажите цену', 'error'); return; } const checkboxes = document.querySelectorAll('#auctionPlayersList input[type="checkbox"]:checked'); const allowedPlayers = Array.from(checkboxes).map(cb => cb.value); const msg = document.getElementById('auctionCreateMessage'); msg.innerText = 'Создание...'; msg.className = 'message'; msg.style.display = 'block'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'createAuction', itemName, itemSection, itemTier, itemColor, itemEnhancement: Number(itemEnhancement), isPrime, isBoss, startPrice: Number(startPrice), durationHours: Number(durationHours), allowedPlayers, minAttendance: Number(minAttendance), priorityOnly, createdBy: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { switchAuctionTab('active', { target: document.getElementById('tabAuctionActive') }); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; } }
     function showAuctionCreateMessage(text, type) { const msg = document.getElementById('auctionCreateMessage'); msg.className = `message ${type}`; msg.innerText = text; msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 4000); }
 
-    async function openBidModal(auctionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: auctionId, bidder: currentUser }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const auction = result.auction; const minBid = auction.currentBid + 1; const colorClass = getColorClass(auction.itemColor); const balanceInfo = auction.playerBalance || { total: 0, frozen: 0, available: 0 }; const canAfford = balanceInfo.available >= minBid; const modal = document.getElementById('bidModal'); const content = document.getElementById('bidModalContent'); content.innerHTML = `<h3 style="color: var(--dkp); font-family: 'Times New Roman', Times, serif; margin-bottom: 12px; font-size: 16px;">🔨 ${auction.itemName}</h3><div style="margin-bottom: 12px;"><div style="font-size: 11px; color: var(--text-dim); margin-bottom: 3px;">Характеристики:</div><div style="font-size: 13px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div style="margin-bottom: 10px;"><div style="font-size: 11px; color: var(--text-dim);">Текущая:</div><div style="font-size: 20px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 11px; color: var(--accent);">От: ${auction.currentBidder}</div>` : ''}</div><div style="margin-bottom: 12px;"><div style="font-size: 11px; color: var(--text-dim);">Мин. ставка:</div><div style="font-size: 16px; color: var(--success); font-weight: 700;">${minBid} DKP</div></div><div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border);"><div style="font-size: 11px; color: var(--text-dim); margin-bottom: 6px; font-weight: 700; text-transform: uppercase;">💰 Ваш баланс</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 6px;"><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 14px; color: var(--accent); font-weight: 700;">${balanceInfo.total}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 14px; color: var(--warning); font-weight: 700;">${balanceInfo.frozen}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'};">Своб.</div><div style="font-size: 14px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'}; font-weight: 700;">${balanceInfo.available}</div></div></div>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); text-align: center; padding: 5px; background: var(--danger-soft); border-radius: var(--radius-sm);">⚠️ Недостаточно DKP</div>` : ''}</div>${auction.bids.length > 0 ? `<div style="margin-bottom: 12px;"><div style="font-size: 11px; color: var(--text-dim); margin-bottom: 5px;">История:</div><div style="max-height: 120px; overflow-y: auto;">${auction.bids.map(bid => { let statusBadge = ''; if (bid.status === 'active') statusBadge = '<span style="font-size: 8px; background: var(--warning-soft); color: var(--warning); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ЗАМОР.</span>'; else if (bid.status === 'outbid') statusBadge = '<span style="font-size: 8px; background: var(--danger-soft); color: var(--danger); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ПЕРЕБИТ</span>'; else if (bid.status === 'won') statusBadge = '<span style="font-size: 8px; background: var(--success-soft); color: var(--success); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ПОБЕДА</span>'; else if (bid.status === 'cancelled') statusBadge = '<span style="font-size: 8px; background: var(--bg-soft); color: var(--text-dim); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ОТМЕНА</span>'; return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 4px; background: var(--bg-soft); border-radius: 3px; margin-bottom: 2px; font-size: 11px;"><span style="color: var(--accent);">${bid.bidder}${statusBadge}</span><span style="color: var(--dkp); font-weight: 700;">${bid.amount}</span><span style="color: var(--text-dim); font-size: 9px;">${bid.date}</span></div>`; }).join('')}</div></div>` : ''}<div class="form-group"><label>Ваша ставка (мин. ${minBid})</label><input type="number" id="bidAmount" min="${minBid}" max="${balanceInfo.available}" placeholder="${minBid}" required ${!canAfford ? 'disabled' : ''}>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); margin-top: 3px;">Недостаточно DKP</div>` : ''}</div><button type="button" class="submit-btn dkp-btn" onclick="placeBid('${auction.id}', ${minBid})" ${!canAfford ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>`; modal.classList.remove('hidden'); } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
+    async function openBidModal(auctionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: auctionId, bidder: currentUser }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const auction = result.auction; const minBid = auction.currentBid + 1; const colorClass = getColorClass(auction.itemColor); const balanceInfo = auction.playerBalance || { total: 0, frozen: 0, available: 0 }; const canAfford = balanceInfo.available >= minBid; const modal = document.getElementById('bidModal'); const content = document.getElementById('bidModalContent'); content.innerHTML = `<h3 style="color: var(--dkp); font-family: 'Times New Roman', Times, serif; margin-bottom: 10px; font-size: 15px;">🔨 ${auction.itemName}</h3><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 2px;">Характеристики:</div><div style="font-size: 12px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim);">Текущая:</div><div style="font-size: 18px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">От: ${auction.currentBidder}</div>` : ''}</div><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim);">Мин. ставка:</div><div style="font-size: 15px; color: var(--success); font-weight: 700;">${minBid} DKP</div></div><div style="margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border);"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px; font-weight: 700; text-transform: uppercase;">💰 Ваш баланс</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 5px;"><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 13px; color: var(--accent); font-weight: 700;">${balanceInfo.total}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 13px; color: var(--warning); font-weight: 700;">${balanceInfo.frozen}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'};">Своб.</div><div style="font-size: 13px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'}; font-weight: 700;">${balanceInfo.available}</div></div></div>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); text-align: center; padding: 4px; background: var(--danger-soft); border-radius: var(--radius-sm);">⚠️ Недостаточно DKP</div>` : ''}</div>${auction.bids.length > 0 ? `<div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">История:</div><div style="max-height: 100px; overflow-y: auto;">${auction.bids.map(bid => { let statusBadge = ''; if (bid.status === 'active') statusBadge = '<span style="font-size: 8px; background: var(--warning-soft); color: var(--warning); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ЗАМОР.</span>'; else if (bid.status === 'outbid') statusBadge = '<span style="font-size: 8px; background: var(--danger-soft); color: var(--danger); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ПЕРЕБИТ</span>'; else if (bid.status === 'won') statusBadge = '<span style="font-size: 8px; background: var(--success-soft); color: var(--success); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ПОБЕДА</span>'; else if (bid.status === 'cancelled') statusBadge = '<span style="font-size: 8px; background: var(--bg-soft); color: var(--text-dim); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ОТМЕНА</span>'; return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 3px; background: var(--bg-soft); border-radius: 3px; margin-bottom: 2px; font-size: 10px;"><span style="color: var(--accent);">${bid.bidder}${statusBadge}</span><span style="color: var(--dkp); font-weight: 700;">${bid.amount}</span><span style="color: var(--text-dim); font-size: 9px;">${bid.date}</span></div>`; }).join('')}</div></div>` : ''}<div class="form-group"><label>Ваша ставка (мин. ${minBid})</label><input type="number" id="bidAmount" min="${minBid}" max="${balanceInfo.available}" placeholder="${minBid}" required ${!canAfford ? 'disabled' : ''}>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); margin-top: 2px;">Недостаточно DKP</div>` : ''}</div><button type="button" class="submit-btn dkp-btn" onclick="placeBid('${auction.id}', ${minBid})" ${!canAfford ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>`; modal.classList.remove('hidden'); } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
     function closeBidModal() { document.getElementById('bidModal').classList.add('hidden'); }
     async function placeBid(auctionId, minBid) { const amount = document.getElementById('bidAmount').value; if (!amount || Number(amount) < minBid) { alert(`Мин. ${minBid} DKP`); return; } if (!confirm(`Ставка ${amount} DKP?`)) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'placeBid', auctionId: auctionId, bidder: currentUser, amount: Number(amount) }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert(result.message); closeBidModal(); loadActiveAuctions(); loadMyDkp(); } else { alert('Ошибка: ' + result.message); } } catch (error) { alert('Ошибка: ' + error.message); } }
     async function cancelAuction(auctionId) { if (!confirm('Отменить?')) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'cancelAuction', auctionId: auctionId, cancelledBy: currentRole }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert(result.message); loadActiveAuctions(); } else { alert('Ошибка: ' + result.message); } } catch (error) { alert('Ошибка: ' + error.message); } }
@@ -1765,7 +1413,7 @@
             else response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItemIcon', itemId: id }), redirect: 'follow' });
             const result = await response.json();
             if (result.success && result.iconData) {
-                const size = type === 'event' ? '260px' : '90px';
+                const size = type === 'event' ? '240px' : '80px';
                 preview.innerHTML = `<img src="${result.iconData}" alt="icon" style="max-width: ${size}; border-radius: 3px;">`;
             } else { preview.innerHTML = '<div style="color: var(--text-dim);">Нет иконки</div>'; }
         } catch (error) { preview.innerHTML = '<div style="color: var(--danger);">Ошибка</div>'; }
@@ -1810,7 +1458,6 @@
         } catch (error) { alert('Ошибка: ' + error.message); }
     }
 
-    // ✅ ОЧИСТКА СОХРАНЕННЫХ ДАННЫХ
     function clearSavedCredentials() {
         if (confirm('Очистить сохраненные данные?')) {
             localStorage.removeItem('rf_saved_login');
