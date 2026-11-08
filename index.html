@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>RF Online Next</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
-        /* ✅ СВЕТЛАЯ ТЕМА — синие кнопки */
         :root {
             --bg-main: #e8eef5; --bg-panel: #ffffff; --bg-soft: #f0f4f8; --bg-hover: #dde5ef;
             --text-main: #1e293b; --text-dim: #64748b; --border: #cbd5e1;
@@ -27,7 +29,6 @@
             --gradient-dkp: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             --gradient-hero: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
         }
-        /* ✅ ТЁМНАЯ ТЕМА — чёрный фон, жёлтые кнопки */
         body[data-theme="dark"] {
             --bg-main: #0a0a0a; --bg-panel: #1a1a1a; --bg-soft: #1f1f1f; --bg-hover: #2a2a2a;
             --text-main: #f5f5f5; --text-dim: #a3a3a3; --border: #404040;
@@ -52,13 +53,28 @@
         .screen.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ✅ ИГРОВОЙ ГЕРОЙ-БАННЕР */
+        .public-title { text-shadow: 0 0 8px var(--accent-glow), 1px 1px 2px rgba(0,0,0,0.2); }
+        .panel-title { text-shadow: 0 0 3px var(--accent-glow); }
+        .top-panel-title { text-shadow: 0 0 3px var(--accent-glow); }
+        .player-nick { text-shadow: 0 0 2px var(--accent-glow); }
+        .data-value { text-shadow: 0 0 3px var(--accent-glow); }
+        .ranking-nick { text-shadow: 0 0 2px var(--accent-glow); }
+        .event-name { text-shadow: 0 0 2px var(--accent-glow); }
+        .auction-title { text-shadow: 0 0 3px var(--warning-glow); }
+        .dkp-highlight { text-shadow: 0 0 4px var(--warning-glow); }
+        .auth-title { text-shadow: 0 0 5px var(--accent-glow); }
+        .top-value { text-shadow: 0 0 2px var(--success-glow); }
+        .calendar-date { text-shadow: 0 0 2px var(--accent-glow); }
+        .calendar-event-title { text-shadow: 0 0 2px var(--warning-glow); }
+        .event-stat-name { text-shadow: 0 0 2px var(--warning-glow); }
+        .submission-event { text-shadow: 0 0 2px var(--warning-glow); }
+
         .public-hero { position: relative; height: 280px; margin-bottom: 20px; border-radius: var(--radius-lg); overflow: hidden; background: var(--gradient-hero); box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
         .public-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px); }
         .public-hero::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 40%); opacity: 0.3; animation: pulse 4s ease-in-out infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.5; } }
         .public-hero-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .public-title { font-family: var(--font-display); font-size: 44px; font-weight: 900; color: #ffffff; letter-spacing: 6px; margin: 0 0 8px 0; text-shadow: 0 0 20px var(--accent-glow), 2px 2px 4px rgba(0,0,0,0.5); text-transform: uppercase; }
+        .public-title { font-family: var(--font-display); font-size: 44px; font-weight: 900; color: #ffffff; letter-spacing: 6px; margin: 0 0 8px 0; text-transform: uppercase; }
         body[data-theme="dark"] .public-title { color: var(--accent); text-shadow: 0 0 30px var(--accent-glow), 0 0 60px var(--accent-glow); }
         .public-subtitle { color: rgba(255,255,255,0.9); font-family: var(--font-display); font-size: 13px; letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase; font-weight: 600; }
         .login-link { background: var(--gradient-btn); border: 1px solid var(--accent); color: #ffffff; padding: 10px 28px; cursor: pointer; font-family: var(--font-display); font-size: 12px; letter-spacing: 2px; transition: 0.3s; border-radius: var(--radius-sm); box-shadow: 0 0 20px var(--accent-glow); font-weight: 700; text-transform: uppercase; }
@@ -71,7 +87,7 @@
         .top-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.6; }
         .top-panel:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--accent); }
         .top-panel.dkp-panel::before { background: linear-gradient(90deg, transparent, var(--dkp), transparent); }
-        .top-panel-title { font-family: var(--font-display); color: var(--accent); font-size: 12px; letter-spacing: 1.5px; margin-bottom: 10px; text-align: center; font-weight: 700; text-transform: uppercase; text-shadow: 0 0 8px var(--accent-glow); }
+        .top-panel-title { font-family: var(--font-display); color: var(--accent); font-size: 12px; letter-spacing: 1.5px; margin-bottom: 10px; text-align: center; font-weight: 700; text-transform: uppercase; }
         .top-panel.dkp-panel .top-panel-title { color: var(--dkp); text-shadow: 0 0 8px var(--warning-glow); }
         .top-list { display: flex; flex-direction: column; gap: 4px; }
         .top-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.2s; font-size: 12px; }
@@ -87,10 +103,9 @@
         .top-item.rank-1 .top-nick { color: var(--gold); }
         .top-item.rank-2 .top-nick { color: var(--silver); }
         .top-item.rank-3 .top-nick { color: var(--bronze); }
-        .top-value { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--success); text-shadow: 0 0 6px var(--success-glow); }
-        .top-value.dkp { color: var(--dkp); text-shadow: 0 0 6px var(--warning-glow); }
+        .top-value { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--success); }
+        .top-value.dkp { color: var(--dkp); }
 
-        /* ✅ ВКЛАДКИ */
         .tabs { display: flex; margin-bottom: 14px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 2px; }
         .tab-btn { background: transparent; border: none; color: var(--text-dim); font-family: var(--font-display); font-size: 11px; padding: 8px 16px; cursor: pointer; transition: 0.3s; letter-spacing: 1px; font-weight: 600; border-radius: var(--radius-sm) var(--radius-sm) 0 0; position: relative; text-transform: uppercase; }
         .tab-btn:hover { color: var(--accent); background: var(--accent-soft); }
@@ -103,8 +118,6 @@
         input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft), 0 0 10px var(--accent-glow); }
         select { cursor: pointer; }
         select option { background: var(--bg-panel); color: var(--text-main); }
-
-        /* ✅ ИГРОВЫЕ КНОПКИ */
         .submit-btn { width: 100%; padding: 9px 16px; background: var(--gradient-btn); border: 1px solid var(--accent); color: #ffffff; font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: 0.3s; border-radius: var(--radius-sm); box-shadow: 0 2px 8px var(--accent-glow); text-transform: uppercase; position: relative; overflow: hidden; }
         .submit-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: 0.5s; }
         .submit-btn:hover::before { left: 100%; }
@@ -121,7 +134,6 @@
         .loader { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--accent); border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-right: 6px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ✅ ШАПКА */
         .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding: 10px 16px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); flex-wrap: wrap; gap: 8px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
         .header-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--dkp), var(--accent)); }
         .user-info { color: var(--accent); font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 8px var(--accent-glow); }
@@ -135,10 +147,9 @@
         .logout-btn:hover { background: var(--danger-soft); box-shadow: 0 0 10px var(--danger-glow); }
         .theme-toggle:hover { background: var(--bg-soft); border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
 
-        /* ✅ ПАНЕЛИ */
         .panel { background: var(--bg-panel); border: 1px solid var(--border); padding: 18px; margin-bottom: 14px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); position: relative; }
         .panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5; }
-        .panel-title { font-family: var(--font-display); color: var(--accent); font-size: 14px; margin-bottom: 12px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 6px; text-transform: uppercase; text-shadow: 0 0 8px var(--accent-glow); }
+        .panel-title { font-family: var(--font-display); color: var(--accent); font-size: 14px; margin-bottom: 12px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 6px; text-transform: uppercase; }
         .status-badge { display: inline-block; padding: 3px 10px; font-size: 10px; letter-spacing: 0.5px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
         .status-pending { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
         .status-approved { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); box-shadow: 0 0 6px var(--success-glow); }
@@ -147,21 +158,19 @@
         .data-item { background: var(--bg-soft); padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.3s; }
         .data-item:hover { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
         .data-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-weight: 700; font-family: var(--font-display); }
-        .data-value { font-size: 16px; color: var(--accent); font-weight: 700; font-family: var(--font-display); text-shadow: 0 0 6px var(--accent-glow); }
+        .data-value { font-size: 16px; color: var(--accent); font-weight: 700; font-family: var(--font-display); }
 
         .player-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; margin-bottom: 8px; border-radius: var(--radius-sm); transition: 0.3s; }
         .player-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent); }
         .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
-        .player-nick { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 0 6px var(--accent-glow); }
+        .player-nick { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 0.5px; }
         .action-buttons { display: flex; gap: 5px; flex-wrap: wrap; }
-
-        /* ✅ ИГРОВЫЕ КНОПКИ ДЕЙСТВИЙ */
         .btn-approve, .btn-reject, .btn-edit, .btn-compare, .btn-back, .btn-remove, .btn-role { padding: 5px 12px; border: none; cursor: pointer; font-family: var(--font-display); font-size: 11px; transition: 0.3s; border-radius: var(--radius-sm); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; position: relative; overflow: hidden; }
         .btn-approve { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
         .btn-approve:hover { background: var(--success); color: #fff; box-shadow: 0 0 12px var(--success-glow); }
         .btn-reject { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
         .btn-reject:hover { background: var(--danger); color: #fff; box-shadow: 0 0 12px var(--danger-glow); }
-        .btn-edit { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); width: 100%; margin-top: 8px; }
+        .btn-edit { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-top: 6px; }
         .btn-edit:hover { background: var(--accent); color: #fff; box-shadow: 0 0 12px var(--accent-glow); }
         body[data-theme="dark"] .btn-edit:hover { color: #000; }
         .btn-compare { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
@@ -181,7 +190,6 @@
         .btn-role-player { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
         .btn-role-player:hover { background: var(--accent); color: #fff; box-shadow: 0 0 10px var(--accent-glow); }
         body[data-theme="dark"] .btn-role-player:hover { color: #000; }
-
         .user-role-tag { display: inline-block; padding: 3px 10px; font-size: 10px; border-radius: var(--radius-sm); margin-left: 6px; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.5px; }
         .user-role-tag.admin { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
         .user-role-tag.mod { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
@@ -228,7 +236,7 @@
         .cabinet-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .auth-container { max-width: 380px; margin: 40px auto; background: var(--bg-panel); border: 1px solid var(--border); padding: 25px; position: relative; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
         .auth-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient-btn); box-shadow: 0 0 20px var(--accent-glow); }
-        .auth-title { font-family: var(--font-display); text-align: center; color: var(--accent); letter-spacing: 3px; margin-bottom: 4px; font-size: 22px; font-weight: 900; text-shadow: 0 0 15px var(--accent-glow); text-transform: uppercase; }
+        .auth-title { font-family: var(--font-display); text-align: center; color: var(--accent); letter-spacing: 3px; margin-bottom: 4px; font-size: 22px; font-weight: 900; text-transform: uppercase; }
         .auth-subtitle { text-align: center; color: var(--text-dim); font-size: 11px; margin-bottom: 18px; font-style: italic; letter-spacing: 1px; }
         .footer { text-align: center; padding: 20px; color: var(--text-dim); font-size: 10px; letter-spacing: 2px; margin-top: 25px; font-style: italic; font-family: var(--font-display); }
         ::-webkit-scrollbar { width: 8px; }
@@ -277,7 +285,7 @@
         .admin-item-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; letter-spacing: 0.5px; }
         .admin-item-meta { display: flex; gap: 4px; flex-wrap: wrap; }
 
-        .dkp-highlight { color: var(--dkp); font-weight: 700; font-family: var(--font-display); text-shadow: 0 0 10px var(--warning-glow); }
+        .dkp-highlight { color: var(--dkp); font-weight: 700; font-family: var(--font-display); }
         .event-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: 0.3s; }
         .event-card:hover { box-shadow: 0 0 10px var(--accent-glow); border-color: var(--accent); }
         .event-info { flex: 1; min-width: 160px; }
@@ -314,7 +322,7 @@
         .dkp-submission-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 8px; transition: 0.3s; }
         .dkp-submission-card:hover { box-shadow: 0 0 10px var(--accent-glow); border-color: var(--accent); }
         .submission-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
-        .submission-event { font-family: var(--font-display); font-size: 13px; color: var(--dkp); font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 0 6px var(--warning-glow); }
+        .submission-event { font-family: var(--font-display); font-size: 13px; color: var(--dkp); font-weight: 700; letter-spacing: 0.5px; }
         .submission-meta { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
         .submission-screenshots { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
         .submission-screenshots img { width: 150px; height: auto; max-height: 110px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; transition: 0.3s; }
@@ -344,9 +352,9 @@
         .modal-content img { max-width: 100%; max-height: 80vh; border-radius: var(--radius-sm); }
 
         .calendar-day { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; }
-        .calendar-date { font-family: var(--font-display); color: var(--accent); font-size: 12px; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 6px var(--accent-glow); }
+        .calendar-date { font-family: var(--font-display); color: var(--accent); font-size: 12px; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); font-weight: 700; letter-spacing: 1px; }
         .calendar-event { background: var(--bg-panel); border-left: 3px solid var(--dkp); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px; }
-        .calendar-event-title { font-size: 12px; color: var(--dkp); font-weight: 700; margin-bottom: 6px; font-family: var(--font-display); letter-spacing: 0.5px; text-shadow: 0 0 6px var(--warning-glow); }
+        .calendar-event-title { font-size: 12px; color: var(--dkp); font-weight: 700; margin-bottom: 6px; font-family: var(--font-display); letter-spacing: 0.5px; }
         .calendar-players { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
         .calendar-nick-attended { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
         .calendar-nick-missed { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
@@ -358,7 +366,7 @@
         .auction-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-dkp); box-shadow: 0 0 10px var(--warning-glow); }
         .auction-card:hover { box-shadow: 0 0 15px var(--warning-glow); border-color: var(--dkp); }
         .auction-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-        .auction-title { font-family: var(--font-display); font-size: 14px; color: var(--dkp); font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 0 8px var(--warning-glow); }
+        .auction-title { font-family: var(--font-display); font-size: 14px; color: var(--dkp); font-weight: 700; letter-spacing: 0.5px; }
         .auction-timer { font-family: var(--font-display); font-size: 12px; color: var(--danger); font-weight: 700; padding: 3px 10px; background: var(--danger-soft); border-radius: var(--radius-sm); border: 1px solid var(--danger); box-shadow: 0 0 8px var(--danger-glow); letter-spacing: 0.5px; }
         .auction-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; padding: 10px; background: var(--bg-panel); border-radius: var(--radius-sm); border: 1px solid var(--border); }
         .auction-info-item { display: flex; flex-direction: column; }
@@ -411,7 +419,7 @@
 
         .settings-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; position: relative; overflow: hidden; }
         .settings-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-btn); }
-        .settings-card-title { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; text-shadow: 0 0 8px var(--accent-glow); letter-spacing: 1px; text-transform: uppercase; }
+        .settings-card-title { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
         .settings-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
         .settings-label { font-size: 11px; color: var(--text-dim); min-width: 150px; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.5px; }
         .settings-value { flex: 1; min-width: 130px; }
@@ -425,6 +433,148 @@
         .penalty-result { background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 6px; font-size: 11px; box-shadow: 0 0 8px var(--danger-glow); }
         .penalty-result .nick { color: var(--danger); font-weight: 700; font-family: var(--font-display); }
         .penalty-result .amount { color: var(--danger); font-weight: 700; font-family: var(--font-display); }
+
+        /* ✅ НОВЫЕ СТИЛИ v13.0 */
+        .nick-with-color {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            font-weight: 700;
+            font-family: var(--font-display);
+            letter-spacing: 0.5px;
+            background: var(--bg-panel);
+        }
+        .auction-number-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--accent-soft);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            border-radius: var(--radius-sm);
+            font-size: 10px;
+            font-weight: 700;
+            font-family: var(--font-display);
+            margin-right: 6px;
+        }
+        .timer-display {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 900;
+            padding: 6px 14px;
+            background: var(--danger-soft);
+            border: 2px solid var(--danger);
+            border-radius: var(--radius-sm);
+            color: var(--danger);
+            box-shadow: 0 0 10px var(--danger-glow);
+            letter-spacing: 1px;
+            animation: timerPulse 2s ease-in-out infinite;
+        }
+        @keyframes timerPulse {
+            0%, 100% { box-shadow: 0 0 10px var(--danger-glow); }
+            50% { box-shadow: 0 0 20px var(--danger-glow); }
+        }
+        .given-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 10px;
+            font-weight: 700;
+            font-family: var(--font-display);
+            letter-spacing: 0.5px;
+        }
+        .given-badge.given {
+            background: var(--success-soft);
+            color: var(--success);
+            border: 1px solid var(--success);
+            box-shadow: 0 0 6px var(--success-glow);
+        }
+        .given-badge.not-given {
+            background: var(--warning-soft);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+            box-shadow: 0 0 6px var(--warning-glow);
+        }
+        .loot-item {
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--dkp);
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            transition: 0.3s;
+        }
+        .loot-item:hover { border-color: var(--dkp); box-shadow: 0 0 8px var(--warning-glow); }
+        .loot-item.given { border-left-color: var(--success); }
+        .loot-item.not-given { border-left-color: var(--warning); }
+        .loot-number {
+            font-family: var(--font-display);
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 700;
+            min-width: 40px;
+        }
+        .loot-info { flex: 1; min-width: 150px; }
+        .loot-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; }
+        .loot-date { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        .loot-amount { font-family: var(--font-display); font-size: 12px; color: var(--dkp); font-weight: 700; }
+        .queue-player {
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .queue-player.top-priority {
+            border-left: 3px solid var(--success);
+            background: var(--success-soft);
+        }
+        .queue-stats {
+            display: flex;
+            gap: 10px;
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+        .queue-stats span b { color: var(--text-main); font-family: var(--font-display); }
+        .history-winner-card {
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--dkp);
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            transition: 0.3s;
+        }
+        .history-winner-card:hover { box-shadow: 0 0 10px var(--warning-glow); border-color: var(--dkp); }
+        .winner-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-panel);
+            border: 2px solid var(--dkp);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 0 8px var(--warning-glow);
+        }
+        .winner-info { flex: 1; min-width: 150px; }
+        .winner-nick { font-family: var(--font-display); font-size: 13px; color: var(--accent); font-weight: 700; }
+        .winner-item { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+        .winner-amount { font-family: var(--font-display); font-size: 13px; color: var(--dkp); font-weight: 700; }
     </style>
 </head>
 <body data-theme="light">
@@ -442,7 +592,7 @@
         <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="topLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
     </div>
-    <div class="footer">© RF Online Next | v11.0</div>
+    <div class="footer">© RF Online Next | v13.0</div>
 </div>
 
 <div id="authScreen" class="screen">
@@ -486,6 +636,7 @@
             <span class="dkp-badge" id="userDkpBadge">💰 0 DKP</span>
         </div>
         <div>
+            <button class="theme-toggle" onclick="forceReload()" title="Обновить сайт">🔄</button>
             <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleBtn">🌙 Темная</button>
             <button class="logout-btn" onclick="logout()">⏻ Выход</button>
         </div>
@@ -511,6 +662,7 @@
         <div style="margin-top: 14px;"><div class="panel-title">📊 Активность сегодня</div><div id="todayActivityBlock"></div></div>
         <div style="margin-top: 14px;"><div class="panel-title">📈 Активность за неделю</div><div id="weeklyActivityBlock"></div></div>
         <div style="margin-top: 14px;"><div class="panel-title">⚠️ Топ-10 неактивных (за месяц)</div><div id="topAbsenteesBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">🏆 Последние победители аукционов</div><div id="recentWinnersBlock"></div></div>
     </div>
 
     <div id="cabinetContent" class="panel hidden">
@@ -549,6 +701,10 @@
             <div id="equipmentEmpty" class="empty-state hidden">Экипировка отсутствует.</div>
             <form id="equipmentForm" class="hidden" onsubmit="savePlayerItems(event)"><div class="equipment-section-tabs" id="equipmentSectionTabs"></div><div id="equipmentItemsList"></div><button type="submit" class="submit-btn" id="saveEquipmentBtn" style="margin-top: 10px;">Отправить</button></form>
             <div id="equipmentMessage" class="message"></div>
+        </div>
+        <div class="cabinet-section">
+            <div class="panel-title">🎁 История лута (мои выигрыши)</div>
+            <div id="myLootHistory"></div>
         </div>
     </div>
 
@@ -598,8 +754,35 @@
             <button class="tab-btn" id="tabAuctionCompleted" onclick="switchAuctionTab('completed', event)">✅ Завершённые</button>
             <button class="tab-btn hidden" id="tabAuctionCreate" onclick="switchAuctionTab('create', event)">➕ Создать</button>
         </div>
-        <div id="auctionActiveContent"><div id="activeAuctionsList"></div></div>
-        <div id="auctionCompletedContent" class="hidden"><div id="completedAuctionsList"></div></div>
+        <div id="auctionActiveContent">
+            <div style="margin-bottom: 12px;">
+                <div class="panel-title" style="font-size: 12px;">🏆 Последние победы</div>
+                <div id="auctionRecentWins"></div>
+            </div>
+            <div id="activeAuctionsList"></div>
+        </div>
+        <div id="auctionCompletedContent" class="hidden">
+            <div style="margin-bottom: 12px;">
+                <div class="panel-title" style="font-size: 12px;">📋 Очередь на выдачу предметов</div>
+                <div class="form-row" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label>Название предмета</label>
+                        <input type="text" id="queueItemKey" placeholder="Точное название предмета...">
+                    </div>
+                    <div class="form-group">
+                        <label>Режим очереди</label>
+                        <select id="queueMode">
+                            <option value="bm">По БМ (больше БМ = выше)</option>
+                            <option value="attendance">По посещаемости</option>
+                            <option value="manual">Вручную (админ)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="submit-btn" style="width: auto; padding: 7px 16px;" onclick="loadQueueForItem()">📊 Показать очередь</button>
+                <div id="queueResult" style="margin-top: 10px;"></div>
+            </div>
+            <div id="completedAuctionsList"></div>
+        </div>
         <div id="auctionCreateContent" class="hidden">
             <div class="panel-title">➕ Создание аукциона</div>
             <div class="add-item-form">
@@ -683,7 +866,8 @@
                 </div>
                 <button type="submit" class="submit-btn dkp-btn" onclick="addEvent(event)">+ Создать</button>
             </div>
-            <div id="adminEventsList"></div><div id="adminEventsMessage" class="message"></div>
+            <div id="adminEventsList"></div>
+            <div id="adminEventsMessage" class="message"></div>
         </div>
         <div id="adminDkpAdjustContent" class="hidden">
             <div class="panel-title">💵 Ручное DKP</div>
@@ -737,9 +921,7 @@
             </div>
         </div>
         
-        <!-- ✅ ВКЛАДКА НАСТРОЕК -->
         <div id="adminSettingsContent" class="hidden">
-            <!-- Настройки аукциона -->
             <div class="settings-card">
                 <div class="settings-card-title">🔨 Настройки аукциона</div>
                 <div class="settings-row">
@@ -792,10 +974,9 @@
                 <div id="auctionSettingsMessage" class="message"></div>
             </div>
             
-            <!-- ✅ НОВОЕ: Коэффициент DKP за мероприятия -->
             <div class="settings-card">
                 <div class="settings-card-title">💰 Коэффициент DKP за мероприятия</div>
-                <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Множитель к базовому DKP за мероприятие. Формула: базовое × коэфБМ × коэфМероприятия</p>
+                <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Множитель к базовому DKP. Формула: базовое × коэфБМ × коэфМероприятия</p>
                 <div class="settings-row">
                     <div class="settings-label">Включить коэффициент:</div>
                     <div class="settings-value">
@@ -823,14 +1004,13 @@
                     <div class="settings-label">Список игроков:</div>
                     <div class="settings-value">
                         <input type="text" id="eventCoefList" placeholder="Ник1, Ник2, Ник3..." style="width: 100%;">
-                        <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Через запятую (только для этих игроков)</div>
+                        <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Через запятую</div>
                     </div>
                 </div>
                 <button class="submit-btn" style="margin-top: 12px;" onclick="saveEventCoefficientSettings()">💾 Сохранить коэффициент мероприятий</button>
                 <div id="eventCoefSettingsMessage" class="message"></div>
             </div>
             
-            <!-- Индивидуальные коэффициенты мероприятий -->
             <div class="settings-card">
                 <div class="settings-card-title">👥 Индивидуальные коэффициенты мероприятий</div>
                 <div class="settings-row">
@@ -868,7 +1048,6 @@
                 </div>
             </div>
             
-            <!-- Настройки штрафов -->
             <div class="settings-card">
                 <div class="settings-card-title">⚠️ Глобальные настройки штрафов</div>
                 <div class="settings-row">
@@ -915,7 +1094,6 @@
                 <div id="penaltyResultsBlock" style="margin-top: 12px;"></div>
             </div>
             
-            <!-- Индивидуальные штрафы -->
             <div class="settings-card">
                 <div class="settings-card-title">👥 Индивидуальные настройки штрафов</div>
                 <div class="settings-row">
@@ -1002,8 +1180,68 @@
         </div>
     </div>
 </div>
+
+<div id="editEventModal" class="modal-overlay hidden" onclick="closeEditEventModal()">
+    <div class="modal-content" style="max-width: 480px;" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeEditEventModal()">✕</button>
+        <h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px; letter-spacing: 1px;">✎ РЕДАКТИРОВАНИЕ МЕРОПРИЯТИЯ</h3>
+        <div style="margin-bottom: 12px;">
+            <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 4px;">ID:</div>
+            <div id="editEventId" style="font-size: 12px; color: var(--text-main); font-family: var(--font-display); padding: 5px 8px; background: var(--bg-soft); border-radius: var(--radius-sm);"></div>
+        </div>
+        <div class="form-group">
+            <label>Название</label>
+            <input type="text" id="editEventName" placeholder="Название...">
+        </div>
+        <div class="form-group">
+            <label>Стоимость DKP</label>
+            <input type="number" id="editEventDkp" min="0" placeholder="100">
+        </div>
+        <div style="padding: 10px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">
+            ⚠️ Изменение DKP повлияет только на будущие начисления. Ранее начисленные DKP не пересчитываются.
+        </div>
+        <button type="button" class="submit-btn" onclick="saveEventEdit()">💾 Сохранить изменения</button>
+        <div id="editEventMessage" class="message"></div>
+    </div>
+</div>
+
+<div id="deleteEventModal" class="modal-overlay hidden" onclick="closeDeleteEventModal()">
+    <div class="modal-content" style="max-width: 520px;" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeDeleteEventModal()">✕</button>
+        <h3 style="color: var(--danger); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px; letter-spacing: 1px;">🗑 УДАЛЕНИЕ МЕРОПРИЯТИЯ</h3>
+        <div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm);">
+            <div style="font-size: 11px; color: var(--text-dim);">Мероприятие:</div>
+            <div id="deleteEventName" style="font-size: 14px; color: var(--text-main); font-weight: 700; font-family: var(--font-display);"></div>
+            <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">ID: <span id="deleteEventId"></span></div>
+        </div>
+        <div style="padding: 10px; background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); margin-bottom: 12px;">
+            <div style="font-size: 12px; color: var(--danger); font-weight: 700; margin-bottom: 6px;">⚠️ ВНИМАНИЕ!</div>
+            <div style="font-size: 11px; color: var(--danger);">Это действие необратимо. Выберите параметры удаления:</div>
+        </div>
+        <div class="checkbox-group" style="margin-bottom: 8px;">
+            <input type="checkbox" id="deleteEventRelated" checked>
+            <label for="deleteEventRelated" style="margin: 0; cursor: pointer;">Удалить связанные данные (посещаемость, заявки, иконку)</label>
+        </div>
+        <div class="checkbox-group" style="margin-bottom: 12px;">
+            <input type="checkbox" id="deleteEventRevertDkp">
+            <label for="deleteEventRevertDkp" style="margin: 0; cursor: pointer;">Вернуть DKP всем игрокам, кто получил за это мероприятие</label>
+        </div>
+        <div id="revertWarning" style="display: none; padding: 8px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">
+            💡 При возврате DKP: у игроков может образоваться отрицательный баланс. Запись о возврате появится в их истории DKP.
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button type="button" class="submit-btn" style="background: var(--border); color: var(--text-main);" onclick="closeDeleteEventModal()">Отмена</button>
+            <button type="button" class="submit-btn" style="background: var(--danger);" onclick="confirmDeleteEvent()">🗑 Удалить</button>
+        </div>
+        <div id="deleteEventMessage" class="message"></div>
+        <div id="deleteEventStats" style="margin-top: 10px;"></div>
+    </div>
+</div>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpRyxIVgSenXnqOT3EDsGVwniNPCDcyRIU4Q8X3EliWYOd0fajF1SRmwMLQfkJ0dqa/exec';
+    const APP_VERSION = '13.0';
+    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbzkJTwpfjN-AjEHQXa5WVffuCtlKAxl9dYlOqjETlk0eZ6TDZLKOUpEBgNysE6cO4iM/exec';
+    const SCRIPT_URL = SCRIPT_URL_BASE + '?v=' + APP_VERSION + '&_t=' + Date.now();
+    
     let currentUser = null; let currentRole = null;
     let myPlayerData = null; let myPlayerSkills = null; let myPlayerItems = null; let myDkpData = null;
     let allSkills = []; let allItems = []; let equipmentSections = [];
@@ -1012,11 +1250,14 @@
     let uploadedScreenshots = []; let recognizedNicks = [];
     let countdownInterval = null; let currentAuctionItems = [];
     let currentIconType = null; let currentIconId = null; let currentIconName = null;
+    let allPlayersBioColors = {};
+    let recentAuctionHistory = [];
 
     window.addEventListener('DOMContentLoaded', () => {
         const savedTheme = localStorage.getItem('rf_theme') || 'light';
         document.body.setAttribute('data-theme', savedTheme);
         updateThemeButton(savedTheme);
+        
         const savedLogin = localStorage.getItem('rf_saved_login');
         const savedPassword = localStorage.getItem('rf_saved_password');
         if (savedLogin && savedPassword) {
@@ -1029,7 +1270,23 @@
             if (rememberMe) rememberMe.checked = true;
             if (indicator) indicator.style.display = 'block';
         }
-        // Обработчики для настроек
+        
+        const savedSession = localStorage.getItem('rf_session');
+        if (savedSession) {
+            try {
+                const sessionData = JSON.parse(savedSession);
+                if (sessionData.user && sessionData.role) {
+                    currentUser = sessionData.user;
+                    currentRole = sessionData.role;
+                    setTimeout(() => { showMainScreen(); }, 100);
+                    console.log('✅ Сессия восстановлена:', currentUser);
+                }
+            } catch (e) {
+                console.error('Ошибка восстановления сессии:', e);
+                localStorage.removeItem('rf_session');
+            }
+        }
+        
         const banPeriodSelect = document.getElementById('auctionRepeatBanPeriod');
         if (banPeriodSelect) banPeriodSelect.addEventListener('change', (e) => { document.getElementById('customDaysRow').style.display = e.target.value === 'custom_days' ? 'flex' : 'none'; });
         const coefModeSelect = document.getElementById('auctionCoefficientMode');
@@ -1038,15 +1295,43 @@
         if (penaltyPeriodSelect) penaltyPeriodSelect.addEventListener('change', (e) => { document.getElementById('penaltyCustomDaysRow').style.display = e.target.value === 'custom_days' ? 'flex' : 'none'; document.getElementById('penaltyMissPercentRow').style.display = e.target.value === 'miss_percent' ? 'flex' : 'none'; });
         const playerPeriodSelect = document.getElementById('playerPenaltyPeriodType');
         if (playerPeriodSelect) playerPeriodSelect.addEventListener('change', (e) => { document.getElementById('playerCustomDaysRow').style.display = e.target.value === 'custom_days' ? 'flex' : 'none'; document.getElementById('playerMissPercentRow').style.display = e.target.value === 'miss_percent' ? 'flex' : 'none'; });
-        // ✅ НОВОЕ: Обработчик режима коэффициента мероприятий
         const eventCoefModeSelect = document.getElementById('eventCoefMode');
         if (eventCoefModeSelect) eventCoefModeSelect.addEventListener('change', (e) => { document.getElementById('eventCoefListRow').style.display = e.target.value === 'selective' ? 'flex' : 'none'; });
-        const playerEventCoefModeSelect = document.getElementById('playerEventCoefMode');
-        if (playerEventCoefModeSelect) playerEventCoefModeSelect.addEventListener('change', (e) => { /* no-op */ });
+        const revertCheckbox = document.getElementById('deleteEventRevertDkp');
+        if (revertCheckbox) revertCheckbox.addEventListener('change', (e) => { document.getElementById('revertWarning').style.display = e.target.checked ? 'block' : 'none'; });
     });
 
     function toggleTheme() { const current = document.body.getAttribute('data-theme') || 'light'; const newTheme = current === 'light' ? 'dark' : 'light'; document.body.setAttribute('data-theme', newTheme); localStorage.setItem('rf_theme', newTheme); updateThemeButton(newTheme); }
     function updateThemeButton(theme) { const btn = document.getElementById('themeToggleBtn'); if (btn) btn.innerHTML = theme === 'light' ? '🌙 Темная' : '☀️ Светлая'; }
+
+    function forceReload() {
+        if (currentUser && currentRole) {
+            localStorage.setItem('rf_session', JSON.stringify({ user: currentUser, role: currentRole, timestamp: Date.now() }));
+        }
+        const url = new URL(window.location.href);
+        url.searchParams.set('_t', Date.now());
+        window.location.href = url.toString();
+    }
+
+    let lastKnownVersion = null;
+    async function checkForUpdates() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getVersion' }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success && result.version) {
+                if (lastKnownVersion === null) { lastKnownVersion = result.version; }
+                else if (lastKnownVersion !== result.version) {
+                    console.log('🔄 Новая версия:', result.version);
+                    if (currentUser && currentRole) {
+                        localStorage.setItem('rf_session', JSON.stringify({ user: currentUser, role: currentRole, timestamp: Date.now() }));
+                    }
+                    if (confirm('🔄 Доступна новая версия сайта!\n\nНажмите OK для обновления.\nСессия сохранится.')) { forceReload(); }
+                    lastKnownVersion = result.version;
+                }
+            }
+        } catch (error) { console.error('Ошибка проверки версии:', error); }
+    }
+    window.addEventListener('load', () => { setTimeout(checkForUpdates, 3000); setInterval(checkForUpdates, 5 * 60 * 1000); });
 
     window.addEventListener('error', (e) => { console.error('ОШИБКА:', e.error); });
     window.addEventListener('unhandledrejection', (e) => { console.error('PROMISE:', e.reason); });
@@ -1075,6 +1360,15 @@
     function getRoleBadge(role) { if (role === 'Админ') return ' <span style="color: var(--danger); font-size: 10px; font-weight: 700;">[АДМИН]</span>'; if (role === 'Модератор') return ' <span style="color: var(--warning); font-size: 10px; font-weight: 700;">[МОД]</span>'; return ''; }
     function getColorClass(color) { const map = { 'Белый': 'color-white', 'Зеленый': 'color-green', 'Синий': 'color-blue', 'Фиолетовый': 'color-purple', 'Желтый': 'color-yellow', 'Красный': 'color-red' }; return map[color] || 'color-white'; }
 
+    async function loadAllPlayersBioColors() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersBioColors' }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success) allPlayersBioColors = result.colors || {};
+        } catch (error) { console.error(error); }
+    }
+    loadAllPlayersBioColors();
+
     async function loadPublicTops() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayers' }), redirect: 'follow' });
@@ -1082,10 +1376,20 @@
             if (result.success && result.players && result.players.length > 0) {
                 const players = result.players;
                 const topBm = [...players].sort((a, b) => Number(b.bm) - Number(a.bm)).slice(0, 10);
-                const topBmHtml = topBm.map((p, i) => { const rank = i + 1; const rankClass = rank <= 3 ? `rank-${rank}` : ''; return `<div class="top-item ${rankClass}"><div class="top-rank ${rankClass}">#${rank}</div><div class="top-nick">${p.nickname}${getRoleBadge(p.role)}</div><div class="top-value">${Number(p.bm).toLocaleString('ru-RU')}</div></div>`; }).join('');
+                const topBmHtml = topBm.map((p, i) => {
+                    const rank = i + 1; const rankClass = rank <= 3 ? `rank-${rank}` : '';
+                    const bioColor = allPlayersBioColors[p.nickname] || null;
+                    const borderColor = bioColor ? getIconBorderColor(bioColor) : 'var(--border)';
+                    return `<div class="top-item ${rankClass}"><div class="top-rank ${rankClass}">#${rank}</div><div class="top-nick"><span class="nick-with-color" style="border-color: ${borderColor};">${p.nickname}</span>${getRoleBadge(p.role)}</div><div class="top-value">${Number(p.bm).toLocaleString('ru-RU')}</div></div>`;
+                }).join('');
                 document.getElementById('topBmList').innerHTML = topBmHtml; document.getElementById('mainTopBmList').innerHTML = topBmHtml;
                 const topLevel = [...players].sort((a, b) => Number(b.level) - Number(a.level)).slice(0, 10);
-                const topLevelHtml = topLevel.map((p, i) => { const rank = i + 1; const rankClass = rank <= 3 ? `rank-${rank}` : ''; return `<div class="top-item ${rankClass}"><div class="top-rank ${rankClass}">#${rank}</div><div class="top-nick">${p.nickname}${getRoleBadge(p.role)}</div><div class="top-value">Ур. ${p.level}</div></div>`; }).join('');
+                const topLevelHtml = topLevel.map((p, i) => {
+                    const rank = i + 1; const rankClass = rank <= 3 ? `rank-${rank}` : '';
+                    const bioColor = allPlayersBioColors[p.nickname] || null;
+                    const borderColor = bioColor ? getIconBorderColor(bioColor) : 'var(--border)';
+                    return `<div class="top-item ${rankClass}"><div class="top-rank ${rankClass}">#${rank}</div><div class="top-nick"><span class="nick-with-color" style="border-color: ${borderColor};">${p.nickname}</span>${getRoleBadge(p.role)}</div><div class="top-value">Ур. ${p.level}</div></div>`;
+                }).join('');
                 document.getElementById('topLevelList').innerHTML = topLevelHtml; document.getElementById('mainTopLevelList').innerHTML = topLevelHtml;
             } else { const emptyHtml = '<div class="empty-state">Нет данных</div>'; ['topBmList', 'topLevelList', 'mainTopBmList', 'mainTopLevelList'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = emptyHtml; }); }
         } catch (error) { console.error('Ошибка топов:', error); }
@@ -1094,7 +1398,12 @@
             const dkpResult = await dkpResponse.json();
             if (dkpResult.success && dkpResult.players && dkpResult.players.length > 0) {
                 const topDkp = dkpResult.players.slice(0, 10);
-                const topDkpHtml = topDkp.map((p, i) => { const rank = i + 1; const rankClass = rank <= 3 ? `rank-${rank}` : ''; return `<div class="top-item ${rankClass}"><div class="top-rank ${rankClass}">#${rank}</div><div class="top-nick">${p.nickname}</div><div class="top-value dkp">${Number(p.balance).toLocaleString('ru-RU')} 💰</div></div>`; }).join('');
+                const topDkpHtml = topDkp.map((p, i) => {
+                    const rank = i + 1; const rankClass = rank <= 3 ? `rank-${rank}` : '';
+                    const bioColor = allPlayersBioColors[p.nickname] || null;
+                    const borderColor = bioColor ? getIconBorderColor(bioColor) : 'var(--border)';
+                    return `<div class="top-item ${rankClass}"><div class="top-rank ${rankClass}">#${rank}</div><div class="top-nick"><span class="nick-with-color" style="border-color: ${borderColor};">${p.nickname}</span></div><div class="top-value dkp">${Number(p.balance).toLocaleString('ru-RU')} 💰</div></div>`;
+                }).join('');
                 document.getElementById('topDkpList').innerHTML = topDkpHtml; document.getElementById('mainTopDkpList').innerHTML = topDkpHtml;
             } else { const emptyHtml = '<div class="empty-state">Нет данных</div>'; ['topDkpList', 'mainTopDkpList'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = emptyHtml; }); }
         } catch (error) { console.error('Ошибка DKP:', error); }
@@ -1106,11 +1415,12 @@
         document.querySelectorAll('#mainTabs .tab-btn').forEach(t => t.classList.remove('active'));
         e.target.classList.add('active');
         ['home', 'cabinet', 'dkp', 'auction', 'calendar', 'players', 'admin'].forEach(t => { const content = document.getElementById(t + 'Content'); if (content) content.classList.toggle('hidden', t !== tab); });
-        if (tab === 'home') { loadPublicTops(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadTopAbsentees(); }
+        if (tab === 'home') { loadPublicTops(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadTopAbsentees(); loadRecentWinners(); }
         if (tab === 'players') loadAllPlayers();
         if (tab === 'dkp') { loadMyDkp(); loadEventsForSelect(); }
-        if (tab === 'auction') { loadActiveAuctions(); if (currentRole === 'Админ' || currentRole === 'Модератор') document.getElementById('tabAuctionCreate').classList.remove('hidden'); }
+        if (tab === 'auction') { loadActiveAuctions(); loadRecentWinners(); if (currentRole === 'Админ' || currentRole === 'Модератор') document.getElementById('tabAuctionCreate').classList.remove('hidden'); }
         if (tab === 'calendar') loadCalendarPlayers();
+        if (tab === 'cabinet') loadMyLootHistory();
         if (tab === 'admin') { loadPendingPlayers(); if (currentRole === 'Админ' || currentRole === 'Модератор') loadAllUsers(); }
     }
     function switchDkpTab(tab, e) { document.querySelectorAll('#dkpContent > .tabs .tab-btn').forEach(t => t.classList.remove('active')); e.target.classList.add('active'); document.getElementById('dkpMyContent').classList.toggle('hidden', tab !== 'my'); document.getElementById('dkpSubmitContent').classList.toggle('hidden', tab !== 'submit'); document.getElementById('dkpRatingContent').classList.toggle('hidden', tab !== 'rating'); if (tab === 'my') loadMyDkp(); if (tab === 'submit') loadEventsForSelect(); if (tab === 'rating') loadDkpRating(); }
@@ -1177,8 +1487,11 @@
         const tabUsers = document.getElementById('tabAdminUsers');
         if (currentRole === 'Админ') tabUsers.classList.remove('hidden');
         else tabUsers.classList.add('hidden');
+        
+        localStorage.setItem('rf_session', JSON.stringify({ user: currentUser, role: currentRole, timestamp: Date.now() }));
+        
         loadPlayerData(); loadPlayerSkills(); loadPlayerItems(); loadMyDkp(); loadPublicTops();
-        loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadTopAbsentees();
+        loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadTopAbsentees(); loadRecentWinners(); loadMyLootHistory();
         switchMainTab('home', { target: document.querySelector('#mainTabs .tab-btn[data-tab="home"]') });
     }
 
@@ -1368,7 +1681,7 @@
     async function submitDkpSubmission() { const select = document.getElementById('dkpEventSelect'); const selectedOption = select.options[select.selectedIndex]; const eventId = select.value; const eventName = selectedOption ? selectedOption.dataset.name : ''; const eventDkp = selectedOption ? selectedOption.dataset.dkp : 0; if (!eventId) { showDkpSubmitMessage('Выберите мероприятие', 'error'); return; } const validNicks = recognizedNicks.filter(n => n && n.trim().length > 0); if (validNicks.length === 0) { showDkpSubmitMessage('Добавьте игрока', 'error'); return; } const btn = document.getElementById('submitDkpBtn'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span> Проверка...'; try { const validationResponse = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' }); const validationResult = await validationResponse.json(); if (!validationResult.success) throw new Error('Ошибка списка'); const allSiteNicks = validationResult.nicks.map(n => String(n).toLowerCase()); const invalidNicks = []; const validNicksLower = []; validNicks.forEach(nick => { const nickLower = nick.toLowerCase().trim(); if (allSiteNicks.includes(nickLower)) validNicksLower.push(nick); else invalidNicks.push(nick); }); if (invalidNicks.length > 0) { showDkpSubmitMessage(`Не найдены:\n\n${invalidNicks.join('\n')}`, 'error'); btn.disabled = false; btn.innerHTML = '📤 Отправить'; return; } btn.innerHTML = '<span class="loader"></span> Отправка...'; const screenshotIds = uploadedScreenshots.filter(s => s.status === 'done' && s.screenshotId).map(s => s.screenshotId); const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'submitDKP', nickname: currentUser, eventId: eventId, eventName: eventName, eventDkp: Number(eventDkp), screenshotIds: screenshotIds, recognizedNicks: validNicksLower }), redirect: 'follow' }); const result = await response.json(); if (result.success) { showDkpSubmitMessage(result.message + ` (${validNicksLower.length})`, 'success'); uploadedScreenshots = []; recognizedNicks = []; renderScreenshotsPreview(); document.getElementById('recognizedNicksBlock').classList.add('hidden'); document.getElementById('ocrProgressBlock').classList.add('hidden'); select.value = ''; } else { showDkpSubmitMessage(result.message, 'error'); } } catch (error) { showDkpSubmitMessage('Ошибка: ' + error.message, 'error'); } finally { btn.disabled = false; btn.innerHTML = '📤 Отправить'; } }
     function showDkpSubmitMessage(text, type) { const msg = document.getElementById('dkpSubmitMessage'); msg.className = `message ${type}`; msg.innerText = text; msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 8000); }
 
-    async function loadDkpRating() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('dkpRatingList'); if (result.success && result.players.length > 0) { list.innerHTML = result.players.map((player, index) => { const position = index + 1; let positionClass = ''; if (position === 1) positionClass = 'top-1'; else if (position === 2) positionClass = 'top-2'; else if (position === 3) positionClass = 'top-3'; return `<div class="ranking-item"><div class="ranking-position ${positionClass}">#${position}</div><div class="ranking-info"><div class="ranking-nick">${player.nickname}</div></div><div class="ranking-bm" style="color: var(--dkp);">${Number(player.balance).toLocaleString('ru-RU')} 💰</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет данных</div>'; } } catch (error) { console.error(error); } }
+    async function loadDkpRating() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('dkpRatingList'); if (result.success && result.players.length > 0) { list.innerHTML = result.players.map((player, index) => { const position = index + 1; let positionClass = ''; if (position === 1) positionClass = 'top-1'; else if (position === 2) positionClass = 'top-2'; else if (position === 3) positionClass = 'top-3'; const bioColor = allPlayersBioColors[player.nickname] || null; const borderColor = bioColor ? getIconBorderColor(bioColor) : 'var(--border)'; return `<div class="ranking-item"><div class="ranking-position ${positionClass}">#${position}</div><div class="ranking-info"><div class="ranking-nick"><span class="nick-with-color" style="border-color: ${borderColor};">${player.nickname}</span></div></div><div class="ranking-bm" style="color: var(--dkp);">${Number(player.balance).toLocaleString('ru-RU')} 💰</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет данных</div>'; } } catch (error) { console.error(error); } }
         async function loadAdminEvents() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' });
@@ -1376,7 +1689,28 @@
             const list = document.getElementById('adminEventsList');
             if (result.success && result.events.length > 0) {
                 allEvents = result.events;
-                list.innerHTML = result.events.map(event => `<div class="event-card"><div style="display: flex; align-items: center; gap: 10px; flex: 1;"><div id="eventIcon_${event.id}" class="icon-preview" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="event-info"><div class="event-name">${event.name}</div><div class="event-meta">${event.createdBy || '—'} | ${event.date}</div></div></div><div class="event-dkp">+${event.dkp}</div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button><button class="btn-remove" onclick="removeEvent('${event.id}')">✕</button></div></div>`).join('');
+                list.innerHTML = result.events.map(event => `
+                    <div class="event-card">
+                        <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                            <div id="eventIcon_${event.id}" class="icon-preview" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')">
+                                <span class="icon-placeholder">...</span>
+                            </div>
+                            <div class="event-info">
+                                <div class="event-name">${event.name}</div>
+                                <div class="event-meta">
+                                    ${event.createdBy || '—'} | ${event.date} | 
+                                    <span style="color: var(--dkp); font-weight: 700; font-family: var(--font-display);">💰 ${event.dkp} DKP</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-dkp">+${event.dkp}</div>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="openEditEventModal('${event.id}', '${event.name.replace(/'/g, "\\'")}', ${event.dkp})" style="width: auto; margin-top: 0;">✎ Изм.</button>
+                            <button class="btn-edit" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>
+                            <button class="btn-remove" onclick="openDeleteEventModal('${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="padding: 5px 10px;">🗑</button>
+                        </div>
+                    </div>
+                `).join('');
                 result.events.forEach(event => loadEventIcon(event.id));
             } else { list.innerHTML = '<div class="empty-state">Нет мероприятий</div>'; }
         } catch (error) { console.error(error); }
@@ -1386,6 +1720,88 @@
 
     async function addEvent(e) { e.preventDefault(); const name = document.getElementById('newEventName').value; const dkp = document.getElementById('newEventDkp').value; const msg = document.getElementById('adminEventsMessage'); if (!name || !dkp) { msg.className = 'message error'; msg.innerText = 'Заполните поля'; msg.style.display = 'block'; return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addEvent', name: name, dkp: Number(dkp), createdBy: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; document.getElementById('newEventName').value = ''; document.getElementById('newEventDkp').value = ''; setTimeout(() => { loadAdminEvents(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function removeEvent(eventId) { if (!confirm('Удалить?')) return; const msg = document.getElementById('adminEventsMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'removeEvent', eventId: eventId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { loadAdminEvents(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
+
+    let currentEditEventId = null;
+    function openEditEventModal(eventId, eventName, eventDkp) {
+        currentEditEventId = eventId;
+        document.getElementById('editEventId').innerText = eventId;
+        document.getElementById('editEventName').value = eventName;
+        document.getElementById('editEventDkp').value = eventDkp;
+        document.getElementById('editEventMessage').style.display = 'none';
+        document.getElementById('editEventModal').classList.remove('hidden');
+    }
+    function closeEditEventModal() { document.getElementById('editEventModal').classList.add('hidden'); currentEditEventId = null; }
+    async function saveEventEdit() {
+        if (!currentEditEventId) return;
+        const newName = document.getElementById('editEventName').value.trim();
+        const newDkp = document.getElementById('editEventDkp').value;
+        const msg = document.getElementById('editEventMessage');
+        if (!newName) { msg.className = 'message error'; msg.innerText = 'Введите название'; msg.style.display = 'block'; return; }
+        if (newDkp === '' || isNaN(newDkp) || Number(newDkp) < 0) { msg.className = 'message error'; msg.innerText = 'Укажите корректный DKP'; msg.style.display = 'block'; return; }
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateEvent', eventId: currentEditEventId, newName: newName, newDkp: Number(newDkp) }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success) { msg.className = 'message success'; msg.innerText = '✅ ' + result.message; msg.style.display = 'block'; setTimeout(() => { closeEditEventModal(); loadAdminEvents(); loadEventsForSelect(); }, 1500); }
+            else { msg.className = 'message error'; msg.innerText = '❌ ' + result.message; msg.style.display = 'block'; }
+        } catch (error) { msg.className = 'message error'; msg.innerText = '❌ Ошибка связи'; msg.style.display = 'block'; }
+    }
+
+    let currentDeleteEventId = null;
+    let currentDeleteEventName = null;
+    function openDeleteEventModal(eventId, eventName) {
+        currentDeleteEventId = eventId;
+        currentDeleteEventName = eventName;
+        document.getElementById('deleteEventId').innerText = eventId;
+        document.getElementById('deleteEventName').innerText = eventName;
+        document.getElementById('deleteEventRelated').checked = true;
+        document.getElementById('deleteEventRevertDkp').checked = false;
+        document.getElementById('revertWarning').style.display = 'none';
+        document.getElementById('deleteEventMessage').style.display = 'none';
+        document.getElementById('deleteEventStats').innerHTML = '';
+        document.getElementById('deleteEventModal').classList.remove('hidden');
+    }
+    function closeDeleteEventModal() { document.getElementById('deleteEventModal').classList.add('hidden'); currentDeleteEventId = null; currentDeleteEventName = null; }
+    async function confirmDeleteEvent() {
+        if (!currentDeleteEventId) return;
+        const deleteRelated = document.getElementById('deleteEventRelated').checked;
+        const revertDkp = document.getElementById('deleteEventRevertDkp').checked;
+        let confirmMsg = `Удалить мероприятие "${currentDeleteEventName}"?`;
+        if (deleteRelated) confirmMsg += '\n\nБудут удалены: посещаемость, заявки, иконка.';
+        if (revertDkp) confirmMsg += '\n\n⚠️ DKP будет возвращено всем игрокам!';
+        if (!confirm(confirmMsg)) return;
+        const msg = document.getElementById('deleteEventMessage');
+        const statsBlock = document.getElementById('deleteEventStats');
+        msg.innerText = 'Удаление...'; msg.className = 'message'; msg.style.display = 'block';
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteEventWithHistory', eventId: currentDeleteEventId, deleteRelated: deleteRelated, revertDkp: revertDkp }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success) {
+                msg.className = 'message success'; msg.innerText = '✅ ' + result.message; msg.style.display = 'block';
+                if (result.stats) {
+                    const s = result.stats;
+                    let statsHtml = '<div style="padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 11px;">';
+                    statsHtml += '<div style="font-weight: 700; color: var(--accent); margin-bottom: 6px; font-family: var(--font-display); letter-spacing: 0.5px;">📊 СТАТИСТИКА УДАЛЕНИЯ:</div>';
+                    statsHtml += `<div style="color: var(--text-dim);">• Записей посещаемости удалено: <b style="color: var(--text-main);">${s.attendanceDeleted || 0}</b></div>`;
+                    statsHtml += `<div style="color: var(--text-dim);">• Заявок DKP удалено: <b style="color: var(--text-main);">${s.submissionsDeleted || 0}</b></div>`;
+                    if (s.iconDeleted) statsHtml += `<div style="color: var(--text-dim);">• Иконка: <b style="color: var(--danger);">удалена</b></div>`;
+                    if (s.dkpReverted > 0) {
+                        statsHtml += `<div style="color: var(--warning); margin-top: 4px;">• Возвращено DKP: <b>${s.dkpReverted.toFixed(2)}</b> (игроков: <b>${s.affectedPlayers || 0}</b>)</div>`;
+                        if (s.playersDetails && Object.keys(s.playersDetails).length > 0) {
+                            statsHtml += '<div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border);">';
+                            statsHtml += '<div style="color: var(--text-dim); margin-bottom: 4px;">Детализация по игрокам:</div>';
+                            Object.entries(s.playersDetails).forEach(([nick, amount]) => {
+                                statsHtml += `<div style="color: var(--text-main); font-size: 10px;">• ${nick}: <span style="color: var(--success);">+${amount.toFixed(2)} DKP</span></div>`;
+                            });
+                            statsHtml += '</div>';
+                        }
+                    }
+                    statsHtml += '</div>';
+                    statsBlock.innerHTML = statsHtml;
+                }
+                setTimeout(() => { closeDeleteEventModal(); loadAdminEvents(); loadEventsForSelect(); loadEventStats(); loadTopAbsentees(); }, 3000);
+            } else { msg.className = 'message error'; msg.innerText = '❌ ' + result.message; msg.style.display = 'block'; }
+        } catch (error) { msg.className = 'message error'; msg.innerText = '❌ Ошибка связи'; msg.style.display = 'block'; }
+    }
 
     async function loadPendingDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('pendingDkpList'); if (result.success && result.submissions.length > 0) { list.innerHTML = result.submissions.map(sub => `<div class="dkp-submission-card"><div class="submission-header"><div><div class="submission-event">🏆 ${sub.eventName} (+${sub.eventDkp})</div><div class="submission-meta">${sub.submitter} | ${sub.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDkp('${sub.id}')">✓</button><button class="btn-reject" onclick="rejectDkp('${sub.id}')">✕</button><button class="btn-edit" onclick="editDkpSubmission('${sub.id}')" style="width: auto; margin-top: 0;">✎</button><button class="btn-remove" onclick="deleteDkpSubmission('${sub.id}')">🗑</button></div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div class="submission-screenshots">${sub.screenshots.map((imgData, idx) => `<img src="${imgData}" onclick="openImageModal('${imgData}')" alt="${idx + 1}">`).join('')}</div>` : ''}<div style="font-size: 10px; color: var(--text-dim); margin-top: 6px;">Игроки (${sub.nicks.length}):</div><div class="submission-nicks">${sub.nicks.map(nick => `<span class="submission-nick-tag">${nick}</span>`).join('')}</div></div>`).join(''); } else { list.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (error) { console.error(error); } }
 
@@ -1517,11 +1933,12 @@
     async function approveDeletion(requestId) { if (!confirm('Подтвердить удаление?')) return; const msg = document.getElementById('deletionRequestsMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveDeletion', requestId: requestId, approvedBy: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; msg.style.display = 'block'; setTimeout(() => { loadDeletionRequests(); loadAllUsers(); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function rejectDeletion(requestId) { if (!confirm('Отклонить?')) return; const msg = document.getElementById('deletionRequestsMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectDeletion', requestId: requestId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; setTimeout(() => { loadDeletionRequests(); msg.style.display = 'none'; }, 800); } } catch (error) { console.error(error); } }
 
-    async function loadAllPlayers() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayers' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('rankingList'); if (result.success && result.players.length > 0) { list.innerHTML = result.players.map((player, index) => { const position = index + 1; let positionClass = ''; if (position === 1) positionClass = 'top-1'; else if (position === 2) positionClass = 'top-2'; else if (position === 3) positionClass = 'top-3'; return `<div class="ranking-item"><div class="ranking-position ${positionClass}">#${position}</div><div class="ranking-info"><div class="ranking-nick">${player.nickname}${getRoleBadge(player.role)}</div><div class="ranking-stats">Ур. ${player.level} | ${player.profession} | Ат: ${player.attack} | Защ: ${player.defense}</div></div><div class="ranking-bm">БМ: ${Number(player.bm).toLocaleString('ru-RU')}</div><button class="btn-compare" onclick="compareWithPlayer('${player.nickname}')">⚔</button></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет</div>'; } } catch (error) { console.error(error); } }
+    async function loadAllPlayers() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayers' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('rankingList'); if (result.success && result.players.length > 0) { list.innerHTML = result.players.map((player, index) => { const position = index + 1; let positionClass = ''; if (position === 1) positionClass = 'top-1'; else if (position === 2) positionClass = 'top-2'; else if (position === 3) positionClass = 'top-3'; const bioColor = allPlayersBioColors[player.nickname] || null; const borderColor = bioColor ? getIconBorderColor(bioColor) : 'var(--border)'; return `<div class="ranking-item"><div class="ranking-position ${positionClass}">#${position}</div><div class="ranking-info"><div class="ranking-nick"><span class="nick-with-color" style="border-color: ${borderColor};">${player.nickname}</span>${getRoleBadge(player.role)}</div><div class="ranking-stats">Ур. ${player.level} | ${player.profession} | Ат: ${player.attack} | Защ: ${player.defense}</div></div><div class="ranking-bm">БМ: ${Number(player.bm).toLocaleString('ru-RU')}</div><button class="btn-compare" onclick="compareWithPlayer('${player.nickname}')">⚔</button></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет</div>'; } } catch (error) { console.error(error); } }
     async function compareWithPlayer(nickname) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerForCompare', nickname: nickname }), redirect: 'follow' }); const result = await response.json(); if (result.success && myPlayerData && myPlayerData.status === 'approved') { document.getElementById('playersList').classList.add('hidden'); document.getElementById('compareView').classList.remove('hidden'); document.getElementById('myNick').innerText = currentUser; document.getElementById('compareNick').innerText = result.data.nickname; const myStats = document.getElementById('myStats'); const compareStats = document.getElementById('compareStats'); const stats = [{ label: 'БМ', my: myPlayerData.bm, other: result.data.bm }, { label: 'Уровень', my: myPlayerData.level, other: result.data.level }, { label: 'Атака', my: myPlayerData.attack, other: result.data.attack }, { label: 'Защита', my: myPlayerData.defense, other: result.data.defense }, { label: 'Меткость', my: myPlayerData.accuracy, other: result.data.accuracy }, { label: 'Уклонение', my: myPlayerData.evasion, other: result.data.evasion }]; myStats.innerHTML = stats.map(stat => { let className = 'equal'; if (Number(stat.my) > Number(stat.other)) className = 'better'; else if (Number(stat.my) < Number(stat.other)) className = 'worse'; return `<div class="compare-stat"><span class="compare-label">${stat.label}</span><span class="compare-value ${className}">${stat.my}</span></div>`; }).join('') + `<div class="compare-stat"><span class="compare-label">Коллекции</span><span class="compare-value equal">${myPlayerData.collections}</span></div>`; compareStats.innerHTML = stats.map(stat => { let className = 'equal'; if (Number(stat.other) > Number(stat.my)) className = 'better'; else if (Number(stat.other) < Number(stat.my)) className = 'worse'; return `<div class="compare-stat"><span class="compare-label">${stat.label}</span><span class="compare-value ${className}">${stat.other}</span></div>`; }).join('') + `<div class="compare-stat"><span class="compare-label">Коллекции</span><span class="compare-value equal">${result.data.collections}</span></div>`; } else { alert('Сравнение недоступно.'); } } catch (error) { console.error(error); } }
     function backToRanking() { document.getElementById('playersList').classList.remove('hidden'); document.getElementById('compareView').classList.add('hidden'); }
 
     function logout() {
+        localStorage.removeItem('rf_session');
         currentUser = null; currentRole = null; myPlayerData = null; myPlayerSkills = null; myPlayerItems = null; myDkpData = null;
         playerItemSelections = {}; currentEquipmentSection = null; uploadedScreenshots = []; recognizedNicks = [];
         if (countdownInterval) clearInterval(countdownInterval);
@@ -1530,7 +1947,7 @@
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById('publicScreen').classList.add('active');
         document.getElementById('authMessage').style.display = 'none';
-        loadPublicTops(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadTopAbsentees();
+        loadPublicTops(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadTopAbsentees(); loadRecentWinners();
     }
 
     function openImageModal(url) { document.getElementById('modalImage').src = url; document.getElementById('imageModal').classList.remove('hidden'); }
@@ -1539,7 +1956,6 @@
     const uploadArea = document.getElementById('screenshotUploadArea');
     if (uploadArea) { uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); }); uploadArea.addEventListener('dragleave', () => { uploadArea.classList.remove('dragover'); }); uploadArea.addEventListener('drop', (e) => { e.preventDefault(); uploadArea.classList.remove('dragover'); const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')); if (files.length > 0) addScreenshots(files); }); }
 
-    // ===== КАЛЕНДАРЬ И АКТИВНОСТЬ =====
     async function loadTodayActivity() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getTodayActivity' }), redirect: 'follow' });
@@ -1560,9 +1976,17 @@
                         </div>
                         <div style="margin-bottom: 6px;">
                             <div style="font-size: 10px; color: var(--success); margin-bottom: 3px; font-weight: 700;">✓ Были (${event.attended.length}):</div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.attended.map(p => `<span class="submission-nick-tag" style="background: var(--success-soft); border-color: var(--success); color: var(--success);">${p.nickname} <span style="font-size: 9px;">(+${p.dkpEarned})</span></span>`).join('')}</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.attended.map(p => {
+                                const bioColor = allPlayersBioColors[p.nickname] || null;
+                                const borderColor = bioColor ? getIconBorderColor(bioColor) : 'var(--success)';
+                                return `<span class="submission-nick-tag" style="background: var(--success-soft); border: 2px solid ${borderColor}; color: var(--success);">${p.nickname} <span style="font-size: 9px;">(+${p.dkpEarned})</span></span>`;
+                            }).join('')}</div>
                         </div>
-                        ${event.missed.length > 0 ? `<div><div style="font-size: 10px; color: var(--danger); margin-bottom: 3px; font-weight: 700;">✕ Пропустили (${event.missed.length}):</div><div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.missed.map(n => `<span class="submission-nick-tag" style="background: var(--danger-soft); border-color: var(--danger); color: var(--danger);">${n}</span>`).join('')}</div></div>` : ''}
+                        ${event.missed.length > 0 ? `<div><div style="font-size: 10px; color: var(--danger); margin-bottom: 3px; font-weight: 700;">✕ Пропустили (${event.missed.length}):</div><div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.missed.map(n => {
+                            const bioColor = allPlayersBioColors[n] || null;
+                            const borderColor = bioColor ? getIconBorderColor(bioColor) : 'var(--danger)';
+                            return `<span class="submission-nick-tag" style="background: var(--danger-soft); border: 2px solid ${borderColor}; color: var(--danger);">${n}</span>`;
+                        }).join('')}</div></div>` : ''}
                     </div>
                 `).join('');
                 result.events.forEach(event => { if (event.eventId) loadAndDisplayIcon('event', event.eventId, `todayEventIcon_${event.eventId}`, null); });
@@ -1658,11 +2082,13 @@
                         let rateClass = 'critical';
                         if (player.attendanceRate >= 70) rateClass = 'good';
                         else if (player.attendanceRate >= 40) rateClass = 'warning';
+                        const bioColor = allPlayersBioColors[player.nickname] || null;
+                        const borderColor = bioColor ? getIconBorderColor(bioColor) : positionColor;
                         return `
                             <div class="ranking-item">
                                 <div class="ranking-position ${positionClass}" style="color: ${positionColor};">#${position}</div>
                                 <div class="ranking-info">
-                                    <div class="ranking-nick">${player.nickname}</div>
+                                    <div class="ranking-nick"><span class="nick-with-color" style="border-color: ${borderColor};">${player.nickname}</span></div>
                                     <div class="ranking-stats">Ур. ${player.level} | ${player.profession || '—'} | БМ: ${Number(player.bm || 0).toLocaleString('ru-RU')}</div>
                                 </div>
                                 <div style="text-align: right;">
@@ -1677,14 +2103,273 @@
         } catch (error) { console.error(error); const block = document.getElementById('topAbsenteesBlock'); if (block) block.innerHTML = '<div class="empty-state">Ошибка</div>'; }
     }
 
+    // ✅ НОВЫЕ ФУНКЦИИ v13.0
+    async function loadRecentWinners() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionHistory', limit: 10 }), redirect: 'follow' });
+            const result = await response.json();
+            if (!result.success) return;
+            recentAuctionHistory = result.history || [];
+            const homeBlock = document.getElementById('recentWinnersBlock');
+            if (homeBlock) {
+                if (recentAuctionHistory.length > 0) {
+                    homeBlock.innerHTML = recentAuctionHistory.map(h => {
+                        const borderColor = getIconBorderColor(h.itemColor);
+                        const winnerColor = allPlayersBioColors[h.winner] ? getIconBorderColor(allPlayersBioColors[h.winner]) : 'var(--border)';
+                        return `
+                            <div class="history-winner-card">
+                                <div class="winner-icon" style="border-color: ${borderColor};">🏆</div>
+                                <div class="winner-info">
+                                    <div class="winner-nick">
+                                        <span class="nick-with-color" style="border-color: ${winnerColor};">${h.winner}</span>
+                                        <span style="font-size: 10px; color: var(--text-dim); margin-left: 6px;">— аукцион #${h.auctionNumber}</span>
+                                    </div>
+                                    <div class="winner-item">
+                                        ${h.itemName} (${h.itemSection}, ${h.itemTier}, ${h.itemColor})
+                                        ${h.itemEnhancement > 0 ? ` +${h.itemEnhancement}` : ''}
+                                        ${h.isPrime ? ' 🌟' : ''}${h.isBoss ? ' 👹' : ''}
+                                    </div>
+                                    <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${h.winDate}</div>
+                                </div>
+                                <div class="winner-amount">${h.winAmount} DKP</div>
+                                <span class="given-badge ${h.itemGiven ? 'given' : 'not-given'}" style="font-size: 9px;">
+                                    ${h.itemGiven ? '✅' : '⚠️'}
+                                </span>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    homeBlock.innerHTML = '<div class="empty-state">Пока нет победителей</div>';
+                }
+            }
+            const auctionBlock = document.getElementById('auctionRecentWins');
+            if (auctionBlock) {
+                auctionBlock.innerHTML = homeBlock ? homeBlock.innerHTML : '';
+            }
+        } catch (error) { console.error(error); }
+    }
+
+    async function loadMyLootHistory() {
+        if (!currentUser) return;
+        const block = document.getElementById('myLootHistory');
+        if (!block) return;
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerLootHistory', nickname: currentUser }), redirect: 'follow' });
+            const result = await response.json();
+            if (!result.success || !result.loot || result.loot.length === 0) {
+                block.innerHTML = '<div class="empty-state">Вы ещё ничего не выигрывали</div>';
+                return;
+            }
+            block.innerHTML = result.loot.map(l => {
+                const borderColor = getIconBorderColor(l.itemColor);
+                return `
+                    <div class="loot-item ${l.itemGiven ? 'given' : 'not-given'}">
+                        <div class="loot-number">#${l.auctionNumber}</div>
+                        <div style="width: 36px; height: 36px; border: 2px solid ${borderColor}; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; background: var(--bg-panel); font-size: 18px;">🎁</div>
+                        <div class="loot-info">
+                            <div class="loot-name">${l.itemName}</div>
+                            <div class="loot-date">
+                                ${l.itemSection} | ${l.itemTier} | ${l.itemColor}
+                                ${l.itemEnhancement > 0 ? ` +${l.itemEnhancement}` : ''}
+                                ${l.isPrime ? ' 🌟' : ''}${l.isBoss ? ' 👹' : ''}
+                                | ${l.winDate}
+                            </div>
+                        </div>
+                        <div class="loot-amount">${l.winAmount} DKP</div>
+                        <span class="given-badge ${l.itemGiven ? 'given' : 'not-given'}" style="font-size: 9px;">
+                            ${l.itemGiven ? '✅ Получен' : '⚠️ Ожидает'}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+        } catch (error) {
+            console.error(error);
+            block.innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
+        }
+    }
+
+    async function markItemGiven(auctionId, given) {
+        const action = given ? 'выдать предмет' : 'отменить выдачу';
+        if (!confirm(`Подтвердите: ${action}?`)) return;
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'markItemGiven', auctionId: auctionId, given: given, role: currentRole }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert(result.message);
+                loadActiveAuctions();
+                loadCompletedAuctions();
+                loadRecentWinners();
+                loadMyLootHistory();
+            } else {
+                alert('Ошибка: ' + result.message);
+            }
+        } catch (error) { alert('Ошибка: ' + error.message); }
+    }
+
+    async function loadQueueForItem() {
+        const itemKey = document.getElementById('queueItemKey').value.trim();
+        const mode = document.getElementById('queueMode').value;
+        if (!itemKey) { alert('Введите название предмета'); return; }
+        const block = document.getElementById('queueResult');
+        block.innerHTML = '<div class="loading-overlay"><span class="loader"></span> Загрузка...</div>';
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'getQueueForItem', itemKey: itemKey, mode: mode }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            if (!result.success) { block.innerHTML = '<div class="empty-state">Ошибка</div>'; return; }
+            let html = '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">';
+            html += '<div>';
+            html += '<div style="font-size: 12px; color: var(--success); font-weight: 700; margin-bottom: 8px; font-family: var(--font-display);">🎯 НЕ ПОЛУЧАЛИ НИ РАЗУ (' + result.neverReceived.length + '):</div>';
+            if (result.neverReceived.length === 0) {
+                html += '<div class="empty-state" style="padding: 10px;">Все уже получали</div>';
+            } else {
+                html += result.neverReceived.map((p, idx) => {
+                    const borderColor = allPlayersBioColors[p.nickname] ? getIconBorderColor(allPlayersBioColors[p.nickname]) : 'var(--border)';
+                    return `
+                        <div class="queue-player ${idx === 0 ? 'top-priority' : ''}">
+                            <div>
+                                <span style="font-family: var(--font-display); font-weight: 700; color: var(--accent);">#${idx + 1}</span>
+                                <span class="nick-with-color" style="border-color: ${borderColor}; margin-left: 6px;">${p.nickname}</span>
+                            </div>
+                            <div class="queue-stats">
+                                <span>БМ: <b>${Number(p.bm).toLocaleString('ru-RU')}</b></span>
+                                <span>Посещ.: <b>${p.attendance}</b></span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            html += '</div>';
+            html += '<div>';
+            html += '<div style="font-size: 12px; color: var(--warning); font-weight: 700; margin-bottom: 8px; font-family: var(--font-display);">📦 УЖЕ ПОЛУЧАЛИ (' + result.received.length + '):</div>';
+            if (result.received.length === 0) {
+                html += '<div class="empty-state" style="padding: 10px;">Никто не получал</div>';
+            } else {
+                html += result.received.map((p, idx) => {
+                    const borderColor = allPlayersBioColors[p.nickname] ? getIconBorderColor(allPlayersBioColors[p.nickname]) : 'var(--border)';
+                    return `
+                        <div class="queue-player">
+                            <div>
+                                <span class="nick-with-color" style="border-color: ${borderColor};">${p.nickname}</span>
+                            </div>
+                            <div class="queue-stats">
+                                <span>Получал: <b>${p.winsThisItem}×</b></span>
+                                <span>БМ: <b>${Number(p.bm).toLocaleString('ru-RU')}</b></span>
+                                <span>Посещ.: <b>${p.attendance}</b></span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            html += '</div>';
+            html += '</div>';
+            block.innerHTML = html;
+        } catch (error) {
+            console.error(error);
+            block.innerHTML = '<div class="empty-state">Ошибка</div>';
+        }
+    }
+
     async function loadCalendarPlayers() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' }); const result = await response.json(); const select = document.getElementById('calendarPlayerFilter'); if (result.success && select) { const currentValue = select.value; select.innerHTML = '<option value="">Все</option>' + result.nicks.map(n => `<option value="${n}">${n}</option>`).join(''); select.value = currentValue; } const today = new Date(); const monthAgo = new Date(); monthAgo.setDate(today.getDate() - 30); const startInput = document.getElementById('calendarStartDate'); const endInput = document.getElementById('calendarEndDate'); if (startInput && !startInput.value) startInput.value = monthAgo.toISOString().split('T')[0]; if (endInput && !endInput.value) endInput.value = today.toISOString().split('T')[0]; } catch (error) { console.error(error); } }
     async function loadCalendar() { const startDate = document.getElementById('calendarStartDate').value; const endDate = document.getElementById('calendarEndDate').value; const playerFilter = document.getElementById('calendarPlayerFilter').value; if (!startDate || !endDate) { alert('Выберите даты'); return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAttendance', startDate: startDate, endDate: endDate, nickname: playerFilter || null }), redirect: 'follow' }); const result = await response.json(); if (result.success) renderCalendar(result.records, startDate, endDate, playerFilter); else alert('Ошибка: ' + result.message); } catch (error) { console.error(error); alert('Ошибка'); } }
     async function loadMyCalendar() { const startDate = document.getElementById('calendarStartDate').value; const endDate = document.getElementById('calendarEndDate').value; if (!startDate || !endDate) { alert('Выберите даты'); return; } document.getElementById('calendarPlayerFilter').value = currentUser; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAttendance', startDate: startDate, endDate: endDate, nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) renderCalendar(result.records, startDate, endDate, currentUser); else alert('Ошибка: ' + result.message); } catch (error) { console.error(error); alert('Ошибка'); } }
     function renderCalendar(records, startDate, endDate, playerFilter) { const grid = document.getElementById('calendarGrid'); const stats = document.getElementById('calendarStats'); if (!records || records.length === 0) { grid.innerHTML = '<div class="empty-state">Нет данных</div>'; stats.innerHTML = ''; return; } const grouped = {}; records.forEach(r => { if (!grouped[r.date]) grouped[r.date] = {}; if (!grouped[r.date][r.eventName]) grouped[r.date][r.eventName] = { attended: [], missed: [], eventDkp: r.eventDkp }; if (r.status === 'attended') grouped[r.date][r.eventName].attended.push({ nickname: r.nickname, dkpEarned: r.dkpEarned }); else grouped[r.date][r.eventName].missed.push(r.nickname); }); let totalAttended = 0, totalMissed = 0, totalDkp = 0; records.forEach(r => { if (r.status === 'attended') { totalAttended++; totalDkp += r.dkpEarned; } else { totalMissed++; } }); const totalEvents = Object.keys(grouped).reduce((sum, date) => sum + Object.keys(grouped[date]).length, 0); const attendanceRate = totalAttended + totalMissed > 0 ? Math.round((totalAttended / (totalAttended + totalMissed)) * 100) : 0; stats.innerHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; margin-bottom: 12px;"><div class="data-item"><div class="data-label">Период</div><div class="data-value" style="font-size: 10px;">${startDate} — ${endDate}</div></div><div class="data-item"><div class="data-label">Мероприятий</div><div class="data-value">${totalEvents}</div></div><div class="data-item"><div class="data-label">Посещений</div><div class="data-value" style="color: var(--success);">${totalAttended}</div></div><div class="data-item"><div class="data-label">Пропусков</div><div class="data-value" style="color: var(--danger);">${totalMissed}</div></div><div class="data-item"><div class="data-label">Посещ.</div><div class="data-value" style="color: var(--dkp);">${attendanceRate}%</div></div><div class="data-item"><div class="data-label">DKP</div><div class="data-value" style="color: var(--dkp);">${totalDkp.toFixed(1)}</div></div></div>`; const dates = Object.keys(grouped).sort(); grid.innerHTML = dates.map(date => { const events = grouped[date]; const eventsHtml = Object.entries(events).map(([eventName, data]) => `<div class="calendar-event"><div class="calendar-event-title">🏆 ${eventName} <span style="font-size: 10px; color: var(--text-dim);">(+${data.eventDkp})</span></div>${data.attended.length > 0 ? `<div style="margin-bottom: 4px;"><span class="calendar-label attended">✓ (${data.attended.length}):</span><div class="calendar-players">${data.attended.map(p => `<span class="calendar-nick-attended">${p.nickname} <span style="font-size: 8px;">(+${p.dkpEarned})</span></span>`).join('')}</div></div>` : ''}${data.missed.length > 0 ? `<div><span class="calendar-label missed">✕ (${data.missed.length}):</span><div class="calendar-players">${data.missed.map(n => `<span class="calendar-nick-missed">${n}</span>`).join('')}</div></div>` : ''}</div>`).join(''); return `<div class="calendar-day"><div class="calendar-date">📅 ${date}</div>${eventsHtml}</div>`; }).join(''); }
 
     // ===== АУКЦИОН =====
-    async function loadActiveAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActiveAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('activeAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const timeLeft = getTimeLeft(auction.endTime); const colorClass = getColorClass(auction.itemColor); const isAllowed = auction.allowedPlayers.length === 0 || auction.allowedPlayers.includes(currentUser); const canBid = isAllowed && auction.currentBidder !== currentUser; return `<div class="auction-card"><div class="auction-header"><div><div class="auction-title">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div class="auction-timer" id="timer_${auction.id}" data-end="${auction.endTime}">${timeLeft}</div></div><div class="auction-info"><div class="auction-info-item"><div class="auction-info-label">Текущая</div><div class="auction-info-value" style="color: var(--dkp);">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">${auction.currentBidder}</div>` : ''}</div><div class="auction-info-item"><div class="auction-info-label">Мин.</div><div class="auction-info-value" style="color: var(--success);">${auction.currentBid + 1} DKP</div></div></div>${auction.minAttendance > 0 ? `<div style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px;">📊 Мин. посещ.: ${auction.minAttendance}%</div>` : ''}${auction.priorityOnly ? `<div style="font-size: 10px; color: var(--warning); margin-bottom: 6px;">⚠️ Только приоритет</div>` : ''}<div class="action-buttons"><button class="btn-compare" onclick="openBidModal('${auction.id}')" ${!canBid ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>${(currentRole === 'Админ' || currentRole === 'Модератор') ? `<button class="btn-remove" onclick="cancelAuction('${auction.id}')">✕ Отмена</button>` : ''}${(currentRole === 'Админ') ? `<button class="btn-approve" onclick="completeAuction('${auction.id}')">✓ Завершить</button>` : ''}</div></div>`; }).join(''); startCountdowns(); } else { list.innerHTML = '<div class="empty-state">Нет активных</div>'; } } catch (error) { console.error(error); } }
-    async function loadCompletedAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getCompletedAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('completedAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const colorClass = getColorClass(auction.itemColor); const statusText = auction.status === 'completed' ? '✅ Завершён' : '❌ Отменён'; const statusColor = auction.status === 'completed' ? 'var(--success)' : 'var(--danger)'; return `<div class="player-card"><div class="player-card-header"><div><div class="player-nick" style="color: var(--dkp); font-size: 13px;">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span></div></div><div style="text-align: right;"><div style="font-size: 10px; color: var(--text-dim);">Цена:</div><div style="font-size: 15px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">🏆 ${auction.currentBidder}</div>` : '<div style="font-size: 10px; color: var(--text-dim);">Без ставок</div>'}</div></div><div style="font-size: 10px; color: ${statusColor}; font-weight: 700; margin-top: 6px;">${statusText} | ${auction.endTime}</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет</div>'; } } catch (error) { console.error(error); } }
+    async function loadActiveAuctions() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActiveAuctions' }), redirect: 'follow' });
+            const result = await response.json();
+            const list = document.getElementById('activeAuctionsList');
+            if (result.success && result.auctions.length > 0) {
+                list.innerHTML = result.auctions.map(auction => {
+                    const timeLeft = getTimeLeft(auction.endTime);
+                    const colorClass = getColorClass(auction.itemColor);
+                    const isAllowed = auction.allowedPlayers.length === 0 || auction.allowedPlayers.includes(currentUser);
+                    const canBid = isAllowed && auction.currentBidder !== currentUser;
+                    const givenBadge = auction.itemGiven
+                        ? '<span class="given-badge given">✅ ВЫДАН</span>'
+                        : '<span class="given-badge not-given">⚠️ НЕ ВЫДАН</span>';
+                    return `<div class="auction-card">
+                        <div class="auction-header">
+                            <div>
+                                <div class="auction-title"><span class="auction-number-badge">#${auction.auctionNumber || '?'}</span>🔨 ${auction.itemName}</div>
+                                <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div>
+                            </div>
+                            <div class="timer-display" id="timer_${auction.id}" data-end="${auction.endTime}">${timeLeft}</div>
+                        </div>
+                        <div class="auction-info">
+                            <div class="auction-info-item">
+                                <div class="auction-info-label">Текущая</div>
+                                <div class="auction-info-value" style="color: var(--dkp);">${auction.currentBid} DKP</div>
+                                ${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">${auction.currentBidder}</div>` : ''}
+                            </div>
+                            <div class="auction-info-item">
+                                <div class="auction-info-label">Мин.</div>
+                                <div class="auction-info-value" style="color: var(--success);">${auction.currentBid + 1} DKP</div>
+                            </div>
+                        </div>
+                        ${auction.minAttendance > 0 ? `<div style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px;">📊 Мин. посещ.: ${auction.minAttendance}%</div>` : ''}
+                        ${auction.priorityOnly ? `<div style="font-size: 10px; color: var(--warning); margin-bottom: 6px;">⚠️ Только приоритет</div>` : ''}
+                        <div style="margin-bottom: 8px;">${givenBadge}</div>
+                        <div class="action-buttons">
+                            <button class="btn-compare" onclick="openBidModal('${auction.id}')" ${!canBid ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>
+                            ${(currentRole === 'Админ' || currentRole === 'Модератор') ? `
+                                <button class="btn-remove" onclick="cancelAuction('${auction.id}')">✕ Отмена</button>
+                                <button class="btn-approve" onclick="completeAuction('${auction.id}')">✓ Завершить</button>
+                                <button class="btn-edit" style="width: auto; margin-top: 0;" onclick="markItemGiven('${auction.id}', ${!auction.itemGiven})">${auction.itemGiven ? '↩ Отменить выдачу' : '✓ Выдать предмет'}</button>
+                            ` : ''}
+                        </div>
+                    </div>`;
+                }).join('');
+                startCountdowns();
+            } else { list.innerHTML = '<div class="empty-state">Нет активных</div>'; }
+        } catch (error) { console.error(error); }
+    }
+    async function loadCompletedAuctions() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getCompletedAuctions' }), redirect: 'follow' });
+            const result = await response.json();
+            const list = document.getElementById('completedAuctionsList');
+            if (result.success && result.auctions.length > 0) {
+                list.innerHTML = result.auctions.map(auction => {
+                    const colorClass = getColorClass(auction.itemColor);
+                    const statusText = auction.status === 'completed' ? '✅ Завершён' : '❌ Отменён';
+                    const statusColor = auction.status === 'completed' ? 'var(--success)' : 'var(--danger)';
+                    const givenBadge = auction.itemGiven
+                        ? '<span class="given-badge given">✅ Выдан</span>'
+                        : '<span class="given-badge not-given">⚠️ Не выдан</span>';
+                    return `<div class="player-card">
+                        <div class="player-card-header">
+                            <div>
+                                <div class="player-nick" style="color: var(--dkp); font-size: 13px;"><span class="auction-number-badge">#${auction.auctionNumber || '?'}</span>🔨 ${auction.itemName}</div>
+                                <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span></div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 10px; color: var(--text-dim);">Цена:</div>
+                                <div style="font-size: 15px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>
+                                ${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">🏆 ${auction.currentBidder}</div>` : '<div style="font-size: 10px; color: var(--text-dim);">Без ставок</div>'}
+                                <div style="margin-top: 4px;">${givenBadge}</div>
+                            </div>
+                        </div>
+                        <div style="font-size: 10px; color: ${statusColor}; font-weight: 700; margin-top: 6px;">${statusText} | ${auction.endTime}</div>
+                        ${(currentRole === 'Админ' || currentRole === 'Модератор') ? `
+                            <div style="margin-top: 6px;">
+                                <button class="btn-edit" style="width: auto; margin-top: 0; font-size: 10px;" onclick="markItemGiven('${auction.id}', ${!auction.itemGiven})">${auction.itemGiven ? '↩ Отменить выдачу' : '✓ Выдать предмет'}</button>
+                            </div>
+                        ` : ''}
+                    </div>`;
+                }).join('');
+            } else { list.innerHTML = '<div class="empty-state">Нет</div>'; }
+        } catch (error) { console.error(error); }
+    }
 
     async function loadAuctionItems() { const section = document.getElementById('auctionItemSection').value; const select = document.getElementById('auctionItemSelect'); const tierInput = document.getElementById('auctionItemTier'); const colorInput = document.getElementById('auctionItemColor'); const enhanceInput = document.getElementById('auctionItemEnhancement'); const primeCheck = document.getElementById('auctionIsPrime'); const bossCheck = document.getElementById('auctionIsBoss'); const nameInput = document.getElementById('auctionItemName'); select.innerHTML = '<option value="">— Сначала раздел —</option>'; tierInput.value = ''; colorInput.value = ''; enhanceInput.value = ''; primeCheck.checked = false; bossCheck.checked = false; nameInput.value = ''; currentAuctionItems = []; if (!section) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems', section: section }), redirect: 'follow' }); const result = await response.json(); if (result.success && result.items && result.items.length > 0) { currentAuctionItems = result.items; select.innerHTML = '<option value="">— Выберите —</option>' + result.items.map((item, idx) => { const badges = []; if (item.isPrime) badges.push('Прайм'); if (item.isBoss) badges.push('Босс'); if (item.enhancement > 0) badges.push(`+${item.enhancement}`); const badgeStr = badges.length > 0 ? ` [${badges.join(', ')}]` : ''; return `<option value="${idx}">${item.name} (${item.tier || 'т0'}, ${item.color})${badgeStr}</option>`; }).join(''); } else { select.innerHTML = '<option value="">— Пусто —</option>'; } } catch (error) { console.error(error); select.innerHTML = '<option value="">— Ошибка —</option>'; } }
     function fillAuctionItemDetails() { const select = document.getElementById('auctionItemSelect'); const idx = select.value; const tierInput = document.getElementById('auctionItemTier'); const colorInput = document.getElementById('auctionItemColor'); const enhanceInput = document.getElementById('auctionItemEnhancement'); const primeCheck = document.getElementById('auctionIsPrime'); const bossCheck = document.getElementById('auctionIsBoss'); const nameInput = document.getElementById('auctionItemName'); if (idx === '' || !currentAuctionItems[idx]) { tierInput.value = ''; colorInput.value = ''; enhanceInput.value = ''; primeCheck.checked = false; bossCheck.checked = false; nameInput.value = ''; return; } const item = currentAuctionItems[idx]; nameInput.value = item.name; tierInput.value = item.tier || 'т0'; colorInput.value = item.color || 'Белый'; enhanceInput.value = item.enhancement || 0; primeCheck.checked = item.isPrime || false; bossCheck.checked = item.isBoss || false; }
@@ -1692,13 +2377,13 @@
     async function createAuction() { const itemName = document.getElementById('auctionItemName').value; const itemSection = document.getElementById('auctionItemSection').value; const itemTier = document.getElementById('auctionItemTier').value; const itemColor = document.getElementById('auctionItemColor').value; const itemEnhancement = document.getElementById('auctionItemEnhancement').value; const isPrime = document.getElementById('auctionIsPrime').checked; const isBoss = document.getElementById('auctionIsBoss').checked; const startPrice = document.getElementById('auctionStartPrice').value; const durationHours = document.getElementById('auctionDuration').value; const minAttendance = document.getElementById('auctionMinAttendance').value; const priorityOnly = document.getElementById('auctionPriorityOnly').checked; if (!itemName || !itemSection) { showAuctionCreateMessage('Выберите предмет', 'error'); return; } if (!startPrice || !durationHours) { showAuctionCreateMessage('Укажите цену', 'error'); return; } const checkboxes = document.querySelectorAll('#auctionPlayersList input[type="checkbox"]:checked'); const allowedPlayers = Array.from(checkboxes).map(cb => cb.value); const itemKey = itemName; const msg = document.getElementById('auctionCreateMessage'); msg.innerText = 'Создание...'; msg.className = 'message'; msg.style.display = 'block'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'createAuction', itemName, itemSection, itemTier, itemColor, itemEnhancement: Number(itemEnhancement), isPrime, isBoss, startPrice: Number(startPrice), durationHours: Number(durationHours), allowedPlayers, minAttendance: Number(minAttendance), priorityOnly, createdBy: currentUser, itemKey: itemKey }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { switchAuctionTab('active', { target: document.getElementById('tabAuctionActive') }); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; } }
     function showAuctionCreateMessage(text, type) { const msg = document.getElementById('auctionCreateMessage'); msg.className = `message ${type}`; msg.innerText = text; msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 4000); }
 
-    async function openBidModal(auctionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: auctionId, bidder: currentUser }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const auction = result.auction; const minBid = auction.currentBid + 1; const colorClass = getColorClass(auction.itemColor); const balanceInfo = auction.playerBalance || { total: 0, frozen: 0, available: 0 }; const canAfford = balanceInfo.available >= minBid; const modal = document.getElementById('bidModal'); const content = document.getElementById('bidModalContent'); content.innerHTML = `<h3 style="color: var(--dkp); font-family: var(--font-display); margin-bottom: 12px; font-size: 15px; letter-spacing: 1px;">🔨 ${auction.itemName}</h3><div style="margin-bottom: 12px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 3px;">Характеристики:</div><div style="font-size: 12px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim);">Текущая:</div><div style="font-size: 20px; color: var(--dkp); font-weight: 700; font-family: var(--font-display);">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">От: ${auction.currentBidder}</div>` : ''}</div><div style="margin-bottom: 12px;"><div style="font-size: 10px; color: var(--text-dim);">Мин. ставка:</div><div style="font-size: 16px; color: var(--success); font-weight: 700; font-family: var(--font-display);">${minBid} DKP</div></div><div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border);"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; font-family: var(--font-display); letter-spacing: 1px;">💰 Ваш баланс</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 6px;"><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 14px; color: var(--accent); font-weight: 700;">${balanceInfo.total}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 14px; color: var(--warning); font-weight: 700;">${balanceInfo.frozen}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'};">Своб.</div><div style="font-size: 14px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'}; font-weight: 700;">${balanceInfo.available}</div></div></div>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); text-align: center; padding: 5px; background: var(--danger-soft); border-radius: var(--radius-sm);">⚠️ Недостаточно DKP</div>` : ''}</div>${auction.bids.length > 0 ? `<div style="margin-bottom: 12px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px;">История:</div><div style="max-height: 110px; overflow-y: auto;">${auction.bids.map(bid => { let statusBadge = ''; if (bid.status === 'active') statusBadge = '<span style="font-size: 8px; background: var(--warning-soft); color: var(--warning); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ЗАМОР.</span>'; else if (bid.status === 'outbid') statusBadge = '<span style="font-size: 8px; background: var(--danger-soft); color: var(--danger); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ПЕРЕБИТ</span>'; else if (bid.status === 'won') statusBadge = '<span style="font-size: 8px; background: var(--success-soft); color: var(--success); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ПОБЕДА</span>'; else if (bid.status === 'cancelled') statusBadge = '<span style="font-size: 8px; background: var(--bg-soft); color: var(--text-dim); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ОТМЕНА</span>'; return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 4px; background: var(--bg-soft); border-radius: 3px; margin-bottom: 3px; font-size: 11px;"><span style="color: var(--accent);">${bid.bidder}${statusBadge}</span><span style="color: var(--dkp); font-weight: 700;">${bid.amount}</span><span style="color: var(--text-dim); font-size: 9px;">${bid.date}</span></div>`; }).join('')}</div></div>` : ''}<div class="form-group"><label>Ваша ставка (мин. ${minBid})</label><input type="number" id="bidAmount" min="${minBid}" max="${balanceInfo.available}" placeholder="${minBid}" required ${!canAfford ? 'disabled' : ''}>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); margin-top: 3px;">Недостаточно DKP</div>` : ''}</div><button type="button" class="submit-btn dkp-btn" onclick="placeBid('${auction.id}', ${minBid})" ${!canAfford ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>`; modal.classList.remove('hidden'); } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
+    async function openBidModal(auctionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: auctionId, bidder: currentUser }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const auction = result.auction; const minBid = auction.currentBid + 1; const colorClass = getColorClass(auction.itemColor); const balanceInfo = auction.playerBalance || { total: 0, frozen: 0, available: 0 }; const canAfford = balanceInfo.available >= minBid; const modal = document.getElementById('bidModal'); const content = document.getElementById('bidModalContent'); content.innerHTML = `<h3 style="color: var(--dkp); font-family: var(--font-display); margin-bottom: 12px; font-size: 15px; letter-spacing: 1px;"><span class="auction-number-badge">#${auction.auctionNumber || '?'}</span> 🔨 ${auction.itemName}</h3><div style="margin-bottom: 12px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 3px;">Характеристики:</div><div style="font-size: 12px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim);">Текущая:</div><div style="font-size: 20px; color: var(--dkp); font-weight: 700; font-family: var(--font-display);">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">От: ${auction.currentBidder}</div>` : ''}</div><div style="margin-bottom: 12px;"><div style="font-size: 10px; color: var(--text-dim);">Мин. ставка:</div><div style="font-size: 16px; color: var(--success); font-weight: 700; font-family: var(--font-display);">${minBid} DKP</div></div><div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border);"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; font-family: var(--font-display); letter-spacing: 1px;">💰 Ваш баланс</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 6px;"><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 14px; color: var(--accent); font-weight: 700;">${balanceInfo.total}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 14px; color: var(--warning); font-weight: 700;">${balanceInfo.frozen}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'};">Своб.</div><div style="font-size: 14px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'}; font-weight: 700;">${balanceInfo.available}</div></div></div>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); text-align: center; padding: 5px; background: var(--danger-soft); border-radius: var(--radius-sm);">⚠️ Недостаточно DKP</div>` : ''}</div>${auction.bids.length > 0 ? `<div style="margin-bottom: 12px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px;">История:</div><div style="max-height: 110px; overflow-y: auto;">${auction.bids.map(bid => { let statusBadge = ''; if (bid.status === 'active') statusBadge = '<span style="font-size: 8px; background: var(--warning-soft); color: var(--warning); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ЗАМОР.</span>'; else if (bid.status === 'outbid') statusBadge = '<span style="font-size: 8px; background: var(--danger-soft); color: var(--danger); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ПЕРЕБИТ</span>'; else if (bid.status === 'won') statusBadge = '<span style="font-size: 8px; background: var(--success-soft); color: var(--success); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ПОБЕДА</span>'; else if (bid.status === 'cancelled') statusBadge = '<span style="font-size: 8px; background: var(--bg-soft); color: var(--text-dim); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ОТМЕНА</span>'; return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 4px; background: var(--bg-soft); border-radius: 3px; margin-bottom: 3px; font-size: 11px;"><span style="color: var(--accent);">${bid.bidder}${statusBadge}</span><span style="color: var(--dkp); font-weight: 700;">${bid.amount}</span><span style="color: var(--text-dim); font-size: 9px;">${bid.date}</span></div>`; }).join('')}</div></div>` : ''}<div class="form-group"><label>Ваша ставка (мин. ${minBid})</label><input type="number" id="bidAmount" min="${minBid}" max="${balanceInfo.available}" placeholder="${minBid}" required ${!canAfford ? 'disabled' : ''}>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); margin-top: 3px;">Недостаточно DKP</div>` : ''}</div><button type="button" class="submit-btn dkp-btn" onclick="placeBid('${auction.id}', ${minBid})" ${!canAfford ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>`; modal.classList.remove('hidden'); } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
     function closeBidModal() { document.getElementById('bidModal').classList.add('hidden'); }
     async function placeBid(auctionId, minBid) { const amount = document.getElementById('bidAmount').value; if (!amount || Number(amount) < minBid) { alert(`Мин. ${minBid} DKP`); return; } if (!confirm(`Ставка ${amount} DKP?`)) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'placeBid', auctionId: auctionId, bidder: currentUser, amount: Number(amount) }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert(result.message); closeBidModal(); loadActiveAuctions(); loadMyDkp(); } else { alert('Ошибка: ' + result.message); } } catch (error) { alert('Ошибка: ' + error.message); } }
     async function cancelAuction(auctionId) { if (!confirm('Отменить?')) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'cancelAuction', auctionId: auctionId, cancelledBy: currentRole }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert(result.message); loadActiveAuctions(); } else { alert('Ошибка: ' + result.message); } } catch (error) { alert('Ошибка: ' + error.message); } }
-    async function completeAuction(auctionId) { if (!confirm('Завершить?')) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'completeAuction', auctionId: auctionId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert(result.message); loadActiveAuctions(); } else { alert('Ошибка: ' + result.message); } } catch (error) { alert('Ошибка: ' + error.message); } }
+    async function completeAuction(auctionId) { if (!confirm('Завершить?')) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'completeAuction', auctionId: auctionId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert(result.message); loadActiveAuctions(); loadRecentWinners(); loadMyLootHistory(); } else { alert('Ошибка: ' + result.message); } } catch (error) { alert('Ошибка: ' + error.message); } }
     function getTimeLeft(endTime) { const end = new Date(endTime); const now = new Date(); const diff = end - now; if (diff <= 0) return 'Завершён'; const hours = Math.floor(diff / (1000 * 60 * 60)); const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)); const seconds = Math.floor((diff % (1000 * 60)) / 1000); return `${hours}ч ${minutes}м ${seconds}с`; }
-    function startCountdowns() { if (countdownInterval) clearInterval(countdownInterval); countdownInterval = setInterval(() => { document.querySelectorAll('.auction-timer').forEach(el => { const endTime = el.getAttribute('data-end'); if (endTime) el.innerText = getTimeLeft(endTime); }); }, 1000); }
+    function startCountdowns() { if (countdownInterval) clearInterval(countdownInterval); countdownInterval = setInterval(() => { document.querySelectorAll('.timer-display').forEach(el => { const endTime = el.getAttribute('data-end'); if (endTime) el.innerText = getTimeLeft(endTime); }); }, 1000); }
 
     // ===== ИКОНКИ =====
     function openIconModal(type, id, name) {
@@ -1735,8 +2420,7 @@
             } else { preview.innerHTML = '<div style="color: var(--text-dim);">Нет иконки</div>'; }
         } catch (error) { preview.innerHTML = '<div style="color: var(--danger);">Ошибка</div>'; }
     }
-
-    async function handleIconFileSelect(event) {
+        async function handleIconFileSelect(event) {
         const file = event.target.files[0];
         if (!file) return;
         if (!file.type.startsWith('image/')) { alert('Выберите изображение'); return; }
@@ -1799,19 +2483,7 @@
         const listStr = document.getElementById('auctionCoefficientList').value;
         const selectiveList = listStr ? listStr.split(',').map(s => s.trim()).filter(s => s) : [];
         try {
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'saveAuctionSettings',
-                    repeatBanEnabled: document.getElementById('auctionRepeatBanEnabled').checked,
-                    repeatBanPeriod: document.getElementById('auctionRepeatBanPeriod').value,
-                    repeatBanDays: Number(document.getElementById('auctionRepeatBanDays').value),
-                    coefficientEnabled: document.getElementById('auctionCoefficientEnabled').checked,
-                    coefficientMode: document.getElementById('auctionCoefficientMode').value,
-                    coefficientSelectiveList: selectiveList
-                }),
-                redirect: 'follow'
-            });
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAuctionSettings', repeatBanEnabled: document.getElementById('auctionRepeatBanEnabled').checked, repeatBanPeriod: document.getElementById('auctionRepeatBanPeriod').value, repeatBanDays: Number(document.getElementById('auctionRepeatBanDays').value), coefficientEnabled: document.getElementById('auctionCoefficientEnabled').checked, coefficientMode: document.getElementById('auctionCoefficientMode').value, coefficientSelectiveList: selectiveList }), redirect: 'follow' });
             const result = await response.json();
             if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Настройки аукциона сохранены'; }
             else { msg.className = 'message error'; msg.innerText = result.message; }
@@ -1820,7 +2492,7 @@
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
     }
 
-    // ✅ НОВЫЕ ФУНКЦИИ: КОЭФФИЦИЕНТ DKP ЗА МЕРОПРИЯТИЯ
+    // ===== КОЭФФИЦИЕНТ DKP ЗА МЕРОПРИЯТИЯ =====
     async function loadEventCoefficientSettings() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEventCoefficientSettings' }), redirect: 'follow' });
@@ -1841,17 +2513,7 @@
         const listStr = document.getElementById('eventCoefList').value;
         const selectiveList = listStr ? listStr.split(',').map(s => s.trim()).filter(s => s) : [];
         try {
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'saveEventCoefficientSettings',
-                    enabled: document.getElementById('eventCoefEnabled').checked,
-                    mode: document.getElementById('eventCoefMode').value,
-                    value: Number(document.getElementById('eventCoefValue').value),
-                    selectiveList: selectiveList
-                }),
-                redirect: 'follow'
-            });
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'saveEventCoefficientSettings', enabled: document.getElementById('eventCoefEnabled').checked, mode: document.getElementById('eventCoefMode').value, value: Number(document.getElementById('eventCoefValue').value), selectiveList: selectiveList }), redirect: 'follow' });
             const result = await response.json();
             if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Коэффициент мероприятий сохранён'; }
             else { msg.className = 'message error'; msg.innerText = result.message; }
@@ -1865,9 +2527,7 @@
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' });
             const result = await response.json();
             const select = document.getElementById('playerEventCoefSelect');
-            if (result.success && select) {
-                select.innerHTML = '<option value="">— Выберите игрока —</option>' + result.nicks.map(n => `<option value="${n}">${n}</option>`).join('');
-            }
+            if (result.success && select) { select.innerHTML = '<option value="">— Выберите игрока —</option>' + result.nicks.map(n => `<option value="${n}">${n}</option>`).join(''); }
         } catch (error) { console.error(error); }
     }
 
@@ -1897,17 +2557,7 @@
         if (!nickname) { alert('Выберите игрока'); return; }
         const msg = document.getElementById('playerEventCoefMessage');
         try {
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'savePlayerEventCoefSettings',
-                    nickname: nickname,
-                    enabled: document.getElementById('playerEventCoefEnabled').checked,
-                    mode: document.getElementById('playerEventCoefMode').value,
-                    value: Number(document.getElementById('playerEventCoefValue').value)
-                }),
-                redirect: 'follow'
-            });
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'savePlayerEventCoefSettings', nickname: nickname, enabled: document.getElementById('playerEventCoefEnabled').checked, mode: document.getElementById('playerEventCoefMode').value, value: Number(document.getElementById('playerEventCoefValue').value) }), redirect: 'follow' });
             const result = await response.json();
             if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Сохранено для ' + nickname; }
             else { msg.className = 'message error'; msg.innerText = result.message; }
@@ -1937,18 +2587,7 @@
     async function savePenaltySettings() {
         const msg = document.getElementById('penaltySettingsMessage');
         try {
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'savePenaltySettings',
-                    enabled: document.getElementById('penaltyEnabled').checked,
-                    penaltyPercent: Number(document.getElementById('penaltyPercent').value),
-                    periodType: document.getElementById('penaltyPeriodType').value,
-                    customDays: Number(document.getElementById('penaltyCustomDays').value),
-                    missPercent: Number(document.getElementById('penaltyMissPercent').value)
-                }),
-                redirect: 'follow'
-            });
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'savePenaltySettings', enabled: document.getElementById('penaltyEnabled').checked, penaltyPercent: Number(document.getElementById('penaltyPercent').value), periodType: document.getElementById('penaltyPeriodType').value, customDays: Number(document.getElementById('penaltyCustomDays').value), missPercent: Number(document.getElementById('penaltyMissPercent').value) }), redirect: 'follow' });
             const result = await response.json();
             if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Настройки штрафов сохранены'; }
             else { msg.className = 'message error'; msg.innerText = result.message; }
@@ -1983,14 +2622,8 @@
                 } else {
                     resultsBlock.innerHTML = '<div style="color: var(--success); font-size: 11px;">✅ Все игроки активны, штрафов нет</div>';
                 }
-            } else {
-                msg.className = 'message error';
-                msg.innerText = result.message;
-            }
-        } catch (error) {
-            msg.className = 'message error';
-            msg.innerText = 'Ошибка связи';
-        }
+            } else { msg.className = 'message error'; msg.innerText = result.message; }
+        } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка связи'; }
     }
 
     async function loadPlayersForPenaltySelect() {
@@ -1998,9 +2631,7 @@
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' });
             const result = await response.json();
             const select = document.getElementById('playerPenaltySelect');
-            if (result.success && select) {
-                select.innerHTML = '<option value="">— Выберите игрока —</option>' + result.nicks.map(n => `<option value="${n}">${n}</option>`).join('');
-            }
+            if (result.success && select) { select.innerHTML = '<option value="">— Выберите игрока —</option>' + result.nicks.map(n => `<option value="${n}">${n}</option>`).join(''); }
         } catch (error) { console.error(error); }
     }
 
@@ -2038,19 +2669,7 @@
         if (!nickname) { alert('Выберите игрока'); return; }
         const msg = document.getElementById('playerPenaltyMessage');
         try {
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'savePlayerPenaltySettings',
-                    nickname: nickname,
-                    enabled: document.getElementById('playerPenaltyEnabled').checked,
-                    penaltyPercent: Number(document.getElementById('playerPenaltyPercent').value),
-                    periodType: document.getElementById('playerPenaltyPeriodType').value,
-                    customDays: Number(document.getElementById('playerPenaltyCustomDays').value),
-                    missPercent: Number(document.getElementById('playerPenaltyMissPercent').value)
-                }),
-                redirect: 'follow'
-            });
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'savePlayerPenaltySettings', nickname: nickname, enabled: document.getElementById('playerPenaltyEnabled').checked, penaltyPercent: Number(document.getElementById('playerPenaltyPercent').value), periodType: document.getElementById('playerPenaltyPeriodType').value, customDays: Number(document.getElementById('playerPenaltyCustomDays').value), missPercent: Number(document.getElementById('playerPenaltyMissPercent').value) }), redirect: 'follow' });
             const result = await response.json();
             if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Сохранено для ' + nickname; }
             else { msg.className = 'message error'; msg.innerText = result.message; }
