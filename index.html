@@ -18,6 +18,9 @@
             --shadow-md: 0 2px 6px rgba(44, 62, 80, 0.08);
             --shadow-lg: 0 4px 12px rgba(44, 62, 80, 0.1);
             --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px;
+            --glow-light: rgba(91, 124, 153, 0.25);
+            --glow-gold: rgba(184, 134, 74, 0.3);
+            --glow-success: rgba(90, 138, 107, 0.25);
         }
         body[data-theme="dark"] {
             --bg-main: #1a1d23; --bg-panel: #242830; --bg-soft: #2a2e36; --bg-hover: #333842;
@@ -30,6 +33,9 @@
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
             --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4);
             --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.5);
+            --glow-light: rgba(107, 140, 174, 0.5);
+            --glow-gold: rgba(200, 150, 96, 0.5);
+            --glow-success: rgba(106, 154, 123, 0.5);
         }
         * { box-sizing: border-box; }
         body { margin: 0; padding: 0; font-family: 'Times New Roman', Times, Georgia, serif; background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background-color 0.3s, color 0.3s; }
@@ -37,10 +43,27 @@
         .screen.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        /* ✅ ЛЁГКОЕ СВЕЧЕНИЕ ТЕКСТА */
+        .public-title { text-shadow: 0 0 8px var(--glow-light), 1px 1px 2px rgba(0,0,0,0.2); }
+        .panel-title { text-shadow: 0 0 3px var(--glow-light); }
+        .top-panel-title { text-shadow: 0 0 3px var(--glow-light); }
+        .player-nick { text-shadow: 0 0 2px var(--glow-light); }
+        .data-value { text-shadow: 0 0 3px var(--glow-light); }
+        .ranking-nick { text-shadow: 0 0 2px var(--glow-light); }
+        .event-name { text-shadow: 0 0 2px var(--glow-light); }
+        .auction-title { text-shadow: 0 0 3px var(--glow-gold); }
+        .dkp-highlight { text-shadow: 0 0 4px var(--glow-gold); }
+        .auth-title { text-shadow: 0 0 5px var(--glow-light); }
+        .top-value { text-shadow: 0 0 2px var(--glow-success); }
+        .calendar-date { text-shadow: 0 0 2px var(--glow-light); }
+        .calendar-event-title { text-shadow: 0 0 2px var(--glow-gold); }
+        .event-stat-name { text-shadow: 0 0 2px var(--glow-gold); }
+        .submission-event { text-shadow: 0 0 2px var(--glow-gold); }
+
         .public-hero { position: relative; height: 260px; margin-bottom: 20px; border-radius: var(--radius-lg); overflow: hidden; background: linear-gradient(135deg, var(--accent) 0%, #4a5d73 100%); box-shadow: var(--shadow-md); }
         body[data-theme="dark"] .public-hero { background: linear-gradient(135deg, #2a3540 0%, #1a2530 100%); }
         .public-hero-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .public-title { font-family: 'Times New Roman', Times, serif; font-size: 40px; font-weight: 700; color: #ffffff; letter-spacing: 3px; margin: 0 0 6px 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+        .public-title { font-family: 'Times New Roman', Times, serif; font-size: 40px; font-weight: 700; color: #ffffff; letter-spacing: 3px; margin: 0 0 6px 0; }
         .public-subtitle { color: rgba(255,255,255,0.85); font-size: 13px; letter-spacing: 2px; margin-bottom: 18px; font-style: italic; }
         .login-link { background: #ffffff; border: none; color: var(--accent); padding: 7px 22px; cursor: pointer; font-family: 'Times New Roman', Times, serif; font-size: 12px; letter-spacing: 1px; transition: 0.2s; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); font-weight: 600; }
         .login-link:hover { background: #f5f3ef; transform: translateY(-1px); box-shadow: var(--shadow-md); }
@@ -278,6 +301,8 @@
         .dkp-history-item.spend { border-left-color: var(--danger); }
         .dkp-history-item.manual_add { border-left-color: var(--dkp); }
         .dkp-history-item.manual_sub { border-left-color: var(--warning); }
+        .dkp-history-item.penalty { border-left-color: var(--danger); background: var(--danger-soft); }
+        .dkp-history-item.auction_win { border-left-color: var(--dkp); }
         .history-info { flex: 1; }
         .history-event { color: var(--text-main); font-size: 12px; font-weight: 600; }
         .history-date { color: var(--text-dim); font-size: 10px; margin-top: 1px; }
@@ -352,6 +377,22 @@
         .absentee-rate.critical { color: var(--danger); }
         .absentee-rate.warning { color: var(--warning); }
         .absentee-rate.good { color: var(--success); }
+
+        /* ✅ СТИЛИ ДЛЯ НАСТРОЕК */
+        .settings-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; }
+        .settings-card-title { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 13px; font-weight: 700; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; text-shadow: 0 0 3px var(--glow-light); }
+        .settings-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+        .settings-label { font-size: 11px; color: var(--text-dim); min-width: 140px; font-weight: 600; }
+        .settings-value { flex: 1; min-width: 120px; }
+        .toggle-switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .3s; border-radius: 20px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+        input:checked + .toggle-slider { background-color: var(--success); }
+        input:checked + .toggle-slider:before { transform: translateX(20px); }
+        .penalty-result { background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); padding: 8px; margin-bottom: 5px; font-size: 11px; }
+        .penalty-result .nick { color: var(--danger); font-weight: 700; }
+        .penalty-result .amount { color: var(--danger); font-weight: 700; }
     </style>
 </head>
 <body data-theme="light">
@@ -369,7 +410,7 @@
         <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="topLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
     </div>
-    <div class="footer">© RF Online Next | v9.0</div>
+    <div class="footer">© RF Online Next | v10.0</div>
 </div>
 
 <div id="authScreen" class="screen">
@@ -445,7 +486,7 @@
             <div class="panel-title">⚡ Характеристики <span id="playerStatus"></span></div>
             <div id="approvedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 8px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEditForm()">✎ Изменить</button></div>
             <div id="approvedDataGrid" class="data-grid"></div>
-            <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют или на проверке.</div>
+            <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют.</div>
             <form id="playerDataForm" class="hidden" onsubmit="savePlayerData(event)">
                 <div class="data-grid">
                     <div class="form-group"><label>БМ</label><input type="number" id="bm" required placeholder="150000"></div>
@@ -595,6 +636,7 @@
             <button class="tab-btn" id="tabAdminSkills" onclick="switchAdminTab('skills', event)">🎯 Навыки</button>
             <button class="tab-btn" id="tabAdminItems" onclick="switchAdminTab('items', event)">⚔ Предметы</button>
             <button class="tab-btn hidden" id="tabAdminUsers" onclick="switchAdminTab('users', event)">👥 Юзеры</button>
+            <button class="tab-btn" id="tabAdminSettings" onclick="switchAdminTab('settings', event)">⚙ Настройки</button>
         </div>
         <div id="adminPlayersContent"><div id="pendingPlayersList"></div><div id="adminMessage" class="message"></div></div>
         <div id="adminSkillsPendingContent" class="hidden"><div id="pendingSkillsList"></div><div id="adminSkillsPendingMessage" class="message"></div></div>
@@ -662,6 +704,158 @@
                 <div id="deletionRequestsList"></div><div id="deletionRequestsMessage" class="message"></div>
             </div>
         </div>
+        
+        <!-- ✅ НОВАЯ ВКЛАДКА НАСТРОЕК -->
+        <div id="adminSettingsContent" class="hidden">
+            <div class="settings-card">
+                <div class="settings-card-title">🔨 Настройки аукциона</div>
+                <div class="settings-row">
+                    <div class="settings-label">Запрет повторных побед:</div>
+                    <div class="settings-value">
+                        <label class="toggle-switch"><input type="checkbox" id="auctionRepeatBanEnabled"><span class="toggle-slider"></span></label>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Период запрета:</div>
+                    <div class="settings-value">
+                        <select id="auctionRepeatBanPeriod">
+                            <option value="week">Неделя</option>
+                            <option value="month">Месяц</option>
+                            <option value="custom_days">Свои дни</option>
+                            <option value="forever">Навсегда</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-row" id="customDaysRow" style="display: none;">
+                    <div class="settings-label">Количество дней:</div>
+                    <div class="settings-value">
+                        <input type="number" id="auctionRepeatBanDays" min="1" max="365" value="30" style="width: 100px;">
+                    </div>
+                </div>
+                <div class="settings-row" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
+                    <div class="settings-label">Коэффициент DKP при победе:</div>
+                    <div class="settings-value">
+                        <label class="toggle-switch"><input type="checkbox" id="auctionCoefficientEnabled"><span class="toggle-slider"></span></label>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Режим коэффициента:</div>
+                    <div class="settings-value">
+                        <select id="auctionCoefficientMode">
+                            <option value="disabled">Выключен</option>
+                            <option value="all">Для всех</option>
+                            <option value="selective">Выборочно</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-row" id="selectiveListRow" style="display: none;">
+                    <div class="settings-label">Список игроков:</div>
+                    <div class="settings-value">
+                        <input type="text" id="auctionCoefficientList" placeholder="Ник1, Ник2, Ник3..." style="width: 100%;">
+                        <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Через запятую</div>
+                    </div>
+                </div>
+                <button class="submit-btn" style="margin-top: 10px;" onclick="saveAuctionSettings()">💾 Сохранить настройки аукциона</button>
+                <div id="auctionSettingsMessage" class="message"></div>
+            </div>
+            
+            <div class="settings-card">
+                <div class="settings-card-title">⚠️ Глобальные настройки штрафов</div>
+                <div class="settings-row">
+                    <div class="settings-label">Включить штрафы:</div>
+                    <div class="settings-value">
+                        <label class="toggle-switch"><input type="checkbox" id="penaltyEnabled"><span class="toggle-slider"></span></label>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Процент списания (%):</div>
+                    <div class="settings-value">
+                        <input type="number" id="penaltyPercent" min="0" max="100" value="10" style="width: 100px;">
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Тип периода:</div>
+                    <div class="settings-value">
+                        <select id="penaltyPeriodType">
+                            <option value="week">Неделя</option>
+                            <option value="month">Месяц</option>
+                            <option value="custom_days">Свои дни</option>
+                            <option value="miss_percent">% пропусков</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-row" id="penaltyCustomDaysRow" style="display: none;">
+                    <div class="settings-label">Количество дней:</div>
+                    <div class="settings-value">
+                        <input type="number" id="penaltyCustomDays" min="1" max="365" value="7" style="width: 100px;">
+                    </div>
+                </div>
+                <div class="settings-row" id="penaltyMissPercentRow" style="display: none;">
+                    <div class="settings-label">Порог пропусков (%):</div>
+                    <div class="settings-value">
+                        <input type="number" id="penaltyMissPercent" min="0" max="100" value="50" style="width: 100px;">
+                        <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Штраф при превышении</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                    <button class="submit-btn" style="flex: 1;" onclick="savePenaltySettings()">💾 Сохранить</button>
+                    <button class="submit-btn dkp-btn" style="flex: 1;" onclick="applyPenalties()">⚡ Применить штрафы</button>
+                </div>
+                <div id="penaltySettingsMessage" class="message"></div>
+                <div id="penaltyResultsBlock" style="margin-top: 10px;"></div>
+            </div>
+            
+            <div class="settings-card">
+                <div class="settings-card-title">👥 Индивидуальные настройки штрафов</div>
+                <div class="settings-row">
+                    <div class="settings-label">Игрок:</div>
+                    <div class="settings-value">
+                        <select id="playerPenaltySelect" onchange="loadPlayerPenaltySettings()">
+                            <option value="">— Выберите игрока —</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="playerPenaltyForm" style="display: none;">
+                    <div class="settings-row">
+                        <div class="settings-label">Индивидуальные штрафы:</div>
+                        <div class="settings-value">
+                            <label class="toggle-switch"><input type="checkbox" id="playerPenaltyEnabled"><span class="toggle-slider"></span></label>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Процент списания:</div>
+                        <div class="settings-value">
+                            <input type="number" id="playerPenaltyPercent" min="0" max="100" value="10" style="width: 100px;">
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Тип периода:</div>
+                        <div class="settings-value">
+                            <select id="playerPenaltyPeriodType">
+                                <option value="week">Неделя</option>
+                                <option value="month">Месяц</option>
+                                <option value="custom_days">Свои дни</option>
+                                <option value="miss_percent">% пропусков</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="settings-row" id="playerCustomDaysRow" style="display: none;">
+                        <div class="settings-label">Количество дней:</div>
+                        <div class="settings-value">
+                            <input type="number" id="playerPenaltyCustomDays" min="1" max="365" value="7" style="width: 100px;">
+                        </div>
+                    </div>
+                    <div class="settings-row" id="playerMissPercentRow" style="display: none;">
+                        <div class="settings-label">Порог пропусков (%):</div>
+                        <div class="settings-value">
+                            <input type="number" id="playerPenaltyMissPercent" min="0" max="100" value="50" style="width: 100px;">
+                        </div>
+                    </div>
+                    <button class="submit-btn" style="margin-top: 10px;" onclick="savePlayerPenaltySettings()">💾 Сохранить для игрока</button>
+                    <div id="playerPenaltyMessage" class="message"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -698,7 +892,7 @@
     </div>
 </div>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7-jUIejCa_lbdjDRjqOecm9aGCzdAbevKsT2kX3l66RJd3nVvoo55uusJDH3w1Zkf/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbylURsSmvwgTqhGGFPjR5IeMu7PKDw07r012wNmO-oWgemInpjDQY3Xn7jetTjAqRNO/exec';
     let currentUser = null; let currentRole = null;
     let myPlayerData = null; let myPlayerSkills = null; let myPlayerItems = null; let myDkpData = null;
     let allSkills = []; let allItems = []; let equipmentSections = [];
@@ -724,27 +918,25 @@
             if (rememberMe) rememberMe.checked = true;
             if (indicator) indicator.style.display = 'block';
         }
+        
+        // Обработчики для показа/скрытия полей настроек
+        const banPeriodSelect = document.getElementById('auctionRepeatBanPeriod');
+        if (banPeriodSelect) banPeriodSelect.addEventListener('change', (e) => { document.getElementById('customDaysRow').style.display = e.target.value === 'custom_days' ? 'flex' : 'none'; });
+        const coefModeSelect = document.getElementById('auctionCoefficientMode');
+        if (coefModeSelect) coefModeSelect.addEventListener('change', (e) => { document.getElementById('selectiveListRow').style.display = e.target.value === 'selective' ? 'flex' : 'none'; });
+        const penaltyPeriodSelect = document.getElementById('penaltyPeriodType');
+        if (penaltyPeriodSelect) penaltyPeriodSelect.addEventListener('change', (e) => { document.getElementById('penaltyCustomDaysRow').style.display = e.target.value === 'custom_days' ? 'flex' : 'none'; document.getElementById('penaltyMissPercentRow').style.display = e.target.value === 'miss_percent' ? 'flex' : 'none'; });
+        const playerPeriodSelect = document.getElementById('playerPenaltyPeriodType');
+        if (playerPeriodSelect) playerPeriodSelect.addEventListener('change', (e) => { document.getElementById('playerCustomDaysRow').style.display = e.target.value === 'custom_days' ? 'flex' : 'none'; document.getElementById('playerMissPercentRow').style.display = e.target.value === 'miss_percent' ? 'flex' : 'none'; });
     });
 
-    function toggleTheme() {
-        const current = document.body.getAttribute('data-theme') || 'light';
-        const newTheme = current === 'light' ? 'dark' : 'light';
-        document.body.setAttribute('data-theme', newTheme);
-        localStorage.setItem('rf_theme', newTheme);
-        updateThemeButton(newTheme);
-    }
-    function updateThemeButton(theme) {
-        const btn = document.getElementById('themeToggleBtn');
-        if (btn) btn.innerHTML = theme === 'light' ? '🌙 Темная' : '☀️ Светлая';
-    }
+    function toggleTheme() { const current = document.body.getAttribute('data-theme') || 'light'; const newTheme = current === 'light' ? 'dark' : 'light'; document.body.setAttribute('data-theme', newTheme); localStorage.setItem('rf_theme', newTheme); updateThemeButton(newTheme); }
+    function updateThemeButton(theme) { const btn = document.getElementById('themeToggleBtn'); if (btn) btn.innerHTML = theme === 'light' ? '🌙 Темная' : '☀️ Светлая'; }
 
     window.addEventListener('error', (e) => { console.error('ОШИБКА:', e.error); });
     window.addEventListener('unhandledrejection', (e) => { console.error('PROMISE:', e.reason); });
 
-    function getIconBorderColor(color) {
-        const map = { 'Белый': '#94a3b8', 'Зеленый': 'var(--success)', 'Синий': 'var(--accent)', 'Фиолетовый': '#6b4aa8', 'Желтый': 'var(--gold)', 'Красный': 'var(--danger)' };
-        return map[color] || 'var(--border)';
-    }
+    function getIconBorderColor(color) { const map = { 'Белый': '#94a3b8', 'Зеленый': 'var(--success)', 'Синий': 'var(--accent)', 'Фиолетовый': '#6b4aa8', 'Желтый': 'var(--gold)', 'Красный': 'var(--danger)' }; return map[color] || 'var(--border)'; }
 
     async function loadAndDisplayIcon(type, id, containerId, color) {
         try {
@@ -781,7 +973,7 @@
                 const topLevelHtml = topLevel.map((p, i) => { const rank = i + 1; const rankClass = rank <= 3 ? `rank-${rank}` : ''; return `<div class="top-item ${rankClass}"><div class="top-rank ${rankClass}">#${rank}</div><div class="top-nick">${p.nickname}${getRoleBadge(p.role)}</div><div class="top-value">Ур. ${p.level}</div></div>`; }).join('');
                 document.getElementById('topLevelList').innerHTML = topLevelHtml; document.getElementById('mainTopLevelList').innerHTML = topLevelHtml;
             } else { const emptyHtml = '<div class="empty-state">Нет данных</div>'; ['topBmList', 'topLevelList', 'mainTopBmList', 'mainTopLevelList'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = emptyHtml; }); }
-        } catch (error) { console.error('Ошибка топов:', error); const errorHtml = '<div class="empty-state">Ошибка</div>'; ['topBmList', 'topLevelList', 'mainTopBmList', 'mainTopLevelList'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = errorHtml; }); }
+        } catch (error) { console.error('Ошибка топов:', error); }
         try {
             const dkpResponse = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllDKP' }), redirect: 'follow' });
             const dkpResult = await dkpResponse.json();
@@ -808,7 +1000,22 @@
     }
     function switchDkpTab(tab, e) { document.querySelectorAll('#dkpContent > .tabs .tab-btn').forEach(t => t.classList.remove('active')); e.target.classList.add('active'); document.getElementById('dkpMyContent').classList.toggle('hidden', tab !== 'my'); document.getElementById('dkpSubmitContent').classList.toggle('hidden', tab !== 'submit'); document.getElementById('dkpRatingContent').classList.toggle('hidden', tab !== 'rating'); if (tab === 'my') loadMyDkp(); if (tab === 'submit') loadEventsForSelect(); if (tab === 'rating') loadDkpRating(); }
     function switchAuctionTab(tab, e) { document.querySelectorAll('#auctionContent > .tabs .tab-btn').forEach(t => t.classList.remove('active')); e.target.classList.add('active'); document.getElementById('auctionActiveContent').classList.toggle('hidden', tab !== 'active'); document.getElementById('auctionCompletedContent').classList.toggle('hidden', tab !== 'completed'); document.getElementById('auctionCreateContent').classList.toggle('hidden', tab !== 'create'); if (tab === 'active') loadActiveAuctions(); if (tab === 'completed') loadCompletedAuctions(); if (tab === 'create') loadPlayersForAuction(); }
-    function switchAdminTab(tab, e) { document.querySelectorAll('#adminContent > .tabs .tab-btn').forEach(t => t.classList.remove('active')); e.target.classList.add('active'); ['players', 'skillsPending', 'equipmentPending', 'dkpPending', 'events', 'dkpAdjust', 'skills', 'items', 'users'].forEach(t => { const content = document.getElementById('admin' + t.charAt(0).toUpperCase() + t.slice(1) + 'Content'); if (content) content.classList.toggle('hidden', t !== tab); }); if (tab === 'skills') loadAdminSkills(); if (tab === 'skillsPending') loadPendingSkills(); if (tab === 'equipmentPending') loadPendingEquipment(); if (tab === 'dkpPending') loadPendingDkp(); if (tab === 'events') loadAdminEvents(); if (tab === 'items') loadAdminItems(); if (tab === 'users') loadAllUsers(); }
+    function switchAdminTab(tab, e) {
+        document.querySelectorAll('#adminContent > .tabs .tab-btn').forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+        ['players', 'skillsPending', 'equipmentPending', 'dkpPending', 'events', 'dkpAdjust', 'skills', 'items', 'users', 'settings'].forEach(t => {
+            const content = document.getElementById('admin' + t.charAt(0).toUpperCase() + t.slice(1) + 'Content');
+            if (content) content.classList.toggle('hidden', t !== tab);
+        });
+        if (tab === 'skills') loadAdminSkills();
+        if (tab === 'skillsPending') loadPendingSkills();
+        if (tab === 'equipmentPending') loadPendingEquipment();
+        if (tab === 'dkpPending') loadPendingDkp();
+        if (tab === 'events') loadAdminEvents();
+        if (tab === 'items') loadAdminItems();
+        if (tab === 'users') loadAllUsers();
+        if (tab === 'settings') loadAllSettings();
+    }
     function showEditForm() { document.getElementById('approvedMessage').classList.add('hidden'); document.getElementById('approvedDataGrid').classList.add('hidden'); document.getElementById('playerDataForm').classList.remove('hidden'); }
     function showSkillsEditForm() { document.getElementById('skillsApprovedMessage').classList.add('hidden'); document.getElementById('approvedSkillsList').classList.add('hidden'); document.getElementById('skillsForm').classList.remove('hidden'); }
     function showEquipmentEditForm() { document.getElementById('equipmentApprovedMessage').classList.add('hidden'); document.getElementById('approvedEquipmentList').classList.add('hidden'); document.getElementById('equipmentForm').classList.remove('hidden'); }
@@ -824,13 +1031,8 @@
             payload.nickname = document.getElementById('loginNick').value;
             payload.password = document.getElementById('loginPass').value;
             const rememberMe = document.getElementById('rememberMe').checked;
-            if (rememberMe) {
-                localStorage.setItem('rf_saved_login', payload.nickname);
-                localStorage.setItem('rf_saved_password', payload.password);
-            } else {
-                localStorage.removeItem('rf_saved_login');
-                localStorage.removeItem('rf_saved_password');
-            }
+            if (rememberMe) { localStorage.setItem('rf_saved_login', payload.nickname); localStorage.setItem('rf_saved_password', payload.password); }
+            else { localStorage.removeItem('rf_saved_login'); localStorage.removeItem('rf_saved_password'); }
         } else {
             payload.nickname = document.getElementById('regNick').value;
             payload.password = document.getElementById('regPass').value;
@@ -1025,7 +1227,7 @@
     async function savePlayerItems(e) { e.preventDefault(); const btn = document.getElementById('saveEquipmentBtn'); const msg = document.getElementById('equipmentMessage'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span> ...'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'savePlayerItems', nickname: currentUser, selections: playerItemSelections }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => loadPlayerItems(), 1000); } else { msg.className = 'message error'; msg.innerText = result.message; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; } finally { btn.disabled = false; btn.innerText = 'Отправить'; msg.style.display = 'block'; } }
 
     async function loadMyDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerDKP', nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { myDkpData = result.data; document.getElementById('myDkpBalance').innerText = Number(result.data.balance).toLocaleString('ru-RU'); document.getElementById('userDkpBadge').innerText = `💰 ${Number(result.data.balance).toLocaleString('ru-RU')} DKP`; renderDkpHistory(result.data.history || []); loadFrozenDkpInfo(); } } catch (error) { console.error(error); } }
-    function renderDkpHistory(history) { const list = document.getElementById('myDkpHistory'); if (!history || history.length === 0) { list.innerHTML = '<div class="empty-state">История пуста</div>'; return; } const sorted = [...history].sort((a, b) => new Date(b.date) - new Date(a.date)); list.innerHTML = sorted.map(h => { const date = new Date(h.date).toLocaleString('ru-RU'); const isPositive = h.amount > 0; let typeLabel = ''; let itemClass = h.type; let details = ''; if (h.type === 'earn') { typeLabel = `🏆 ${h.event || 'Мероприятие'}`; if (h.coefficient && h.baseAmount !== undefined) details = `<div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${h.baseAmount} × ${h.coefficient.toFixed(2)} (БМ: ${h.playerBm || 0})</div>`; } else if (h.type === 'manual_add') typeLabel = `💵 ${h.reason || ''}`; else if (h.type === 'manual_sub') typeLabel = `💸 ${h.reason || ''}`; else if (h.type === 'auction_win') typeLabel = `🔨 ${h.reason || ''}`; else typeLabel = h.reason || h.event || 'Операция'; return `<div class="dkp-history-item ${itemClass}"><div class="history-info"><div class="history-event">${typeLabel}</div>${details}<div class="history-date">${date}</div></div><div class="history-amount ${isPositive ? 'positive' : 'negative'}">${isPositive ? '+' : ''}${h.amount}</div></div>`; }).join(''); }
+    function renderDkpHistory(history) { const list = document.getElementById('myDkpHistory'); if (!history || history.length === 0) { list.innerHTML = '<div class="empty-state">История пуста</div>'; return; } const sorted = [...history].sort((a, b) => new Date(b.date) - new Date(a.date)); list.innerHTML = sorted.map(h => { const date = new Date(h.date).toLocaleString('ru-RU'); const isPositive = h.amount > 0; let typeLabel = ''; let itemClass = h.type; let details = ''; if (h.type === 'earn') { typeLabel = `🏆 ${h.event || 'Мероприятие'}`; if (h.coefficient && h.baseAmount !== undefined) details = `<div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${h.baseAmount} × ${h.coefficient.toFixed(2)} (БМ: ${h.playerBm || 0})</div>`; } else if (h.type === 'manual_add') typeLabel = `💵 ${h.reason || ''}`; else if (h.type === 'manual_sub') typeLabel = `💸 ${h.reason || ''}`; else if (h.type === 'auction_win') typeLabel = `🔨 ${h.reason || ''}`; else if (h.type === 'penalty') typeLabel = `⚠️ ${h.reason || 'Штраф'}`; else typeLabel = h.reason || h.event || 'Операция'; return `<div class="dkp-history-item ${itemClass}"><div class="history-info"><div class="history-event">${typeLabel}</div>${details}<div class="history-date">${date}</div></div><div class="history-amount ${isPositive ? 'positive' : 'negative'}">${isPositive ? '+' : ''}${h.amount}</div></div>`; }).join(''); }
 
     async function loadFrozenDkpInfo() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerDkpInfo', nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success && result.data) { const { total, frozen, available, activeBids } = result.data; const dkpBadge = document.getElementById('userDkpBadge'); if (dkpBadge) { if (frozen > 0) dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} <span style="font-size: 9px; color: var(--warning);">(🔒${frozen})</span>`; else dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} DKP`; } const frozenBlock = document.getElementById('frozenDkpBlock'); if (frozenBlock && activeBids && activeBids.length > 0) { frozenBlock.innerHTML = `<div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--warning);"><div style="font-size: 12px; color: var(--warning); font-weight: 700; margin-bottom: 6px;">🔒 ЗАМОРОЖЕНО: ${frozen} DKP</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px;"><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 13px; color: var(--accent); font-weight: 700;">${total}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 13px; color: var(--warning); font-weight: 700;">${frozen}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--success);">Своб.</div><div style="font-size: 13px; color: var(--success); font-weight: 700;">${available}</div></div></div>${activeBids.map(bid => `<div style="display: flex; justify-content: space-between; align-items: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm); margin-bottom: 3px; font-size: 11px; border-left: 2px solid ${bid.isLeader ? 'var(--success)' : 'var(--warning)'};"><div><div style="font-weight: 700;">${bid.isLeader ? '👑 ' : ''}${bid.itemName}</div><div style="font-size: 9px; color: var(--text-dim);">${bid.itemSection}</div></div><div style="color: var(--dkp); font-weight: 700;">${bid.bidAmount} DKP</div></div>`).join('')}</div>`; } else if (frozenBlock) { frozenBlock.innerHTML = ''; } } } catch (error) { console.error(error); } }
 
@@ -1067,7 +1269,7 @@
 
     async function loadEventIcon(eventId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEventIcon', eventId: eventId }), redirect: 'follow' }); const result = await response.json(); const container = document.getElementById(`eventIcon_${eventId}`); if (container && result.success && result.iconData) container.innerHTML = `<img src="${result.iconData}" style="width: 100%; height: 100%; object-fit: cover;">`; else if (container) container.innerHTML = '<span class="icon-placeholder">Нет</span>'; } catch (error) { console.error(error); } }
 
-    async function addEvent(e) { e.preventDefault(); const name = document.getElementById('newEventName').value; const dkp = document.getElementById('newEventDkp').value; const msg = document.getElementById('adminEventsMessage'); if (!name || !dkp) { msg.className = 'message error'; msg.innerText = 'Заполните все поля'; msg.style.display = 'block'; return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addEvent', name: name, dkp: Number(dkp), createdBy: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; document.getElementById('newEventName').value = ''; document.getElementById('newEventDkp').value = ''; setTimeout(() => { loadAdminEvents(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
+    async function addEvent(e) { e.preventDefault(); const name = document.getElementById('newEventName').value; const dkp = document.getElementById('newEventDkp').value; const msg = document.getElementById('adminEventsMessage'); if (!name || !dkp) { msg.className = 'message error'; msg.innerText = 'Заполните поля'; msg.style.display = 'block'; return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addEvent', name: name, dkp: Number(dkp), createdBy: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; document.getElementById('newEventName').value = ''; document.getElementById('newEventDkp').value = ''; setTimeout(() => { loadAdminEvents(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function removeEvent(eventId) { if (!confirm('Удалить?')) return; const msg = document.getElementById('adminEventsMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'removeEvent', eventId: eventId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { loadAdminEvents(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
 
     async function loadPendingDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('pendingDkpList'); if (result.success && result.submissions.length > 0) { list.innerHTML = result.submissions.map(sub => `<div class="dkp-submission-card"><div class="submission-header"><div><div class="submission-event">🏆 ${sub.eventName} (+${sub.eventDkp})</div><div class="submission-meta">${sub.submitter} | ${sub.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDkp('${sub.id}')">✓</button><button class="btn-reject" onclick="rejectDkp('${sub.id}')">✕</button><button class="btn-edit" onclick="editDkpSubmission('${sub.id}')" style="width: auto; margin-top: 0;">✎</button><button class="btn-remove" onclick="deleteDkpSubmission('${sub.id}')">🗑</button></div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div class="submission-screenshots">${sub.screenshots.map((imgData, idx) => `<img src="${imgData}" onclick="openImageModal('${imgData}')" alt="${idx + 1}">`).join('')}</div>` : ''}<div style="font-size: 10px; color: var(--text-dim); margin-top: 5px;">Игроки (${sub.nicks.length}):</div><div class="submission-nicks">${sub.nicks.map(nick => `<span class="submission-nick-tag">${nick}</span>`).join('')}</div></div>`).join(''); } else { list.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (error) { console.error(error); } }
@@ -1372,7 +1574,7 @@
     async function loadAuctionItems() { const section = document.getElementById('auctionItemSection').value; const select = document.getElementById('auctionItemSelect'); const tierInput = document.getElementById('auctionItemTier'); const colorInput = document.getElementById('auctionItemColor'); const enhanceInput = document.getElementById('auctionItemEnhancement'); const primeCheck = document.getElementById('auctionIsPrime'); const bossCheck = document.getElementById('auctionIsBoss'); const nameInput = document.getElementById('auctionItemName'); select.innerHTML = '<option value="">— Сначала раздел —</option>'; tierInput.value = ''; colorInput.value = ''; enhanceInput.value = ''; primeCheck.checked = false; bossCheck.checked = false; nameInput.value = ''; currentAuctionItems = []; if (!section) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems', section: section }), redirect: 'follow' }); const result = await response.json(); if (result.success && result.items && result.items.length > 0) { currentAuctionItems = result.items; select.innerHTML = '<option value="">— Выберите —</option>' + result.items.map((item, idx) => { const badges = []; if (item.isPrime) badges.push('Прайм'); if (item.isBoss) badges.push('Босс'); if (item.enhancement > 0) badges.push(`+${item.enhancement}`); const badgeStr = badges.length > 0 ? ` [${badges.join(', ')}]` : ''; return `<option value="${idx}">${item.name} (${item.tier || 'т0'}, ${item.color})${badgeStr}</option>`; }).join(''); } else { select.innerHTML = '<option value="">— Пусто —</option>'; } } catch (error) { console.error(error); select.innerHTML = '<option value="">— Ошибка —</option>'; } }
     function fillAuctionItemDetails() { const select = document.getElementById('auctionItemSelect'); const idx = select.value; const tierInput = document.getElementById('auctionItemTier'); const colorInput = document.getElementById('auctionItemColor'); const enhanceInput = document.getElementById('auctionItemEnhancement'); const primeCheck = document.getElementById('auctionIsPrime'); const bossCheck = document.getElementById('auctionIsBoss'); const nameInput = document.getElementById('auctionItemName'); if (idx === '' || !currentAuctionItems[idx]) { tierInput.value = ''; colorInput.value = ''; enhanceInput.value = ''; primeCheck.checked = false; bossCheck.checked = false; nameInput.value = ''; return; } const item = currentAuctionItems[idx]; nameInput.value = item.name; tierInput.value = item.tier || 'т0'; colorInput.value = item.color || 'Белый'; enhanceInput.value = item.enhancement || 0; primeCheck.checked = item.isPrime || false; bossCheck.checked = item.isBoss || false; }
     async function loadPlayersForAuction() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForAuction' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('auctionPlayersList'); if (result.success && result.players.length > 0) { list.innerHTML = result.players.map(player => `<div class="checkbox-group"><input type="checkbox" id="player_${player.nickname}" value="${player.nickname}"><label for="player_${player.nickname}">${player.nickname} <span style="color: var(--text-dim); font-size: 10px;">(${player.role})</span></label></div>`).join(''); } else { list.innerHTML = '<div style="color: var(--text-dim);">Нет</div>'; } } catch (error) { console.error(error); } }
-    async function createAuction() { const itemName = document.getElementById('auctionItemName').value; const itemSection = document.getElementById('auctionItemSection').value; const itemTier = document.getElementById('auctionItemTier').value; const itemColor = document.getElementById('auctionItemColor').value; const itemEnhancement = document.getElementById('auctionItemEnhancement').value; const isPrime = document.getElementById('auctionIsPrime').checked; const isBoss = document.getElementById('auctionIsBoss').checked; const startPrice = document.getElementById('auctionStartPrice').value; const durationHours = document.getElementById('auctionDuration').value; const minAttendance = document.getElementById('auctionMinAttendance').value; const priorityOnly = document.getElementById('auctionPriorityOnly').checked; if (!itemName || !itemSection) { showAuctionCreateMessage('Выберите предмет', 'error'); return; } if (!startPrice || !durationHours) { showAuctionCreateMessage('Укажите цену', 'error'); return; } const checkboxes = document.querySelectorAll('#auctionPlayersList input[type="checkbox"]:checked'); const allowedPlayers = Array.from(checkboxes).map(cb => cb.value); const msg = document.getElementById('auctionCreateMessage'); msg.innerText = 'Создание...'; msg.className = 'message'; msg.style.display = 'block'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'createAuction', itemName, itemSection, itemTier, itemColor, itemEnhancement: Number(itemEnhancement), isPrime, isBoss, startPrice: Number(startPrice), durationHours: Number(durationHours), allowedPlayers, minAttendance: Number(minAttendance), priorityOnly, createdBy: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { switchAuctionTab('active', { target: document.getElementById('tabAuctionActive') }); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; } }
+    async function createAuction() { const itemName = document.getElementById('auctionItemName').value; const itemSection = document.getElementById('auctionItemSection').value; const itemTier = document.getElementById('auctionItemTier').value; const itemColor = document.getElementById('auctionItemColor').value; const itemEnhancement = document.getElementById('auctionItemEnhancement').value; const isPrime = document.getElementById('auctionIsPrime').checked; const isBoss = document.getElementById('auctionIsBoss').checked; const startPrice = document.getElementById('auctionStartPrice').value; const durationHours = document.getElementById('auctionDuration').value; const minAttendance = document.getElementById('auctionMinAttendance').value; const priorityOnly = document.getElementById('auctionPriorityOnly').checked; if (!itemName || !itemSection) { showAuctionCreateMessage('Выберите предмет', 'error'); return; } if (!startPrice || !durationHours) { showAuctionCreateMessage('Укажите цену', 'error'); return; } const checkboxes = document.querySelectorAll('#auctionPlayersList input[type="checkbox"]:checked'); const allowedPlayers = Array.from(checkboxes).map(cb => cb.value); const itemKey = itemName; const msg = document.getElementById('auctionCreateMessage'); msg.innerText = 'Создание...'; msg.className = 'message'; msg.style.display = 'block'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'createAuction', itemName, itemSection, itemTier, itemColor, itemEnhancement: Number(itemEnhancement), isPrime, isBoss, startPrice: Number(startPrice), durationHours: Number(durationHours), allowedPlayers, minAttendance: Number(minAttendance), priorityOnly, createdBy: currentUser, itemKey: itemKey }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { switchAuctionTab('active', { target: document.getElementById('tabAuctionActive') }); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; } }
     function showAuctionCreateMessage(text, type) { const msg = document.getElementById('auctionCreateMessage'); msg.className = `message ${type}`; msg.innerText = text; msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 4000); }
 
     async function openBidModal(auctionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: auctionId, bidder: currentUser }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const auction = result.auction; const minBid = auction.currentBid + 1; const colorClass = getColorClass(auction.itemColor); const balanceInfo = auction.playerBalance || { total: 0, frozen: 0, available: 0 }; const canAfford = balanceInfo.available >= minBid; const modal = document.getElementById('bidModal'); const content = document.getElementById('bidModalContent'); content.innerHTML = `<h3 style="color: var(--dkp); font-family: 'Times New Roman', Times, serif; margin-bottom: 10px; font-size: 15px;">🔨 ${auction.itemName}</h3><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 2px;">Характеристики:</div><div style="font-size: 12px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim);">Текущая:</div><div style="font-size: 18px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">От: ${auction.currentBidder}</div>` : ''}</div><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim);">Мин. ставка:</div><div style="font-size: 15px; color: var(--success); font-weight: 700;">${minBid} DKP</div></div><div style="margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border);"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px; font-weight: 700; text-transform: uppercase;">💰 Ваш баланс</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 5px;"><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 13px; color: var(--accent); font-weight: 700;">${balanceInfo.total}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 13px; color: var(--warning); font-weight: 700;">${balanceInfo.frozen}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'};">Своб.</div><div style="font-size: 13px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'}; font-weight: 700;">${balanceInfo.available}</div></div></div>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); text-align: center; padding: 4px; background: var(--danger-soft); border-radius: var(--radius-sm);">⚠️ Недостаточно DKP</div>` : ''}</div>${auction.bids.length > 0 ? `<div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">История:</div><div style="max-height: 100px; overflow-y: auto;">${auction.bids.map(bid => { let statusBadge = ''; if (bid.status === 'active') statusBadge = '<span style="font-size: 8px; background: var(--warning-soft); color: var(--warning); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ЗАМОР.</span>'; else if (bid.status === 'outbid') statusBadge = '<span style="font-size: 8px; background: var(--danger-soft); color: var(--danger); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ПЕРЕБИТ</span>'; else if (bid.status === 'won') statusBadge = '<span style="font-size: 8px; background: var(--success-soft); color: var(--success); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ПОБЕДА</span>'; else if (bid.status === 'cancelled') statusBadge = '<span style="font-size: 8px; background: var(--bg-soft); color: var(--text-dim); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ОТМЕНА</span>'; return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 3px; background: var(--bg-soft); border-radius: 3px; margin-bottom: 2px; font-size: 10px;"><span style="color: var(--accent);">${bid.bidder}${statusBadge}</span><span style="color: var(--dkp); font-weight: 700;">${bid.amount}</span><span style="color: var(--text-dim); font-size: 9px;">${bid.date}</span></div>`; }).join('')}</div></div>` : ''}<div class="form-group"><label>Ваша ставка (мин. ${minBid})</label><input type="number" id="bidAmount" min="${minBid}" max="${balanceInfo.available}" placeholder="${minBid}" required ${!canAfford ? 'disabled' : ''}>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); margin-top: 2px;">Недостаточно DKP</div>` : ''}</div><button type="button" class="submit-btn dkp-btn" onclick="placeBid('${auction.id}', ${minBid})" ${!canAfford ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>`; modal.classList.remove('hidden'); } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
@@ -1456,6 +1658,199 @@
             if (result.success) { alert('Удалена!'); closeIconModal(); if (currentIconType === 'event') loadAdminEvents(); else if (currentIconType === 'skill') loadAdminSkills(); else loadAdminItems(); }
             else { alert('Ошибка: ' + result.message); }
         } catch (error) { alert('Ошибка: ' + error.message); }
+    }
+
+    // ===== НАСТРОЙКИ =====
+    async function loadAuctionSettings() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionSettings' }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success && result.settings) {
+                const s = result.settings;
+                document.getElementById('auctionRepeatBanEnabled').checked = s.repeatBanEnabled;
+                document.getElementById('auctionRepeatBanPeriod').value = s.repeatBanPeriod;
+                document.getElementById('auctionRepeatBanDays').value = s.repeatBanDays;
+                document.getElementById('auctionCoefficientEnabled').checked = s.coefficientEnabled;
+                document.getElementById('auctionCoefficientMode').value = s.coefficientMode;
+                document.getElementById('auctionCoefficientList').value = (s.coefficientSelectiveList || []).join(', ');
+                document.getElementById('customDaysRow').style.display = s.repeatBanPeriod === 'custom_days' ? 'flex' : 'none';
+                document.getElementById('selectiveListRow').style.display = s.coefficientMode === 'selective' ? 'flex' : 'none';
+            }
+        } catch (error) { console.error(error); }
+    }
+
+    async function saveAuctionSettings() {
+        const msg = document.getElementById('auctionSettingsMessage');
+        const listStr = document.getElementById('auctionCoefficientList').value;
+        const selectiveList = listStr ? listStr.split(',').map(s => s.trim()).filter(s => s) : [];
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'saveAuctionSettings',
+                    repeatBanEnabled: document.getElementById('auctionRepeatBanEnabled').checked,
+                    repeatBanPeriod: document.getElementById('auctionRepeatBanPeriod').value,
+                    repeatBanDays: Number(document.getElementById('auctionRepeatBanDays').value),
+                    coefficientEnabled: document.getElementById('auctionCoefficientEnabled').checked,
+                    coefficientMode: document.getElementById('auctionCoefficientMode').value,
+                    coefficientSelectiveList: selectiveList
+                }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Настройки аукциона сохранены'; }
+            else { msg.className = 'message error'; msg.innerText = result.message; }
+        } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка связи'; }
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
+    async function loadPenaltySettings() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPenaltySettings' }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success && result.settings) {
+                const s = result.settings;
+                document.getElementById('penaltyEnabled').checked = s.enabled;
+                document.getElementById('penaltyPercent').value = s.penaltyPercent;
+                document.getElementById('penaltyPeriodType').value = s.periodType;
+                document.getElementById('penaltyCustomDays').value = s.customDays;
+                document.getElementById('penaltyMissPercent').value = s.missPercent;
+                document.getElementById('penaltyCustomDaysRow').style.display = s.periodType === 'custom_days' ? 'flex' : 'none';
+                document.getElementById('penaltyMissPercentRow').style.display = s.periodType === 'miss_percent' ? 'flex' : 'none';
+            }
+        } catch (error) { console.error(error); }
+    }
+
+    async function savePenaltySettings() {
+        const msg = document.getElementById('penaltySettingsMessage');
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'savePenaltySettings',
+                    enabled: document.getElementById('penaltyEnabled').checked,
+                    penaltyPercent: Number(document.getElementById('penaltyPercent').value),
+                    periodType: document.getElementById('penaltyPeriodType').value,
+                    customDays: Number(document.getElementById('penaltyCustomDays').value),
+                    missPercent: Number(document.getElementById('penaltyMissPercent').value)
+                }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Настройки штрафов сохранены'; }
+            else { msg.className = 'message error'; msg.innerText = result.message; }
+        } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка связи'; }
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
+    async function applyPenalties() {
+        if (!confirm('⚠️ Применить штрафы ко всем игрокам?\nЭто спишет DKP с неактивных игроков.')) return;
+        const msg = document.getElementById('penaltySettingsMessage');
+        const resultsBlock = document.getElementById('penaltyResultsBlock');
+        msg.innerText = 'Применение штрафов...';
+        msg.className = 'message';
+        msg.style.display = 'block';
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'applyPenalties', appliedBy: currentUser }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success) {
+                msg.className = 'message success';
+                msg.innerText = result.message;
+                if (result.results && result.results.length > 0) {
+                    resultsBlock.innerHTML = '<div style="font-size: 11px; color: var(--text-dim); margin-bottom: 6px;">Оштрафованные игроки:</div>' +
+                        result.results.map(r => `
+                            <div class="penalty-result">
+                                <span class="nick">${r.nickname}</span> — 
+                                <span class="amount">-${r.penaltyAmount} DKP</span>
+                                <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${r.reason}</div>
+                                <div style="font-size: 10px; color: var(--text-dim);">Новый баланс: ${r.newBalance} DKP</div>
+                            </div>
+                        `).join('');
+                } else {
+                    resultsBlock.innerHTML = '<div style="color: var(--success); font-size: 11px;">✅ Все игроки активны, штрафов нет</div>';
+                }
+            } else {
+                msg.className = 'message error';
+                msg.innerText = result.message;
+            }
+        } catch (error) {
+            msg.className = 'message error';
+            msg.innerText = 'Ошибка связи';
+        }
+    }
+
+    async function loadPlayersForPenaltySelect() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' });
+            const result = await response.json();
+            const select = document.getElementById('playerPenaltySelect');
+            if (result.success && select) {
+                select.innerHTML = '<option value="">— Выберите игрока —</option>' + result.nicks.map(n => `<option value="${n}">${n}</option>`).join('');
+            }
+        } catch (error) { console.error(error); }
+    }
+
+    async function loadPlayerPenaltySettings() {
+        const nickname = document.getElementById('playerPenaltySelect').value;
+        const form = document.getElementById('playerPenaltyForm');
+        if (!nickname) { form.style.display = 'none'; return; }
+        form.style.display = 'block';
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerPenaltySettings', nickname: nickname }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success && result.settings) {
+                const s = result.settings;
+                document.getElementById('playerPenaltyEnabled').checked = s.enabled;
+                document.getElementById('playerPenaltyPercent').value = s.penaltyPercent;
+                document.getElementById('playerPenaltyPeriodType').value = s.periodType;
+                document.getElementById('playerPenaltyCustomDays').value = s.customDays;
+                document.getElementById('playerPenaltyMissPercent').value = s.missPercent;
+                document.getElementById('playerCustomDaysRow').style.display = s.periodType === 'custom_days' ? 'flex' : 'none';
+                document.getElementById('playerMissPercentRow').style.display = s.periodType === 'miss_percent' ? 'flex' : 'none';
+            } else {
+                document.getElementById('playerPenaltyEnabled').checked = false;
+                document.getElementById('playerPenaltyPercent').value = 10;
+                document.getElementById('playerPenaltyPeriodType').value = 'week';
+                document.getElementById('playerPenaltyCustomDays').value = 7;
+                document.getElementById('playerPenaltyMissPercent').value = 50;
+                document.getElementById('playerCustomDaysRow').style.display = 'none';
+                document.getElementById('playerMissPercentRow').style.display = 'none';
+            }
+        } catch (error) { console.error(error); }
+    }
+
+    async function savePlayerPenaltySettings() {
+        const nickname = document.getElementById('playerPenaltySelect').value;
+        if (!nickname) { alert('Выберите игрока'); return; }
+        const msg = document.getElementById('playerPenaltyMessage');
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'savePlayerPenaltySettings',
+                    nickname: nickname,
+                    enabled: document.getElementById('playerPenaltyEnabled').checked,
+                    penaltyPercent: Number(document.getElementById('playerPenaltyPercent').value),
+                    periodType: document.getElementById('playerPenaltyPeriodType').value,
+                    customDays: Number(document.getElementById('playerPenaltyCustomDays').value),
+                    missPercent: Number(document.getElementById('playerPenaltyMissPercent').value)
+                }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Сохранено для ' + nickname; }
+            else { msg.className = 'message error'; msg.innerText = result.message; }
+        } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка связи'; }
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
+    async function loadAllSettings() {
+        loadAuctionSettings();
+        loadPenaltySettings();
+        loadPlayersForPenaltySelect();
     }
 
     function clearSavedCredentials() {
