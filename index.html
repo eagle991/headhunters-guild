@@ -4,226 +4,252 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RF Online Next</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
+        /* ✅ СВЕТЛАЯ ТЕМА — синие кнопки */
         :root {
-            --bg-main: #faf9f6; --bg-panel: #ffffff; --bg-soft: #f5f3ef; --bg-hover: #eeeae3;
-            --text-main: #2c3e50; --text-dim: #7a8599; --border: #d8d4cb;
-            --accent: #5b7c99; --accent-soft: #e8eef3;
-            --success: #5a8a6b; --success-soft: #e3efe6;
-            --warning: #b8864a; --warning-soft: #f3ead9;
-            --danger: #a85454; --danger-soft: #f0e0e0;
-            --gold: #a68a3e; --silver: #7a7a7a; --bronze: #8a6a3e; --dkp: #b8864a;
-            --shadow-sm: 0 1px 3px rgba(44, 62, 80, 0.06);
-            --shadow-md: 0 2px 6px rgba(44, 62, 80, 0.08);
-            --shadow-lg: 0 4px 12px rgba(44, 62, 80, 0.1);
-            --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px;
-            --glow-light: rgba(91, 124, 153, 0.25);
-            --glow-gold: rgba(184, 134, 74, 0.3);
-            --glow-success: rgba(90, 138, 107, 0.25);
+            --bg-main: #e8eef5; --bg-panel: #ffffff; --bg-soft: #f0f4f8; --bg-hover: #dde5ef;
+            --text-main: #1e293b; --text-dim: #64748b; --border: #cbd5e1;
+            --accent: #2563eb; --accent-hover: #1d4ed8; --accent-soft: #dbeafe; --accent-glow: rgba(37, 99, 235, 0.4);
+            --success: #10b981; --success-soft: #d1fae5; --success-glow: rgba(16, 185, 129, 0.4);
+            --warning: #f59e0b; --warning-soft: #fef3c7; --warning-glow: rgba(245, 158, 11, 0.4);
+            --danger: #ef4444; --danger-soft: #fee2e2; --danger-glow: rgba(239, 68, 68, 0.4);
+            --gold: #d97706; --silver: #64748b; --bronze: #92400e; --dkp: #f59e0b;
+            --shadow-sm: 0 1px 3px rgba(37, 99, 235, 0.08);
+            --shadow-md: 0 4px 12px rgba(37, 99, 235, 0.12);
+            --shadow-lg: 0 8px 24px rgba(37, 99, 235, 0.18);
+            --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+            --font-main: 'Segoe UI', 'Times New Roman', serif;
+            --font-display: 'Orbitron', sans-serif;
+            --gradient-btn: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            --gradient-btn-hover: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            --gradient-dkp: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --gradient-hero: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
         }
+        /* ✅ ТЁМНАЯ ТЕМА — чёрный фон, жёлтые кнопки */
         body[data-theme="dark"] {
-            --bg-main: #1a1d23; --bg-panel: #242830; --bg-soft: #2a2e36; --bg-hover: #333842;
-            --text-main: #e4e6eb; --text-dim: #8a92a3; --border: #3a3f47;
-            --accent: #6b8cae; --accent-soft: #2a3540;
-            --success: #6a9a7b; --success-soft: #2a3a2e;
-            --warning: #c89660; --warning-soft: #3a3020;
-            --danger: #b86464; --danger-soft: #3a2525;
-            --gold: #b89a4e; --silver: #9a9a9a; --bronze: #9a7a4e; --dkp: #c89660;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.5);
-            --glow-light: rgba(107, 140, 174, 0.5);
-            --glow-gold: rgba(200, 150, 96, 0.5);
-            --glow-success: rgba(106, 154, 123, 0.5);
+            --bg-main: #0a0a0a; --bg-panel: #1a1a1a; --bg-soft: #1f1f1f; --bg-hover: #2a2a2a;
+            --text-main: #f5f5f5; --text-dim: #a3a3a3; --border: #404040;
+            --accent: #fbbf24; --accent-hover: #f59e0b; --accent-soft: #422006; --accent-glow: rgba(251, 191, 36, 0.5);
+            --success: #22c55e; --success-soft: #052e16; --success-glow: rgba(34, 197, 94, 0.5);
+            --warning: #f59e0b; --warning-soft: #431407; --warning-glow: rgba(245, 158, 11, 0.5);
+            --danger: #ef4444; --danger-soft: #450a0a; --danger-glow: rgba(239, 68, 68, 0.5);
+            --gold: #fbbf24; --silver: #a3a3a3; --bronze: #d97706; --dkp: #fbbf24;
+            --shadow-sm: 0 1px 3px rgba(251, 191, 36, 0.15);
+            --shadow-md: 0 4px 12px rgba(251, 191, 36, 0.25);
+            --shadow-lg: 0 8px 24px rgba(251, 191, 36, 0.35);
+            --gradient-btn: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --gradient-btn-hover: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+            --gradient-dkp: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            --gradient-hero: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%);
         }
         * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; font-family: 'Times New Roman', Times, Georgia, serif; background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background-color 0.3s, color 0.3s; }
-        .screen { display: none; width: 100%; max-width: 1280px; padding: 15px; margin: 0 auto; }
-        .screen.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        body { margin: 0; padding: 0; font-family: var(--font-main); background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background-color 0.3s, color 0.3s; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 30%, var(--accent-glow) 0%, transparent 40%), radial-gradient(circle at 80% 70%, var(--warning-glow) 0%, transparent 40%); opacity: 0.08; z-index: -1; pointer-events: none; }
+        body[data-theme="dark"]::before { opacity: 0.15; }
+        .screen { display: none; width: 100%; max-width: 1300px; padding: 15px; margin: 0 auto; position: relative; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ✅ ЛЁГКОЕ СВЕЧЕНИЕ ТЕКСТА */
-        .public-title { text-shadow: 0 0 8px var(--glow-light), 1px 1px 2px rgba(0,0,0,0.2); }
-        .panel-title { text-shadow: 0 0 3px var(--glow-light); }
-        .top-panel-title { text-shadow: 0 0 3px var(--glow-light); }
-        .player-nick { text-shadow: 0 0 2px var(--glow-light); }
-        .data-value { text-shadow: 0 0 3px var(--glow-light); }
-        .ranking-nick { text-shadow: 0 0 2px var(--glow-light); }
-        .event-name { text-shadow: 0 0 2px var(--glow-light); }
-        .auction-title { text-shadow: 0 0 3px var(--glow-gold); }
-        .dkp-highlight { text-shadow: 0 0 4px var(--glow-gold); }
-        .auth-title { text-shadow: 0 0 5px var(--glow-light); }
-        .top-value { text-shadow: 0 0 2px var(--glow-success); }
-        .calendar-date { text-shadow: 0 0 2px var(--glow-light); }
-        .calendar-event-title { text-shadow: 0 0 2px var(--glow-gold); }
-        .event-stat-name { text-shadow: 0 0 2px var(--glow-gold); }
-        .submission-event { text-shadow: 0 0 2px var(--glow-gold); }
-
-        .public-hero { position: relative; height: 260px; margin-bottom: 20px; border-radius: var(--radius-lg); overflow: hidden; background: linear-gradient(135deg, var(--accent) 0%, #4a5d73 100%); box-shadow: var(--shadow-md); }
-        body[data-theme="dark"] .public-hero { background: linear-gradient(135deg, #2a3540 0%, #1a2530 100%); }
+        /* ✅ ИГРОВОЙ ГЕРОЙ-БАННЕР */
+        .public-hero { position: relative; height: 280px; margin-bottom: 20px; border-radius: var(--radius-lg); overflow: hidden; background: var(--gradient-hero); box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
+        .public-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px); }
+        .public-hero::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 40%); opacity: 0.3; animation: pulse 4s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.5; } }
         .public-hero-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .public-title { font-family: 'Times New Roman', Times, serif; font-size: 40px; font-weight: 700; color: #ffffff; letter-spacing: 3px; margin: 0 0 6px 0; }
-        .public-subtitle { color: rgba(255,255,255,0.85); font-size: 13px; letter-spacing: 2px; margin-bottom: 18px; font-style: italic; }
-        .login-link { background: #ffffff; border: none; color: var(--accent); padding: 7px 22px; cursor: pointer; font-family: 'Times New Roman', Times, serif; font-size: 12px; letter-spacing: 1px; transition: 0.2s; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); font-weight: 600; }
-        .login-link:hover { background: #f5f3ef; transform: translateY(-1px); box-shadow: var(--shadow-md); }
-        .top-containers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .public-title { font-family: var(--font-display); font-size: 44px; font-weight: 900; color: #ffffff; letter-spacing: 6px; margin: 0 0 8px 0; text-shadow: 0 0 20px var(--accent-glow), 2px 2px 4px rgba(0,0,0,0.5); text-transform: uppercase; }
+        body[data-theme="dark"] .public-title { color: var(--accent); text-shadow: 0 0 30px var(--accent-glow), 0 0 60px var(--accent-glow); }
+        .public-subtitle { color: rgba(255,255,255,0.9); font-family: var(--font-display); font-size: 13px; letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase; font-weight: 600; }
+        .login-link { background: var(--gradient-btn); border: 1px solid var(--accent); color: #ffffff; padding: 10px 28px; cursor: pointer; font-family: var(--font-display); font-size: 12px; letter-spacing: 2px; transition: 0.3s; border-radius: var(--radius-sm); box-shadow: 0 0 20px var(--accent-glow); font-weight: 700; text-transform: uppercase; }
+        .login-link:hover { background: var(--gradient-btn-hover); transform: translateY(-2px); box-shadow: 0 0 30px var(--accent-glow), 0 4px 12px rgba(0,0,0,0.3); }
+        body[data-theme="dark"] .login-link { color: #000; }
+        .top-containers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         @media (max-width: 900px) { .top-containers { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) { .public-title { font-size: 26px; } .public-hero { height: 200px; } }
-        .top-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; box-shadow: var(--shadow-sm); transition: 0.2s; }
-        .top-panel:hover { box-shadow: var(--shadow-md); }
-        .top-panel.dkp-panel { border-top: 2px solid var(--dkp); }
-        .top-panel-title { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 12px; letter-spacing: 1px; margin-bottom: 8px; text-align: center; font-weight: 700; }
-        .top-panel.dkp-panel .top-panel-title { color: var(--dkp); }
-        .top-list { display: flex; flex-direction: column; gap: 3px; }
-        .top-item { display: flex; align-items: center; gap: 8px; padding: 5px 8px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.2s; font-size: 12px; }
-        .top-item:hover { background: var(--bg-hover); }
-        .top-item.rank-1 { border-left: 3px solid var(--gold); background: var(--warning-soft); }
+        @media (max-width: 768px) { .public-title { font-size: 28px; letter-spacing: 3px; } .public-hero { height: 220px; } }
+        .top-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; box-shadow: var(--shadow-sm); transition: 0.3s; position: relative; overflow: hidden; }
+        .top-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.6; }
+        .top-panel:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--accent); }
+        .top-panel.dkp-panel::before { background: linear-gradient(90deg, transparent, var(--dkp), transparent); }
+        .top-panel-title { font-family: var(--font-display); color: var(--accent); font-size: 12px; letter-spacing: 1.5px; margin-bottom: 10px; text-align: center; font-weight: 700; text-transform: uppercase; text-shadow: 0 0 8px var(--accent-glow); }
+        .top-panel.dkp-panel .top-panel-title { color: var(--dkp); text-shadow: 0 0 8px var(--warning-glow); }
+        .top-list { display: flex; flex-direction: column; gap: 4px; }
+        .top-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.2s; font-size: 12px; }
+        .top-item:hover { background: var(--bg-hover); border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+        .top-item.rank-1 { border-left: 3px solid var(--gold); background: var(--warning-soft); box-shadow: 0 0 10px var(--warning-glow); }
         .top-item.rank-2 { border-left: 3px solid var(--silver); }
         .top-item.rank-3 { border-left: 3px solid var(--bronze); }
-        .top-rank { font-family: 'Times New Roman', Times, serif; font-size: 14px; font-weight: 700; min-width: 28px; text-align: center; color: var(--text-dim); }
-        .top-rank.rank-1 { color: var(--gold); } .top-rank.rank-2 { color: var(--silver); } .top-rank.rank-3 { color: var(--bronze); }
-        .top-nick { flex: 1; font-family: 'Times New Roman', Times, serif; color: var(--text-main); font-size: 12px; font-weight: 600; }
-        .top-item.rank-1 .top-nick { color: var(--gold); } .top-item.rank-2 .top-nick { color: var(--silver); } .top-item.rank-3 .top-nick { color: var(--bronze); }
-        .top-value { font-family: 'Times New Roman', Times, serif; font-size: 12px; font-weight: 700; color: var(--success); }
-        .top-value.dkp { color: var(--dkp); }
+        .top-rank { font-family: var(--font-display); font-size: 14px; font-weight: 900; min-width: 30px; text-align: center; color: var(--text-dim); }
+        .top-rank.rank-1 { color: var(--gold); text-shadow: 0 0 8px var(--warning-glow); }
+        .top-rank.rank-2 { color: var(--silver); }
+        .top-rank.rank-3 { color: var(--bronze); }
+        .top-nick { flex: 1; font-family: var(--font-display); color: var(--text-main); font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+        .top-item.rank-1 .top-nick { color: var(--gold); }
+        .top-item.rank-2 .top-nick { color: var(--silver); }
+        .top-item.rank-3 .top-nick { color: var(--bronze); }
+        .top-value { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--success); text-shadow: 0 0 6px var(--success-glow); }
+        .top-value.dkp { color: var(--dkp); text-shadow: 0 0 6px var(--warning-glow); }
 
-        .tabs { display: flex; margin-bottom: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 2px; }
-        .tab-btn { background: transparent; border: none; color: var(--text-dim); font-family: 'Times New Roman', Times, serif; font-size: 12px; padding: 6px 12px; cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; font-weight: 600; border-radius: var(--radius-sm) var(--radius-sm) 0 0; position: relative; }
+        /* ✅ ВКЛАДКИ */
+        .tabs { display: flex; margin-bottom: 14px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 2px; }
+        .tab-btn { background: transparent; border: none; color: var(--text-dim); font-family: var(--font-display); font-size: 11px; padding: 8px 16px; cursor: pointer; transition: 0.3s; letter-spacing: 1px; font-weight: 600; border-radius: var(--radius-sm) var(--radius-sm) 0 0; position: relative; text-transform: uppercase; }
         .tab-btn:hover { color: var(--accent); background: var(--accent-soft); }
-        .tab-btn.active { color: var(--accent); background: var(--bg-panel); border-bottom: 1px solid var(--bg-panel); margin-bottom: -1px; }
-        .tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--accent); }
-        .form-group { margin-bottom: 8px; position: relative; }
-        label { display: block; font-size: 11px; color: var(--accent); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 0.5px; font-weight: 700; }
-        input, select, textarea { width: 100%; background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-main); padding: 6px 9px; font-family: 'Times New Roman', Times, serif; font-size: 13px; transition: 0.2s; outline: none; border-radius: var(--radius-sm); }
-        textarea { resize: vertical; min-height: 50px; }
-        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+        .tab-btn.active { color: var(--accent); background: var(--bg-panel); border-bottom: 2px solid var(--bg-panel); margin-bottom: -2px; text-shadow: 0 0 8px var(--accent-glow); }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--gradient-btn); box-shadow: 0 0 10px var(--accent-glow); }
+        .form-group { margin-bottom: 10px; position: relative; }
+        label { display: block; font-size: 11px; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px; font-weight: 700; font-family: var(--font-display); }
+        input, select, textarea { width: 100%; background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-main); padding: 8px 12px; font-family: var(--font-main); font-size: 13px; transition: 0.2s; outline: none; border-radius: var(--radius-sm); }
+        textarea { resize: vertical; min-height: 60px; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft), 0 0 10px var(--accent-glow); }
         select { cursor: pointer; }
         select option { background: var(--bg-panel); color: var(--text-main); }
-        .submit-btn { width: 100%; padding: 6px 12px; background: var(--accent); border: none; color: #ffffff; font-family: 'Times New Roman', Times, serif; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; transition: 0.2s; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
-        .submit-btn:hover { background: #4a6880; box-shadow: var(--shadow-md); }
-        body[data-theme="dark"] .submit-btn:hover { background: #5a7a9a; }
+
+        /* ✅ ИГРОВЫЕ КНОПКИ */
+        .submit-btn { width: 100%; padding: 9px 16px; background: var(--gradient-btn); border: 1px solid var(--accent); color: #ffffff; font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: 0.3s; border-radius: var(--radius-sm); box-shadow: 0 2px 8px var(--accent-glow); text-transform: uppercase; position: relative; overflow: hidden; }
+        .submit-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: 0.5s; }
+        .submit-btn:hover::before { left: 100%; }
+        .submit-btn:hover { background: var(--gradient-btn-hover); box-shadow: 0 4px 16px var(--accent-glow); transform: translateY(-1px); }
+        body[data-theme="dark"] .submit-btn { color: #000; }
         .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .submit-btn.dkp-btn { background: var(--dkp); }
-        .submit-btn.dkp-btn:hover { background: #a07030; }
-        .message { margin-top: 6px; padding: 6px 10px; text-align: center; font-size: 12px; border-radius: var(--radius-sm); display: none; white-space: pre-wrap; }
-        .message.success { display: block; color: var(--success); background: var(--success-soft); border: 1px solid var(--success); }
-        .message.error { display: block; color: var(--danger); background: var(--danger-soft); border: 1px solid var(--danger); }
+        .submit-btn.dkp-btn { background: var(--gradient-dkp); border-color: var(--dkp); box-shadow: 0 2px 8px var(--warning-glow); }
+        .submit-btn.dkp-btn:hover { box-shadow: 0 4px 16px var(--warning-glow); }
+        body[data-theme="dark"] .submit-btn.dkp-btn { color: #000; }
+        .message { margin-top: 8px; padding: 8px 12px; text-align: center; font-size: 12px; border-radius: var(--radius-sm); display: none; white-space: pre-wrap; }
+        .message.success { display: block; color: var(--success); background: var(--success-soft); border: 1px solid var(--success); box-shadow: 0 0 10px var(--success-glow); }
+        .message.error { display: block; color: var(--danger); background: var(--danger-soft); border: 1px solid var(--danger); box-shadow: 0 0 10px var(--danger-glow); }
         .hidden { display: none !important; }
-        .loader { display: inline-block; width: 11px; height: 11px; border: 2px solid var(--accent); border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-right: 5px; vertical-align: middle; }
+        .loader { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--accent); border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-right: 6px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 8px 12px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); flex-wrap: wrap; gap: 6px; box-shadow: var(--shadow-sm); }
-        .user-info { color: var(--accent); font-family: 'Times New Roman', Times, serif; font-size: 13px; font-weight: 700; }
-        .user-info .role-badge { display: inline-block; padding: 2px 7px; margin-left: 6px; font-size: 10px; border-radius: var(--radius-sm); font-weight: 700; }
-        .user-info .role-badge.role-admin { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); }
-        .user-info .role-badge.role-mod { background: var(--warning-soft); border: 1px solid var(--warning); color: var(--warning); }
+        /* ✅ ШАПКА */
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding: 10px 16px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); flex-wrap: wrap; gap: 8px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+        .header-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--dkp), var(--accent)); }
+        .user-info { color: var(--accent); font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 8px var(--accent-glow); }
+        .user-info .role-badge { display: inline-block; padding: 3px 10px; margin-left: 8px; font-size: 10px; border-radius: var(--radius-sm); font-weight: 700; letter-spacing: 0.5px; }
+        .user-info .role-badge.role-admin { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); box-shadow: 0 0 8px var(--danger-glow); }
+        .user-info .role-badge.role-mod { background: var(--warning-soft); border: 1px solid var(--warning); color: var(--warning); box-shadow: 0 0 8px var(--warning-glow); }
         .user-info .role-badge.role-player { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); }
-        .user-info .dkp-badge { display: inline-block; padding: 2px 7px; margin-left: 5px; font-size: 11px; background: var(--warning-soft); border: 1px solid var(--dkp); color: var(--dkp); border-radius: var(--radius-sm); font-weight: 700; }
-        .logout-btn, .theme-toggle { background: transparent; border: 1px solid var(--border); color: var(--text-main); padding: 4px 10px; cursor: pointer; font-family: 'Times New Roman', Times, serif; font-size: 11px; transition: 0.2s; border-radius: var(--radius-sm); margin-left: 4px; }
+        .user-info .dkp-badge { display: inline-block; padding: 3px 10px; margin-left: 6px; font-size: 11px; background: var(--warning-soft); border: 1px solid var(--dkp); color: var(--dkp); border-radius: var(--radius-sm); font-weight: 700; box-shadow: 0 0 8px var(--warning-glow); }
+        .logout-btn, .theme-toggle { background: transparent; border: 1px solid var(--border); color: var(--text-main); padding: 5px 12px; cursor: pointer; font-family: var(--font-display); font-size: 11px; transition: 0.3s; border-radius: var(--radius-sm); margin-left: 4px; font-weight: 600; letter-spacing: 0.5px; }
         .logout-btn { border-color: var(--danger); color: var(--danger); }
-        .logout-btn:hover { background: var(--danger-soft); }
-        .theme-toggle:hover { background: var(--bg-soft); border-color: var(--accent); }
+        .logout-btn:hover { background: var(--danger-soft); box-shadow: 0 0 10px var(--danger-glow); }
+        .theme-toggle:hover { background: var(--bg-soft); border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
 
-        .panel { background: var(--bg-panel); border: 1px solid var(--border); padding: 15px; margin-bottom: 12px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
-        .panel-title { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 14px; margin-bottom: 10px; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        .status-badge { display: inline-block; padding: 2px 7px; font-size: 10px; letter-spacing: 0.5px; border-radius: var(--radius-sm); font-weight: 700; }
+        /* ✅ ПАНЕЛИ */
+        .panel { background: var(--bg-panel); border: 1px solid var(--border); padding: 18px; margin-bottom: 14px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); position: relative; }
+        .panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5; }
+        .panel-title { font-family: var(--font-display); color: var(--accent); font-size: 14px; margin-bottom: 12px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 6px; text-transform: uppercase; text-shadow: 0 0 8px var(--accent-glow); }
+        .status-badge { display: inline-block; padding: 3px 10px; font-size: 10px; letter-spacing: 0.5px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
         .status-pending { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
-        .status-approved { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .status-approved { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); box-shadow: 0 0 6px var(--success-glow); }
         .status-rejected { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
-        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; margin-bottom: 10px; }
-        .data-item { background: var(--bg-soft); padding: 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.2s; }
-        .data-item:hover { border-color: var(--accent); }
-        .data-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px; font-weight: 700; }
-        .data-value { font-size: 15px; color: var(--accent); font-weight: 700; font-family: 'Times New Roman', Times, serif; }
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 12px; }
+        .data-item { background: var(--bg-soft); padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.3s; }
+        .data-item:hover { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        .data-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-weight: 700; font-family: var(--font-display); }
+        .data-value { font-size: 16px; color: var(--accent); font-weight: 700; font-family: var(--font-display); text-shadow: 0 0 6px var(--accent-glow); }
 
-        .player-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; margin-bottom: 6px; border-radius: var(--radius-sm); transition: 0.2s; }
-        .player-card:hover { box-shadow: var(--shadow-sm); border-color: var(--accent); }
-        .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
-        .player-nick { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 13px; font-weight: 700; }
-        .action-buttons { display: flex; gap: 4px; flex-wrap: wrap; }
-        .btn-approve, .btn-reject, .btn-edit, .btn-compare, .btn-back, .btn-remove, .btn-role { padding: 3px 8px; border: none; cursor: pointer; font-family: 'Times New Roman', Times, serif; font-size: 11px; transition: 0.2s; border-radius: var(--radius-sm); font-weight: 600; letter-spacing: 0.3px; }
+        .player-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; margin-bottom: 8px; border-radius: var(--radius-sm); transition: 0.3s; }
+        .player-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent); }
+        .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+        .player-nick { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 0 6px var(--accent-glow); }
+        .action-buttons { display: flex; gap: 5px; flex-wrap: wrap; }
+
+        /* ✅ ИГРОВЫЕ КНОПКИ ДЕЙСТВИЙ */
+        .btn-approve, .btn-reject, .btn-edit, .btn-compare, .btn-back, .btn-remove, .btn-role { padding: 5px 12px; border: none; cursor: pointer; font-family: var(--font-display); font-size: 11px; transition: 0.3s; border-radius: var(--radius-sm); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; position: relative; overflow: hidden; }
         .btn-approve { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
-        .btn-approve:hover { background: var(--success); color: #fff; }
+        .btn-approve:hover { background: var(--success); color: #fff; box-shadow: 0 0 12px var(--success-glow); }
         .btn-reject { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
-        .btn-reject:hover { background: var(--danger); color: #fff; }
-        .btn-edit { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); width: 100%; margin-top: 6px; }
-        .btn-edit:hover { background: var(--accent); color: #fff; }
+        .btn-reject:hover { background: var(--danger); color: #fff; box-shadow: 0 0 12px var(--danger-glow); }
+        .btn-edit { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); width: 100%; margin-top: 8px; }
+        .btn-edit:hover { background: var(--accent); color: #fff; box-shadow: 0 0 12px var(--accent-glow); }
+        body[data-theme="dark"] .btn-edit:hover { color: #000; }
         .btn-compare { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
-        .btn-compare:hover { background: var(--warning); color: #fff; }
-        .btn-back { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-bottom: 8px; }
-        .btn-back:hover { background: var(--accent); color: #fff; }
-        .btn-remove { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); font-size: 10px; padding: 2px 6px; }
-        .btn-remove:hover { background: var(--danger); color: #fff; }
-        .btn-role { padding: 2px 6px; font-size: 10px; }
+        .btn-compare:hover { background: var(--warning); color: #fff; box-shadow: 0 0 12px var(--warning-glow); }
+        body[data-theme="dark"] .btn-compare:hover { color: #000; }
+        .btn-back { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-bottom: 10px; }
+        .btn-back:hover { background: var(--accent); color: #fff; box-shadow: 0 0 12px var(--accent-glow); }
+        body[data-theme="dark"] .btn-back:hover { color: #000; }
+        .btn-remove { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); font-size: 10px; padding: 3px 8px; }
+        .btn-remove:hover { background: var(--danger); color: #fff; box-shadow: 0 0 10px var(--danger-glow); }
+        .btn-role { padding: 3px 8px; font-size: 10px; }
         .btn-role-admin { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
-        .btn-role-admin:hover { background: var(--danger); color: #fff; }
+        .btn-role-admin:hover { background: var(--danger); color: #fff; box-shadow: 0 0 10px var(--danger-glow); }
         .btn-role-mod { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
-        .btn-role-mod:hover { background: var(--warning); color: #fff; }
+        .btn-role-mod:hover { background: var(--warning); color: #fff; box-shadow: 0 0 10px var(--warning-glow); }
+        body[data-theme="dark"] .btn-role-mod:hover { color: #000; }
         .btn-role-player { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
-        .btn-role-player:hover { background: var(--accent); color: #fff; }
-        .user-role-tag { display: inline-block; padding: 2px 7px; font-size: 10px; border-radius: var(--radius-sm); margin-left: 5px; font-weight: 700; }
+        .btn-role-player:hover { background: var(--accent); color: #fff; box-shadow: 0 0 10px var(--accent-glow); }
+        body[data-theme="dark"] .btn-role-player:hover { color: #000; }
+
+        .user-role-tag { display: inline-block; padding: 3px 10px; font-size: 10px; border-radius: var(--radius-sm); margin-left: 6px; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.5px; }
         .user-role-tag.admin { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
         .user-role-tag.mod { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
         .user-role-tag.player { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
-        .empty-state { text-align: center; color: var(--text-dim); padding: 20px 10px; font-size: 12px; font-style: italic; }
-        .ranking-list { display: flex; flex-direction: column; gap: 5px; }
-        .ranking-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; display: flex; align-items: center; gap: 8px; transition: 0.2s; flex-wrap: wrap; border-radius: var(--radius-sm); }
-        .ranking-item:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
-        .ranking-position { font-family: 'Times New Roman', Times, serif; font-size: 16px; font-weight: 700; min-width: 32px; text-align: center; color: var(--text-dim); }
-        .ranking-position.top-1 { color: var(--gold); } .ranking-position.top-2 { color: var(--silver); } .ranking-position.top-3 { color: var(--bronze); }
+        .empty-state { text-align: center; color: var(--text-dim); padding: 25px 15px; font-size: 12px; font-style: italic; }
+        .ranking-list { display: flex; flex-direction: column; gap: 6px; }
+        .ranking-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px 12px; display: flex; align-items: center; gap: 10px; transition: 0.3s; flex-wrap: wrap; border-radius: var(--radius-sm); }
+        .ranking-item:hover { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        .ranking-position { font-family: var(--font-display); font-size: 16px; font-weight: 900; min-width: 35px; text-align: center; color: var(--text-dim); }
+        .ranking-position.top-1 { color: var(--gold); text-shadow: 0 0 8px var(--warning-glow); }
+        .ranking-position.top-2 { color: var(--silver); }
+        .ranking-position.top-3 { color: var(--bronze); }
         .ranking-info { flex: 1; min-width: 160px; }
-        .ranking-nick { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 13px; font-weight: 700; }
+        .ranking-nick { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 0.5px; }
         .ranking-stats { font-size: 11px; color: var(--text-dim); }
-        .ranking-bm { font-size: 13px; color: var(--success); font-weight: 700; font-family: 'Times New Roman', Times, serif; }
-        .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .ranking-bm { font-size: 13px; color: var(--success); font-weight: 700; font-family: var(--font-display); text-shadow: 0 0 6px var(--success-glow); }
+        .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         @media (max-width: 600px) { .compare-container { grid-template-columns: 1fr; } }
-        .compare-column { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); }
-        .compare-title { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 13px; margin-bottom: 8px; text-align: center; font-weight: 700; }
-        .compare-stat { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+        .compare-column { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); }
+        .compare-title { font-family: var(--font-display); color: var(--accent); font-size: 13px; margin-bottom: 10px; text-align: center; font-weight: 700; letter-spacing: 1px; }
+        .compare-stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
         .compare-stat:last-child { border-bottom: none; }
         .compare-label { color: var(--text-dim); }
-        .compare-value { font-size: 13px; font-weight: 700; font-family: 'Times New Roman', Times, serif; }
-        .compare-value.better { color: var(--success); } .compare-value.worse { color: var(--danger); } .compare-value.equal { color: var(--warning); }
+        .compare-value { font-size: 13px; font-weight: 700; font-family: var(--font-display); }
+        .compare-value.better { color: var(--success); text-shadow: 0 0 6px var(--success-glow); }
+        .compare-value.worse { color: var(--danger); }
+        .compare-value.equal { color: var(--warning); }
 
-        .skills-list { display: flex; flex-direction: column; gap: 4px; }
-        .skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 6px 8px; display: flex; align-items: center; gap: 8px; transition: 0.2s; border-radius: var(--radius-sm); cursor: pointer; }
-        .skill-item:hover { border-color: var(--accent); }
-        .skill-item.checked { border-color: var(--success); background: var(--success-soft); }
-        .skill-checkbox { width: 15px; height: 15px; cursor: pointer; accent-color: var(--accent); }
+        .skills-list { display: flex; flex-direction: column; gap: 5px; }
+        .skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; display: flex; align-items: center; gap: 10px; transition: 0.3s; border-radius: var(--radius-sm); cursor: pointer; }
+        .skill-item:hover { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+        .skill-item.checked { border-color: var(--success); background: var(--success-soft); box-shadow: 0 0 8px var(--success-glow); }
+        .skill-checkbox { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
         .skill-name { flex: 1; font-size: 13px; font-weight: 600; }
-        .approved-skills { display: flex; flex-wrap: wrap; gap: 4px; }
-        .approved-skill-badge { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 3px 8px; font-size: 11px; border-radius: var(--radius-sm); transition: 0.2s; font-weight: 600; }
-        .approved-skill-badge:hover { background: var(--success); color: #fff; }
-        .admin-skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 7px 9px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; border-radius: var(--radius-sm); transition: 0.2s; }
+        .approved-skills { display: flex; flex-wrap: wrap; gap: 5px; }
+        .approved-skill-badge { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 4px 10px; font-size: 11px; border-radius: var(--radius-sm); transition: 0.3s; font-weight: 600; }
+        .approved-skill-badge:hover { background: var(--success); color: #fff; box-shadow: 0 0 10px var(--success-glow); }
+        .admin-skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; border-radius: var(--radius-sm); transition: 0.3s; }
         .admin-skill-item:hover { border-color: var(--accent); }
         .admin-skill-name { font-size: 13px; font-weight: 600; }
-        .admin-skill-tag { font-size: 9px; padding: 2px 5px; background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); margin-left: 5px; border-radius: var(--radius-sm); font-weight: 600; }
-        .loading-overlay { text-align: center; padding: 20px; color: var(--accent); font-family: 'Times New Roman', Times, serif; letter-spacing: 1px; font-size: 12px; }
-        .cabinet-section { margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
+        .admin-skill-tag { font-size: 9px; padding: 2px 6px; background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); margin-left: 6px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .loading-overlay { text-align: center; padding: 25px; color: var(--accent); font-family: var(--font-display); letter-spacing: 2px; font-size: 12px; }
+        .cabinet-section { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
         .cabinet-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .auth-container { max-width: 360px; margin: 40px auto; background: var(--bg-panel); border: 1px solid var(--border); padding: 22px; position: relative; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); }
-        .auth-title { font-family: 'Times New Roman', Times, serif; text-align: center; color: var(--accent); letter-spacing: 2px; margin-bottom: 3px; font-size: 20px; font-weight: 700; }
-        .auth-subtitle { text-align: center; color: var(--text-dim); font-size: 11px; margin-bottom: 15px; font-style: italic; }
-        .footer { text-align: center; padding: 15px; color: var(--text-dim); font-size: 10px; letter-spacing: 1px; margin-top: 20px; font-style: italic; }
-        ::-webkit-scrollbar { width: 7px; }
+        .auth-container { max-width: 380px; margin: 40px auto; background: var(--bg-panel); border: 1px solid var(--border); padding: 25px; position: relative; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+        .auth-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient-btn); box-shadow: 0 0 20px var(--accent-glow); }
+        .auth-title { font-family: var(--font-display); text-align: center; color: var(--accent); letter-spacing: 3px; margin-bottom: 4px; font-size: 22px; font-weight: 900; text-shadow: 0 0 15px var(--accent-glow); text-transform: uppercase; }
+        .auth-subtitle { text-align: center; color: var(--text-dim); font-size: 11px; margin-bottom: 18px; font-style: italic; letter-spacing: 1px; }
+        .footer { text-align: center; padding: 20px; color: var(--text-dim); font-size: 10px; letter-spacing: 2px; margin-top: 25px; font-style: italic; font-family: var(--font-display); }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-main); }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4a6880; }
+        ::-webkit-scrollbar-thumb { background: var(--gradient-btn); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-hover); }
 
-        .equipment-section-tabs { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 8px; padding: 6px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border); }
-        .eq-tab { background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-dim); font-family: 'Times New Roman', Times, serif; font-size: 11px; padding: 3px 7px; cursor: pointer; border-radius: var(--radius-sm); transition: 0.2s; font-weight: 600; }
-        .eq-tab:hover { color: var(--accent); border-color: var(--accent); }
-        .eq-tab.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
-        .item-card { background: var(--bg-panel); border: 1px solid var(--border); padding: 8px; border-radius: var(--radius-sm); margin-bottom: 5px; transition: 0.2s; cursor: pointer; position: relative; }
-        .item-card:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
-        .item-card.selected { border-color: var(--success); background: var(--success-soft); }
-        .item-card.selected::before { content: '✓'; position: absolute; top: 6px; right: 8px; color: var(--success); font-size: 15px; font-weight: bold; }
-        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; flex-wrap: wrap; gap: 4px; }
-        .item-name { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: var(--text-main); font-weight: 700; }
-        .item-badges { display: flex; gap: 3px; flex-wrap: wrap; }
-        .item-badge { font-size: 9px; padding: 1px 5px; border-radius: var(--radius-sm); letter-spacing: 0.3px; font-weight: 600; }
-        .item-badge.prime { background: var(--warning-soft); color: var(--gold); border: 1px solid var(--gold); }
+        .equipment-section-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        .eq-tab { background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-display); font-size: 10px; padding: 5px 10px; cursor: pointer; border-radius: var(--radius-sm); transition: 0.3s; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+        .eq-tab:hover { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 6px var(--accent-glow); }
+        .eq-tab.active { background: var(--gradient-btn); color: #ffffff; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        body[data-theme="dark"] .eq-tab.active { color: #000; }
+        .item-card { background: var(--bg-panel); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; transition: 0.3s; cursor: pointer; position: relative; }
+        .item-card:hover { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        .item-card.selected { border-color: var(--success); background: var(--success-soft); box-shadow: 0 0 12px var(--success-glow); }
+        .item-card.selected::before { content: '✓'; position: absolute; top: 8px; right: 10px; color: var(--success); font-size: 16px; font-weight: bold; text-shadow: 0 0 8px var(--success-glow); }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+        .item-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; letter-spacing: 0.5px; }
+        .item-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+        .item-badge { font-size: 9px; padding: 2px 6px; border-radius: var(--radius-sm); letter-spacing: 0.3px; font-weight: 700; font-family: var(--font-display); }
+        .item-badge.prime { background: var(--warning-soft); color: var(--gold); border: 1px solid var(--gold); box-shadow: 0 0 4px var(--warning-glow); }
         .item-badge.boss { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
         .item-badge.enhance { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
         .item-badge.tier { background: #ede9fe; color: var(--accent); border: 1px solid var(--accent); }
@@ -234,69 +260,70 @@
         .item-badge.color-yellow { background: var(--warning-soft); color: var(--gold); border: 1px solid var(--gold); }
         .item-badge.color-red { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
 
-        .approved-equipment { display: flex; flex-direction: column; gap: 5px; }
-        .approved-eq-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 7px 9px; border-radius: var(--radius-sm); display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
-        .approved-eq-section { font-family: 'Times New Roman', Times, serif; font-size: 11px; color: var(--warning); text-transform: uppercase; letter-spacing: 0.5px; min-width: 70px; font-weight: 700; }
+        .approved-equipment { display: flex; flex-direction: column; gap: 6px; }
+        .approved-eq-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; border-radius: var(--radius-sm); display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .approved-eq-section { font-family: var(--font-display); font-size: 10px; color: var(--warning); text-transform: uppercase; letter-spacing: 0.5px; min-width: 75px; font-weight: 700; }
         .approved-eq-name { flex: 1; font-size: 12px; color: var(--text-main); font-weight: 600; }
 
-        .add-item-form { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 10px; }
-        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; margin-bottom: 6px; }
-        .checkbox-group { display: flex; align-items: center; gap: 5px; padding: 4px 0; }
-        .checkbox-group input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+        .add-item-form { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 8px; }
+        .checkbox-group { display: flex; align-items: center; gap: 6px; padding: 5px 0; }
+        .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
         .checkbox-group label { margin: 0; font-size: 12px; cursor: pointer; font-weight: 600; }
 
-        .admin-item-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 7px 9px; border-radius: var(--radius-sm); margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; transition: 0.2s; }
-        .admin-item-card:hover { border-color: var(--accent); }
-        .admin-item-info { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 160px; }
-        .admin-item-name { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: var(--text-main); font-weight: 700; }
-        .admin-item-meta { display: flex; gap: 3px; flex-wrap: wrap; }
+        .admin-item-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: 0.3s; }
+        .admin-item-card:hover { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+        .admin-item-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px; }
+        .admin-item-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; letter-spacing: 0.5px; }
+        .admin-item-meta { display: flex; gap: 4px; flex-wrap: wrap; }
 
-        .dkp-highlight { color: var(--dkp); font-weight: 700; }
-        .event-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 9px; border-radius: var(--radius-sm); margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; transition: 0.2s; }
-        .event-card:hover { box-shadow: var(--shadow-sm); }
+        .dkp-highlight { color: var(--dkp); font-weight: 700; font-family: var(--font-display); text-shadow: 0 0 10px var(--warning-glow); }
+        .event-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: 0.3s; }
+        .event-card:hover { box-shadow: 0 0 10px var(--accent-glow); border-color: var(--accent); }
         .event-info { flex: 1; min-width: 160px; }
-        .event-name { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: var(--text-main); font-weight: 700; margin-bottom: 2px; }
+        .event-name { font-family: var(--font-display); font-size: 13px; color: var(--text-main); font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; }
         .event-meta { font-size: 10px; color: var(--text-dim); }
-        .event-dkp { font-family: 'Times New Roman', Times, serif; font-size: 13px; font-weight: 700; color: var(--dkp); padding: 3px 9px; border: 1px solid var(--dkp); border-radius: var(--radius-sm); background: var(--warning-soft); }
+        .event-dkp { font-family: var(--font-display); font-size: 13px; font-weight: 900; color: var(--dkp); padding: 4px 12px; border: 1px solid var(--dkp); border-radius: var(--radius-sm); background: var(--warning-soft); box-shadow: 0 0 8px var(--warning-glow); letter-spacing: 0.5px; }
 
-        .screenshot-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; background: var(--bg-soft); margin-bottom: 10px; }
-        .screenshot-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); }
+        .screenshot-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; background: var(--bg-soft); margin-bottom: 12px; }
+        .screenshot-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 15px var(--accent-glow); }
         .screenshot-upload-area.dragover { border-color: var(--accent); background: var(--accent-soft); }
-        .upload-icon { font-size: 28px; margin-bottom: 5px; }
+        .upload-icon { font-size: 32px; margin-bottom: 6px; }
         .upload-text { color: var(--text-main); font-size: 12px; font-weight: 600; }
-        .upload-hint { color: var(--text-dim); font-size: 10px; margin-top: 3px; }
+        .upload-hint { color: var(--text-dim); font-size: 10px; margin-top: 4px; }
 
-        .screenshots-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 6px; margin-bottom: 10px; }
+        .screenshots-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 12px; }
         .screenshot-thumb { position: relative; aspect-ratio: 16/10; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-soft); }
-        .screenshot-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-        .screenshot-thumb .remove-btn { position: absolute; top: 2px; right: 2px; background: var(--danger); color: white; border: none; width: 16px; height: 16px; border-radius: 50%; cursor: pointer; font-size: 9px; display: flex; align-items: center; justify-content: center; }
-        .screenshot-thumb .remove-btn:hover { background: #8a3a3a; }
-        .screenshot-thumb .upload-progress { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: var(--accent); font-size: 8px; padding: 2px; text-align: center; font-weight: 600; }
+        .screenshot-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; transition: 0.3s; }
+        .screenshot-thumb img:hover { transform: scale(1.05); box-shadow: 0 0 10px var(--accent-glow); }
+        .screenshot-thumb .remove-btn { position: absolute; top: 3px; right: 3px; background: var(--danger); color: white; border: none; width: 18px; height: 18px; border-radius: 50%; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 6px var(--danger-glow); }
+        .screenshot-thumb .upload-progress { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: var(--accent); font-size: 9px; padding: 2px; text-align: center; font-weight: 600; }
 
-        .recognized-nicks-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-        .nick-item { display: flex; align-items: center; gap: 6px; background: var(--bg-soft); border: 1px solid var(--border); padding: 5px 8px; border-radius: var(--radius-sm); }
-        .nick-item input { flex: 1; background: transparent; border: none; color: var(--text-main); font-size: 12px; padding: 2px; font-weight: 600; }
+        .recognized-nicks-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+        .nick-item { display: flex; align-items: center; gap: 8px; background: var(--bg-soft); border: 1px solid var(--border); padding: 6px 10px; border-radius: var(--radius-sm); }
+        .nick-item input { flex: 1; background: transparent; border: none; color: var(--text-main); font-size: 13px; padding: 3px; font-weight: 600; }
         .nick-item input:focus { background: var(--accent-soft); border-radius: var(--radius-sm); }
-        .nick-item .remove-nick-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 18px; height: 18px; border-radius: var(--radius-sm); cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+        .nick-item .remove-nick-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 20px; height: 20px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; }
         .nick-item .remove-nick-btn:hover { background: var(--danger-soft); }
 
-        .ocr-progress { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 10px; }
-        .progress-bar { width: 100%; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 5px; }
-        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #4a5d73); transition: width 0.3s; width: 0%; }
-        .progress-text { font-family: 'Times New Roman', Times, serif; font-size: 11px; color: var(--accent); font-weight: 600; }
+        .ocr-progress { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; }
+        .progress-bar { width: 100%; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+        .progress-bar-fill { height: 100%; background: var(--gradient-btn); transition: width 0.3s; width: 0%; box-shadow: 0 0 8px var(--accent-glow); }
+        .progress-text { font-family: var(--font-display); font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
 
-        .dkp-submission-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 7px; transition: 0.2s; }
-        .dkp-submission-card:hover { box-shadow: var(--shadow-sm); }
-        .submission-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
-        .submission-event { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: var(--dkp); font-weight: 700; }
+        .dkp-submission-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 8px; transition: 0.3s; }
+        .dkp-submission-card:hover { box-shadow: 0 0 10px var(--accent-glow); border-color: var(--accent); }
+        .submission-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+        .submission-event { font-family: var(--font-display); font-size: 13px; color: var(--dkp); font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 0 6px var(--warning-glow); }
         .submission-meta { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
-        .submission-screenshots { display: flex; gap: 5px; flex-wrap: wrap; margin: 6px 0; }
-        .submission-screenshots img { width: 140px; height: auto; max-height: 100px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
-        .submission-screenshots img:hover { box-shadow: var(--shadow-sm); transform: scale(1.02); }
-        .submission-nicks { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px; }
-        .submission-nick-tag { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); padding: 2px 7px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
+        .submission-screenshots { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+        .submission-screenshots img { width: 150px; height: auto; max-height: 110px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; transition: 0.3s; }
+        .submission-screenshots img:hover { box-shadow: 0 0 10px var(--accent-glow); transform: scale(1.03); }
+        .submission-nicks { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+        .submission-nick-tag { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.3px; }
 
-        .dkp-history-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; background: var(--bg-soft); border-left: 3px solid var(--border); margin-bottom: 4px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 12px; }
+        .dkp-history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--bg-soft); border-left: 3px solid var(--border); margin-bottom: 5px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 12px; transition: 0.3s; }
+        .dkp-history-item:hover { background: var(--bg-hover); }
         .dkp-history-item.earn { border-left-color: var(--success); }
         .dkp-history-item.spend { border-left-color: var(--danger); }
         .dkp-history-item.manual_add { border-left-color: var(--dkp); }
@@ -305,94 +332,99 @@
         .dkp-history-item.auction_win { border-left-color: var(--dkp); }
         .history-info { flex: 1; }
         .history-event { color: var(--text-main); font-size: 12px; font-weight: 600; }
-        .history-date { color: var(--text-dim); font-size: 10px; margin-top: 1px; }
-        .history-amount { font-family: 'Times New Roman', Times, serif; font-weight: 700; font-size: 12px; }
-        .history-amount.positive { color: var(--success); }
+        .history-date { color: var(--text-dim); font-size: 10px; margin-top: 2px; }
+        .history-amount { font-family: var(--font-display); font-weight: 700; font-size: 13px; }
+        .history-amount.positive { color: var(--success); text-shadow: 0 0 6px var(--success-glow); }
         .history-amount.negative { color: var(--danger); }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(3px); }
-        .modal-content { max-width: 90%; max-height: 90%; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; position: relative; box-shadow: var(--shadow-lg); overflow-y: auto; }
-        .modal-close { position: absolute; top: 8px; right: 8px; background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 13px; }
-        .modal-close:hover { background: var(--danger-soft); }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.75); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(5px); }
+        .modal-content { max-width: 90%; max-height: 90%; background: var(--bg-panel); border: 1px solid var(--accent); border-radius: var(--radius-md); padding: 20px; position: relative; box-shadow: var(--shadow-lg), 0 0 30px var(--accent-glow); overflow-y: auto; }
+        .modal-close { position: absolute; top: 10px; right: 10px; background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; transition: 0.3s; }
+        .modal-close:hover { background: var(--danger); color: #fff; box-shadow: 0 0 10px var(--danger-glow); }
         .modal-content img { max-width: 100%; max-height: 80vh; border-radius: var(--radius-sm); }
 
-        .calendar-day { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px; }
-        .calendar-date { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 12px; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border); font-weight: 700; }
-        .calendar-event { background: var(--bg-panel); border-left: 3px solid var(--dkp); border-radius: var(--radius-sm); padding: 8px; margin-bottom: 6px; }
-        .calendar-event-title { font-size: 12px; color: var(--dkp); font-weight: 700; margin-bottom: 5px; font-family: 'Times New Roman', Times, serif; }
-        .calendar-players { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
-        .calendar-nick-attended { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 2px 6px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
-        .calendar-nick-missed { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); padding: 2px 6px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
-        .calendar-label { font-size: 10px; margin-bottom: 3px; display: block; font-weight: 700; }
+        .calendar-day { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; }
+        .calendar-date { font-family: var(--font-display); color: var(--accent); font-size: 12px; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 6px var(--accent-glow); }
+        .calendar-event { background: var(--bg-panel); border-left: 3px solid var(--dkp); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px; }
+        .calendar-event-title { font-size: 12px; color: var(--dkp); font-weight: 700; margin-bottom: 6px; font-family: var(--font-display); letter-spacing: 0.5px; text-shadow: 0 0 6px var(--warning-glow); }
+        .calendar-players { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+        .calendar-nick-attended { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .calendar-nick-missed { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .calendar-label { font-size: 10px; margin-bottom: 4px; display: block; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.5px; }
         .calendar-label.attended { color: var(--success); }
         .calendar-label.missed { color: var(--danger); }
 
-        .auction-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 8px; transition: 0.2s; }
-        .auction-card:hover { box-shadow: var(--shadow-sm); }
-        .auction-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-        .auction-title { font-family: 'Times New Roman', Times, serif; font-size: 14px; color: var(--dkp); font-weight: 700; }
-        .auction-timer { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: var(--danger); font-weight: 700; padding: 2px 7px; background: var(--danger-soft); border-radius: var(--radius-sm); }
-        .auction-info { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; padding: 8px; background: var(--bg-panel); border-radius: var(--radius-sm); }
+        .auction-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px; transition: 0.3s; position: relative; overflow: hidden; }
+        .auction-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-dkp); box-shadow: 0 0 10px var(--warning-glow); }
+        .auction-card:hover { box-shadow: 0 0 15px var(--warning-glow); border-color: var(--dkp); }
+        .auction-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        .auction-title { font-family: var(--font-display); font-size: 14px; color: var(--dkp); font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 0 8px var(--warning-glow); }
+        .auction-timer { font-family: var(--font-display); font-size: 12px; color: var(--danger); font-weight: 700; padding: 3px 10px; background: var(--danger-soft); border-radius: var(--radius-sm); border: 1px solid var(--danger); box-shadow: 0 0 8px var(--danger-glow); letter-spacing: 0.5px; }
+        .auction-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; padding: 10px; background: var(--bg-panel); border-radius: var(--radius-sm); border: 1px solid var(--border); }
         .auction-info-item { display: flex; flex-direction: column; }
-        .auction-info-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; }
-        .auction-info-value { font-size: 14px; color: var(--text-main); font-family: 'Times New Roman', Times, serif; font-weight: 700; }
+        .auction-info-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.5px; }
+        .auction-info-value { font-size: 15px; color: var(--text-main); font-family: var(--font-display); font-weight: 700; }
 
-        .icon-preview { width: 70px; height: 35px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
+        .icon-preview { width: 75px; height: 38px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; transition: 0.3s; }
+        .icon-preview:hover { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
         .icon-preview img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-preview-small { width: 42px; height: 42px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-small { width: 44px; height: 44px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; transition: 0.3s; }
+        .icon-preview-small:hover { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
         .icon-preview-small img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-preview-cabinet { width: 36px; height: 36px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-cabinet { width: 38px; height: 38px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .icon-preview-cabinet img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-preview-activity { width: 55px; height: 28px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-activity { width: 58px; height: 29px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .icon-preview-activity img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-placeholder { font-size: 8px; color: var(--text-dim); text-align: center; }
-        .icon-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; background: var(--bg-soft); margin: 10px 0; }
-        .icon-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); }
+        .icon-placeholder { font-size: 9px; color: var(--text-dim); text-align: center; }
+        .icon-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 15px; text-align: center; cursor: pointer; transition: 0.3s; background: var(--bg-soft); margin: 12px 0; }
+        .icon-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 10px var(--accent-glow); }
         .icon-upload-area.dragover { border-color: var(--accent); background: var(--accent-soft); }
-        .approved-skill-with-icon { display: flex; align-items: center; gap: 4px; background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 3px 8px; border-radius: var(--radius-sm); font-weight: 600; font-size: 11px; }
-        .approved-skill-with-icon img { width: 22px; height: 22px; object-fit: cover; border-radius: 3px; }
+        .approved-skill-with-icon { display: flex; align-items: center; gap: 5px; background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 4px 10px; border-radius: var(--radius-sm); font-weight: 600; font-size: 11px; }
+        .approved-skill-with-icon img { width: 24px; height: 24px; object-fit: cover; border-radius: 3px; }
 
-        .saved-indicator { display: inline-block; padding: 2px 7px; background: var(--success-soft); color: var(--success); border: 1px solid var(--success); border-radius: var(--radius-sm); font-size: 10px; font-weight: 600; }
+        .saved-indicator { display: inline-block; padding: 3px 10px; background: var(--success-soft); color: var(--success); border: 1px solid var(--success); border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); box-shadow: 0 0 8px var(--success-glow); letter-spacing: 0.5px; }
 
-        .event-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
-        .event-stat-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; transition: 0.2s; }
-        .event-stat-card:hover { border-color: var(--accent); }
-        .event-stat-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-        .event-stat-name { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: var(--dkp); font-weight: 700; flex: 1; }
+        .event-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+        .event-stat-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; transition: 0.3s; position: relative; overflow: hidden; }
+        .event-stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-dkp); }
+        .event-stat-card:hover { border-color: var(--dkp); box-shadow: 0 0 12px var(--warning-glow); }
+        .event-stat-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .event-stat-name { font-family: var(--font-display); font-size: 12px; color: var(--dkp); font-weight: 700; flex: 1; letter-spacing: 0.5px; }
         .event-stat-total { font-size: 10px; color: var(--text-dim); }
-        .progress-row { margin-bottom: 4px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 1px; }
+        .progress-row { margin-bottom: 5px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 2px; font-family: var(--font-display); font-weight: 600; }
         .progress-label span:first-child { color: var(--text-dim); }
         .progress-label span:last-child { font-weight: 700; }
-        .progress-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
-        .progress-fill.month { background: linear-gradient(90deg, var(--accent), #4a5d73); }
-        .progress-fill.week { background: linear-gradient(90deg, var(--success), #4a7a5b); }
-        .progress-fill.total { background: linear-gradient(90deg, var(--dkp), var(--warning)); }
-        .event-stat-footer { margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; }
-        .event-stat-footer .attended { color: var(--success); font-weight: 600; }
-        .event-stat-footer .missed { color: var(--danger); font-weight: 600; }
+        .progress-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+        .progress-fill.month { background: linear-gradient(90deg, var(--accent), #60a5fa); box-shadow: 0 0 6px var(--accent-glow); }
+        .progress-fill.week { background: linear-gradient(90deg, var(--success), #34d399); box-shadow: 0 0 6px var(--success-glow); }
+        .progress-fill.total { background: var(--gradient-dkp); box-shadow: 0 0 6px var(--warning-glow); }
+        .event-stat-footer { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; font-family: var(--font-display); font-weight: 700; }
+        .event-stat-footer .attended { color: var(--success); }
+        .event-stat-footer .missed { color: var(--danger); }
 
-        .absentee-rate { font-family: 'Times New Roman', Times, serif; font-weight: 700; font-size: 15px; }
+        .absentee-rate { font-family: var(--font-display); font-weight: 900; font-size: 16px; text-shadow: 0 0 8px currentColor; }
         .absentee-rate.critical { color: var(--danger); }
         .absentee-rate.warning { color: var(--warning); }
         .absentee-rate.good { color: var(--success); }
 
-        /* ✅ СТИЛИ ДЛЯ НАСТРОЕК */
-        .settings-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; }
-        .settings-card-title { font-family: 'Times New Roman', Times, serif; color: var(--accent); font-size: 13px; font-weight: 700; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; text-shadow: 0 0 3px var(--glow-light); }
-        .settings-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
-        .settings-label { font-size: 11px; color: var(--text-dim); min-width: 140px; font-weight: 600; }
-        .settings-value { flex: 1; min-width: 120px; }
-        .toggle-switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .settings-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; position: relative; overflow: hidden; }
+        .settings-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-btn); }
+        .settings-card-title { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; text-shadow: 0 0 8px var(--accent-glow); letter-spacing: 1px; text-transform: uppercase; }
+        .settings-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+        .settings-label { font-size: 11px; color: var(--text-dim); min-width: 150px; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.5px; }
+        .settings-value { flex: 1; min-width: 130px; }
+        .toggle-switch { position: relative; display: inline-block; width: 44px; height: 22px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .3s; border-radius: 20px; }
-        .toggle-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-        input:checked + .toggle-slider { background-color: var(--success); }
-        input:checked + .toggle-slider:before { transform: translateX(20px); }
-        .penalty-result { background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); padding: 8px; margin-bottom: 5px; font-size: 11px; }
-        .penalty-result .nick { color: var(--danger); font-weight: 700; }
-        .penalty-result .amount { color: var(--danger); font-weight: 700; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .3s; border-radius: 22px; border: 1px solid var(--border); }
+        .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: var(--text-dim); transition: .3s; border-radius: 50%; }
+        input:checked + .toggle-slider { background: var(--gradient-btn); border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        input:checked + .toggle-slider:before { transform: translateX(22px); background-color: #fff; }
+        body[data-theme="dark"] input:checked + .toggle-slider:before { background-color: #000; }
+        .penalty-result { background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 6px; font-size: 11px; box-shadow: 0 0 8px var(--danger-glow); }
+        .penalty-result .nick { color: var(--danger); font-weight: 700; font-family: var(--font-display); }
+        .penalty-result .amount { color: var(--danger); font-weight: 700; font-family: var(--font-display); }
     </style>
 </head>
 <body data-theme="light">
@@ -410,14 +442,14 @@
         <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="topLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
     </div>
-    <div class="footer">© RF Online Next | v10.0</div>
+    <div class="footer">© RF Online Next | v11.0</div>
 </div>
 
 <div id="authScreen" class="screen">
     <div class="auth-container">
         <div class="auth-title">RF Online</div>
         <div class="auth-subtitle">Система идентификации</div>
-        <div id="savedIndicator" style="text-align: center; margin-bottom: 6px; display: none;">
+        <div id="savedIndicator" style="text-align: center; margin-bottom: 8px; display: none;">
             <span class="saved-indicator">✓ Данные сохранены</span>
         </div>
         <div class="tabs">
@@ -427,13 +459,13 @@
         <form id="loginForm" onsubmit="handleAuth(event, 'login')">
             <div class="form-group"><label>Позывной</label><input type="text" id="loginNick" required placeholder="Введите позывной..."></div>
             <div class="form-group"><label>Код доступа</label><input type="password" id="loginPass" required placeholder="Введите код..."></div>
-            <div class="checkbox-group" style="margin-bottom: 8px;">
+            <div class="checkbox-group" style="margin-bottom: 10px;">
                 <input type="checkbox" id="rememberMe">
                 <label for="rememberMe" style="margin: 0; cursor: pointer;">🔒 Запомнить меня</label>
             </div>
             <button type="submit" class="submit-btn" id="loginBtn">Войти</button>
-            <div style="text-align: center; margin-top: 6px;">
-                <button type="button" class="btn-edit" style="width: auto; padding: 4px 10px; font-size: 10px;" onclick="clearSavedCredentials()">🗑 Очистить сохраненные</button>
+            <div style="text-align: center; margin-top: 8px;">
+                <button type="button" class="btn-edit" style="width: auto; padding: 5px 12px; font-size: 10px;" onclick="clearSavedCredentials()">🗑 Очистить сохраненные</button>
             </div>
         </form>
         <form id="registerForm" class="hidden" onsubmit="handleAuth(event, 'register')">
@@ -475,16 +507,16 @@
             <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="mainTopLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
             <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="mainTopDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         </div>
-        <div style="margin-top: 15px;"><div class="panel-title">📊 Статистика мероприятий</div><div id="eventStatsBlock"></div></div>
-        <div style="margin-top: 12px;"><div class="panel-title">📊 Активность сегодня</div><div id="todayActivityBlock"></div></div>
-        <div style="margin-top: 12px;"><div class="panel-title">📈 Активность за неделю</div><div id="weeklyActivityBlock"></div></div>
-        <div style="margin-top: 12px;"><div class="panel-title">⚠️ Топ-10 неактивных (за месяц)</div><div id="topAbsenteesBlock"></div></div>
+        <div style="margin-top: 18px;"><div class="panel-title">📊 Статистика мероприятий</div><div id="eventStatsBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">📊 Активность сегодня</div><div id="todayActivityBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">📈 Активность за неделю</div><div id="weeklyActivityBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">⚠️ Топ-10 неактивных (за месяц)</div><div id="topAbsenteesBlock"></div></div>
     </div>
 
     <div id="cabinetContent" class="panel hidden">
         <div class="cabinet-section">
             <div class="panel-title">⚡ Характеристики <span id="playerStatus"></span></div>
-            <div id="approvedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 8px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEditForm()">✎ Изменить</button></div>
+            <div id="approvedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEditForm()">✎ Изменить</button></div>
             <div id="approvedDataGrid" class="data-grid"></div>
             <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют.</div>
             <form id="playerDataForm" class="hidden" onsubmit="savePlayerData(event)">
@@ -504,18 +536,18 @@
         </div>
         <div class="cabinet-section">
             <div class="panel-title">🎯 Навыки <span id="skillsStatus"></span></div>
-            <div id="skillsApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 8px;">✓ Подтверждено</div><button class="btn-edit" onclick="showSkillsEditForm()">✎ Изменить</button></div>
+            <div id="skillsApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div><button class="btn-edit" onclick="showSkillsEditForm()">✎ Изменить</button></div>
             <div id="approvedSkillsList" class="approved-skills"></div>
             <div id="skillsEmpty" class="empty-state hidden">Навыки отсутствуют.</div>
-            <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)"><div id="skillsList" class="skills-list"></div><button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 8px;">Отправить</button></form>
+            <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)"><div id="skillsList" class="skills-list"></div><button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 10px;">Отправить</button></form>
             <div id="skillsMessage" class="message"></div>
         </div>
         <div class="cabinet-section">
             <div class="panel-title">🛡 Экипировка <span id="equipmentStatus"></span></div>
-            <div id="equipmentApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 8px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEquipmentEditForm()">✎ Изменить</button></div>
+            <div id="equipmentApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEquipmentEditForm()">✎ Изменить</button></div>
             <div id="approvedEquipmentList" class="approved-equipment"></div>
             <div id="equipmentEmpty" class="empty-state hidden">Экипировка отсутствует.</div>
-            <form id="equipmentForm" class="hidden" onsubmit="savePlayerItems(event)"><div class="equipment-section-tabs" id="equipmentSectionTabs"></div><div id="equipmentItemsList"></div><button type="submit" class="submit-btn" id="saveEquipmentBtn" style="margin-top: 8px;">Отправить</button></form>
+            <form id="equipmentForm" class="hidden" onsubmit="savePlayerItems(event)"><div class="equipment-section-tabs" id="equipmentSectionTabs"></div><div id="equipmentItemsList"></div><button type="submit" class="submit-btn" id="saveEquipmentBtn" style="margin-top: 10px;">Отправить</button></form>
             <div id="equipmentMessage" class="message"></div>
         </div>
     </div>
@@ -528,10 +560,10 @@
         </div>
         <div id="dkpMyContent">
             <div class="panel-title">💼 Мои DKP</div>
-            <div style="text-align: center; padding: 15px; background: var(--bg-soft); border-radius: var(--radius-md); margin-bottom: 12px; border: 1px solid var(--border);">
-                <div style="font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; font-weight: 700;">Баланс</div>
-                <div id="myDkpBalance" class="dkp-highlight" style="font-size: 32px; font-family: 'Times New Roman', Times, serif;">0</div>
-                <div style="font-size: 12px; color: var(--dkp); margin-top: 2px; font-weight: 700;">DKP</div>
+            <div style="text-align: center; padding: 18px; background: var(--bg-soft); border-radius: var(--radius-md); margin-bottom: 14px; border: 1px solid var(--border); box-shadow: 0 0 15px var(--warning-glow);">
+                <div style="font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; font-weight: 700; font-family: var(--font-display);">Баланс</div>
+                <div id="myDkpBalance" class="dkp-highlight" style="font-size: 36px; font-family: var(--font-display);">0</div>
+                <div style="font-size: 12px; color: var(--dkp); margin-top: 3px; font-weight: 700; font-family: var(--font-display); letter-spacing: 1px;">DKP</div>
             </div>
             <div id="frozenDkpBlock"></div>
             <div class="panel-title" style="font-size: 12px;">📜 История операций</div>
@@ -539,7 +571,7 @@
         </div>
         <div id="dkpSubmitContent" class="hidden">
             <div class="panel-title">📸 Загрузка скриншотов</div>
-            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 8px;">До 5 скриншотов, макс. 2 МБ каждый.</p>
+            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 10px;">До 5 скриншотов, макс. 2 МБ каждый.</p>
             <div class="form-group"><label>Мероприятие</label><select id="dkpEventSelect" required><option value="">— Выберите —</option></select></div>
             <div class="screenshot-upload-area" id="screenshotUploadArea" onclick="document.getElementById('screenshotInput').click()">
                 <div class="upload-icon">📷</div>
@@ -552,9 +584,9 @@
             <div id="recognizedNicksBlock" class="hidden">
                 <div class="panel-title" style="font-size: 12px;">👥 Распознанные ники <span style="font-size: 9px; color: var(--text-dim);">(можно редактировать)</span></div>
                 <div class="recognized-nicks-list" id="recognizedNicksList"></div>
-                <button type="button" class="btn-edit" onclick="addEmptyNickField()" style="margin-bottom: 8px;">+ Добавить ник</button>
+                <button type="button" class="btn-edit" onclick="addEmptyNickField()" style="margin-bottom: 10px;">+ Добавить ник</button>
             </div>
-            <button type="button" class="submit-btn dkp-btn" id="submitDkpBtn" onclick="submitDkpSubmission()" style="margin-top: 8px;">📤 Отправить</button>
+            <button type="button" class="submit-btn dkp-btn" id="submitDkpBtn" onclick="submitDkpSubmission()" style="margin-top: 10px;">📤 Отправить</button>
             <div id="dkpSubmitMessage" class="message"></div>
         </div>
         <div id="dkpRatingContent" class="hidden"><div class="panel-title">🏆 Рейтинг DKP</div><div id="dkpRatingList" class="ranking-list"></div></div>
@@ -591,9 +623,9 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label>Мин. посещаемость (%)</label><select id="auctionMinAttendance"><option value="0">Без ограничений</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="40">40%</option><option value="50">50%</option><option value="60">60%</option><option value="70">70%</option><option value="80">80%</option><option value="90">90%</option><option value="100">100%</option></select></div>
-                    <div class="checkbox-group" style="align-self: flex-end; padding-bottom: 8px;"><input type="checkbox" id="auctionPriorityOnly"><label for="auctionPriorityOnly">Только приоритет</label></div>
+                    <div class="checkbox-group" style="align-self: flex-end; padding-bottom: 10px;"><input type="checkbox" id="auctionPriorityOnly"><label for="auctionPriorityOnly">Только приоритет</label></div>
                 </div>
-                <div class="form-group"><label>Участники (пусто = все)</label><div id="auctionPlayersList" style="max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px; background: var(--bg-soft);"></div></div>
+                <div class="form-group"><label>Участники (пусто = все)</label><div id="auctionPlayersList" style="max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; background: var(--bg-soft);"></div></div>
                 <button type="button" class="submit-btn dkp-btn" onclick="createAuction()">🔨 Создать</button>
             </div>
             <div id="auctionCreateMessage" class="message"></div>
@@ -602,14 +634,14 @@
 
     <div id="calendarContent" class="panel hidden">
         <div class="panel-title">📅 Календарь посещений</div>
-        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; align-items: flex-end;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: flex-end;">
             <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;"><label>С даты</label><input type="date" id="calendarStartDate"></div>
             <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;"><label>По дату</label><input type="date" id="calendarEndDate"></div>
             <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;"><label>Игрок</label><select id="calendarPlayerFilter"><option value="">Все</option></select></div>
-            <button class="submit-btn" style="width: auto; padding: 6px 12px;" onclick="loadCalendar()">🔍</button>
-            <button class="submit-btn dkp-btn" style="width: auto; padding: 6px 12px;" onclick="loadMyCalendar()">👤 Моя</button>
+            <button class="submit-btn" style="width: auto; padding: 8px 14px;" onclick="loadCalendar()">🔍</button>
+            <button class="submit-btn dkp-btn" style="width: auto; padding: 8px 14px;" onclick="loadMyCalendar()">👤 Моя</button>
         </div>
-        <div id="calendarStats" style="margin-bottom: 12px;"></div>
+        <div id="calendarStats" style="margin-bottom: 14px;"></div>
         <div id="calendarGrid"></div>
     </div>
 
@@ -655,7 +687,7 @@
         </div>
         <div id="adminDkpAdjustContent" class="hidden">
             <div class="panel-title">💵 Ручное DKP</div>
-            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 8px;">+ начисление, - списание.</p>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">+ начисление, - списание.</p>
             <div class="add-item-form">
                 <div class="form-row">
                     <div class="form-group"><label>Ник</label><input type="text" id="adjustDkpNick" required placeholder="Ник..."></div>
@@ -668,7 +700,7 @@
         </div>
         <div id="adminSkillsContent" class="hidden">
             <div class="panel-title">🎯 Навыки</div>
-            <form onsubmit="addSkill(event)" style="margin-bottom: 8px;">
+            <form onsubmit="addSkill(event)" style="margin-bottom: 10px;">
                 <div class="form-group"><label>Новый навык</label><input type="text" id="newSkillName" required placeholder="Название..."></div>
                 <button type="submit" class="submit-btn">+ Добавить</button>
             </form>
@@ -697,16 +729,17 @@
         </div>
         <div id="adminUsersContent" class="hidden">
             <div class="panel-title">👥 Пользователи</div>
-            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 8px;">Управление ролями и удаление.</p>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Управление ролями и удаление.</p>
             <div id="usersList"></div><div id="adminUsersMessage" class="message"></div>
-            <div id="deletionRequestsSection" style="margin-top: 15px; display: none;">
+            <div id="deletionRequestsSection" style="margin-top: 18px; display: none;">
                 <div class="panel-title">🗑️ Заявки на удаление</div>
                 <div id="deletionRequestsList"></div><div id="deletionRequestsMessage" class="message"></div>
             </div>
         </div>
         
-        <!-- ✅ НОВАЯ ВКЛАДКА НАСТРОЕК -->
+        <!-- ✅ ВКЛАДКА НАСТРОЕК -->
         <div id="adminSettingsContent" class="hidden">
+            <!-- Настройки аукциона -->
             <div class="settings-card">
                 <div class="settings-card-title">🔨 Настройки аукциона</div>
                 <div class="settings-row">
@@ -732,7 +765,7 @@
                         <input type="number" id="auctionRepeatBanDays" min="1" max="365" value="30" style="width: 100px;">
                     </div>
                 </div>
-                <div class="settings-row" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
+                <div class="settings-row" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;">
                     <div class="settings-label">Коэффициент DKP при победе:</div>
                     <div class="settings-value">
                         <label class="toggle-switch"><input type="checkbox" id="auctionCoefficientEnabled"><span class="toggle-slider"></span></label>
@@ -755,10 +788,87 @@
                         <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Через запятую</div>
                     </div>
                 </div>
-                <button class="submit-btn" style="margin-top: 10px;" onclick="saveAuctionSettings()">💾 Сохранить настройки аукциона</button>
+                <button class="submit-btn" style="margin-top: 12px;" onclick="saveAuctionSettings()">💾 Сохранить настройки аукциона</button>
                 <div id="auctionSettingsMessage" class="message"></div>
             </div>
             
+            <!-- ✅ НОВОЕ: Коэффициент DKP за мероприятия -->
+            <div class="settings-card">
+                <div class="settings-card-title">💰 Коэффициент DKP за мероприятия</div>
+                <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Множитель к базовому DKP за мероприятие. Формула: базовое × коэфБМ × коэфМероприятия</p>
+                <div class="settings-row">
+                    <div class="settings-label">Включить коэффициент:</div>
+                    <div class="settings-value">
+                        <label class="toggle-switch"><input type="checkbox" id="eventCoefEnabled"><span class="toggle-slider"></span></label>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Режим применения:</div>
+                    <div class="settings-value">
+                        <select id="eventCoefMode">
+                            <option value="disabled">Выключен</option>
+                            <option value="all">Для всех игроков</option>
+                            <option value="selective">Выборочно (по списку)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Значение коэффициента:</div>
+                    <div class="settings-value">
+                        <input type="number" id="eventCoefValue" min="0.1" max="10" step="0.1" value="1" style="width: 100px;">
+                        <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">1 = без изменений, 1.5 = +50%, 0.5 = -50%</div>
+                    </div>
+                </div>
+                <div class="settings-row" id="eventCoefListRow" style="display: none;">
+                    <div class="settings-label">Список игроков:</div>
+                    <div class="settings-value">
+                        <input type="text" id="eventCoefList" placeholder="Ник1, Ник2, Ник3..." style="width: 100%;">
+                        <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Через запятую (только для этих игроков)</div>
+                    </div>
+                </div>
+                <button class="submit-btn" style="margin-top: 12px;" onclick="saveEventCoefficientSettings()">💾 Сохранить коэффициент мероприятий</button>
+                <div id="eventCoefSettingsMessage" class="message"></div>
+            </div>
+            
+            <!-- Индивидуальные коэффициенты мероприятий -->
+            <div class="settings-card">
+                <div class="settings-card-title">👥 Индивидуальные коэффициенты мероприятий</div>
+                <div class="settings-row">
+                    <div class="settings-label">Игрок:</div>
+                    <div class="settings-value">
+                        <select id="playerEventCoefSelect" onchange="loadPlayerEventCoefSettings()">
+                            <option value="">— Выберите игрока —</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="playerEventCoefForm" style="display: none;">
+                    <div class="settings-row">
+                        <div class="settings-label">Индивидуальный коэф:</div>
+                        <div class="settings-value">
+                            <label class="toggle-switch"><input type="checkbox" id="playerEventCoefEnabled"><span class="toggle-slider"></span></label>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Режим:</div>
+                        <div class="settings-value">
+                            <select id="playerEventCoefMode">
+                                <option value="disabled">Выключен (использовать общий)</option>
+                                <option value="fixed">Фиксированный множитель</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Значение:</div>
+                        <div class="settings-value">
+                            <input type="number" id="playerEventCoefValue" min="0.1" max="10" step="0.1" value="1" style="width: 100px;">
+                        </div>
+                    </div>
+                    <button class="submit-btn" style="margin-top: 10px;" onclick="savePlayerEventCoefSettings()">💾 Сохранить для игрока</button>
+                    <div id="playerEventCoefMessage" class="message"></div>
+                </div>
+            </div>
+            
+            <!-- Настройки штрафов -->
             <div class="settings-card">
                 <div class="settings-card-title">⚠️ Глобальные настройки штрафов</div>
                 <div class="settings-row">
@@ -797,14 +907,15 @@
                         <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Штраф при превышении</div>
                     </div>
                 </div>
-                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
                     <button class="submit-btn" style="flex: 1;" onclick="savePenaltySettings()">💾 Сохранить</button>
                     <button class="submit-btn dkp-btn" style="flex: 1;" onclick="applyPenalties()">⚡ Применить штрафы</button>
                 </div>
                 <div id="penaltySettingsMessage" class="message"></div>
-                <div id="penaltyResultsBlock" style="margin-top: 10px;"></div>
+                <div id="penaltyResultsBlock" style="margin-top: 12px;"></div>
             </div>
             
+            <!-- Индивидуальные штрафы -->
             <div class="settings-card">
                 <div class="settings-card-title">👥 Индивидуальные настройки штрафов</div>
                 <div class="settings-row">
@@ -876,23 +987,23 @@
 <div id="iconModal" class="modal-overlay hidden" onclick="closeIconModal()">
     <div class="modal-content" style="max-width: 440px;" onclick="event.stopPropagation()">
         <button class="modal-close" onclick="closeIconModal()">✕</button>
-        <h3 id="iconModalTitle" style="color: var(--accent); font-family: 'Times New Roman', Times, serif; margin-bottom: 10px; font-size: 15px;">🖼 Иконка</h3>
-        <div id="iconPreview" style="text-align: center; margin-bottom: 10px; min-height: 70px; display: flex; align-items: center; justify-content: center; background: var(--bg-soft); border-radius: var(--radius-sm); border: 2px dashed var(--border);">
+        <h3 id="iconModalTitle" style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px; letter-spacing: 1px;">🖼 ИКОНКА</h3>
+        <div id="iconPreview" style="text-align: center; margin-bottom: 12px; min-height: 80px; display: flex; align-items: center; justify-content: center; background: var(--bg-soft); border-radius: var(--radius-sm); border: 2px dashed var(--border);">
             <div style="color: var(--text-dim);">Загрузка...</div>
         </div>
         <div class="icon-upload-area" id="iconUploadArea" onclick="document.getElementById('iconFileInput').click()">
-            <div style="font-size: 22px; margin-bottom: 4px;">📤</div>
+            <div style="font-size: 24px; margin-bottom: 5px;">📤</div>
             <div style="color: var(--text-main); font-size: 12px; font-weight: 600;">Выберите или перетащите</div>
-            <div id="iconSizeHint" style="color: var(--text-dim); font-size: 10px; margin-top: 2px;">JPG, PNG</div>
+            <div id="iconSizeHint" style="color: var(--text-dim); font-size: 10px; margin-top: 3px;">JPG, PNG</div>
             <input type="file" id="iconFileInput" accept="image/*" style="display: none;" onchange="handleIconFileSelect(event)">
         </div>
-        <div class="action-buttons" style="margin-top: 10px;">
-            <button class="btn-remove" onclick="deleteCurrentIcon()" style="width: 100%; padding: 5px;">🗑 Удалить</button>
+        <div class="action-buttons" style="margin-top: 12px;">
+            <button class="btn-remove" onclick="deleteCurrentIcon()" style="width: 100%; padding: 6px;">🗑 Удалить</button>
         </div>
     </div>
 </div>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbylURsSmvwgTqhGGFPjR5IeMu7PKDw07r012wNmO-oWgemInpjDQY3Xn7jetTjAqRNO/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpRyxIVgSenXnqOT3EDsGVwniNPCDcyRIU4Q8X3EliWYOd0fajF1SRmwMLQfkJ0dqa/exec';
     let currentUser = null; let currentRole = null;
     let myPlayerData = null; let myPlayerSkills = null; let myPlayerItems = null; let myDkpData = null;
     let allSkills = []; let allItems = []; let equipmentSections = [];
@@ -918,8 +1029,7 @@
             if (rememberMe) rememberMe.checked = true;
             if (indicator) indicator.style.display = 'block';
         }
-        
-        // Обработчики для показа/скрытия полей настроек
+        // Обработчики для настроек
         const banPeriodSelect = document.getElementById('auctionRepeatBanPeriod');
         if (banPeriodSelect) banPeriodSelect.addEventListener('change', (e) => { document.getElementById('customDaysRow').style.display = e.target.value === 'custom_days' ? 'flex' : 'none'; });
         const coefModeSelect = document.getElementById('auctionCoefficientMode');
@@ -928,6 +1038,11 @@
         if (penaltyPeriodSelect) penaltyPeriodSelect.addEventListener('change', (e) => { document.getElementById('penaltyCustomDaysRow').style.display = e.target.value === 'custom_days' ? 'flex' : 'none'; document.getElementById('penaltyMissPercentRow').style.display = e.target.value === 'miss_percent' ? 'flex' : 'none'; });
         const playerPeriodSelect = document.getElementById('playerPenaltyPeriodType');
         if (playerPeriodSelect) playerPeriodSelect.addEventListener('change', (e) => { document.getElementById('playerCustomDaysRow').style.display = e.target.value === 'custom_days' ? 'flex' : 'none'; document.getElementById('playerMissPercentRow').style.display = e.target.value === 'miss_percent' ? 'flex' : 'none'; });
+        // ✅ НОВОЕ: Обработчик режима коэффициента мероприятий
+        const eventCoefModeSelect = document.getElementById('eventCoefMode');
+        if (eventCoefModeSelect) eventCoefModeSelect.addEventListener('change', (e) => { document.getElementById('eventCoefListRow').style.display = e.target.value === 'selective' ? 'flex' : 'none'; });
+        const playerEventCoefModeSelect = document.getElementById('playerEventCoefMode');
+        if (playerEventCoefModeSelect) playerEventCoefModeSelect.addEventListener('change', (e) => { /* no-op */ });
     });
 
     function toggleTheme() { const current = document.body.getAttribute('data-theme') || 'light'; const newTheme = current === 'light' ? 'dark' : 'light'; document.body.setAttribute('data-theme', newTheme); localStorage.setItem('rf_theme', newTheme); updateThemeButton(newTheme); }
@@ -1113,7 +1228,7 @@
                     if (result.data.skills && result.data.skills.length > 0) {
                         approvedList.innerHTML = result.data.skills.map((s, idx) => {
                             const safeName = s.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_');
-                            return `<div class="approved-skill-with-icon"><div id="approvedSkillIcon_${safeName}_${idx}" class="icon-preview-cabinet" style="width: 26px; height: 26px;"><span class="icon-placeholder" style="font-size: 7px;">...</span></div>✓ ${s}</div>`;
+                            return `<div class="approved-skill-with-icon"><div id="approvedSkillIcon_${safeName}_${idx}" class="icon-preview-cabinet" style="width: 28px; height: 28px;"><span class="icon-placeholder" style="font-size: 7px;">...</span></div>✓ ${s}</div>`;
                         }).join('');
                         approvedList.classList.remove('hidden'); skillsEmpty.classList.add('hidden');
                         result.data.skills.forEach((s, idx) => { const safeName = s.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_'); loadAndDisplayIcon('skill', s, `approvedSkillIcon_${safeName}_${idx}`, null); });
@@ -1227,9 +1342,9 @@
     async function savePlayerItems(e) { e.preventDefault(); const btn = document.getElementById('saveEquipmentBtn'); const msg = document.getElementById('equipmentMessage'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span> ...'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'savePlayerItems', nickname: currentUser, selections: playerItemSelections }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => loadPlayerItems(), 1000); } else { msg.className = 'message error'; msg.innerText = result.message; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; } finally { btn.disabled = false; btn.innerText = 'Отправить'; msg.style.display = 'block'; } }
 
     async function loadMyDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerDKP', nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { myDkpData = result.data; document.getElementById('myDkpBalance').innerText = Number(result.data.balance).toLocaleString('ru-RU'); document.getElementById('userDkpBadge').innerText = `💰 ${Number(result.data.balance).toLocaleString('ru-RU')} DKP`; renderDkpHistory(result.data.history || []); loadFrozenDkpInfo(); } } catch (error) { console.error(error); } }
-    function renderDkpHistory(history) { const list = document.getElementById('myDkpHistory'); if (!history || history.length === 0) { list.innerHTML = '<div class="empty-state">История пуста</div>'; return; } const sorted = [...history].sort((a, b) => new Date(b.date) - new Date(a.date)); list.innerHTML = sorted.map(h => { const date = new Date(h.date).toLocaleString('ru-RU'); const isPositive = h.amount > 0; let typeLabel = ''; let itemClass = h.type; let details = ''; if (h.type === 'earn') { typeLabel = `🏆 ${h.event || 'Мероприятие'}`; if (h.coefficient && h.baseAmount !== undefined) details = `<div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${h.baseAmount} × ${h.coefficient.toFixed(2)} (БМ: ${h.playerBm || 0})</div>`; } else if (h.type === 'manual_add') typeLabel = `💵 ${h.reason || ''}`; else if (h.type === 'manual_sub') typeLabel = `💸 ${h.reason || ''}`; else if (h.type === 'auction_win') typeLabel = `🔨 ${h.reason || ''}`; else if (h.type === 'penalty') typeLabel = `⚠️ ${h.reason || 'Штраф'}`; else typeLabel = h.reason || h.event || 'Операция'; return `<div class="dkp-history-item ${itemClass}"><div class="history-info"><div class="history-event">${typeLabel}</div>${details}<div class="history-date">${date}</div></div><div class="history-amount ${isPositive ? 'positive' : 'negative'}">${isPositive ? '+' : ''}${h.amount}</div></div>`; }).join(''); }
+    function renderDkpHistory(history) { const list = document.getElementById('myDkpHistory'); if (!history || history.length === 0) { list.innerHTML = '<div class="empty-state">История пуста</div>'; return; } const sorted = [...history].sort((a, b) => new Date(b.date) - new Date(a.date)); list.innerHTML = sorted.map(h => { const date = new Date(h.date).toLocaleString('ru-RU'); const isPositive = h.amount > 0; let typeLabel = ''; let itemClass = h.type; let details = ''; if (h.type === 'earn') { typeLabel = `🏆 ${h.event || 'Мероприятие'}`; let detailsArr = []; if (h.coefficient && h.baseAmount !== undefined) detailsArr.push(`${h.baseAmount} × коэфБМ ${h.coefficient.toFixed(2)} (БМ: ${h.playerBm || 0})`); if (h.useEventCoef && h.eventCoefficient) detailsArr.push(`× коэфМероприятия ${h.eventCoefficient.toFixed(2)}`); if (detailsArr.length > 0) details = `<div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${detailsArr.join(' | ')}</div>`; } else if (h.type === 'manual_add') typeLabel = `💵 ${h.reason || ''}`; else if (h.type === 'manual_sub') typeLabel = `💸 ${h.reason || ''}`; else if (h.type === 'auction_win') typeLabel = `🔨 ${h.reason || ''}`; else if (h.type === 'penalty') typeLabel = `⚠️ ${h.reason || 'Штраф'}`; else typeLabel = h.reason || h.event || 'Операция'; return `<div class="dkp-history-item ${itemClass}"><div class="history-info"><div class="history-event">${typeLabel}</div>${details}<div class="history-date">${date}</div></div><div class="history-amount ${isPositive ? 'positive' : 'negative'}">${isPositive ? '+' : ''}${h.amount}</div></div>`; }).join(''); }
 
-    async function loadFrozenDkpInfo() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerDkpInfo', nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success && result.data) { const { total, frozen, available, activeBids } = result.data; const dkpBadge = document.getElementById('userDkpBadge'); if (dkpBadge) { if (frozen > 0) dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} <span style="font-size: 9px; color: var(--warning);">(🔒${frozen})</span>`; else dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} DKP`; } const frozenBlock = document.getElementById('frozenDkpBlock'); if (frozenBlock && activeBids && activeBids.length > 0) { frozenBlock.innerHTML = `<div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--warning);"><div style="font-size: 12px; color: var(--warning); font-weight: 700; margin-bottom: 6px;">🔒 ЗАМОРОЖЕНО: ${frozen} DKP</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px;"><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 13px; color: var(--accent); font-weight: 700;">${total}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 13px; color: var(--warning); font-weight: 700;">${frozen}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--success);">Своб.</div><div style="font-size: 13px; color: var(--success); font-weight: 700;">${available}</div></div></div>${activeBids.map(bid => `<div style="display: flex; justify-content: space-between; align-items: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm); margin-bottom: 3px; font-size: 11px; border-left: 2px solid ${bid.isLeader ? 'var(--success)' : 'var(--warning)'};"><div><div style="font-weight: 700;">${bid.isLeader ? '👑 ' : ''}${bid.itemName}</div><div style="font-size: 9px; color: var(--text-dim);">${bid.itemSection}</div></div><div style="color: var(--dkp); font-weight: 700;">${bid.bidAmount} DKP</div></div>`).join('')}</div>`; } else if (frozenBlock) { frozenBlock.innerHTML = ''; } } } catch (error) { console.error(error); } }
+    async function loadFrozenDkpInfo() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerDkpInfo', nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success && result.data) { const { total, frozen, available, activeBids } = result.data; const dkpBadge = document.getElementById('userDkpBadge'); if (dkpBadge) { if (frozen > 0) dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} <span style="font-size: 9px; color: var(--warning);">(🔒${frozen})</span>`; else dkpBadge.innerHTML = `💰 ${total.toLocaleString('ru-RU')} DKP`; } const frozenBlock = document.getElementById('frozenDkpBlock'); if (frozenBlock && activeBids && activeBids.length > 0) { frozenBlock.innerHTML = `<div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--warning); box-shadow: 0 0 10px var(--warning-glow);"><div style="font-size: 12px; color: var(--warning); font-weight: 700; margin-bottom: 6px; font-family: var(--font-display); letter-spacing: 0.5px;">🔒 ЗАМОРОЖЕНО: ${frozen} DKP</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px;"><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 13px; color: var(--accent); font-weight: 700;">${total}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 13px; color: var(--warning); font-weight: 700;">${frozen}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--success);">Своб.</div><div style="font-size: 13px; color: var(--success); font-weight: 700;">${available}</div></div></div>${activeBids.map(bid => `<div style="display: flex; justify-content: space-between; align-items: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm); margin-bottom: 3px; font-size: 11px; border-left: 2px solid ${bid.isLeader ? 'var(--success)' : 'var(--warning)'};"><div><div style="font-weight: 700;">${bid.isLeader ? '👑 ' : ''}${bid.itemName}</div><div style="font-size: 9px; color: var(--text-dim);">${bid.itemSection}</div></div><div style="color: var(--dkp); font-weight: 700;">${bid.bidAmount} DKP</div></div>`).join('')}</div>`; } else if (frozenBlock) { frozenBlock.innerHTML = ''; } } } catch (error) { console.error(error); } }
 
     async function loadEventsForSelect() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' }); const result = await response.json(); if (result.success) { allEvents = result.events; const select = document.getElementById('dkpEventSelect'); select.innerHTML = '<option value="">— Выберите —</option>' + allEvents.map(e => `<option value="${e.id}" data-dkp="${e.dkp}" data-name="${String(e.name).replace(/"/g, '&quot;')}">${e.name} (+${e.dkp})</option>`).join(''); } } catch (error) { console.error(error); } }
 
@@ -1261,7 +1376,7 @@
             const list = document.getElementById('adminEventsList');
             if (result.success && result.events.length > 0) {
                 allEvents = result.events;
-                list.innerHTML = result.events.map(event => `<div class="event-card"><div style="display: flex; align-items: center; gap: 8px; flex: 1;"><div id="eventIcon_${event.id}" class="icon-preview" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="event-info"><div class="event-name">${event.name}</div><div class="event-meta">${event.createdBy || '—'} | ${event.date}</div></div></div><div class="event-dkp">+${event.dkp}</div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button><button class="btn-remove" onclick="removeEvent('${event.id}')">✕</button></div></div>`).join('');
+                list.innerHTML = result.events.map(event => `<div class="event-card"><div style="display: flex; align-items: center; gap: 10px; flex: 1;"><div id="eventIcon_${event.id}" class="icon-preview" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="event-info"><div class="event-name">${event.name}</div><div class="event-meta">${event.createdBy || '—'} | ${event.date}</div></div></div><div class="event-dkp">+${event.dkp}</div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button><button class="btn-remove" onclick="removeEvent('${event.id}')">✕</button></div></div>`).join('');
                 result.events.forEach(event => loadEventIcon(event.id));
             } else { list.innerHTML = '<div class="empty-state">Нет мероприятий</div>'; }
         } catch (error) { console.error(error); }
@@ -1272,12 +1387,12 @@
     async function addEvent(e) { e.preventDefault(); const name = document.getElementById('newEventName').value; const dkp = document.getElementById('newEventDkp').value; const msg = document.getElementById('adminEventsMessage'); if (!name || !dkp) { msg.className = 'message error'; msg.innerText = 'Заполните поля'; msg.style.display = 'block'; return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addEvent', name: name, dkp: Number(dkp), createdBy: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; document.getElementById('newEventName').value = ''; document.getElementById('newEventDkp').value = ''; setTimeout(() => { loadAdminEvents(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function removeEvent(eventId) { if (!confirm('Удалить?')) return; const msg = document.getElementById('adminEventsMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'removeEvent', eventId: eventId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { loadAdminEvents(); msg.style.display = 'none'; }, 800); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
 
-    async function loadPendingDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('pendingDkpList'); if (result.success && result.submissions.length > 0) { list.innerHTML = result.submissions.map(sub => `<div class="dkp-submission-card"><div class="submission-header"><div><div class="submission-event">🏆 ${sub.eventName} (+${sub.eventDkp})</div><div class="submission-meta">${sub.submitter} | ${sub.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDkp('${sub.id}')">✓</button><button class="btn-reject" onclick="rejectDkp('${sub.id}')">✕</button><button class="btn-edit" onclick="editDkpSubmission('${sub.id}')" style="width: auto; margin-top: 0;">✎</button><button class="btn-remove" onclick="deleteDkpSubmission('${sub.id}')">🗑</button></div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div class="submission-screenshots">${sub.screenshots.map((imgData, idx) => `<img src="${imgData}" onclick="openImageModal('${imgData}')" alt="${idx + 1}">`).join('')}</div>` : ''}<div style="font-size: 10px; color: var(--text-dim); margin-top: 5px;">Игроки (${sub.nicks.length}):</div><div class="submission-nicks">${sub.nicks.map(nick => `<span class="submission-nick-tag">${nick}</span>`).join('')}</div></div>`).join(''); } else { list.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (error) { console.error(error); } }
+    async function loadPendingDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('pendingDkpList'); if (result.success && result.submissions.length > 0) { list.innerHTML = result.submissions.map(sub => `<div class="dkp-submission-card"><div class="submission-header"><div><div class="submission-event">🏆 ${sub.eventName} (+${sub.eventDkp})</div><div class="submission-meta">${sub.submitter} | ${sub.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDkp('${sub.id}')">✓</button><button class="btn-reject" onclick="rejectDkp('${sub.id}')">✕</button><button class="btn-edit" onclick="editDkpSubmission('${sub.id}')" style="width: auto; margin-top: 0;">✎</button><button class="btn-remove" onclick="deleteDkpSubmission('${sub.id}')">🗑</button></div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div class="submission-screenshots">${sub.screenshots.map((imgData, idx) => `<img src="${imgData}" onclick="openImageModal('${imgData}')" alt="${idx + 1}">`).join('')}</div>` : ''}<div style="font-size: 10px; color: var(--text-dim); margin-top: 6px;">Игроки (${sub.nicks.length}):</div><div class="submission-nicks">${sub.nicks.map(nick => `<span class="submission-nick-tag">${nick}</span>`).join('')}</div></div>`).join(''); } else { list.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (error) { console.error(error); } }
 
-    async function approveDkp(submissionId) { if (!confirm('Подтвердить и начислить DKP?')) return; const msg = document.getElementById('adminDkpPendingMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveDKP', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { let details = result.message + '\n\n'; if (result.results && result.results.length > 0) { details += 'Детализация:\n'; result.results.forEach(r => { details += `• ${r.nick}: БМ=${r.bm}, коэф=${r.coefficient.toFixed(2)}, +${r.finalDkp}\n`; }); } alert(details); msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { loadPendingDkp(); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
+    async function approveDkp(submissionId) { if (!confirm('Подтвердить и начислить DKP?')) return; const msg = document.getElementById('adminDkpPendingMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveDKP', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { let details = result.message + '\n\n'; if (result.results && result.results.length > 0) { details += 'Детализация:\n'; result.results.forEach(r => { let coefInfo = `БМ=${r.bm}, коэфБМ=${r.coefficient.toFixed(2)}`; if (r.useEventCoef) coefInfo += `, коэфМероприятия=${r.eventCoefficient.toFixed(2)}`; details += `• ${r.nick}: ${coefInfo}, +${r.finalDkp}\n`; }); } alert(details); msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { loadPendingDkp(); msg.style.display = 'none'; }, 1500); } else { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; msg.style.display = 'block'; } }
     async function rejectDkp(submissionId) { if (!confirm('Отклонить?')) return; const msg = document.getElementById('adminDkpPendingMessage'); try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectDKP', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message error'; msg.innerText = result.message; setTimeout(() => { loadPendingDkp(); msg.style.display = 'none'; }, 800); } } catch (error) { console.error(error); } }
 
-    async function editDkpSubmission(submissionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getDkpSubmission', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const sub = result.submission; const modal = document.createElement('div'); modal.className = 'modal-overlay'; modal.id = 'editDkpModal'; modal.innerHTML = `<div class="modal-content" style="max-width: 580px; max-height: 90vh; overflow-y: auto;"><button class="modal-close" onclick="closeEditDkpModal()">✕</button><h3 style="color: var(--accent); font-family: 'Times New Roman', Times, serif; margin-bottom: 10px; font-size: 15px;">✎ ${sub.eventName}</h3><div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim);">Отправитель:</div><div style="font-size: 12px;">${sub.submitter}</div></div><div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim);">Базовые DKP:</div><div style="font-size: 15px; color: var(--dkp); font-weight: 700;">${sub.eventDkp}</div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">Скриншоты:</div><div style="display: flex; gap: 5px; flex-wrap: wrap;">${sub.screenshots.map((img, idx) => `<img src="${img}" onclick="openImageModal('${img}')" style="width: 180px; height: auto; border-radius: 3px; border: 1px solid var(--border); cursor: pointer;">`).join('')}</div></div>` : ''}<div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">Участники (${sub.nicks.length}):</div><div id="editDkpNicksList" style="display: flex; flex-direction: column; gap: 4px;">${sub.nicks.map((nick, idx) => `<div class="nick-item"><input type="text" value="${nick.replace(/"/g, '&quot;')}" id="editNick_${idx}" placeholder="Ник..."><button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button></div>`).join('')}</div><button type="button" class="btn-edit" onclick="addEditNickField()" style="margin-top: 6px; width: auto;">+ Добавить</button></div><button type="button" class="submit-btn dkp-btn" onclick="saveDkpSubmission('${sub.id}')">💾 Сохранить</button></div>`; document.body.appendChild(modal); window.currentEditDkp = { id: sub.id, nicks: [...sub.nicks] }; } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
+    async function editDkpSubmission(submissionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getDkpSubmission', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const sub = result.submission; const modal = document.createElement('div'); modal.className = 'modal-overlay'; modal.id = 'editDkpModal'; modal.innerHTML = `<div class="modal-content" style="max-width: 580px; max-height: 90vh; overflow-y: auto;"><button class="modal-close" onclick="closeEditDkpModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px; letter-spacing: 1px;">✎ ${sub.eventName}</h3><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim);">Отправитель:</div><div style="font-size: 12px;">${sub.submitter}</div></div><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim);">Базовые DKP:</div><div style="font-size: 16px; color: var(--dkp); font-weight: 700; font-family: var(--font-display);">${sub.eventDkp}</div></div>${sub.screenshots && sub.screenshots.length > 0 ? `<div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px;">Скриншоты:</div><div style="display: flex; gap: 6px; flex-wrap: wrap;">${sub.screenshots.map((img, idx) => `<img src="${img}" onclick="openImageModal('${img}')" style="width: 180px; height: auto; border-radius: 3px; border: 1px solid var(--border); cursor: pointer;">`).join('')}</div></div>` : ''}<div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px;">Участники (${sub.nicks.length}):</div><div id="editDkpNicksList" style="display: flex; flex-direction: column; gap: 5px;">${sub.nicks.map((nick, idx) => `<div class="nick-item"><input type="text" value="${nick.replace(/"/g, '&quot;')}" id="editNick_${idx}" placeholder="Ник..."><button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button></div>`).join('')}</div><button type="button" class="btn-edit" onclick="addEditNickField()" style="margin-top: 8px; width: auto;">+ Добавить</button></div><button type="button" class="submit-btn dkp-btn" onclick="saveDkpSubmission('${sub.id}')">💾 Сохранить</button></div>`; document.body.appendChild(modal); window.currentEditDkp = { id: sub.id, nicks: [...sub.nicks] }; } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
     function closeEditDkpModal() { const modal = document.getElementById('editDkpModal'); if (modal) modal.remove(); window.currentEditDkp = null; }
     function removeEditNick(idx) { const input = document.getElementById('editNick_' + idx); if (input) input.parentElement.remove(); }
     function addEditNickField() {
@@ -1302,7 +1417,7 @@
             if (result.success && result.skills.length > 0) {
                 list.innerHTML = result.skills.map(skill => {
                     const safeName = skill.name.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_');
-                    return `<div class="admin-skill-item"><div style="display: flex; align-items: center; gap: 7px; flex: 1;"><div id="skillIcon_${safeName}" class="icon-preview-small" onclick="openIconModal('skill', '${skill.name.replace(/'/g, "\\'")}', '${skill.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div><span class="admin-skill-name">${skill.name}</span>${skill.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">Станд.</span>'}</div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('skill', '${skill.name.replace(/'/g, "\\'")}', '${skill.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>${skill.isAdminCreated ? `<button class="btn-remove" onclick="removeSkill('${skill.name.replace(/'/g, "\\'")}')">✕</button>` : ''}</div></div>`;
+                    return `<div class="admin-skill-item"><div style="display: flex; align-items: center; gap: 8px; flex: 1;"><div id="skillIcon_${safeName}" class="icon-preview-small" onclick="openIconModal('skill', '${skill.name.replace(/'/g, "\\'")}', '${skill.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div><span class="admin-skill-name">${skill.name}</span>${skill.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">Станд.</span>'}</div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('skill', '${skill.name.replace(/'/g, "\\'")}', '${skill.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>${skill.isAdminCreated ? `<button class="btn-remove" onclick="removeSkill('${skill.name.replace(/'/g, "\\'")}')">✕</button>` : ''}</div></div>`;
                 }).join('');
                 result.skills.forEach(skill => loadSkillIcon(skill.name));
             } else { list.innerHTML = '<div class="empty-state">Пусто</div>'; }
@@ -1361,7 +1476,7 @@
         if (items.length === 0) { list.innerHTML = '<div class="empty-state">Нет</div>'; return; }
         list.innerHTML = items.map(item => {
             const borderColor = getIconBorderColor(item.color);
-            return `<div class="admin-item-card"><div style="display: flex; align-items: center; gap: 7px; flex: 1;"><div id="itemIcon_${item.id}" class="icon-preview-small" style="border: 2px solid ${borderColor};" onclick="openIconModal('item', ${item.id}, '${item.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="admin-item-info"><div class="admin-item-name">${item.name}</div><div class="admin-item-meta">${item.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${item.enhancement > 0 ? `<span class="item-badge enhance">+${item.enhancement}</span>` : ''}${item.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}${item.tier ? `<span class="item-badge ${getColorClass(item.color)}">${item.tier}</span>` : ''}<span class="item-badge ${getColorClass(item.color)}">${item.color}</span>${item.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">Станд.</span>'}</div></div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('item', ${item.id}, '${item.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>${item.isAdminCreated ? `<button class="btn-remove" onclick="removeItem(${item.id})">✕</button>` : ''}</div></div>`;
+            return `<div class="admin-item-card"><div style="display: flex; align-items: center; gap: 8px; flex: 1;"><div id="itemIcon_${item.id}" class="icon-preview-small" style="border: 2px solid ${borderColor};" onclick="openIconModal('item', ${item.id}, '${item.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="admin-item-info"><div class="admin-item-name">${item.name}</div><div class="admin-item-meta">${item.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${item.enhancement > 0 ? `<span class="item-badge enhance">+${item.enhancement}</span>` : ''}${item.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}${item.tier ? `<span class="item-badge ${getColorClass(item.color)}">${item.tier}</span>` : ''}<span class="item-badge ${getColorClass(item.color)}">${item.color}</span>${item.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">Станд.</span>'}</div></div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('item', ${item.id}, '${item.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>${item.isAdminCreated ? `<button class="btn-remove" onclick="removeItem(${item.id})">✕</button>` : ''}</div></div>`;
         }).join('');
         items.forEach(item => loadItemIcon(item.id));
     }
@@ -1433,9 +1548,9 @@
             if (!block) return;
             if (result.success && result.events.length > 0) {
                 block.innerHTML = result.events.map(event => `
-                    <div class="player-card" style="margin-bottom: 6px;">
+                    <div class="player-card" style="margin-bottom: 8px;">
                         <div class="player-card-header">
-                            <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
                                 ${event.eventId ? `<div id="todayEventIcon_${event.eventId}" class="icon-preview-activity" style="border-color: var(--dkp);"><span class="icon-placeholder">...</span></div>` : ''}
                                 <div>
                                     <div class="player-nick" style="color: var(--dkp);">🏆 ${event.name}</div>
@@ -1443,11 +1558,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-bottom: 5px;">
-                            <div style="font-size: 10px; color: var(--success); margin-bottom: 2px; font-weight: 700;">✓ Были (${event.attended.length}):</div>
+                        <div style="margin-bottom: 6px;">
+                            <div style="font-size: 10px; color: var(--success); margin-bottom: 3px; font-weight: 700;">✓ Были (${event.attended.length}):</div>
                             <div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.attended.map(p => `<span class="submission-nick-tag" style="background: var(--success-soft); border-color: var(--success); color: var(--success);">${p.nickname} <span style="font-size: 9px;">(+${p.dkpEarned})</span></span>`).join('')}</div>
                         </div>
-                        ${event.missed.length > 0 ? `<div><div style="font-size: 10px; color: var(--danger); margin-bottom: 2px; font-weight: 700;">✕ Пропустили (${event.missed.length}):</div><div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.missed.map(n => `<span class="submission-nick-tag" style="background: var(--danger-soft); border-color: var(--danger); color: var(--danger);">${n}</span>`).join('')}</div></div>` : ''}
+                        ${event.missed.length > 0 ? `<div><div style="font-size: 10px; color: var(--danger); margin-bottom: 3px; font-weight: 700;">✕ Пропустили (${event.missed.length}):</div><div style="display: flex; flex-wrap: wrap; gap: 3px;">${event.missed.map(n => `<span class="submission-nick-tag" style="background: var(--danger-soft); border-color: var(--danger); color: var(--danger);">${n}</span>`).join('')}</div></div>` : ''}
                     </div>
                 `).join('');
                 result.events.forEach(event => { if (event.eventId) loadAndDisplayIcon('event', event.eventId, `todayEventIcon_${event.eventId}`, null); });
@@ -1464,9 +1579,9 @@
             if (result.success && result.days.length > 0) {
                 block.innerHTML = result.days.map(day => {
                     const eventsHtml = Object.values(day.events).map(event => `
-                        <div style="margin-bottom: 5px; padding: 7px; background: var(--bg-soft); border-radius: var(--radius-sm); border-left: 2px solid var(--dkp);">
-                            <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 3px;">
-                                ${event.eventId ? `<div id="weekEventIcon_${event.eventId}_${day.date}" class="icon-preview-activity" style="width: 45px; height: 22px; border-color: var(--dkp);"><span class="icon-placeholder">...</span></div>` : ''}
+                        <div style="margin-bottom: 6px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm); border-left: 2px solid var(--dkp);">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                ${event.eventId ? `<div id="weekEventIcon_${event.eventId}_${day.date}" class="icon-preview-activity" style="width: 48px; height: 24px; border-color: var(--dkp);"><span class="icon-placeholder">...</span></div>` : ''}
                                 <div>
                                     <div style="font-size: 11px; color: var(--dkp); font-weight: 700;">🏆 ${event.name} (+${event.eventDkp})</div>
                                     <div style="font-size: 10px; color: var(--success);">✓ ${event.attended.length} | ✕ ${event.missed.length}</div>
@@ -1474,7 +1589,7 @@
                             </div>
                         </div>
                     `).join('');
-                    return `<div style="margin-bottom: 10px;"><div style="font-size: 12px; color: var(--accent); font-family: 'Times New Roman', Times, serif; margin-bottom: 5px; padding-bottom: 3px; border-bottom: 1px solid var(--border); font-weight: 700;">📅 ${day.date}</div>${eventsHtml}</div>`;
+                    return `<div style="margin-bottom: 12px;"><div style="font-size: 12px; color: var(--accent); font-family: var(--font-display); margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border); font-weight: 700; letter-spacing: 1px;">📅 ${day.date}</div>${eventsHtml}</div>`;
                 }).join('');
                 result.days.forEach(day => { Object.values(day.events).forEach(event => { if (event.eventId) loadAndDisplayIcon('event', event.eventId, `weekEventIcon_${event.eventId}_${day.date}`, null); }); });
             } else { block.innerHTML = '<div class="empty-state">На неделе нет мероприятий</div>'; }
@@ -1496,7 +1611,7 @@
                         return `
                             <div class="event-stat-card">
                                 <div class="event-stat-header">
-                                    ${stat.iconData ? `<img src="${stat.iconData}" style="width: 45px; height: 22px; object-fit: cover; border-radius: 3px; border: 2px solid var(--dkp);">` : `<div style="width: 45px; height: 22px; background: var(--bg-panel); border: 2px solid var(--border); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🏆</div>`}
+                                    ${stat.iconData ? `<img src="${stat.iconData}" style="width: 48px; height: 24px; object-fit: cover; border-radius: 3px; border: 2px solid var(--dkp); box-shadow: 0 0 8px var(--warning-glow);">` : `<div style="width: 48px; height: 24px; background: var(--bg-panel); border: 2px solid var(--border); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🏆</div>`}
                                     <div style="flex: 1;">
                                         <div class="event-stat-name">${stat.name}</div>
                                         <div class="event-stat-total">Всего: ${stat.total}</div>
@@ -1551,7 +1666,7 @@
                                     <div class="ranking-stats">Ур. ${player.level} | ${player.profession || '—'} | БМ: ${Number(player.bm || 0).toLocaleString('ru-RU')}</div>
                                 </div>
                                 <div style="text-align: right;">
-                                    <div style="font-size: 9px; color: var(--text-dim); text-transform: uppercase;">Посещ.</div>
+                                    <div style="font-size: 9px; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-display); letter-spacing: 0.5px;">Посещ.</div>
                                     <div class="absentee-rate ${rateClass}">${player.attendanceRate}%</div>
                                     <div style="font-size: 10px; color: var(--text-dim);">${player.attended}/${player.total}</div>
                                 </div>
@@ -1565,11 +1680,11 @@
     async function loadCalendarPlayers() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' }); const result = await response.json(); const select = document.getElementById('calendarPlayerFilter'); if (result.success && select) { const currentValue = select.value; select.innerHTML = '<option value="">Все</option>' + result.nicks.map(n => `<option value="${n}">${n}</option>`).join(''); select.value = currentValue; } const today = new Date(); const monthAgo = new Date(); monthAgo.setDate(today.getDate() - 30); const startInput = document.getElementById('calendarStartDate'); const endInput = document.getElementById('calendarEndDate'); if (startInput && !startInput.value) startInput.value = monthAgo.toISOString().split('T')[0]; if (endInput && !endInput.value) endInput.value = today.toISOString().split('T')[0]; } catch (error) { console.error(error); } }
     async function loadCalendar() { const startDate = document.getElementById('calendarStartDate').value; const endDate = document.getElementById('calendarEndDate').value; const playerFilter = document.getElementById('calendarPlayerFilter').value; if (!startDate || !endDate) { alert('Выберите даты'); return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAttendance', startDate: startDate, endDate: endDate, nickname: playerFilter || null }), redirect: 'follow' }); const result = await response.json(); if (result.success) renderCalendar(result.records, startDate, endDate, playerFilter); else alert('Ошибка: ' + result.message); } catch (error) { console.error(error); alert('Ошибка'); } }
     async function loadMyCalendar() { const startDate = document.getElementById('calendarStartDate').value; const endDate = document.getElementById('calendarEndDate').value; if (!startDate || !endDate) { alert('Выберите даты'); return; } document.getElementById('calendarPlayerFilter').value = currentUser; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAttendance', startDate: startDate, endDate: endDate, nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) renderCalendar(result.records, startDate, endDate, currentUser); else alert('Ошибка: ' + result.message); } catch (error) { console.error(error); alert('Ошибка'); } }
-    function renderCalendar(records, startDate, endDate, playerFilter) { const grid = document.getElementById('calendarGrid'); const stats = document.getElementById('calendarStats'); if (!records || records.length === 0) { grid.innerHTML = '<div class="empty-state">Нет данных</div>'; stats.innerHTML = ''; return; } const grouped = {}; records.forEach(r => { if (!grouped[r.date]) grouped[r.date] = {}; if (!grouped[r.date][r.eventName]) grouped[r.date][r.eventName] = { attended: [], missed: [], eventDkp: r.eventDkp }; if (r.status === 'attended') grouped[r.date][r.eventName].attended.push({ nickname: r.nickname, dkpEarned: r.dkpEarned }); else grouped[r.date][r.eventName].missed.push(r.nickname); }); let totalAttended = 0, totalMissed = 0, totalDkp = 0; records.forEach(r => { if (r.status === 'attended') { totalAttended++; totalDkp += r.dkpEarned; } else { totalMissed++; } }); const totalEvents = Object.keys(grouped).reduce((sum, date) => sum + Object.keys(grouped[date]).length, 0); const attendanceRate = totalAttended + totalMissed > 0 ? Math.round((totalAttended / (totalAttended + totalMissed)) * 100) : 0; stats.innerHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; margin-bottom: 12px;"><div class="data-item"><div class="data-label">Период</div><div class="data-value" style="font-size: 10px;">${startDate} — ${endDate}</div></div><div class="data-item"><div class="data-label">Мероприятий</div><div class="data-value">${totalEvents}</div></div><div class="data-item"><div class="data-label">Посещений</div><div class="data-value" style="color: var(--success);">${totalAttended}</div></div><div class="data-item"><div class="data-label">Пропусков</div><div class="data-value" style="color: var(--danger);">${totalMissed}</div></div><div class="data-item"><div class="data-label">Посещ.</div><div class="data-value" style="color: var(--dkp);">${attendanceRate}%</div></div><div class="data-item"><div class="data-label">DKP</div><div class="data-value" style="color: var(--dkp);">${totalDkp.toFixed(1)}</div></div></div>`; const dates = Object.keys(grouped).sort(); grid.innerHTML = dates.map(date => { const events = grouped[date]; const eventsHtml = Object.entries(events).map(([eventName, data]) => `<div class="calendar-event"><div class="calendar-event-title">🏆 ${eventName} <span style="font-size: 10px; color: var(--text-dim);">(+${data.eventDkp})</span></div>${data.attended.length > 0 ? `<div style="margin-bottom: 3px;"><span class="calendar-label attended">✓ (${data.attended.length}):</span><div class="calendar-players">${data.attended.map(p => `<span class="calendar-nick-attended">${p.nickname} <span style="font-size: 8px;">(+${p.dkpEarned})</span></span>`).join('')}</div></div>` : ''}${data.missed.length > 0 ? `<div><span class="calendar-label missed">✕ (${data.missed.length}):</span><div class="calendar-players">${data.missed.map(n => `<span class="calendar-nick-missed">${n}</span>`).join('')}</div></div>` : ''}</div>`).join(''); return `<div class="calendar-day"><div class="calendar-date">📅 ${date}</div>${eventsHtml}</div>`; }).join(''); }
+    function renderCalendar(records, startDate, endDate, playerFilter) { const grid = document.getElementById('calendarGrid'); const stats = document.getElementById('calendarStats'); if (!records || records.length === 0) { grid.innerHTML = '<div class="empty-state">Нет данных</div>'; stats.innerHTML = ''; return; } const grouped = {}; records.forEach(r => { if (!grouped[r.date]) grouped[r.date] = {}; if (!grouped[r.date][r.eventName]) grouped[r.date][r.eventName] = { attended: [], missed: [], eventDkp: r.eventDkp }; if (r.status === 'attended') grouped[r.date][r.eventName].attended.push({ nickname: r.nickname, dkpEarned: r.dkpEarned }); else grouped[r.date][r.eventName].missed.push(r.nickname); }); let totalAttended = 0, totalMissed = 0, totalDkp = 0; records.forEach(r => { if (r.status === 'attended') { totalAttended++; totalDkp += r.dkpEarned; } else { totalMissed++; } }); const totalEvents = Object.keys(grouped).reduce((sum, date) => sum + Object.keys(grouped[date]).length, 0); const attendanceRate = totalAttended + totalMissed > 0 ? Math.round((totalAttended / (totalAttended + totalMissed)) * 100) : 0; stats.innerHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; margin-bottom: 12px;"><div class="data-item"><div class="data-label">Период</div><div class="data-value" style="font-size: 10px;">${startDate} — ${endDate}</div></div><div class="data-item"><div class="data-label">Мероприятий</div><div class="data-value">${totalEvents}</div></div><div class="data-item"><div class="data-label">Посещений</div><div class="data-value" style="color: var(--success);">${totalAttended}</div></div><div class="data-item"><div class="data-label">Пропусков</div><div class="data-value" style="color: var(--danger);">${totalMissed}</div></div><div class="data-item"><div class="data-label">Посещ.</div><div class="data-value" style="color: var(--dkp);">${attendanceRate}%</div></div><div class="data-item"><div class="data-label">DKP</div><div class="data-value" style="color: var(--dkp);">${totalDkp.toFixed(1)}</div></div></div>`; const dates = Object.keys(grouped).sort(); grid.innerHTML = dates.map(date => { const events = grouped[date]; const eventsHtml = Object.entries(events).map(([eventName, data]) => `<div class="calendar-event"><div class="calendar-event-title">🏆 ${eventName} <span style="font-size: 10px; color: var(--text-dim);">(+${data.eventDkp})</span></div>${data.attended.length > 0 ? `<div style="margin-bottom: 4px;"><span class="calendar-label attended">✓ (${data.attended.length}):</span><div class="calendar-players">${data.attended.map(p => `<span class="calendar-nick-attended">${p.nickname} <span style="font-size: 8px;">(+${p.dkpEarned})</span></span>`).join('')}</div></div>` : ''}${data.missed.length > 0 ? `<div><span class="calendar-label missed">✕ (${data.missed.length}):</span><div class="calendar-players">${data.missed.map(n => `<span class="calendar-nick-missed">${n}</span>`).join('')}</div></div>` : ''}</div>`).join(''); return `<div class="calendar-day"><div class="calendar-date">📅 ${date}</div>${eventsHtml}</div>`; }).join(''); }
 
     // ===== АУКЦИОН =====
-    async function loadActiveAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActiveAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('activeAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const timeLeft = getTimeLeft(auction.endTime); const colorClass = getColorClass(auction.itemColor); const isAllowed = auction.allowedPlayers.length === 0 || auction.allowedPlayers.includes(currentUser); const canBid = isAllowed && auction.currentBidder !== currentUser; return `<div class="auction-card"><div class="auction-header"><div><div class="auction-title">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div class="auction-timer" id="timer_${auction.id}" data-end="${auction.endTime}">${timeLeft}</div></div><div class="auction-info"><div class="auction-info-item"><div class="auction-info-label">Текущая</div><div class="auction-info-value" style="color: var(--dkp);">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">${auction.currentBidder}</div>` : ''}</div><div class="auction-info-item"><div class="auction-info-label">Мин.</div><div class="auction-info-value" style="color: var(--success);">${auction.currentBid + 1} DKP</div></div></div>${auction.minAttendance > 0 ? `<div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px;">📊 Мин. посещ.: ${auction.minAttendance}%</div>` : ''}${auction.priorityOnly ? `<div style="font-size: 10px; color: var(--warning); margin-bottom: 5px;">⚠️ Только приоритет</div>` : ''}<div class="action-buttons"><button class="btn-compare" onclick="openBidModal('${auction.id}')" ${!canBid ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>${(currentRole === 'Админ' || currentRole === 'Модератор') ? `<button class="btn-remove" onclick="cancelAuction('${auction.id}')">✕ Отмена</button>` : ''}${(currentRole === 'Админ') ? `<button class="btn-approve" onclick="completeAuction('${auction.id}')">✓ Завершить</button>` : ''}</div></div>`; }).join(''); startCountdowns(); } else { list.innerHTML = '<div class="empty-state">Нет активных</div>'; } } catch (error) { console.error(error); } }
-    async function loadCompletedAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getCompletedAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('completedAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const colorClass = getColorClass(auction.itemColor); const statusText = auction.status === 'completed' ? '✅ Завершён' : '❌ Отменён'; const statusColor = auction.status === 'completed' ? 'var(--success)' : 'var(--danger)'; return `<div class="player-card"><div class="player-card-header"><div><div class="player-nick" style="color: var(--dkp); font-size: 13px;">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span></div></div><div style="text-align: right;"><div style="font-size: 10px; color: var(--text-dim);">Цена:</div><div style="font-size: 15px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">🏆 ${auction.currentBidder}</div>` : '<div style="font-size: 10px; color: var(--text-dim);">Без ставок</div>'}</div></div><div style="font-size: 10px; color: ${statusColor}; font-weight: 700; margin-top: 5px;">${statusText} | ${auction.endTime}</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет</div>'; } } catch (error) { console.error(error); } }
+    async function loadActiveAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActiveAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('activeAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const timeLeft = getTimeLeft(auction.endTime); const colorClass = getColorClass(auction.itemColor); const isAllowed = auction.allowedPlayers.length === 0 || auction.allowedPlayers.includes(currentUser); const canBid = isAllowed && auction.currentBidder !== currentUser; return `<div class="auction-card"><div class="auction-header"><div><div class="auction-title">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div class="auction-timer" id="timer_${auction.id}" data-end="${auction.endTime}">${timeLeft}</div></div><div class="auction-info"><div class="auction-info-item"><div class="auction-info-label">Текущая</div><div class="auction-info-value" style="color: var(--dkp);">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">${auction.currentBidder}</div>` : ''}</div><div class="auction-info-item"><div class="auction-info-label">Мин.</div><div class="auction-info-value" style="color: var(--success);">${auction.currentBid + 1} DKP</div></div></div>${auction.minAttendance > 0 ? `<div style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px;">📊 Мин. посещ.: ${auction.minAttendance}%</div>` : ''}${auction.priorityOnly ? `<div style="font-size: 10px; color: var(--warning); margin-bottom: 6px;">⚠️ Только приоритет</div>` : ''}<div class="action-buttons"><button class="btn-compare" onclick="openBidModal('${auction.id}')" ${!canBid ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>${(currentRole === 'Админ' || currentRole === 'Модератор') ? `<button class="btn-remove" onclick="cancelAuction('${auction.id}')">✕ Отмена</button>` : ''}${(currentRole === 'Админ') ? `<button class="btn-approve" onclick="completeAuction('${auction.id}')">✓ Завершить</button>` : ''}</div></div>`; }).join(''); startCountdowns(); } else { list.innerHTML = '<div class="empty-state">Нет активных</div>'; } } catch (error) { console.error(error); } }
+    async function loadCompletedAuctions() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getCompletedAuctions' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('completedAuctionsList'); if (result.success && result.auctions.length > 0) { list.innerHTML = result.auctions.map(auction => { const colorClass = getColorClass(auction.itemColor); const statusText = auction.status === 'completed' ? '✅ Завершён' : '❌ Отменён'; const statusColor = auction.status === 'completed' ? 'var(--success)' : 'var(--danger)'; return `<div class="player-card"><div class="player-card-header"><div><div class="player-nick" style="color: var(--dkp); font-size: 13px;">🔨 ${auction.itemName}</div><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span></div></div><div style="text-align: right;"><div style="font-size: 10px; color: var(--text-dim);">Цена:</div><div style="font-size: 15px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">🏆 ${auction.currentBidder}</div>` : '<div style="font-size: 10px; color: var(--text-dim);">Без ставок</div>'}</div></div><div style="font-size: 10px; color: ${statusColor}; font-weight: 700; margin-top: 6px;">${statusText} | ${auction.endTime}</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет</div>'; } } catch (error) { console.error(error); } }
 
     async function loadAuctionItems() { const section = document.getElementById('auctionItemSection').value; const select = document.getElementById('auctionItemSelect'); const tierInput = document.getElementById('auctionItemTier'); const colorInput = document.getElementById('auctionItemColor'); const enhanceInput = document.getElementById('auctionItemEnhancement'); const primeCheck = document.getElementById('auctionIsPrime'); const bossCheck = document.getElementById('auctionIsBoss'); const nameInput = document.getElementById('auctionItemName'); select.innerHTML = '<option value="">— Сначала раздел —</option>'; tierInput.value = ''; colorInput.value = ''; enhanceInput.value = ''; primeCheck.checked = false; bossCheck.checked = false; nameInput.value = ''; currentAuctionItems = []; if (!section) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems', section: section }), redirect: 'follow' }); const result = await response.json(); if (result.success && result.items && result.items.length > 0) { currentAuctionItems = result.items; select.innerHTML = '<option value="">— Выберите —</option>' + result.items.map((item, idx) => { const badges = []; if (item.isPrime) badges.push('Прайм'); if (item.isBoss) badges.push('Босс'); if (item.enhancement > 0) badges.push(`+${item.enhancement}`); const badgeStr = badges.length > 0 ? ` [${badges.join(', ')}]` : ''; return `<option value="${idx}">${item.name} (${item.tier || 'т0'}, ${item.color})${badgeStr}</option>`; }).join(''); } else { select.innerHTML = '<option value="">— Пусто —</option>'; } } catch (error) { console.error(error); select.innerHTML = '<option value="">— Ошибка —</option>'; } }
     function fillAuctionItemDetails() { const select = document.getElementById('auctionItemSelect'); const idx = select.value; const tierInput = document.getElementById('auctionItemTier'); const colorInput = document.getElementById('auctionItemColor'); const enhanceInput = document.getElementById('auctionItemEnhancement'); const primeCheck = document.getElementById('auctionIsPrime'); const bossCheck = document.getElementById('auctionIsBoss'); const nameInput = document.getElementById('auctionItemName'); if (idx === '' || !currentAuctionItems[idx]) { tierInput.value = ''; colorInput.value = ''; enhanceInput.value = ''; primeCheck.checked = false; bossCheck.checked = false; nameInput.value = ''; return; } const item = currentAuctionItems[idx]; nameInput.value = item.name; tierInput.value = item.tier || 'т0'; colorInput.value = item.color || 'Белый'; enhanceInput.value = item.enhancement || 0; primeCheck.checked = item.isPrime || false; bossCheck.checked = item.isBoss || false; }
@@ -1577,7 +1692,7 @@
     async function createAuction() { const itemName = document.getElementById('auctionItemName').value; const itemSection = document.getElementById('auctionItemSection').value; const itemTier = document.getElementById('auctionItemTier').value; const itemColor = document.getElementById('auctionItemColor').value; const itemEnhancement = document.getElementById('auctionItemEnhancement').value; const isPrime = document.getElementById('auctionIsPrime').checked; const isBoss = document.getElementById('auctionIsBoss').checked; const startPrice = document.getElementById('auctionStartPrice').value; const durationHours = document.getElementById('auctionDuration').value; const minAttendance = document.getElementById('auctionMinAttendance').value; const priorityOnly = document.getElementById('auctionPriorityOnly').checked; if (!itemName || !itemSection) { showAuctionCreateMessage('Выберите предмет', 'error'); return; } if (!startPrice || !durationHours) { showAuctionCreateMessage('Укажите цену', 'error'); return; } const checkboxes = document.querySelectorAll('#auctionPlayersList input[type="checkbox"]:checked'); const allowedPlayers = Array.from(checkboxes).map(cb => cb.value); const itemKey = itemName; const msg = document.getElementById('auctionCreateMessage'); msg.innerText = 'Создание...'; msg.className = 'message'; msg.style.display = 'block'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'createAuction', itemName, itemSection, itemTier, itemColor, itemEnhancement: Number(itemEnhancement), isPrime, isBoss, startPrice: Number(startPrice), durationHours: Number(durationHours), allowedPlayers, minAttendance: Number(minAttendance), priorityOnly, createdBy: currentUser, itemKey: itemKey }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { switchAuctionTab('active', { target: document.getElementById('tabAuctionActive') }); msg.style.display = 'none'; }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; } }
     function showAuctionCreateMessage(text, type) { const msg = document.getElementById('auctionCreateMessage'); msg.className = `message ${type}`; msg.innerText = text; msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 4000); }
 
-    async function openBidModal(auctionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: auctionId, bidder: currentUser }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const auction = result.auction; const minBid = auction.currentBid + 1; const colorClass = getColorClass(auction.itemColor); const balanceInfo = auction.playerBalance || { total: 0, frozen: 0, available: 0 }; const canAfford = balanceInfo.available >= minBid; const modal = document.getElementById('bidModal'); const content = document.getElementById('bidModalContent'); content.innerHTML = `<h3 style="color: var(--dkp); font-family: 'Times New Roman', Times, serif; margin-bottom: 10px; font-size: 15px;">🔨 ${auction.itemName}</h3><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 2px;">Характеристики:</div><div style="font-size: 12px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div style="margin-bottom: 8px;"><div style="font-size: 10px; color: var(--text-dim);">Текущая:</div><div style="font-size: 18px; color: var(--dkp); font-weight: 700;">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">От: ${auction.currentBidder}</div>` : ''}</div><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim);">Мин. ставка:</div><div style="font-size: 15px; color: var(--success); font-weight: 700;">${minBid} DKP</div></div><div style="margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border);"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px; font-weight: 700; text-transform: uppercase;">💰 Ваш баланс</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 5px;"><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 13px; color: var(--accent); font-weight: 700;">${balanceInfo.total}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 13px; color: var(--warning); font-weight: 700;">${balanceInfo.frozen}</div></div><div style="text-align: center; padding: 5px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'};">Своб.</div><div style="font-size: 13px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'}; font-weight: 700;">${balanceInfo.available}</div></div></div>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); text-align: center; padding: 4px; background: var(--danger-soft); border-radius: var(--radius-sm);">⚠️ Недостаточно DKP</div>` : ''}</div>${auction.bids.length > 0 ? `<div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">История:</div><div style="max-height: 100px; overflow-y: auto;">${auction.bids.map(bid => { let statusBadge = ''; if (bid.status === 'active') statusBadge = '<span style="font-size: 8px; background: var(--warning-soft); color: var(--warning); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ЗАМОР.</span>'; else if (bid.status === 'outbid') statusBadge = '<span style="font-size: 8px; background: var(--danger-soft); color: var(--danger); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ПЕРЕБИТ</span>'; else if (bid.status === 'won') statusBadge = '<span style="font-size: 8px; background: var(--success-soft); color: var(--success); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ПОБЕДА</span>'; else if (bid.status === 'cancelled') statusBadge = '<span style="font-size: 8px; background: var(--bg-soft); color: var(--text-dim); padding: 1px 3px; border-radius: 2px; margin-left: 3px;">ОТМЕНА</span>'; return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 3px; background: var(--bg-soft); border-radius: 3px; margin-bottom: 2px; font-size: 10px;"><span style="color: var(--accent);">${bid.bidder}${statusBadge}</span><span style="color: var(--dkp); font-weight: 700;">${bid.amount}</span><span style="color: var(--text-dim); font-size: 9px;">${bid.date}</span></div>`; }).join('')}</div></div>` : ''}<div class="form-group"><label>Ваша ставка (мин. ${minBid})</label><input type="number" id="bidAmount" min="${minBid}" max="${balanceInfo.available}" placeholder="${minBid}" required ${!canAfford ? 'disabled' : ''}>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); margin-top: 2px;">Недостаточно DKP</div>` : ''}</div><button type="button" class="submit-btn dkp-btn" onclick="placeBid('${auction.id}', ${minBid})" ${!canAfford ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>`; modal.classList.remove('hidden'); } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
+    async function openBidModal(auctionId) { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: auctionId, bidder: currentUser }), redirect: 'follow' }); const result = await response.json(); if (!result.success) { alert('Ошибка: ' + result.message); return; } const auction = result.auction; const minBid = auction.currentBid + 1; const colorClass = getColorClass(auction.itemColor); const balanceInfo = auction.playerBalance || { total: 0, frozen: 0, available: 0 }; const canAfford = balanceInfo.available >= minBid; const modal = document.getElementById('bidModal'); const content = document.getElementById('bidModalContent'); content.innerHTML = `<h3 style="color: var(--dkp); font-family: var(--font-display); margin-bottom: 12px; font-size: 15px; letter-spacing: 1px;">🔨 ${auction.itemName}</h3><div style="margin-bottom: 12px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 3px;">Характеристики:</div><div style="font-size: 12px;">${auction.itemSection} | ${auction.itemTier} | <span class="item-badge ${colorClass}">${auction.itemColor}</span>${auction.itemEnhancement > 0 ? `<span class="item-badge enhance">+${auction.itemEnhancement}</span>` : ''}${auction.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${auction.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div><div style="margin-bottom: 10px;"><div style="font-size: 10px; color: var(--text-dim);">Текущая:</div><div style="font-size: 20px; color: var(--dkp); font-weight: 700; font-family: var(--font-display);">${auction.currentBid} DKP</div>${auction.currentBidder ? `<div style="font-size: 10px; color: var(--accent);">От: ${auction.currentBidder}</div>` : ''}</div><div style="margin-bottom: 12px;"><div style="font-size: 10px; color: var(--text-dim);">Мин. ставка:</div><div style="font-size: 16px; color: var(--success); font-weight: 700; font-family: var(--font-display);">${minBid} DKP</div></div><div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border);"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; font-family: var(--font-display); letter-spacing: 1px;">💰 Ваш баланс</div><div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 6px;"><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--text-dim);">Всего</div><div style="font-size: 14px; color: var(--accent); font-weight: 700;">${balanceInfo.total}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: var(--warning);">Замор.</div><div style="font-size: 14px; color: var(--warning); font-weight: 700;">${balanceInfo.frozen}</div></div><div style="text-align: center; padding: 6px; background: var(--bg-panel); border-radius: var(--radius-sm);"><div style="font-size: 9px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'};">Своб.</div><div style="font-size: 14px; color: ${canAfford ? 'var(--success)' : 'var(--danger)'}; font-weight: 700;">${balanceInfo.available}</div></div></div>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); text-align: center; padding: 5px; background: var(--danger-soft); border-radius: var(--radius-sm);">⚠️ Недостаточно DKP</div>` : ''}</div>${auction.bids.length > 0 ? `<div style="margin-bottom: 12px;"><div style="font-size: 10px; color: var(--text-dim); margin-bottom: 5px;">История:</div><div style="max-height: 110px; overflow-y: auto;">${auction.bids.map(bid => { let statusBadge = ''; if (bid.status === 'active') statusBadge = '<span style="font-size: 8px; background: var(--warning-soft); color: var(--warning); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ЗАМОР.</span>'; else if (bid.status === 'outbid') statusBadge = '<span style="font-size: 8px; background: var(--danger-soft); color: var(--danger); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ПЕРЕБИТ</span>'; else if (bid.status === 'won') statusBadge = '<span style="font-size: 8px; background: var(--success-soft); color: var(--success); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ПОБЕДА</span>'; else if (bid.status === 'cancelled') statusBadge = '<span style="font-size: 8px; background: var(--bg-soft); color: var(--text-dim); padding: 1px 4px; border-radius: 2px; margin-left: 3px;">ОТМЕНА</span>'; return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 4px; background: var(--bg-soft); border-radius: 3px; margin-bottom: 3px; font-size: 11px;"><span style="color: var(--accent);">${bid.bidder}${statusBadge}</span><span style="color: var(--dkp); font-weight: 700;">${bid.amount}</span><span style="color: var(--text-dim); font-size: 9px;">${bid.date}</span></div>`; }).join('')}</div></div>` : ''}<div class="form-group"><label>Ваша ставка (мин. ${minBid})</label><input type="number" id="bidAmount" min="${minBid}" max="${balanceInfo.available}" placeholder="${minBid}" required ${!canAfford ? 'disabled' : ''}>${!canAfford ? `<div style="font-size: 10px; color: var(--danger); margin-top: 3px;">Недостаточно DKP</div>` : ''}</div><button type="button" class="submit-btn dkp-btn" onclick="placeBid('${auction.id}', ${minBid})" ${!canAfford ? 'disabled style="opacity: 0.5;"' : ''}>💰 Ставка</button>`; modal.classList.remove('hidden'); } catch (error) { console.error(error); alert('Ошибка: ' + error.message); } }
     function closeBidModal() { document.getElementById('bidModal').classList.add('hidden'); }
     async function placeBid(auctionId, minBid) { const amount = document.getElementById('bidAmount').value; if (!amount || Number(amount) < minBid) { alert(`Мин. ${minBid} DKP`); return; } if (!confirm(`Ставка ${amount} DKP?`)) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'placeBid', auctionId: auctionId, bidder: currentUser, amount: Number(amount) }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert(result.message); closeBidModal(); loadActiveAuctions(); loadMyDkp(); } else { alert('Ошибка: ' + result.message); } } catch (error) { alert('Ошибка: ' + error.message); } }
     async function cancelAuction(auctionId) { if (!confirm('Отменить?')) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'cancelAuction', auctionId: auctionId, cancelledBy: currentRole }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert(result.message); loadActiveAuctions(); } else { alert('Ошибка: ' + result.message); } } catch (error) { alert('Ошибка: ' + error.message); } }
@@ -1660,7 +1775,7 @@
         } catch (error) { alert('Ошибка: ' + error.message); }
     }
 
-    // ===== НАСТРОЙКИ =====
+    // ===== НАСТРОЙКИ АУКЦИОНА =====
     async function loadAuctionSettings() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionSettings' }), redirect: 'follow' });
@@ -1705,6 +1820,103 @@
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
     }
 
+    // ✅ НОВЫЕ ФУНКЦИИ: КОЭФФИЦИЕНТ DKP ЗА МЕРОПРИЯТИЯ
+    async function loadEventCoefficientSettings() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEventCoefficientSettings' }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success && result.settings) {
+                const s = result.settings;
+                document.getElementById('eventCoefEnabled').checked = s.enabled;
+                document.getElementById('eventCoefMode').value = s.mode;
+                document.getElementById('eventCoefValue').value = s.value;
+                document.getElementById('eventCoefList').value = (s.selectiveList || []).join(', ');
+                document.getElementById('eventCoefListRow').style.display = s.mode === 'selective' ? 'flex' : 'none';
+            }
+        } catch (error) { console.error(error); }
+    }
+
+    async function saveEventCoefficientSettings() {
+        const msg = document.getElementById('eventCoefSettingsMessage');
+        const listStr = document.getElementById('eventCoefList').value;
+        const selectiveList = listStr ? listStr.split(',').map(s => s.trim()).filter(s => s) : [];
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'saveEventCoefficientSettings',
+                    enabled: document.getElementById('eventCoefEnabled').checked,
+                    mode: document.getElementById('eventCoefMode').value,
+                    value: Number(document.getElementById('eventCoefValue').value),
+                    selectiveList: selectiveList
+                }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Коэффициент мероприятий сохранён'; }
+            else { msg.className = 'message error'; msg.innerText = result.message; }
+        } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка связи'; }
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
+    async function loadPlayersForEventCoefSelect() {
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' });
+            const result = await response.json();
+            const select = document.getElementById('playerEventCoefSelect');
+            if (result.success && select) {
+                select.innerHTML = '<option value="">— Выберите игрока —</option>' + result.nicks.map(n => `<option value="${n}">${n}</option>`).join('');
+            }
+        } catch (error) { console.error(error); }
+    }
+
+    async function loadPlayerEventCoefSettings() {
+        const nickname = document.getElementById('playerEventCoefSelect').value;
+        const form = document.getElementById('playerEventCoefForm');
+        if (!nickname) { form.style.display = 'none'; return; }
+        form.style.display = 'block';
+        try {
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerEventCoefSettings', nickname: nickname }), redirect: 'follow' });
+            const result = await response.json();
+            if (result.success && result.settings) {
+                const s = result.settings;
+                document.getElementById('playerEventCoefEnabled').checked = s.enabled;
+                document.getElementById('playerEventCoefMode').value = s.mode;
+                document.getElementById('playerEventCoefValue').value = s.value;
+            } else {
+                document.getElementById('playerEventCoefEnabled').checked = false;
+                document.getElementById('playerEventCoefMode').value = 'disabled';
+                document.getElementById('playerEventCoefValue').value = 1;
+            }
+        } catch (error) { console.error(error); }
+    }
+
+    async function savePlayerEventCoefSettings() {
+        const nickname = document.getElementById('playerEventCoefSelect').value;
+        if (!nickname) { alert('Выберите игрока'); return; }
+        const msg = document.getElementById('playerEventCoefMessage');
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'savePlayerEventCoefSettings',
+                    nickname: nickname,
+                    enabled: document.getElementById('playerEventCoefEnabled').checked,
+                    mode: document.getElementById('playerEventCoefMode').value,
+                    value: Number(document.getElementById('playerEventCoefValue').value)
+                }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            if (result.success) { msg.className = 'message success'; msg.innerText = '✅ Сохранено для ' + nickname; }
+            else { msg.className = 'message error'; msg.innerText = result.message; }
+        } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка связи'; }
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
+    // ===== ШТРАФЫ =====
     async function loadPenaltySettings() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPenaltySettings' }), redirect: 'follow' });
@@ -1759,12 +1971,12 @@
                 msg.className = 'message success';
                 msg.innerText = result.message;
                 if (result.results && result.results.length > 0) {
-                    resultsBlock.innerHTML = '<div style="font-size: 11px; color: var(--text-dim); margin-bottom: 6px;">Оштрафованные игроки:</div>' +
+                    resultsBlock.innerHTML = '<div style="font-size: 11px; color: var(--text-dim); margin-bottom: 8px;">Оштрафованные игроки:</div>' +
                         result.results.map(r => `
                             <div class="penalty-result">
                                 <span class="nick">${r.nickname}</span> — 
                                 <span class="amount">-${r.penaltyAmount} DKP</span>
-                                <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">${r.reason}</div>
+                                <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">${r.reason}</div>
                                 <div style="font-size: 10px; color: var(--text-dim);">Новый баланс: ${r.newBalance} DKP</div>
                             </div>
                         `).join('');
@@ -1851,6 +2063,8 @@
         loadAuctionSettings();
         loadPenaltySettings();
         loadPlayersForPenaltySelect();
+        loadEventCoefficientSettings();
+        loadPlayersForEventCoefSelect();
     }
 
     function clearSavedCredentials() {
