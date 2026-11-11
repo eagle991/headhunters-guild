@@ -1,3 +1,1247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>RF Online Next</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <style>
+        :root {
+            --bg-main: #e8eef5; --bg-panel: #ffffff; --bg-soft: #f0f4f8; --bg-hover: #dde5ef;
+            --text-main: #1e293b; --text-dim: #64748b; --border: #cbd5e1;
+            --accent: #2563eb; --accent-hover: #1d4ed8; --accent-soft: #dbeafe; --accent-glow: rgba(37, 99, 235, 0.4);
+            --success: #10b981; --success-soft: #d1fae5; --success-glow: rgba(16, 185, 129, 0.4);
+            --warning: #f59e0b; --warning-soft: #fef3c7; --warning-glow: rgba(245, 158, 11, 0.4);
+            --danger: #ef4444; --danger-soft: #fee2e2; --danger-glow: rgba(239, 68, 68, 0.4);
+            --gold: #d97706; --silver: #64748b; --bronze: #92400e; --dkp: #f59e0b;
+            --shadow-sm: 0 1px 3px rgba(37, 99, 235, 0.08);
+            --shadow-md: 0 4px 12px rgba(37, 99, 235, 0.12);
+            --shadow-lg: 0 8px 24px rgba(37, 99, 235, 0.18);
+            --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+            --font-main: 'Segoe UI', 'Times New Roman', serif;
+            --font-display: 'Orbitron', sans-serif;
+            --gradient-btn: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            --gradient-btn-hover: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            --gradient-dkp: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --gradient-hero: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+        }
+        body[data-theme="dark"] {
+            --bg-main: #0a0a0a; --bg-panel: #1a1a1a; --bg-soft: #1f1f1f; --bg-hover: #2a2a2a;
+            --text-main: #f5f5f5; --text-dim: #a3a3a3; --border: #404040;
+            --accent: #fbbf24; --accent-hover: #f59e0b; --accent-soft: #422006; --accent-glow: rgba(251, 191, 36, 0.5);
+            --success: #22c55e; --success-soft: #052e16; --success-glow: rgba(34, 197, 94, 0.5);
+            --warning: #f59e0b; --warning-soft: #431407; --warning-glow: rgba(245, 158, 11, 0.5);
+            --danger: #ef4444; --danger-soft: #450a0a; --danger-glow: rgba(239, 68, 68, 0.5);
+            --gold: #fbbf24; --silver: #a3a3a3; --bronze: #d97706; --dkp: #fbbf24;
+            --shadow-sm: 0 1px 3px rgba(251, 191, 36, 0.15);
+            --shadow-md: 0 4px 12px rgba(251, 191, 36, 0.25);
+            --shadow-lg: 0 8px 24px rgba(251, 191, 36, 0.35);
+            --gradient-btn: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --gradient-btn-hover: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+            --gradient-dkp: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            --gradient-hero: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 0; font-family: var(--font-main); background-color: var(--bg-main); background-image: var(--site-bg-image, none); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text-main); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background-color 0.3s, color 0.3s; }
+        body.has-bg-image::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); z-index: -1; pointer-events: none; }
+        body:not(.has-bg-image)::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 30%, var(--accent-glow) 0%, transparent 40%), radial-gradient(circle at 80% 70%, var(--warning-glow) 0%, transparent 40%); opacity: 0.08; z-index: -1; pointer-events: none; }
+        body[data-theme="dark"]:not(.has-bg-image)::before { opacity: 0.15; }
+        .screen { display: none; width: 100%; max-width: 1300px; padding: 15px; margin: 0 auto; position: relative; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .public-title, .panel-title, .top-panel-title, .player-nick, .data-value, .ranking-nick, .event-name, .auction-title, .dkp-highlight, .auth-title, .top-value { text-shadow: 0 0 3px var(--accent-glow); }
+        body.has-bg-image .public-title, body.has-bg-image .panel-title, body.has-bg-image .auth-title { text-shadow: 0 0 10px var(--accent-glow), 2px 2px 4px rgba(0,0,0,0.8); }
+        .public-hero { position: relative; height: 280px; margin-bottom: 20px; border-radius: var(--radius-lg); overflow: hidden; background: var(--gradient-hero); box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
+        .public-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px); }
+        .public-hero::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 40%); opacity: 0.3; animation: pulse 4s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.5; } }
+        .public-hero-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .public-title { font-family: var(--font-display); font-size: 44px; font-weight: 900; color: #ffffff; letter-spacing: 6px; margin: 0 0 8px 0; text-transform: uppercase; }
+        body[data-theme="dark"] .public-title { color: var(--accent); text-shadow: 0 0 30px var(--accent-glow); }
+        .public-subtitle { color: rgba(255,255,255,0.9); font-family: var(--font-display); font-size: 13px; letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase; font-weight: 600; }
+        .login-link { background: var(--gradient-btn); border: 1px solid var(--accent); color: #ffffff; padding: 10px 28px; cursor: pointer; font-family: var(--font-display); font-size: 12px; letter-spacing: 2px; transition: 0.3s; border-radius: var(--radius-sm); box-shadow: 0 0 20px var(--accent-glow); font-weight: 700; text-transform: uppercase; }
+        .login-link:hover { background: var(--gradient-btn-hover); transform: translateY(-2px); }
+        body[data-theme="dark"] .login-link { color: #000; }
+        .top-containers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        @media (max-width: 900px) { .top-containers { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .public-title { font-size: 28px; } .public-hero { height: 220px; } }
+        .top-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; box-shadow: var(--shadow-sm); transition: 0.3s; position: relative; overflow: hidden; }
+        .top-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.6; }
+        .top-panel:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--accent); }
+        .top-panel.dkp-panel::before { background: linear-gradient(90deg, transparent, var(--dkp), transparent); }
+        .top-panel-title { font-family: var(--font-display); color: var(--accent); font-size: 12px; letter-spacing: 1.5px; margin-bottom: 10px; text-align: center; font-weight: 700; text-transform: uppercase; }
+        .top-panel.dkp-panel .top-panel-title { color: var(--dkp); }
+        .top-list { display: flex; flex-direction: column; gap: 4px; }
+        .top-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.2s; font-size: 12px; }
+        .top-item:hover { background: var(--bg-hover); border-color: var(--accent); }
+        .top-item.rank-1 { border-left: 3px solid var(--gold); background: var(--warning-soft); }
+        .top-item.rank-2 { border-left: 3px solid var(--silver); }
+        .top-item.rank-3 { border-left: 3px solid var(--bronze); }
+        .top-rank { font-family: var(--font-display); font-size: 14px; font-weight: 900; min-width: 30px; text-align: center; color: var(--text-dim); }
+        .top-rank.rank-1 { color: var(--gold); } .top-rank.rank-2 { color: var(--silver); } .top-rank.rank-3 { color: var(--bronze); }
+        .top-nick { flex: 1; font-family: var(--font-display); color: var(--text-main); font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .top-item.rank-1 .top-nick { color: var(--gold); }
+        .top-value { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--success); }
+        .top-value.dkp { color: var(--dkp); }
+        .tabs { display: flex; margin-bottom: 14px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 2px; }
+        .tab-btn { background: transparent; border: none; color: var(--text-dim); font-family: var(--font-display); font-size: 11px; padding: 8px 14px; cursor: pointer; transition: 0.3s; letter-spacing: 1px; font-weight: 600; border-radius: var(--radius-sm) var(--radius-sm) 0 0; position: relative; text-transform: uppercase; }
+        .tab-btn:hover { color: var(--accent); background: var(--accent-soft); }
+        .tab-btn.active { color: var(--accent); background: var(--bg-panel); border-bottom: 2px solid var(--bg-panel); margin-bottom: -2px; }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--gradient-btn); }
+        .form-group { margin-bottom: 10px; position: relative; }
+        label { display: block; font-size: 11px; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px; font-weight: 700; font-family: var(--font-display); }
+        input, select, textarea { width: 100%; background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-main); padding: 8px 12px; font-family: var(--font-main); font-size: 13px; transition: 0.2s; outline: none; border-radius: var(--radius-sm); }
+        textarea { resize: vertical; min-height: 60px; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+        select { cursor: pointer; }
+        select option { background: var(--bg-panel); color: var(--text-main); }
+        .submit-btn { width: 100%; padding: 9px 16px; background: var(--gradient-btn); border: 1px solid var(--accent); color: #ffffff; font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: 0.3s; border-radius: var(--radius-sm); box-shadow: 0 2px 8px var(--accent-glow); text-transform: uppercase; }
+        .submit-btn:hover { background: var(--gradient-btn-hover); transform: translateY(-1px); }
+        body[data-theme="dark"] .submit-btn { color: #000; }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .submit-btn.dkp-btn { background: var(--gradient-dkp); border-color: var(--dkp); }
+        .message { margin-top: 8px; padding: 8px 12px; text-align: center; font-size: 12px; border-radius: var(--radius-sm); display: none; white-space: pre-wrap; }
+        .message.success { display: block; color: var(--success); background: var(--success-soft); border: 1px solid var(--success); }
+        .message.error { display: block; color: var(--danger); background: var(--danger-soft); border: 1px solid var(--danger); }
+        .hidden { display: none !important; }
+        .loader { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--accent); border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-right: 6px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding: 10px 16px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); flex-wrap: wrap; gap: 8px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+        .header-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--dkp), var(--accent)); }
+        .user-info { color: var(--accent); font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+        .user-info .role-badge { display: inline-block; padding: 3px 10px; margin-left: 4px; font-size: 10px; border-radius: var(--radius-sm); font-weight: 700; }
+        .user-info .role-badge.role-admin { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); }
+        .user-info .role-badge.role-mod { background: var(--warning-soft); border: 1px solid var(--warning); color: var(--warning); }
+        .user-info .role-badge.role-player { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); }
+        .user-info .dkp-badge { display: inline-block; padding: 3px 10px; margin-left: 4px; font-size: 11px; background: var(--warning-soft); border: 1px solid var(--dkp); color: var(--dkp); border-radius: var(--radius-sm); font-weight: 700; }
+        .logout-btn, .theme-toggle, .notification-bell { background: transparent; border: 1px solid var(--border); color: var(--text-main); padding: 5px 12px; cursor: pointer; font-family: var(--font-display); font-size: 11px; transition: 0.3s; border-radius: var(--radius-sm); margin-left: 4px; font-weight: 600; }
+        .logout-btn { border-color: var(--danger); color: var(--danger); }
+        .logout-btn:hover { background: var(--danger-soft); }
+        .theme-toggle:hover, .notification-bell:hover { background: var(--bg-soft); border-color: var(--accent); }
+        .notification-bell { position: relative; padding: 5px 10px; font-size: 16px; }
+        .notification-badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; font-size: 9px; font-weight: 700; font-family: var(--font-display); min-width: 16px; height: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 4px; animation: badgePulse 2s ease-in-out infinite; }
+        @keyframes badgePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .notification-bell.has-new { animation: bellShake 0.5s ease-in-out; }
+        @keyframes bellShake { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(15deg); } 75% { transform: rotate(-15deg); } }
+        .panel { background: var(--bg-panel); border: 1px solid var(--border); padding: 18px; margin-bottom: 14px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); position: relative; }
+        .panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5; }
+        .panel-title { font-family: var(--font-display); color: var(--accent); font-size: 14px; margin-bottom: 12px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 6px; text-transform: uppercase; }
+        .status-badge { display: inline-block; padding: 3px 10px; font-size: 10px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .status-pending { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .status-approved { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .status-rejected { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 12px; }
+        .data-item { background: var(--bg-soft); padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.3s; }
+        .data-item:hover { border-color: var(--accent); }
+        .data-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-weight: 700; font-family: var(--font-display); }
+        .data-value { font-size: 16px; color: var(--accent); font-weight: 700; font-family: var(--font-display); }
+        .player-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; margin-bottom: 8px; border-radius: var(--radius-sm); transition: 0.3s; }
+        .player-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent); }
+        .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+        .player-nick { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .action-buttons { display: flex; gap: 5px; flex-wrap: wrap; }
+        .btn-approve, .btn-reject, .btn-edit, .btn-compare, .btn-back, .btn-remove, .btn-role { padding: 5px 12px; border: none; cursor: pointer; font-family: var(--font-display); font-size: 11px; transition: 0.3s; border-radius: var(--radius-sm); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+        .btn-approve { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .btn-approve:hover { background: var(--success); color: #fff; }
+        .btn-reject { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-reject:hover { background: var(--danger); color: #fff; }
+        .btn-edit { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-top: 6px; }
+        .btn-edit:hover { background: var(--accent); color: #fff; }
+        body[data-theme="dark"] .btn-edit:hover { color: #000; }
+        .btn-compare { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .btn-compare:hover { background: var(--warning); color: #fff; }
+        body[data-theme="dark"] .btn-compare:hover { color: #000; }
+        .btn-back { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-bottom: 10px; }
+        .btn-back:hover { background: var(--accent); color: #fff; }
+        .btn-remove { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); font-size: 10px; padding: 3px 8px; }
+        .btn-remove:hover { background: var(--danger); color: #fff; }
+        .btn-role { padding: 3px 8px; font-size: 10px; }
+        .btn-role-admin { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-role-mod { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .btn-role-player { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .user-role-tag { display: inline-block; padding: 3px 10px; font-size: 10px; border-radius: var(--radius-sm); margin-left: 6px; font-weight: 700; font-family: var(--font-display); }
+        .user-role-tag.admin { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .user-role-tag.mod { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .user-role-tag.player { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .empty-state { text-align: center; color: var(--text-dim); padding: 25px 15px; font-size: 12px; font-style: italic; }
+        .ranking-list { display: flex; flex-direction: column; gap: 6px; }
+        .ranking-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px 12px; display: flex; align-items: center; gap: 10px; transition: 0.3s; flex-wrap: wrap; border-radius: var(--radius-sm); }
+        .ranking-item:hover { border-color: var(--accent); }
+        .ranking-position { font-family: var(--font-display); font-size: 16px; font-weight: 900; min-width: 35px; text-align: center; color: var(--text-dim); }
+        .ranking-position.top-1 { color: var(--gold); } .ranking-position.top-2 { color: var(--silver); } .ranking-position.top-3 { color: var(--bronze); }
+        .ranking-info { flex: 1; min-width: 160px; }
+        .ranking-nick { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .ranking-stats { font-size: 11px; color: var(--text-dim); }
+        .ranking-bm { font-size: 13px; color: var(--success); font-weight: 700; font-family: var(--font-display); }
+        .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 600px) { .compare-container { grid-template-columns: 1fr; } }
+        .compare-column { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); }
+        .compare-title { font-family: var(--font-display); color: var(--accent); font-size: 13px; margin-bottom: 10px; text-align: center; font-weight: 700; }
+        .compare-stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+        .compare-stat:last-child { border-bottom: none; }
+        .compare-label { color: var(--text-dim); }
+        .compare-value { font-size: 13px; font-weight: 700; font-family: var(--font-display); }
+        .compare-value.better { color: var(--success); } .compare-value.worse { color: var(--danger); } .compare-value.equal { color: var(--warning); }
+        .skills-list { display: flex; flex-direction: column; gap: 5px; }
+        .skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; display: flex; align-items: center; gap: 10px; transition: 0.3s; border-radius: var(--radius-sm); cursor: pointer; }
+        .skill-item:hover { border-color: var(--accent); }
+        .skill-item.checked { border-color: var(--success); background: var(--success-soft); }
+        .skill-checkbox { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
+        .skill-name { flex: 1; font-size: 13px; font-weight: 600; }
+        .approved-skills { display: flex; flex-wrap: wrap; gap: 5px; }
+        .approved-skill-badge { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 4px 10px; font-size: 11px; border-radius: var(--radius-sm); transition: 0.3s; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .admin-skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; border-radius: var(--radius-sm); transition: 0.3s; }
+        .admin-skill-item:hover { border-color: var(--accent); }
+        .admin-skill-name { font-size: 13px; font-weight: 600; }
+        .admin-skill-tag { font-size: 9px; padding: 2px 6px; background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); margin-left: 6px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .loading-overlay { text-align: center; padding: 25px; color: var(--accent); font-family: var(--font-display); letter-spacing: 2px; font-size: 12px; }
+        .cabinet-section { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
+        .cabinet-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .auth-container { max-width: 380px; margin: 40px auto; background: var(--bg-panel); border: 1px solid var(--border); padding: 25px; position: relative; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+        .auth-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient-btn); }
+        .auth-title { font-family: var(--font-display); text-align: center; color: var(--accent); letter-spacing: 3px; margin-bottom: 4px; font-size: 22px; font-weight: 900; text-transform: uppercase; }
+        .auth-subtitle { text-align: center; color: var(--text-dim); font-size: 11px; margin-bottom: 18px; font-style: italic; }
+        .footer { text-align: center; padding: 20px; color: var(--text-dim); font-size: 10px; letter-spacing: 2px; margin-top: 25px; font-style: italic; font-family: var(--font-display); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: var(--gradient-btn); border-radius: 4px; }
+        .equipment-section-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        .eq-tab { background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-display); font-size: 10px; padding: 5px 10px; cursor: pointer; border-radius: var(--radius-sm); transition: 0.3s; font-weight: 600; text-transform: uppercase; }
+        .eq-tab:hover { color: var(--accent); border-color: var(--accent); }
+        .eq-tab.active { background: var(--gradient-btn); color: #ffffff; border-color: var(--accent); }
+        body[data-theme="dark"] .eq-tab.active { color: #000; }
+        .item-card { background: var(--bg-panel); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; transition: 0.3s; cursor: pointer; position: relative; }
+        .item-card:hover { border-color: var(--accent); }
+        .item-card.selected { border-color: var(--success); background: var(--success-soft); }
+        .item-card.selected::before { content: '✓'; position: absolute; top: 8px; right: 10px; color: var(--success); font-size: 16px; font-weight: bold; }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+        .item-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; }
+        .item-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+        .item-badge { font-size: 9px; padding: 2px 6px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .item-badge.prime { background: var(--warning-soft); color: var(--gold); border: 1px solid var(--gold); }
+        .item-badge.boss { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .item-badge.enhance { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .item-badge.tier { background: #ede9fe; color: var(--accent); border: 1px solid var(--accent); }
+        .item-badge.color-white { background: var(--bg-soft); color: var(--text-dim); border: 1px solid var(--border); }
+        .item-badge.color-green { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .item-badge.color-blue { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .item-badge.color-purple { background: #ede9fe; color: #6b4aa8; border: 1px solid #6b4aa8; }
+        .item-badge.color-yellow { background: var(--warning-soft); color: var(--gold); border: 1px solid var(--gold); }
+        .item-badge.color-red { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .approved-equipment { display: flex; flex-direction: column; gap: 6px; }
+        .approved-eq-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; border-radius: var(--radius-sm); display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .approved-eq-section { font-family: var(--font-display); font-size: 10px; color: var(--warning); text-transform: uppercase; min-width: 75px; font-weight: 700; }
+        .approved-eq-name { flex: 1; font-size: 12px; color: var(--text-main); font-weight: 600; }
+        .add-item-form { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 8px; }
+        .checkbox-group { display: flex; align-items: center; gap: 6px; padding: 5px 0; }
+        .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+        .checkbox-group label { margin: 0; font-size: 12px; cursor: pointer; font-weight: 600; }
+        .admin-item-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: 0.3s; }
+        .admin-item-card:hover { border-color: var(--accent); }
+        .admin-item-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px; }
+        .admin-item-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; }
+        .admin-item-meta { display: flex; gap: 4px; flex-wrap: wrap; }
+        .dkp-highlight { color: var(--dkp); font-weight: 700; font-family: var(--font-display); }
+        .event-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: 0.3s; }
+        .event-card:hover { border-color: var(--accent); }
+        .event-info { flex: 1; min-width: 160px; }
+        .event-name { font-family: var(--font-display); font-size: 13px; color: var(--text-main); font-weight: 700; margin-bottom: 2px; }
+        .event-meta { font-size: 10px; color: var(--text-dim); }
+        .event-dkp { font-family: var(--font-display); font-size: 13px; font-weight: 900; color: var(--dkp); padding: 4px 12px; border: 1px solid var(--dkp); border-radius: var(--radius-sm); background: var(--warning-soft); }
+        .screenshot-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; background: var(--bg-soft); margin-bottom: 12px; }
+        .screenshot-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); }
+        .upload-icon { font-size: 32px; margin-bottom: 6px; }
+        .upload-text { color: var(--text-main); font-size: 12px; font-weight: 600; }
+        .upload-hint { color: var(--text-dim); font-size: 10px; margin-top: 4px; }
+        .screenshots-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 12px; }
+        .screenshot-thumb { position: relative; aspect-ratio: 16/10; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-soft); }
+        .screenshot-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .screenshot-thumb .remove-btn { position: absolute; top: 3px; right: 3px; background: var(--danger); color: white; border: none; width: 18px; height: 18px; border-radius: 50%; cursor: pointer; font-size: 10px; }
+        .screenshot-thumb .upload-progress { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: var(--accent); font-size: 9px; padding: 2px; text-align: center; font-weight: 600; }
+        .recognized-nicks-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+        .nick-item { display: flex; align-items: center; gap: 8px; background: var(--bg-soft); border: 1px solid var(--border); padding: 6px 10px; border-radius: var(--radius-sm); flex-wrap: wrap; }
+        .nick-item input { flex: 1; min-width: 120px; background: transparent; border: none; color: var(--text-main); font-size: 13px; padding: 3px; font-weight: 600; }
+        .nick-item .remove-nick-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 20px; height: 20px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; }
+        .ocr-progress { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; }
+        .progress-bar { width: 100%; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+        .progress-bar-fill { height: 100%; background: var(--gradient-btn); transition: width 0.3s; width: 0%; }
+        .progress-text { font-family: var(--font-display); font-size: 11px; color: var(--accent); font-weight: 600; }
+        .dkp-submission-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 8px; transition: 0.3s; }
+        .dkp-submission-card:hover { border-color: var(--accent); }
+        .submission-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+        .submission-event { font-family: var(--font-display); font-size: 13px; color: var(--dkp); font-weight: 700; }
+        .submission-meta { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        .submission-screenshots { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+        .submission-screenshots img { width: 150px; height: auto; max-height: 110px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; }
+        .submission-nicks { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+        .submission-nick-tag { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .dkp-history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--bg-soft); border-left: 3px solid var(--border); margin-bottom: 5px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 12px; transition: 0.3s; cursor: pointer; position: relative; }
+        .dkp-history-item:hover { background: var(--bg-hover); }
+        .dkp-history-item.earn { border-left-color: var(--success); }
+        .dkp-history-item.manual_add { border-left-color: var(--dkp); }
+        .dkp-history-item.manual_sub { border-left-color: var(--warning); }
+        .dkp-history-item.penalty { border-left-color: var(--danger); background: var(--danger-soft); }
+        .dkp-history-item.auction_win { border-left-color: var(--dkp); }
+        .history-info { flex: 1; }
+        .history-event { color: var(--text-main); font-size: 12px; font-weight: 600; }
+        .history-date { color: var(--text-dim); font-size: 10px; margin-top: 2px; }
+        .history-amount { font-family: var(--font-display); font-weight: 700; font-size: 13px; }
+        .history-amount.positive { color: var(--success); }
+        .history-amount.negative { color: var(--danger); }
+        .history-actions { display: flex; gap: 4px; margin-left: 8px; }
+        .history-action-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); width: 22px; height: 22px; border-radius: var(--radius-sm); cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .history-action-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+        .history-action-btn.danger:hover { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.75); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(5px); }
+        .modal-content { max-width: 90%; max-height: 90%; background: var(--bg-panel); border: 1px solid var(--accent); border-radius: var(--radius-md); padding: 20px; position: relative; box-shadow: var(--shadow-lg); overflow-y: auto; }
+        .modal-close { position: absolute; top: 10px; right: 10px; background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; }
+        .modal-close:hover { background: var(--danger); color: #fff; }
+        .modal-content img { max-width: 100%; max-height: 80vh; border-radius: var(--radius-sm); }
+        .calendar-day { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; }
+        .calendar-date { font-family: var(--font-display); color: var(--accent); font-size: 12px; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); font-weight: 700; }
+        .calendar-event { background: var(--bg-panel); border-left: 3px solid var(--dkp); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px; }
+        .calendar-event-title { font-size: 12px; color: var(--dkp); font-weight: 700; margin-bottom: 6px; font-family: var(--font-display); }
+        .calendar-players { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+        .calendar-nick-attended { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .calendar-nick-missed { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .calendar-label { font-size: 10px; margin-bottom: 4px; display: block; font-weight: 700; font-family: var(--font-display); }
+        .calendar-label.attended { color: var(--success); }
+        .calendar-label.missed { color: var(--danger); }
+        .auction-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px; transition: 0.3s; position: relative; overflow: hidden; }
+        .auction-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-dkp); }
+        .auction-card:hover { border-color: var(--dkp); }
+        .auction-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        .auction-title { font-family: var(--font-display); font-size: 14px; color: var(--dkp); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .auction-item-icon { width: 48px; height: 48px; border: 2px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-panel); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; flex-shrink: 0; }
+        .auction-item-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .timer-display { font-family: var(--font-display); font-size: 18px; font-weight: 900; padding: 6px 14px; background: var(--danger-soft); border: 2px solid var(--danger); border-radius: var(--radius-sm); color: var(--danger); animation: timerPulse 2s ease-in-out infinite; }
+        @keyframes timerPulse { 0%, 100% { box-shadow: 0 0 10px var(--danger-glow); } 50% { box-shadow: 0 0 20px var(--danger-glow); } }
+        .auction-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; padding: 10px; background: var(--bg-panel); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        .auction-info-item { display: flex; flex-direction: column; }
+        .auction-info-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; font-family: var(--font-display); }
+        .auction-info-value { font-size: 15px; color: var(--text-main); font-family: var(--font-display); font-weight: 700; }
+        .icon-preview { width: 75px; height: 38px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
+        .icon-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-preview-small { width: 44px; height: 44px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-small img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-preview-cabinet { width: 36px; height: 36px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-cabinet img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-preview-activity { width: 58px; height: 29px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-activity img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-placeholder { font-size: 9px; color: var(--text-dim); text-align: center; }
+        .icon-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 15px; text-align: center; cursor: pointer; transition: 0.3s; background: var(--bg-soft); margin: 12px 0; }
+        .icon-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); }
+        .saved-indicator { display: inline-block; padding: 3px 10px; background: var(--success-soft); color: var(--success); border: 1px solid var(--success); border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .event-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+        .event-stat-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; transition: 0.3s; position: relative; overflow: hidden; }
+        .event-stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-dkp); }
+        .event-stat-card:hover { border-color: var(--dkp); }
+        .event-stat-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .event-stat-name { font-family: var(--font-display); font-size: 12px; color: var(--dkp); font-weight: 700; flex: 1; }
+        .event-stat-total { font-size: 10px; color: var(--text-dim); }
+        .progress-row { margin-bottom: 5px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 2px; font-family: var(--font-display); font-weight: 600; }
+        .progress-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+        .progress-fill.month { background: linear-gradient(90deg, var(--accent), #60a5fa); }
+        .progress-fill.week { background: linear-gradient(90deg, var(--success), #34d399); }
+        .progress-fill.total { background: var(--gradient-dkp); }
+        .event-stat-footer { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; font-family: var(--font-display); font-weight: 700; }
+        .event-stat-footer .attended { color: var(--success); }
+        .event-stat-footer .missed { color: var(--danger); }
+        .absentee-rate { font-family: var(--font-display); font-weight: 900; font-size: 16px; }
+        .absentee-rate.critical { color: var(--danger); }
+        .absentee-rate.warning { color: var(--warning); }
+        .absentee-rate.good { color: var(--success); }
+        .settings-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; position: relative; overflow: hidden; }
+        .settings-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-btn); }
+        .settings-card-title { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
+        .settings-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+        .settings-label { font-size: 11px; color: var(--text-dim); min-width: 150px; font-weight: 700; font-family: var(--font-display); }
+        .settings-value { flex: 1; min-width: 130px; }
+        .toggle-switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .3s; border-radius: 22px; border: 1px solid var(--border); }
+        .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: var(--text-dim); transition: .3s; border-radius: 50%; }
+        input:checked + .toggle-slider { background: var(--gradient-btn); border-color: var(--accent); }
+        input:checked + .toggle-slider:before { transform: translateX(22px); background-color: #fff; }
+        body[data-theme="dark"] input:checked + .toggle-slider:before { background-color: #000; }
+        .penalty-result { background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 6px; font-size: 11px; }
+        .penalty-result .nick { color: var(--danger); font-weight: 700; font-family: var(--font-display); }
+        .penalty-result .amount { color: var(--danger); font-weight: 700; font-family: var(--font-display); }
+        .nick-with-color { display: inline-block; padding: 2px 8px; border-radius: var(--radius-sm); border: 2px solid var(--border); font-weight: 700; font-family: var(--font-display); background: var(--bg-panel); }
+        .auction-number-badge { display: inline-block; padding: 2px 8px; background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); margin-right: 6px; }
+        .given-badge { display: inline-block; padding: 3px 10px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .given-badge.given { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .given-badge.not-given { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .loot-item { background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--dkp); padding: 8px 10px; border-radius: var(--radius-sm); margin-bottom: 5px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; transition: 0.3s; }
+        .loot-item:hover { border-color: var(--dkp); }
+        .loot-item.given { border-left-color: var(--success); }
+        .loot-item.not-given { border-left-color: var(--warning); }
+        .loot-number { font-family: var(--font-display); font-size: 11px; color: var(--accent); font-weight: 700; min-width: 40px; }
+        .loot-info { flex: 1; min-width: 150px; }
+        .loot-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; }
+        .loot-date { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        .loot-amount { font-family: var(--font-display); font-size: 12px; color: var(--dkp); font-weight: 700; }
+        .queue-item-card { background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; transition: 0.3s; }
+        .queue-item-card.given { border-left-color: var(--success); }
+        .queue-item-card.pending { border-left-color: var(--warning); }
+        .queue-item-info { flex: 1; min-width: 200px; }
+        .queue-item-name { font-family: var(--font-display); font-size: 13px; color: var(--text-main); font-weight: 700; }
+        .queue-item-meta { font-size: 10px; color: var(--text-dim); margin-top: 3px; }
+        .queue-item-recipient { font-family: var(--font-display); font-size: 12px; color: var(--accent); font-weight: 700; }
+        .unified-loot-stat { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 6px; }
+        .unified-loot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .unified-loot-name { font-family: var(--font-display); font-size: 13px; color: var(--text-main); font-weight: 700; }
+        .unified-loot-count { font-family: var(--font-display); font-size: 14px; color: var(--dkp); font-weight: 900; }
+        .source-badge { display: inline-block; padding: 1px 6px; border-radius: var(--radius-sm); font-size: 9px; font-weight: 700; margin-right: 3px; }
+        .source-badge.auction { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .source-badge.queue { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .history-winner-card { background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--dkp); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; transition: 0.3s; }
+        .history-winner-card:hover { border-color: var(--dkp); }
+        .winner-icon { width: 40px; height: 40px; background: var(--bg-panel); border: 2px solid var(--dkp); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 20px; overflow: hidden; }
+        .winner-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .winner-info { flex: 1; min-width: 150px; }
+        .winner-nick { font-family: var(--font-display); font-size: 13px; color: var(--accent); font-weight: 700; }
+        .winner-item { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+        .winner-amount { font-family: var(--font-display); font-size: 13px; color: var(--dkp); font-weight: 700; }
+        .bid-history-full { max-height: 300px; overflow-y: auto; margin-bottom: 10px; }
+        .bid-history-item { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; padding: 6px 8px; background: var(--bg-soft); border-radius: var(--radius-sm); margin-bottom: 3px; font-size: 11px; border-left: 3px solid var(--border); }
+        .bid-history-item.active { border-left-color: var(--success); background: var(--success-soft); }
+        .bid-history-item.outbid { border-left-color: var(--warning); opacity: 0.8; }
+        .bid-history-item.won { border-left-color: var(--dkp); background: var(--warning-soft); }
+        .bid-bidder-info { display: flex; flex-direction: column; gap: 2px; }
+        .bid-bidder-name { font-family: var(--font-display); font-weight: 700; color: var(--accent); font-size: 11px; }
+        .bid-bidder-dkp { font-size: 9px; color: var(--text-dim); }
+        .bid-bidder-dkp b { color: var(--dkp); font-family: var(--font-display); }
+        .bid-amount { font-family: var(--font-display); font-weight: 900; color: var(--dkp); font-size: 13px; text-align: right; }
+        .bid-status { font-size: 9px; padding: 2px 6px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .bid-status.active { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .bid-status.outbid { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .bid-status.won { background: var(--warning-soft); color: var(--dkp); border: 1px solid var(--dkp); }
+        .unrecognized-nick-btn { background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-main); padding: 3px 8px; font-size: 11px; font-family: var(--font-display); font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; transition: 0.2s; }
+        .unrecognized-nick-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+        .unrecognized-nick-btn.added { background: var(--success-soft); border-color: var(--success); color: var(--success); cursor: default; opacity: 0.6; }
+        .match-badge { display: inline-block; padding: 1px 6px; border-radius: var(--radius-sm); font-size: 9px; font-weight: 700; font-family: var(--font-display); margin-left: 6px; }
+        .match-badge.high { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .match-badge.medium { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .match-badge.low { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .original-nick { color: var(--text-dim); text-decoration: line-through; font-size: 10px; margin-right: 4px; }
+        .notification-item { background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; transition: 0.3s; cursor: pointer; display: flex; gap: 8px; }
+        .notification-item:hover { border-color: var(--accent); }
+        .notification-item.unread { background: var(--accent-soft); border-left-color: var(--warning); }
+        .notification-item.type-bid_outbid { border-left-color: var(--danger); }
+        .notification-item.type-auction_ending { border-left-color: var(--warning); }
+        .notification-item.type-auction_extended { border-left-color: var(--accent); }
+        .notification-item.type-auction_random_close { border-left-color: var(--gold); }
+        .notification-item.type-new_auction { border-left-color: var(--success); }
+        .notification-item.type-auction_won { border-left-color: var(--dkp); }
+        .notification-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .notification-type { font-size: 10px; font-weight: 700; font-family: var(--font-display); text-transform: uppercase; }
+        .notification-type.bid_outbid { color: var(--danger); }
+        .notification-type.auction_ending { color: var(--warning); }
+        .notification-type.auction_extended { color: var(--accent); }
+        .notification-type.auction_random_close { color: var(--gold); }
+        .notification-type.new_auction { color: var(--success); }
+        .notification-type.auction_won { color: var(--dkp); }
+        .notification-date { font-size: 9px; color: var(--text-dim); }
+        .notification-message { font-size: 12px; color: var(--text-main); line-height: 1.4; }
+        .notif-action-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); width: 24px; height: 24px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: 0.2s; padding: 0; }
+        .notif-action-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+        .notif-action-btn.read { background: var(--success-soft); border-color: var(--success); color: var(--success); cursor: default; opacity: 0.7; }
+        .notif-action-btn.delete:hover { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+        .toast-notification { position: fixed; top: 20px; right: 20px; background: var(--bg-panel); border: 2px solid var(--accent); border-radius: var(--radius-md); padding: 12px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 20px var(--accent-glow); z-index: 10001; max-width: 400px; animation: toastSlideIn 0.4s ease; }
+        .toast-notification.hidden { display: none; }
+        .toast-notification.type-bid_outbid { border-color: var(--danger); }
+        .toast-notification.type-auction_ending { border-color: var(--warning); }
+        .toast-notification.type-auction_extended { border-color: var(--accent); }
+        .toast-notification.type-auction_random_close { border-color: var(--gold); }
+        .toast-notification.type-new_auction { border-color: var(--success); }
+        .toast-notification.type-auction_won { border-color: var(--dkp); }
+        @keyframes toastSlideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast-icon { font-size: 24px; }
+        .toast-content { flex: 1; }
+        .toast-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
+        .toast-message { font-size: 12px; color: var(--text-main); line-height: 1.3; }
+        .toast-close { background: transparent; border: none; color: var(--text-dim); cursor: pointer; font-size: 16px; padding: 0 4px; }
+        .profession-icon { width: 20px; height: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-panel); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; overflow: hidden; flex-shrink: 0; }
+        .profession-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .profession-icon-large { width: 48px; height: 48px; border-radius: var(--radius-md); border: 2px solid var(--accent); background: var(--bg-panel); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 10px var(--accent-glow); overflow: hidden; }
+        .profession-icon-large img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md); }
+        .mmorpg-inventory { display: grid; grid-template-columns: 200px 1fr; gap: 20px; padding: 15px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-md); position: relative; }
+        @media (max-width: 768px) { .mmorpg-inventory { grid-template-columns: 1fr; } }
+        .character-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .character-silhouette { width: 120px; height: 180px; background: linear-gradient(180deg, var(--bg-soft) 0%, var(--bg-hover) 100%); border: 2px solid var(--border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 60px; color: var(--text-dim); position: relative; overflow: hidden; }
+        .character-name { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--accent); text-align: center; }
+        .character-profession { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-dim); font-family: var(--font-display); }
+        .character-stats-mini { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 10px; }
+        .stat-mini { background: var(--bg-soft); padding: 4px 6px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; border: 1px solid var(--border); }
+        .stat-mini-label { color: var(--text-dim); font-family: var(--font-display); }
+        .stat-mini-value { color: var(--accent); font-weight: 700; font-family: var(--font-display); }
+        .equipment-slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        @media (max-width: 900px) { .equipment-slots { grid-template-columns: repeat(3, 1fr); } }
+        .equipment-slot { aspect-ratio: 1; background: var(--bg-panel); border: 2px solid var(--border); border-radius: var(--radius-md); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; }
+        .equipment-slot:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .equipment-slot.empty { opacity: 0.5; border-style: dashed; }
+        .equipment-slot.equipped { border-color: var(--success); }
+        .slot-label { font-family: var(--font-display); font-size: 9px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; text-align: center; }
+        .slot-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 18px; overflow: hidden; }
+        .slot-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .slot-item-name { font-size: 9px; color: var(--text-main); font-weight: 600; text-align: center; margin-top: 3px; font-family: var(--font-display); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .slot-badges { display: flex; gap: 2px; margin-top: 2px; flex-wrap: wrap; justify-content: center; }
+        .slot-badge { font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: 700; font-family: var(--font-display); }
+        .bg-preview { width: 100%; height: 150px; border: 2px dashed var(--border); border-radius: var(--radius-md); background-size: cover; background-position: center; background-color: var(--bg-soft); display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 12px; margin-bottom: 10px; position: relative; overflow: hidden; }
+        .bg-preview.has-image { border-style: solid; border-color: var(--success); }
+    </style>
+</head>
+<body data-theme="light">
+
+<div id="publicScreen" class="screen active">
+    <div class="public-hero">
+        <div class="public-hero-content">
+            <div class="public-title">RF ONLINE NEXT</div>
+            <div class="public-subtitle">Глобальный рейтинг пилотов</div>
+            <button class="login-link" onclick="showAuthScreen()">▶ Войти в систему</button>
+        </div>
+    </div>
+    <div class="top-containers">
+        <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по БМ</div><div id="topBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+        <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="topLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+        <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+    </div>
+    <div class="footer">© RF Online Next | v16.1</div>
+</div>
+
+<div id="authScreen" class="screen">
+    <div class="auth-container">
+        <div class="auth-title">RF Online</div>
+        <div class="auth-subtitle">Система идентификации</div>
+        <div id="savedIndicator" style="text-align: center; margin-bottom: 8px; display: none;"><span class="saved-indicator">✓ Данные сохранены</span></div>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchAuthTab('login', event)">Вход</button>
+            <button class="tab-btn" onclick="switchAuthTab('register', event)">Регистрация</button>
+        </div>
+        <form id="loginForm" onsubmit="handleAuth(event, 'login')">
+            <div class="form-group"><label>Позывной</label><input type="text" id="loginNick" required placeholder="Введите позывной..."></div>
+            <div class="form-group"><label>Код доступа</label><input type="password" id="loginPass" required placeholder="Введите код..."></div>
+            <div class="checkbox-group" style="margin-bottom: 10px;"><input type="checkbox" id="rememberMe"><label for="rememberMe" style="margin: 0; cursor: pointer;">🔒 Запомнить меня</label></div>
+            <button type="submit" class="submit-btn" id="loginBtn">Войти</button>
+            <div style="text-align: center; margin-top: 8px;"><button type="button" class="btn-edit" style="width: auto; padding: 5px 12px; font-size: 10px;" onclick="clearSavedCredentials()">🗑 Очистить сохраненные</button></div>
+        </form>
+        <form id="registerForm" class="hidden" onsubmit="handleAuth(event, 'register')">
+            <div class="form-group"><label>Новый позывной</label><input type="text" id="regNick" required placeholder="Придумайте ник..."></div>
+            <div class="form-group"><label>Код доступа</label><input type="password" id="regPass" required placeholder="Придумайте пароль..."></div>
+            <div class="form-group"><label>Ключ доступа (Админ/Мод)</label><input type="password" id="regKey" placeholder="Пусто для роли Игрок"></div>
+            <button type="submit" class="submit-btn" id="regBtn">Зарегистрироваться</button>
+        </form>
+        <div id="authMessage" class="message"></div>
+    </div>
+</div>
+
+<div id="mainScreen" class="screen">
+    <div class="header-bar">
+        <div class="user-info">
+            Позывной: <span id="playerNick"></span>
+            <span class="role-badge" id="roleBadge">Игрок</span>
+            <span class="dkp-badge" id="userDkpBadge">💰 0 DKP</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px;">
+            <button class="notification-bell" onclick="openNotificationsModal()" id="notificationBell" title="Уведомления">🔔<span class="notification-badge hidden" id="notificationBadge">0</span></button>
+            <button class="theme-toggle" onclick="forceReload()" title="Обновить сайт">🔄</button>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleBtn">🌙 Темная</button>
+            <button class="logout-btn" onclick="logout()">⏻ Выход</button>
+        </div>
+    </div>
+    <div class="tabs" id="mainTabs">
+        <button class="tab-btn active" data-tab="home" onclick="switchMainTab('home', event)">🏠 Главная</button>
+        <button class="tab-btn" data-tab="cabinet" onclick="switchMainTab('cabinet', event)">👤 Кабинет</button>
+        <button class="tab-btn" data-tab="dkp" onclick="switchMainTab('dkp', event)">💰 DKP</button>
+        <button class="tab-btn" data-tab="auction" onclick="switchMainTab('auction', event)">🔨 Аукцион</button>
+        <button class="tab-btn" data-tab="queue" onclick="switchMainTab('queue', event)">📦 Очередь</button>
+        <button class="tab-btn" data-tab="calendar" onclick="switchMainTab('calendar', event)">📅 Календарь</button>
+        <button class="tab-btn" data-tab="players" onclick="switchMainTab('players', event)">👥 Игроки</button>
+        <button class="tab-btn hidden" data-tab="admin" id="tabAdmin" onclick="switchMainTab('admin', event)">⚙ Админ</button>
+    </div>
+
+    <div id="homeContent" class="panel">
+        <div class="top-containers">
+            <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по БМ</div><div id="mainTopBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+            <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="mainTopLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+            <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="mainTopDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+        </div>
+        <div style="margin-top: 18px;"><div class="panel-title">📊 Статистика мероприятий</div><div id="eventStatsBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">📊 Активность сегодня</div><div id="todayActivityBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">📈 Активность за неделю</div><div id="weeklyActivityBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">⚠️ Топ-10 неактивных (за месяц)</div><div id="topAbsenteesBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">🏆 Последние победители аукционов</div><div id="recentWinnersBlock"></div></div>
+    </div>
+
+    <div id="cabinetContent" class="panel hidden">
+        <div class="cabinet-section">
+            <div class="panel-title">🎮 Персонаж <span id="playerStatus"></span></div>
+            <div id="approvedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEditForm()">✎ Изменить</button></div>
+            <div id="mmorpgInventoryView" class="mmorpg-inventory hidden">
+                <div class="character-panel">
+                    <div class="character-silhouette" id="characterSilhouette">👤</div>
+                    <div class="character-name" id="characterNameDisplay"></div>
+                    <div class="character-profession">
+                        <div id="characterProfIcon" class="profession-icon-large">⚔</div>
+                        <span id="characterProfName">—</span>
+                    </div>
+                    <div class="character-stats-mini" id="characterStatsMini"></div>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-family: var(--font-display); font-weight: 700; text-transform: uppercase;">🛡 Экипировка</div>
+                    <div class="equipment-slots" id="equipmentSlotsGrid"></div>
+                    <button class="btn-edit" onclick="showEquipmentEditForm()" style="margin-top: 10px;">✎ Изменить экипировку</button>
+                </div>
+            </div>
+            <div id="approvedDataGrid" class="data-grid hidden"></div>
+            <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют или на проверке.</div>
+            <form id="playerDataForm" class="hidden" onsubmit="savePlayerData(event)">
+                <div class="data-grid">
+                    <div class="form-group"><label>БМ</label><input type="number" id="bm" required placeholder="150000"></div>
+                    <div class="form-group"><label>Уровень</label><input type="number" id="level" required placeholder="60"></div>
+                    <div class="form-group"><label>Атака</label><input type="number" id="attack" required placeholder="5000"></div>
+                    <div class="form-group"><label>Защита</label><input type="number" id="defense" required placeholder="3000"></div>
+                    <div class="form-group"><label>Меткость</label><input type="number" id="accuracy" required placeholder="2000"></div>
+                    <div class="form-group"><label>Уклонение</label><input type="number" id="evasion" required placeholder="1500"></div>
+                </div>
+                <div class="form-group"><label>Коллекции</label><input type="text" id="collections" required placeholder="Перечислите..."></div>
+                <div class="form-group"><label>Профессия</label><select id="profession" required><option value="">Выберите...</option><option value="Демолишер">Демолишер</option><option value="Арбитр">Арбитр</option><option value="Каратель">Каратель</option><option value="Фантом">Фантом</option><option value="Дредноут">Дредноут</option><option value="Сайфер">Сайфер</option><option value="Техник">Техник</option><option value="Инфорсер">Инфорсер</option></select></div>
+                <button type="submit" class="submit-btn" id="saveDataBtn">Отправить</button>
+            </form>
+            <div id="playerMessage" class="message"></div>
+        </div>
+        
+        <div class="cabinet-section">
+            <div class="panel-title">📧 Моя почта</div>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Укажите email для получения уведомлений о победах на аукционах.</p>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="userEmail" placeholder="example@mail.com">
+            </div>
+            <button class="submit-btn" onclick="saveUserEmail()" style="max-width: 200px;">💾 Сохранить email</button>
+            <div id="emailMessage" class="message"></div>
+        </div>
+        
+        <div class="cabinet-section">
+            <div class="panel-title">🎯 Навыки <span id="skillsStatus"></span></div>
+            <div id="skillsApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div><button class="btn-edit" onclick="showSkillsEditForm()">✎ Изменить</button></div>
+            <div id="approvedSkillsList" class="approved-skills"></div>
+            <div id="skillsEmpty" class="empty-state hidden">Навыки отсутствуют.</div>
+            <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)"><div id="skillsList" class="skills-list"></div><button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 10px;">Отправить</button></form>
+            <div id="skillsMessage" class="message"></div>
+        </div>
+        
+        <div class="cabinet-section" id="equipmentFormSection">
+            <div class="panel-title">🛡 Экипировка <span id="equipmentStatus"></span></div>
+            <div id="equipmentApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div></div>
+            <div id="equipmentEmpty" class="empty-state hidden">Экипировка отсутствует.</div>
+            <form id="equipmentForm" class="hidden" onsubmit="savePlayerItems(event)">
+                <button type="button" class="btn-back" onclick="backToInventory()" style="margin-bottom: 10px;">← Назад к инвентарю</button>
+                <div class="equipment-section-tabs" id="equipmentSectionTabs"></div>
+                <div id="equipmentItemsList"></div>
+                <button type="submit" class="submit-btn" id="saveEquipmentBtn" style="margin-top: 10px;">Отправить на проверку</button>
+            </form>
+            <div id="equipmentMessage" class="message"></div>
+        </div>
+        
+        <div class="cabinet-section">
+            <div class="panel-title">🎁 История лута (мои выигрыши)</div>
+            <div id="myLootHistory"></div>
+        </div>
+    </div>
+
+    <div id="dkpContent" class="panel hidden">
+        <div class="tabs">
+            <button class="tab-btn active" id="tabDkpMy" onclick="switchDkpTab('my', event)">💼 Мои DKP</button>
+            <button class="tab-btn" id="tabDkpSubmit" onclick="switchDkpTab('submit', event)">📸 Скриншоты</button>
+            <button class="tab-btn" id="tabDkpRating" onclick="switchDkpTab('rating', event)">🏆 Рейтинг</button>
+        </div>
+        <div id="dkpMyContent">
+            <div class="panel-title">💼 Мои DKP</div>
+            <div style="text-align: center; padding: 18px; background: var(--bg-soft); border-radius: var(--radius-md); margin-bottom: 14px; border: 1px solid var(--border);">
+                <div style="font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; font-weight: 700; font-family: var(--font-display);">Баланс</div>
+                <div id="myDkpBalance" class="dkp-highlight" style="font-size: 36px; font-family: var(--font-display);">0</div>
+                <div style="font-size: 12px; color: var(--dkp); margin-top: 3px; font-weight: 700; font-family: var(--font-display);">DKP</div>
+            </div>
+            <div id="frozenDkpBlock"></div>
+            <div class="panel-title" style="font-size: 12px;">📜 История операций <span style="font-size: 9px; color: var(--text-dim);">(клик для деталей)</span></div>
+            <div id="myDkpHistory"></div>
+        </div>
+        <div id="dkpSubmitContent" class="hidden">
+            <div class="panel-title">📸 Загрузка скриншотов</div>
+            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 10px;">До 5 скриншотов, макс. 2 МБ каждый. Ники автоматически сверяются с базой.</p>
+            <div class="form-group"><label>Мероприятие</label><select id="dkpEventSelect" required><option value="">— Выберите —</option></select></div>
+            <div class="screenshot-upload-area" id="screenshotUploadArea" onclick="document.getElementById('screenshotInput').click()">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">Нажмите или перетащите</div>
+                <div class="upload-hint">До 5 изображений, до 2 МБ</div>
+                <input type="file" id="screenshotInput" accept="image/*" multiple style="display: none;" onchange="handleScreenshotSelect(event)">
+            </div>
+            <div class="screenshots-preview" id="screenshotsPreview"></div>
+            <div id="ocrProgressBlock" class="ocr-progress hidden"><div class="progress-text" id="ocrProgressText">Распознавание...</div><div class="progress-bar"><div class="progress-bar-fill" id="ocrProgressBar"></div></div></div>
+            <div id="recognizedNicksBlock" class="hidden">
+                <div class="panel-title" style="font-size: 12px;">👥 Распознанные ники <span style="font-size: 9px; color: var(--text-dim);">(сверяются с базой)</span></div>
+                <div id="ocrMatchInfo" style="font-size: 10px; color: var(--text-dim); margin-bottom: 8px; padding: 6px 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border-left: 2px solid var(--accent);"></div>
+                <div class="recognized-nicks-list" id="recognizedNicksList"></div>
+                <div id="unrecognizedNicksBlock" style="margin-top: 12px; padding: 10px; background: var(--bg-soft); border: 1px dashed var(--border); border-radius: var(--radius-sm);">
+                    <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 6px; font-weight: 700; font-family: var(--font-display);">📋 Игроки, которых не удалось распознать (клик для добавления):</div>
+                    <div id="unrecognizedNicksList" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
+                </div>
+                <button type="button" class="btn-edit" onclick="addEmptyNickField()" style="margin-top: 10px; margin-bottom: 10px;">+ Добавить пустое поле</button>
+            </div>
+            <button type="button" class="submit-btn dkp-btn" id="submitDkpBtn" onclick="submitDkpSubmission()" style="margin-top: 10px;">📤 Отправить</button>
+            <div id="dkpSubmitMessage" class="message"></div>
+        </div>
+        <div id="dkpRatingContent" class="hidden"><div class="panel-title">🏆 Рейтинг DKP</div><div id="dkpRatingList" class="ranking-list"></div></div>
+    </div>
+
+    <div id="auctionContent" class="panel hidden">
+        <div class="tabs">
+            <button class="tab-btn active" id="tabAuctionActive" onclick="switchAuctionTab('active', event)">🔨 Активные</button>
+            <button class="tab-btn" id="tabAuctionCompleted" onclick="switchAuctionTab('completed', event)">✅ Завершённые</button>
+            <button class="tab-btn hidden" id="tabAuctionCreate" onclick="switchAuctionTab('create', event)">➕ Создать</button>
+        </div>
+        <div id="auctionActiveContent">
+            <div style="margin-bottom: 12px;"><div class="panel-title" style="font-size: 12px;">🏆 Последние победы</div><div id="auctionRecentWins"></div></div>
+            <div id="activeAuctionsList"></div>
+        </div>
+        <div id="auctionCompletedContent" class="hidden">
+            <div id="completedAuctionsList"></div>
+        </div>
+        <div id="auctionCreateContent" class="hidden">
+            <div class="panel-title">➕ Создание аукциона</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Раздел</label><select id="auctionItemSection" onchange="loadAuctionItems()"><option value="">— Выберите —</option><option value="Оружие">Оружие</option><option value="Шея">Шея</option><option value="Грудь">Грудь</option><option value="Штаны">Штаны</option><option value="Колени">Колени</option><option value="Венец">Венец</option><option value="Серьга">Серьга</option><option value="Ожерелье">Ожерелье</option><option value="Браслет">Браслет</option><option value="Кольцо">Кольцо</option><option value="Привод">Привод</option><option value="Звездочет">Звездочет</option><option value="Руки">Руки</option><option value="Биокостюм">Биокостюм</option><option value="Ровер">Ровер</option></select></div>
+                    <div class="form-group"><label>Предмет</label><select id="auctionItemSelect" onchange="fillAuctionItemDetails()"><option value="">— Сначала раздел —</option></select></div>
+                </div>
+                <input type="hidden" id="auctionItemName">
+                <div class="form-row">
+                    <div class="form-group"><label>Тир</label><input type="text" id="auctionItemTier" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                    <div class="form-group"><label>Цвет</label><input type="text" id="auctionItemColor" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                    <div class="form-group"><label>Заточка</label><input type="text" id="auctionItemEnhancement" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                </div>
+                <div class="form-row">
+                    <div class="checkbox-group"><input type="checkbox" id="auctionIsPrime" readonly disabled><label for="auctionIsPrime">Прайм</label></div>
+                    <div class="checkbox-group"><input type="checkbox" id="auctionIsBoss" readonly disabled><label for="auctionIsBoss">Босс</label></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Начальная цена (DKP)</label><input type="number" id="auctionStartPrice" required placeholder="100" min="1"></div>
+                    <div class="form-group"><label>Длительность (часы)</label><input type="number" id="auctionDuration" required placeholder="24" min="1" max="168"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Мин. посещаемость (%)</label><select id="auctionMinAttendance"><option value="
+                     <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>RF Online Next</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <style>
+        :root {
+            --bg-main: #e8eef5; --bg-panel: #ffffff; --bg-soft: #f0f4f8; --bg-hover: #dde5ef;
+            --text-main: #1e293b; --text-dim: #64748b; --border: #cbd5e1;
+            --accent: #2563eb; --accent-hover: #1d4ed8; --accent-soft: #dbeafe; --accent-glow: rgba(37, 99, 235, 0.4);
+            --success: #10b981; --success-soft: #d1fae5; --success-glow: rgba(16, 185, 129, 0.4);
+            --warning: #f59e0b; --warning-soft: #fef3c7; --warning-glow: rgba(245, 158, 11, 0.4);
+            --danger: #ef4444; --danger-soft: #fee2e2; --danger-glow: rgba(239, 68, 68, 0.4);
+            --gold: #d97706; --silver: #64748b; --bronze: #92400e; --dkp: #f59e0b;
+            --shadow-sm: 0 1px 3px rgba(37, 99, 235, 0.08);
+            --shadow-md: 0 4px 12px rgba(37, 99, 235, 0.12);
+            --shadow-lg: 0 8px 24px rgba(37, 99, 235, 0.18);
+            --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+            --font-main: 'Segoe UI', 'Times New Roman', serif;
+            --font-display: 'Orbitron', sans-serif;
+            --gradient-btn: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            --gradient-btn-hover: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            --gradient-dkp: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --gradient-hero: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+        }
+        body[data-theme="dark"] {
+            --bg-main: #0a0a0a; --bg-panel: #1a1a1a; --bg-soft: #1f1f1f; --bg-hover: #2a2a2a;
+            --text-main: #f5f5f5; --text-dim: #a3a3a3; --border: #404040;
+            --accent: #fbbf24; --accent-hover: #f59e0b; --accent-soft: #422006; --accent-glow: rgba(251, 191, 36, 0.5);
+            --success: #22c55e; --success-soft: #052e16; --success-glow: rgba(34, 197, 94, 0.5);
+            --warning: #f59e0b; --warning-soft: #431407; --warning-glow: rgba(245, 158, 11, 0.5);
+            --danger: #ef4444; --danger-soft: #450a0a; --danger-glow: rgba(239, 68, 68, 0.5);
+            --gold: #fbbf24; --silver: #a3a3a3; --bronze: #d97706; --dkp: #fbbf24;
+            --shadow-sm: 0 1px 3px rgba(251, 191, 36, 0.15);
+            --shadow-md: 0 4px 12px rgba(251, 191, 36, 0.25);
+            --shadow-lg: 0 8px 24px rgba(251, 191, 36, 0.35);
+            --gradient-btn: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --gradient-btn-hover: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+            --gradient-dkp: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            --gradient-hero: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 0; font-family: var(--font-main); background-color: var(--bg-main); background-image: var(--site-bg-image, none); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text-main); min-height: 100vh; font-size: 14px; line-height: 1.5; transition: background-color 0.3s, color 0.3s; }
+        body.has-bg-image::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); z-index: -1; pointer-events: none; }
+        body:not(.has-bg-image)::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 30%, var(--accent-glow) 0%, transparent 40%), radial-gradient(circle at 80% 70%, var(--warning-glow) 0%, transparent 40%); opacity: 0.08; z-index: -1; pointer-events: none; }
+        body[data-theme="dark"]:not(.has-bg-image)::before { opacity: 0.15; }
+        .screen { display: none; width: 100%; max-width: 1300px; padding: 15px; margin: 0 auto; position: relative; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .public-title, .panel-title, .top-panel-title, .player-nick, .data-value, .ranking-nick, .event-name, .auction-title, .dkp-highlight, .auth-title, .top-value { text-shadow: 0 0 3px var(--accent-glow); }
+        body.has-bg-image .public-title, body.has-bg-image .panel-title, body.has-bg-image .auth-title { text-shadow: 0 0 10px var(--accent-glow), 2px 2px 4px rgba(0,0,0,0.8); }
+        .public-hero { position: relative; height: 280px; margin-bottom: 20px; border-radius: var(--radius-lg); overflow: hidden; background: var(--gradient-hero); box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
+        .public-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px); }
+        .public-hero::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 40%); opacity: 0.3; animation: pulse 4s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.5; } }
+        .public-hero-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .public-title { font-family: var(--font-display); font-size: 44px; font-weight: 900; color: #ffffff; letter-spacing: 6px; margin: 0 0 8px 0; text-transform: uppercase; }
+        body[data-theme="dark"] .public-title { color: var(--accent); text-shadow: 0 0 30px var(--accent-glow); }
+        .public-subtitle { color: rgba(255,255,255,0.9); font-family: var(--font-display); font-size: 13px; letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase; font-weight: 600; }
+        .login-link { background: var(--gradient-btn); border: 1px solid var(--accent); color: #ffffff; padding: 10px 28px; cursor: pointer; font-family: var(--font-display); font-size: 12px; letter-spacing: 2px; transition: 0.3s; border-radius: var(--radius-sm); box-shadow: 0 0 20px var(--accent-glow); font-weight: 700; text-transform: uppercase; }
+        .login-link:hover { background: var(--gradient-btn-hover); transform: translateY(-2px); }
+        body[data-theme="dark"] .login-link { color: #000; }
+        .top-containers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        @media (max-width: 900px) { .top-containers { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .public-title { font-size: 28px; } .public-hero { height: 220px; } }
+        .top-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; box-shadow: var(--shadow-sm); transition: 0.3s; position: relative; overflow: hidden; }
+        .top-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.6; }
+        .top-panel:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--accent); }
+        .top-panel.dkp-panel::before { background: linear-gradient(90deg, transparent, var(--dkp), transparent); }
+        .top-panel-title { font-family: var(--font-display); color: var(--accent); font-size: 12px; letter-spacing: 1.5px; margin-bottom: 10px; text-align: center; font-weight: 700; text-transform: uppercase; }
+        .top-panel.dkp-panel .top-panel-title { color: var(--dkp); }
+        .top-list { display: flex; flex-direction: column; gap: 4px; }
+        .top-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.2s; font-size: 12px; }
+        .top-item:hover { background: var(--bg-hover); border-color: var(--accent); }
+        .top-item.rank-1 { border-left: 3px solid var(--gold); background: var(--warning-soft); }
+        .top-item.rank-2 { border-left: 3px solid var(--silver); }
+        .top-item.rank-3 { border-left: 3px solid var(--bronze); }
+        .top-rank { font-family: var(--font-display); font-size: 14px; font-weight: 900; min-width: 30px; text-align: center; color: var(--text-dim); }
+        .top-rank.rank-1 { color: var(--gold); } .top-rank.rank-2 { color: var(--silver); } .top-rank.rank-3 { color: var(--bronze); }
+        .top-nick { flex: 1; font-family: var(--font-display); color: var(--text-main); font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .top-item.rank-1 .top-nick { color: var(--gold); }
+        .top-value { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--success); }
+        .top-value.dkp { color: var(--dkp); }
+        .tabs { display: flex; margin-bottom: 14px; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: 2px; }
+        .tab-btn { background: transparent; border: none; color: var(--text-dim); font-family: var(--font-display); font-size: 11px; padding: 8px 14px; cursor: pointer; transition: 0.3s; letter-spacing: 1px; font-weight: 600; border-radius: var(--radius-sm) var(--radius-sm) 0 0; position: relative; text-transform: uppercase; }
+        .tab-btn:hover { color: var(--accent); background: var(--accent-soft); }
+        .tab-btn.active { color: var(--accent); background: var(--bg-panel); border-bottom: 2px solid var(--bg-panel); margin-bottom: -2px; }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--gradient-btn); }
+        .form-group { margin-bottom: 10px; position: relative; }
+        label { display: block; font-size: 11px; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px; font-weight: 700; font-family: var(--font-display); }
+        input, select, textarea { width: 100%; background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-main); padding: 8px 12px; font-family: var(--font-main); font-size: 13px; transition: 0.2s; outline: none; border-radius: var(--radius-sm); }
+        textarea { resize: vertical; min-height: 60px; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+        select { cursor: pointer; }
+        select option { background: var(--bg-panel); color: var(--text-main); }
+        .submit-btn { width: 100%; padding: 9px 16px; background: var(--gradient-btn); border: 1px solid var(--accent); color: #ffffff; font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: 0.3s; border-radius: var(--radius-sm); box-shadow: 0 2px 8px var(--accent-glow); text-transform: uppercase; }
+        .submit-btn:hover { background: var(--gradient-btn-hover); transform: translateY(-1px); }
+        body[data-theme="dark"] .submit-btn { color: #000; }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .submit-btn.dkp-btn { background: var(--gradient-dkp); border-color: var(--dkp); }
+        .message { margin-top: 8px; padding: 8px 12px; text-align: center; font-size: 12px; border-radius: var(--radius-sm); display: none; white-space: pre-wrap; }
+        .message.success { display: block; color: var(--success); background: var(--success-soft); border: 1px solid var(--success); }
+        .message.error { display: block; color: var(--danger); background: var(--danger-soft); border: 1px solid var(--danger); }
+        .hidden { display: none !important; }
+        .loader { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--accent); border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-right: 6px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding: 10px 16px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); flex-wrap: wrap; gap: 8px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+        .header-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--dkp), var(--accent)); }
+        .user-info { color: var(--accent); font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+        .user-info .role-badge { display: inline-block; padding: 3px 10px; margin-left: 4px; font-size: 10px; border-radius: var(--radius-sm); font-weight: 700; }
+        .user-info .role-badge.role-admin { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); }
+        .user-info .role-badge.role-mod { background: var(--warning-soft); border: 1px solid var(--warning); color: var(--warning); }
+        .user-info .role-badge.role-player { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); }
+        .user-info .dkp-badge { display: inline-block; padding: 3px 10px; margin-left: 4px; font-size: 11px; background: var(--warning-soft); border: 1px solid var(--dkp); color: var(--dkp); border-radius: var(--radius-sm); font-weight: 700; }
+        .logout-btn, .theme-toggle, .notification-bell { background: transparent; border: 1px solid var(--border); color: var(--text-main); padding: 5px 12px; cursor: pointer; font-family: var(--font-display); font-size: 11px; transition: 0.3s; border-radius: var(--radius-sm); margin-left: 4px; font-weight: 600; }
+        .logout-btn { border-color: var(--danger); color: var(--danger); }
+        .logout-btn:hover { background: var(--danger-soft); }
+        .theme-toggle:hover, .notification-bell:hover { background: var(--bg-soft); border-color: var(--accent); }
+        .notification-bell { position: relative; padding: 5px 10px; font-size: 16px; }
+        .notification-badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; font-size: 9px; font-weight: 700; font-family: var(--font-display); min-width: 16px; height: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 4px; animation: badgePulse 2s ease-in-out infinite; }
+        @keyframes badgePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .notification-bell.has-new { animation: bellShake 0.5s ease-in-out; }
+        @keyframes bellShake { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(15deg); } 75% { transform: rotate(-15deg); } }
+        .panel { background: var(--bg-panel); border: 1px solid var(--border); padding: 18px; margin-bottom: 14px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); position: relative; }
+        .panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5; }
+        .panel-title { font-family: var(--font-display); color: var(--accent); font-size: 14px; margin-bottom: 12px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 6px; text-transform: uppercase; }
+        .status-badge { display: inline-block; padding: 3px 10px; font-size: 10px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .status-pending { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .status-approved { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .status-rejected { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 12px; }
+        .data-item { background: var(--bg-soft); padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); transition: 0.3s; }
+        .data-item:hover { border-color: var(--accent); }
+        .data-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-weight: 700; font-family: var(--font-display); }
+        .data-value { font-size: 16px; color: var(--accent); font-weight: 700; font-family: var(--font-display); }
+        .player-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; margin-bottom: 8px; border-radius: var(--radius-sm); transition: 0.3s; }
+        .player-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent); }
+        .player-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+        .player-nick { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .action-buttons { display: flex; gap: 5px; flex-wrap: wrap; }
+        .btn-approve, .btn-reject, .btn-edit, .btn-compare, .btn-back, .btn-remove, .btn-role { padding: 5px 12px; border: none; cursor: pointer; font-family: var(--font-display); font-size: 11px; transition: 0.3s; border-radius: var(--radius-sm); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+        .btn-approve { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .btn-approve:hover { background: var(--success); color: #fff; }
+        .btn-reject { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-reject:hover { background: var(--danger); color: #fff; }
+        .btn-edit { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-top: 6px; }
+        .btn-edit:hover { background: var(--accent); color: #fff; }
+        body[data-theme="dark"] .btn-edit:hover { color: #000; }
+        .btn-compare { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .btn-compare:hover { background: var(--warning); color: #fff; }
+        body[data-theme="dark"] .btn-compare:hover { color: #000; }
+        .btn-back { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-bottom: 10px; }
+        .btn-back:hover { background: var(--accent); color: #fff; }
+        .btn-remove { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); font-size: 10px; padding: 3px 8px; }
+        .btn-remove:hover { background: var(--danger); color: #fff; }
+        .btn-role { padding: 3px 8px; font-size: 10px; }
+        .btn-role-admin { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-role-mod { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .btn-role-player { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .user-role-tag { display: inline-block; padding: 3px 10px; font-size: 10px; border-radius: var(--radius-sm); margin-left: 6px; font-weight: 700; font-family: var(--font-display); }
+        .user-role-tag.admin { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .user-role-tag.mod { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .user-role-tag.player { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .empty-state { text-align: center; color: var(--text-dim); padding: 25px 15px; font-size: 12px; font-style: italic; }
+        .ranking-list { display: flex; flex-direction: column; gap: 6px; }
+        .ranking-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px 12px; display: flex; align-items: center; gap: 10px; transition: 0.3s; flex-wrap: wrap; border-radius: var(--radius-sm); }
+        .ranking-item:hover { border-color: var(--accent); }
+        .ranking-position { font-family: var(--font-display); font-size: 16px; font-weight: 900; min-width: 35px; text-align: center; color: var(--text-dim); }
+        .ranking-position.top-1 { color: var(--gold); } .ranking-position.top-2 { color: var(--silver); } .ranking-position.top-3 { color: var(--bronze); }
+        .ranking-info { flex: 1; min-width: 160px; }
+        .ranking-nick { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .ranking-stats { font-size: 11px; color: var(--text-dim); }
+        .ranking-bm { font-size: 13px; color: var(--success); font-weight: 700; font-family: var(--font-display); }
+        .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 600px) { .compare-container { grid-template-columns: 1fr; } }
+        .compare-column { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); }
+        .compare-title { font-family: var(--font-display); color: var(--accent); font-size: 13px; margin-bottom: 10px; text-align: center; font-weight: 700; }
+        .compare-stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+        .compare-stat:last-child { border-bottom: none; }
+        .compare-label { color: var(--text-dim); }
+        .compare-value { font-size: 13px; font-weight: 700; font-family: var(--font-display); }
+        .compare-value.better { color: var(--success); } .compare-value.worse { color: var(--danger); } .compare-value.equal { color: var(--warning); }
+        .skills-list { display: flex; flex-direction: column; gap: 5px; }
+        .skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; display: flex; align-items: center; gap: 10px; transition: 0.3s; border-radius: var(--radius-sm); cursor: pointer; }
+        .skill-item:hover { border-color: var(--accent); }
+        .skill-item.checked { border-color: var(--success); background: var(--success-soft); }
+        .skill-checkbox { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
+        .skill-name { flex: 1; font-size: 13px; font-weight: 600; }
+        .approved-skills { display: flex; flex-wrap: wrap; gap: 5px; }
+        .approved-skill-badge { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 4px 10px; font-size: 11px; border-radius: var(--radius-sm); transition: 0.3s; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .admin-skill-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; border-radius: var(--radius-sm); transition: 0.3s; }
+        .admin-skill-item:hover { border-color: var(--accent); }
+        .admin-skill-name { font-size: 13px; font-weight: 600; }
+        .admin-skill-tag { font-size: 9px; padding: 2px 6px; background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); margin-left: 6px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .loading-overlay { text-align: center; padding: 25px; color: var(--accent); font-family: var(--font-display); letter-spacing: 2px; font-size: 12px; }
+        .cabinet-section { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
+        .cabinet-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .auth-container { max-width: 380px; margin: 40px auto; background: var(--bg-panel); border: 1px solid var(--border); padding: 25px; position: relative; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+        .auth-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient-btn); }
+        .auth-title { font-family: var(--font-display); text-align: center; color: var(--accent); letter-spacing: 3px; margin-bottom: 4px; font-size: 22px; font-weight: 900; text-transform: uppercase; }
+        .auth-subtitle { text-align: center; color: var(--text-dim); font-size: 11px; margin-bottom: 18px; font-style: italic; }
+        .footer { text-align: center; padding: 20px; color: var(--text-dim); font-size: 10px; letter-spacing: 2px; margin-top: 25px; font-style: italic; font-family: var(--font-display); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: var(--gradient-btn); border-radius: 4px; }
+        .equipment-section-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        .eq-tab { background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-display); font-size: 10px; padding: 5px 10px; cursor: pointer; border-radius: var(--radius-sm); transition: 0.3s; font-weight: 600; text-transform: uppercase; }
+        .eq-tab:hover { color: var(--accent); border-color: var(--accent); }
+        .eq-tab.active { background: var(--gradient-btn); color: #ffffff; border-color: var(--accent); }
+        body[data-theme="dark"] .eq-tab.active { color: #000; }
+        .item-card { background: var(--bg-panel); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; transition: 0.3s; cursor: pointer; position: relative; }
+        .item-card:hover { border-color: var(--accent); }
+        .item-card.selected { border-color: var(--success); background: var(--success-soft); }
+        .item-card.selected::before { content: '✓'; position: absolute; top: 8px; right: 10px; color: var(--success); font-size: 16px; font-weight: bold; }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+        .item-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; }
+        .item-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+        .item-badge { font-size: 9px; padding: 2px 6px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .item-badge.prime { background: var(--warning-soft); color: var(--gold); border: 1px solid var(--gold); }
+        .item-badge.boss { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .item-badge.enhance { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .item-badge.tier { background: #ede9fe; color: var(--accent); border: 1px solid var(--accent); }
+        .item-badge.color-white { background: var(--bg-soft); color: var(--text-dim); border: 1px solid var(--border); }
+        .item-badge.color-green { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .item-badge.color-blue { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .item-badge.color-purple { background: #ede9fe; color: #6b4aa8; border: 1px solid #6b4aa8; }
+        .item-badge.color-yellow { background: var(--warning-soft); color: var(--gold); border: 1px solid var(--gold); }
+        .item-badge.color-red { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .approved-equipment { display: flex; flex-direction: column; gap: 6px; }
+        .approved-eq-item { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; border-radius: var(--radius-sm); display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .approved-eq-section { font-family: var(--font-display); font-size: 10px; color: var(--warning); text-transform: uppercase; min-width: 75px; font-weight: 700; }
+        .approved-eq-name { flex: 1; font-size: 12px; color: var(--text-main); font-weight: 600; }
+        .add-item-form { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 8px; }
+        .checkbox-group { display: flex; align-items: center; gap: 6px; padding: 5px 0; }
+        .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+        .checkbox-group label { margin: 0; font-size: 12px; cursor: pointer; font-weight: 600; }
+        .admin-item-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 8px 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: 0.3s; }
+        .admin-item-card:hover { border-color: var(--accent); }
+        .admin-item-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 160px; }
+        .admin-item-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; }
+        .admin-item-meta { display: flex; gap: 4px; flex-wrap: wrap; }
+        .dkp-highlight { color: var(--dkp); font-weight: 700; font-family: var(--font-display); }
+        .event-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; transition: 0.3s; }
+        .event-card:hover { border-color: var(--accent); }
+        .event-info { flex: 1; min-width: 160px; }
+        .event-name { font-family: var(--font-display); font-size: 13px; color: var(--text-main); font-weight: 700; margin-bottom: 2px; }
+        .event-meta { font-size: 10px; color: var(--text-dim); }
+        .event-dkp { font-family: var(--font-display); font-size: 13px; font-weight: 900; color: var(--dkp); padding: 4px 12px; border: 1px solid var(--dkp); border-radius: var(--radius-sm); background: var(--warning-soft); }
+        .screenshot-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; background: var(--bg-soft); margin-bottom: 12px; }
+        .screenshot-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); }
+        .upload-icon { font-size: 32px; margin-bottom: 6px; }
+        .upload-text { color: var(--text-main); font-size: 12px; font-weight: 600; }
+        .upload-hint { color: var(--text-dim); font-size: 10px; margin-top: 4px; }
+        .screenshots-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 12px; }
+        .screenshot-thumb { position: relative; aspect-ratio: 16/10; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-soft); }
+        .screenshot-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .screenshot-thumb .remove-btn { position: absolute; top: 3px; right: 3px; background: var(--danger); color: white; border: none; width: 18px; height: 18px; border-radius: 50%; cursor: pointer; font-size: 10px; }
+        .screenshot-thumb .upload-progress { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: var(--accent); font-size: 9px; padding: 2px; text-align: center; font-weight: 600; }
+        .recognized-nicks-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+        .nick-item { display: flex; align-items: center; gap: 8px; background: var(--bg-soft); border: 1px solid var(--border); padding: 6px 10px; border-radius: var(--radius-sm); flex-wrap: wrap; }
+        .nick-item input { flex: 1; min-width: 120px; background: transparent; border: none; color: var(--text-main); font-size: 13px; padding: 3px; font-weight: 600; }
+        .nick-item .remove-nick-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 20px; height: 20px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; }
+        .ocr-progress { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; }
+        .progress-bar { width: 100%; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+        .progress-bar-fill { height: 100%; background: var(--gradient-btn); transition: width 0.3s; width: 0%; }
+        .progress-text { font-family: var(--font-display); font-size: 11px; color: var(--accent); font-weight: 600; }
+        .dkp-submission-card { background: var(--bg-soft); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 8px; transition: 0.3s; }
+        .dkp-submission-card:hover { border-color: var(--accent); }
+        .submission-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+        .submission-event { font-family: var(--font-display); font-size: 13px; color: var(--dkp); font-weight: 700; }
+        .submission-meta { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        .submission-screenshots { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+        .submission-screenshots img { width: 150px; height: auto; max-height: 110px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; }
+        .submission-nicks { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+        .submission-nick-tag { background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .dkp-history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--bg-soft); border-left: 3px solid var(--border); margin-bottom: 5px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 12px; transition: 0.3s; cursor: pointer; position: relative; }
+        .dkp-history-item:hover { background: var(--bg-hover); }
+        .dkp-history-item.earn { border-left-color: var(--success); }
+        .dkp-history-item.manual_add { border-left-color: var(--dkp); }
+        .dkp-history-item.manual_sub { border-left-color: var(--warning); }
+        .dkp-history-item.penalty { border-left-color: var(--danger); background: var(--danger-soft); }
+        .dkp-history-item.auction_win { border-left-color: var(--dkp); }
+        .history-info { flex: 1; }
+        .history-event { color: var(--text-main); font-size: 12px; font-weight: 600; }
+        .history-date { color: var(--text-dim); font-size: 10px; margin-top: 2px; }
+        .history-amount { font-family: var(--font-display); font-weight: 700; font-size: 13px; }
+        .history-amount.positive { color: var(--success); }
+        .history-amount.negative { color: var(--danger); }
+        .history-actions { display: flex; gap: 4px; margin-left: 8px; }
+        .history-action-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); width: 22px; height: 22px; border-radius: var(--radius-sm); cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .history-action-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+        .history-action-btn.danger:hover { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.75); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 15px; backdrop-filter: blur(5px); }
+        .modal-content { max-width: 90%; max-height: 90%; background: var(--bg-panel); border: 1px solid var(--accent); border-radius: var(--radius-md); padding: 20px; position: relative; box-shadow: var(--shadow-lg); overflow-y: auto; }
+        .modal-close { position: absolute; top: 10px; right: 10px; background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; }
+        .modal-close:hover { background: var(--danger); color: #fff; }
+        .modal-content img { max-width: 100%; max-height: 80vh; border-radius: var(--radius-sm); }
+        .calendar-day { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; }
+        .calendar-date { font-family: var(--font-display); color: var(--accent); font-size: 12px; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); font-weight: 700; }
+        .calendar-event { background: var(--bg-panel); border-left: 3px solid var(--dkp); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px; }
+        .calendar-event-title { font-size: 12px; color: var(--dkp); font-weight: 700; margin-bottom: 6px; font-family: var(--font-display); }
+        .calendar-players { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+        .calendar-nick-attended { background: var(--success-soft); border: 1px solid var(--success); color: var(--success); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .calendar-nick-missed { background: var(--danger-soft); border: 1px solid var(--danger); color: var(--danger); padding: 3px 8px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .calendar-label { font-size: 10px; margin-bottom: 4px; display: block; font-weight: 700; font-family: var(--font-display); }
+        .calendar-label.attended { color: var(--success); }
+        .calendar-label.missed { color: var(--danger); }
+        .auction-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px; transition: 0.3s; position: relative; overflow: hidden; }
+        .auction-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-dkp); }
+        .auction-card:hover { border-color: var(--dkp); }
+        .auction-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        .auction-title { font-family: var(--font-display); font-size: 14px; color: var(--dkp); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .auction-item-icon { width: 48px; height: 48px; border: 2px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-panel); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; flex-shrink: 0; }
+        .auction-item-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .timer-display { font-family: var(--font-display); font-size: 18px; font-weight: 900; padding: 6px 14px; background: var(--danger-soft); border: 2px solid var(--danger); border-radius: var(--radius-sm); color: var(--danger); animation: timerPulse 2s ease-in-out infinite; }
+        @keyframes timerPulse { 0%, 100% { box-shadow: 0 0 10px var(--danger-glow); } 50% { box-shadow: 0 0 20px var(--danger-glow); } }
+        .auction-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; padding: 10px; background: var(--bg-panel); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        .auction-info-item { display: flex; flex-direction: column; }
+        .auction-info-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; font-family: var(--font-display); }
+        .auction-info-value { font-size: 15px; color: var(--text-main); font-family: var(--font-display); font-weight: 700; }
+        .icon-preview { width: 75px; height: 38px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
+        .icon-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-preview-small { width: 44px; height: 44px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-small img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-preview-cabinet { width: 36px; height: 36px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-cabinet img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-preview-activity { width: 58px; height: 29px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .icon-preview-activity img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-placeholder { font-size: 9px; color: var(--text-dim); text-align: center; }
+        .icon-upload-area { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 15px; text-align: center; cursor: pointer; transition: 0.3s; background: var(--bg-soft); margin: 12px 0; }
+        .icon-upload-area:hover { border-color: var(--accent); background: var(--accent-soft); }
+        .saved-indicator { display: inline-block; padding: 3px 10px; background: var(--success-soft); color: var(--success); border: 1px solid var(--success); border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .event-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+        .event-stat-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; transition: 0.3s; position: relative; overflow: hidden; }
+        .event-stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-dkp); }
+        .event-stat-card:hover { border-color: var(--dkp); }
+        .event-stat-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .event-stat-name { font-family: var(--font-display); font-size: 12px; color: var(--dkp); font-weight: 700; flex: 1; }
+        .event-stat-total { font-size: 10px; color: var(--text-dim); }
+        .progress-row { margin-bottom: 5px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 2px; font-family: var(--font-display); font-weight: 600; }
+        .progress-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+        .progress-fill.month { background: linear-gradient(90deg, var(--accent), #60a5fa); }
+        .progress-fill.week { background: linear-gradient(90deg, var(--success), #34d399); }
+        .progress-fill.total { background: var(--gradient-dkp); }
+        .event-stat-footer { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; font-family: var(--font-display); font-weight: 700; }
+        .event-stat-footer .attended { color: var(--success); }
+        .event-stat-footer .missed { color: var(--danger); }
+        .absentee-rate { font-family: var(--font-display); font-weight: 900; font-size: 16px; }
+        .absentee-rate.critical { color: var(--danger); }
+        .absentee-rate.warning { color: var(--warning); }
+        .absentee-rate.good { color: var(--success); }
+        .settings-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; position: relative; overflow: hidden; }
+        .settings-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-btn); }
+        .settings-card-title { font-family: var(--font-display); color: var(--accent); font-size: 13px; font-weight: 700; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
+        .settings-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+        .settings-label { font-size: 11px; color: var(--text-dim); min-width: 150px; font-weight: 700; font-family: var(--font-display); }
+        .settings-value { flex: 1; min-width: 130px; }
+        .toggle-switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .3s; border-radius: 22px; border: 1px solid var(--border); }
+        .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: var(--text-dim); transition: .3s; border-radius: 50%; }
+        input:checked + .toggle-slider { background: var(--gradient-btn); border-color: var(--accent); }
+        input:checked + .toggle-slider:before { transform: translateX(22px); background-color: #fff; }
+        body[data-theme="dark"] input:checked + .toggle-slider:before { background-color: #000; }
+        .penalty-result { background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 6px; font-size: 11px; }
+        .penalty-result .nick { color: var(--danger); font-weight: 700; font-family: var(--font-display); }
+        .penalty-result .amount { color: var(--danger); font-weight: 700; font-family: var(--font-display); }
+        .nick-with-color { display: inline-block; padding: 2px 8px; border-radius: var(--radius-sm); border: 2px solid var(--border); font-weight: 700; font-family: var(--font-display); background: var(--bg-panel); }
+        .auction-number-badge { display: inline-block; padding: 2px 8px; background: var(--accent-soft); border: 1px solid var(--accent); color: var(--accent); border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); margin-right: 6px; }
+        .given-badge { display: inline-block; padding: 3px 10px; border-radius: var(--radius-sm); font-size: 10px; font-weight: 700; font-family: var(--font-display); }
+        .given-badge.given { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .given-badge.not-given { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .loot-item { background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--dkp); padding: 8px 10px; border-radius: var(--radius-sm); margin-bottom: 5px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; transition: 0.3s; }
+        .loot-item:hover { border-color: var(--dkp); }
+        .loot-item.given { border-left-color: var(--success); }
+        .loot-item.not-given { border-left-color: var(--warning); }
+        .loot-number { font-family: var(--font-display); font-size: 11px; color: var(--accent); font-weight: 700; min-width: 40px; }
+        .loot-info { flex: 1; min-width: 150px; }
+        .loot-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); font-weight: 700; }
+        .loot-date { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        .loot-amount { font-family: var(--font-display); font-size: 12px; color: var(--dkp); font-weight: 700; }
+        .queue-item-card { background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; transition: 0.3s; }
+        .queue-item-card.given { border-left-color: var(--success); }
+        .queue-item-card.pending { border-left-color: var(--warning); }
+        .queue-item-info { flex: 1; min-width: 200px; }
+        .queue-item-name { font-family: var(--font-display); font-size: 13px; color: var(--text-main); font-weight: 700; }
+        .queue-item-meta { font-size: 10px; color: var(--text-dim); margin-top: 3px; }
+        .queue-item-recipient { font-family: var(--font-display); font-size: 12px; color: var(--accent); font-weight: 700; }
+        .unified-loot-stat { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 6px; }
+        .unified-loot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .unified-loot-name { font-family: var(--font-display); font-size: 13px; color: var(--text-main); font-weight: 700; }
+        .unified-loot-count { font-family: var(--font-display); font-size: 14px; color: var(--dkp); font-weight: 900; }
+        .source-badge { display: inline-block; padding: 1px 6px; border-radius: var(--radius-sm); font-size: 9px; font-weight: 700; margin-right: 3px; }
+        .source-badge.auction { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .source-badge.queue { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+        .history-winner-card { background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--dkp); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; transition: 0.3s; }
+        .history-winner-card:hover { border-color: var(--dkp); }
+        .winner-icon { width: 40px; height: 40px; background: var(--bg-panel); border: 2px solid var(--dkp); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 20px; overflow: hidden; }
+        .winner-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .winner-info { flex: 1; min-width: 150px; }
+        .winner-nick { font-family: var(--font-display); font-size: 13px; color: var(--accent); font-weight: 700; }
+        .winner-item { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+        .winner-amount { font-family: var(--font-display); font-size: 13px; color: var(--dkp); font-weight: 700; }
+        .bid-history-full { max-height: 300px; overflow-y: auto; margin-bottom: 10px; }
+        .bid-history-item { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; padding: 6px 8px; background: var(--bg-soft); border-radius: var(--radius-sm); margin-bottom: 3px; font-size: 11px; border-left: 3px solid var(--border); }
+        .bid-history-item.active { border-left-color: var(--success); background: var(--success-soft); }
+        .bid-history-item.outbid { border-left-color: var(--warning); opacity: 0.8; }
+        .bid-history-item.won { border-left-color: var(--dkp); background: var(--warning-soft); }
+        .bid-bidder-info { display: flex; flex-direction: column; gap: 2px; }
+        .bid-bidder-name { font-family: var(--font-display); font-weight: 700; color: var(--accent); font-size: 11px; }
+        .bid-bidder-dkp { font-size: 9px; color: var(--text-dim); }
+        .bid-bidder-dkp b { color: var(--dkp); font-family: var(--font-display); }
+        .bid-amount { font-family: var(--font-display); font-weight: 900; color: var(--dkp); font-size: 13px; text-align: right; }
+        .bid-status { font-size: 9px; padding: 2px 6px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .bid-status.active { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .bid-status.outbid { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .bid-status.won { background: var(--warning-soft); color: var(--dkp); border: 1px solid var(--dkp); }
+        .unrecognized-nick-btn { background: var(--bg-panel); border: 1px solid var(--border); color: var(--text-main); padding: 3px 8px; font-size: 11px; font-family: var(--font-display); font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; transition: 0.2s; }
+        .unrecognized-nick-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+        .unrecognized-nick-btn.added { background: var(--success-soft); border-color: var(--success); color: var(--success); cursor: default; opacity: 0.6; }
+        .match-badge { display: inline-block; padding: 1px 6px; border-radius: var(--radius-sm); font-size: 9px; font-weight: 700; font-family: var(--font-display); margin-left: 6px; }
+        .match-badge.high { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .match-badge.medium { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning); }
+        .match-badge.low { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .original-nick { color: var(--text-dim); text-decoration: line-through; font-size: 10px; margin-right: 4px; }
+        .notification-item { background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 6px; transition: 0.3s; cursor: pointer; display: flex; gap: 8px; }
+        .notification-item:hover { border-color: var(--accent); }
+        .notification-item.unread { background: var(--accent-soft); border-left-color: var(--warning); }
+        .notification-item.type-bid_outbid { border-left-color: var(--danger); }
+        .notification-item.type-auction_ending { border-left-color: var(--warning); }
+        .notification-item.type-auction_extended { border-left-color: var(--accent); }
+        .notification-item.type-auction_random_close { border-left-color: var(--gold); }
+        .notification-item.type-new_auction { border-left-color: var(--success); }
+        .notification-item.type-auction_won { border-left-color: var(--dkp); }
+        .notification-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .notification-type { font-size: 10px; font-weight: 700; font-family: var(--font-display); text-transform: uppercase; }
+        .notification-type.bid_outbid { color: var(--danger); }
+        .notification-type.auction_ending { color: var(--warning); }
+        .notification-type.auction_extended { color: var(--accent); }
+        .notification-type.auction_random_close { color: var(--gold); }
+        .notification-type.new_auction { color: var(--success); }
+        .notification-type.auction_won { color: var(--dkp); }
+        .notification-date { font-size: 9px; color: var(--text-dim); }
+        .notification-message { font-size: 12px; color: var(--text-main); line-height: 1.4; }
+        .notif-action-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); width: 24px; height: 24px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: 0.2s; padding: 0; }
+        .notif-action-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+        .notif-action-btn.read { background: var(--success-soft); border-color: var(--success); color: var(--success); cursor: default; opacity: 0.7; }
+        .notif-action-btn.delete:hover { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+        .toast-notification { position: fixed; top: 20px; right: 20px; background: var(--bg-panel); border: 2px solid var(--accent); border-radius: var(--radius-md); padding: 12px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 20px var(--accent-glow); z-index: 10001; max-width: 400px; animation: toastSlideIn 0.4s ease; }
+        .toast-notification.hidden { display: none; }
+        .toast-notification.type-bid_outbid { border-color: var(--danger); }
+        .toast-notification.type-auction_ending { border-color: var(--warning); }
+        .toast-notification.type-auction_extended { border-color: var(--accent); }
+        .toast-notification.type-auction_random_close { border-color: var(--gold); }
+        .toast-notification.type-new_auction { border-color: var(--success); }
+        .toast-notification.type-auction_won { border-color: var(--dkp); }
+        @keyframes toastSlideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast-icon { font-size: 24px; }
+        .toast-content { flex: 1; }
+        .toast-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
+        .toast-message { font-size: 12px; color: var(--text-main); line-height: 1.3; }
+        .toast-close { background: transparent; border: none; color: var(--text-dim); cursor: pointer; font-size: 16px; padding: 0 4px; }
+        .profession-icon { width: 20px; height: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-panel); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; overflow: hidden; flex-shrink: 0; }
+        .profession-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .profession-icon-large { width: 48px; height: 48px; border-radius: var(--radius-md); border: 2px solid var(--accent); background: var(--bg-panel); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 10px var(--accent-glow); overflow: hidden; }
+        .profession-icon-large img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md); }
+        .mmorpg-inventory { display: grid; grid-template-columns: 200px 1fr; gap: 20px; padding: 15px; background: var(--bg-soft); border: 2px solid var(--border); border-radius: var(--radius-md); position: relative; }
+        @media (max-width: 768px) { .mmorpg-inventory { grid-template-columns: 1fr; } }
+        .character-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .character-silhouette { width: 120px; height: 180px; background: linear-gradient(180deg, var(--bg-soft) 0%, var(--bg-hover) 100%); border: 2px solid var(--border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 60px; color: var(--text-dim); position: relative; overflow: hidden; }
+        .character-name { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--accent); text-align: center; }
+        .character-profession { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-dim); font-family: var(--font-display); }
+        .character-stats-mini { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 10px; }
+        .stat-mini { background: var(--bg-soft); padding: 4px 6px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; border: 1px solid var(--border); }
+        .stat-mini-label { color: var(--text-dim); font-family: var(--font-display); }
+        .stat-mini-value { color: var(--accent); font-weight: 700; font-family: var(--font-display); }
+        .equipment-slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        @media (max-width: 900px) { .equipment-slots { grid-template-columns: repeat(3, 1fr); } }
+        .equipment-slot { aspect-ratio: 1; background: var(--bg-panel); border: 2px solid var(--border); border-radius: var(--radius-md); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; }
+        .equipment-slot:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .equipment-slot.empty { opacity: 0.5; border-style: dashed; }
+        .equipment-slot.equipped { border-color: var(--success); }
+        .slot-label { font-family: var(--font-display); font-size: 9px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; text-align: center; }
+        .slot-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 18px; overflow: hidden; }
+        .slot-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .slot-item-name { font-size: 9px; color: var(--text-main); font-weight: 600; text-align: center; margin-top: 3px; font-family: var(--font-display); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .slot-badges { display: flex; gap: 2px; margin-top: 2px; flex-wrap: wrap; justify-content: center; }
+        .slot-badge { font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: 700; font-family: var(--font-display); }
+        .bg-preview { width: 100%; height: 150px; border: 2px dashed var(--border); border-radius: var(--radius-md); background-size: cover; background-position: center; background-color: var(--bg-soft); display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 12px; margin-bottom: 10px; position: relative; overflow: hidden; }
+        .bg-preview.has-image { border-style: solid; border-color: var(--success); }
+    </style>
+</head>
+<body data-theme="light">
+
 <div id="publicScreen" class="screen active">
     <div class="public-hero">
         <div class="public-hero-content">
@@ -428,21 +1672,9 @@
                 <div class="settings-row"><div class="settings-label">🎲 Случайное закрытие:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionRandomCloseEnabled"><span class="toggle-slider"></span></label></div></div>
                 <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 10px; padding-left: 150px;">В последний час аукцион закроется в случайный момент. За 10 мин до закрытия — уведомление</div>
                 
-                <!-- ✅ НОВОЕ: Коэффициент за повторную покупку -->
-                <div class="settings-row" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;">
-                    <div class="settings-label">🔄 Коэф. за повторную покупку:</div>
-                    <div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionRepeatPurchaseCoefEnabled"><span class="toggle-slider"></span></label></div>
-                </div>
-                <div class="settings-row">
-                    <div class="settings-label">Базовый коэффициент (2-я покупка):</div>
-                    <div class="settings-value"><input type="number" id="auctionRepeatPurchaseBaseCoef" min="1.1" max="10" step="0.1" value="1.5" style="width: 100px;">
-                    <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">1.5 = +50%, 2 = +100%</div></div>
-                </div>
-                <div class="settings-row">
-                    <div class="settings-label">Макс. покупок до сброса:</div>
-                    <div class="settings-value"><input type="number" id="auctionRepeatPurchaseMaxCount" min="2" max="20" value="5" style="width: 100px;">
-                    <div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">После N покупок — сброс к ×1.0</div></div>
-                </div>
+                <div class="settings-row" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;"><div class="settings-label">🔄 Коэф. за повторную покупку:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionRepeatPurchaseCoefEnabled"><span class="toggle-slider"></span></label></div></div>
+                <div class="settings-row"><div class="settings-label">Базовый коэффициент (2-я покупка):</div><div class="settings-value"><input type="number" id="auctionRepeatPurchaseBaseCoef" min="1.1" max="10" step="0.1" value="1.5" style="width: 100px;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">1.5 = +50%, 2 = +100%</div></div></div>
+                <div class="settings-row"><div class="settings-label">Макс. покупок до сброса:</div><div class="settings-value"><input type="number" id="auctionRepeatPurchaseMaxCount" min="2" max="20" value="5" style="width: 100px;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">После N покупок — сброс к ×1.0</div></div></div>
                 <div style="padding: 10px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: var(--radius-sm); margin: 10px 0; font-size: 11px; color: var(--text-main);">
                     <div style="font-weight: 700; color: var(--accent); margin-bottom: 6px; font-family: var(--font-display);">📊 КАК РАБОТАЕТ:</div>
                     <div style="color: var(--text-dim); line-height: 1.6;">
@@ -522,45 +1754,9 @@
 <div id="notificationsModal" class="modal-overlay hidden" onclick="closeNotificationsModal()"><div class="modal-content" style="max-width: 500px; max-height: 80vh;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeNotificationsModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 15px;">🔔 УВЕДОМЛЕНИЯ</h3><div style="display: flex; gap: 6px; margin-bottom: 12px;"><button class="submit-btn" style="flex: 1;" onclick="markAllNotificationsRead()">✓ Прочитано все</button></div><div id="notificationsList" style="max-height: 60vh; overflow-y: auto;"></div></div></div>
 <div id="toastNotification" class="toast-notification hidden"><div class="toast-icon">🔔</div><div class="toast-content"><div class="toast-title" id="toastTitle">Новое уведомление</div><div class="toast-message" id="toastMessage"></div></div><button class="toast-close" onclick="hideToast()">✕</button></div>
 
-<!-- ✅ СТИЛИ ДЛЯ КНОПОК УВЕДОМЛЕНИЙ -->
-<style>
-    .notif-action-btn {
-        background: transparent;
-        border: 1px solid var(--border);
-        color: var(--text-dim);
-        width: 24px;
-        height: 24px;
-        border-radius: var(--radius-sm);
-        cursor: pointer;
-        font-size: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: 0.2s;
-        padding: 0;
-    }
-    .notif-action-btn:hover {
-        background: var(--accent-soft);
-        border-color: var(--accent);
-        color: var(--accent);
-    }
-    .notif-action-btn.read {
-        background: var(--success-soft);
-        border-color: var(--success);
-        color: var(--success);
-        cursor: default;
-        opacity: 0.7;
-    }
-    .notif-action-btn.delete:hover {
-        background: var(--danger-soft);
-        border-color: var(--danger);
-        color: var(--danger);
-    }
-</style>
-
 <script>
         const APP_VERSION = '16.1';
-    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbwRNncJE4m1-3CTEohRS-BGywSlYciGL6TlgOL1mxblklkpL2SAsMOhB3YXijAMEsln/exec';
+    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbxXNHS4Lqh-sINl84roEA3JBWfbReJH-pZVoZWATsm9oIP3zbDRiJqcTVEouL7T4Cpp/exec';
     const SCRIPT_URL = SCRIPT_URL_BASE + '?v=' + APP_VERSION + '&_t=' + Date.now();
     
     let currentUser = null; let currentRole = null;
@@ -664,7 +1860,6 @@
         const revertCheckbox = document.getElementById('deleteEventRevertDkp');
         if (revertCheckbox) revertCheckbox.addEventListener('change', (e) => { document.getElementById('revertWarning').style.display = e.target.checked ? 'block' : 'none'; });
         
-        // ✅ НОВЫЕ: Обновление превью коэффициентов
         const baseCoefInput = document.getElementById('auctionRepeatPurchaseBaseCoef');
         if (baseCoefInput) baseCoefInput.addEventListener('input', updateRepeatPurchasePreview);
         const maxCountInput = document.getElementById('auctionRepeatPurchaseMaxCount');
@@ -2182,7 +3377,6 @@
 
     function showAuctionCreateMessage(text, type) { const msg = document.getElementById('auctionCreateMessage'); msg.className = `message ${type}`; msg.innerText = text; msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 4000); }
 
-    // ✅ ОБНОВЛЁННАЯ ФУНКЦИЯ: с информацией о повторной покупке
     async function openBidModal(auctionId) {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: auctionId, bidder: currentUser }), redirect: 'follow' });
@@ -2196,27 +3390,16 @@
             const modal = document.getElementById('bidModal');
             const content = document.getElementById('bidModalContent');
             
-            // ✅ Получаем информацию о коэффициенте за повторную покупку
             let repeatPurchaseInfoHtml = '';
             window._currentRepeatCoef = 1;
             try {
-                const rpResponse = await fetch(SCRIPT_URL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ 
-                        action: 'getRepeatPurchaseInfo', 
-                        nickname: currentUser, 
-                        itemKey: auction.itemKey || auction.itemName 
-                    }), 
-                    redirect: 'follow' 
-                });
+                const rpResponse = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getRepeatPurchaseInfo', nickname: currentUser, itemKey: auction.itemKey || auction.itemName }), redirect: 'follow' });
                 const rpResult = await rpResponse.json();
                 if (rpResult.success && rpResult.info && rpResult.info.enabled) {
                     const info = rpResult.info;
                     const willPay = Math.round(auction.currentBid * info.currentCoef);
                     const isReset = info.purchaseCount >= info.willResetAfter;
-                    
                     window._currentRepeatCoef = info.currentCoef;
-                    
                     repeatPurchaseInfoHtml = `
                         <div style="margin-bottom: 12px; padding: 10px; background: ${isReset ? 'var(--success-soft)' : 'var(--warning-soft)'}; border-radius: var(--radius-sm); border: 1px solid ${isReset ? 'var(--success)' : 'var(--warning)'};">
                             <div style="font-size: 11px; font-weight: 700; font-family: var(--font-display); color: ${isReset ? 'var(--success)' : 'var(--warning)'}; margin-bottom: 6px;">
@@ -2231,9 +3414,7 @@
                         </div>
                     `;
                 }
-            } catch (error) { 
-                console.error('Ошибка получения информации о повторной покупке:', error); 
-            }
+            } catch (error) { console.error('Ошибка получения информации о повторной покупке:', error); }
             
             let bidsHtml = '';
             if (auction.allBids && auction.allBids.length > 0) {
@@ -2246,34 +3427,21 @@
 
     function closeBidModal() { document.getElementById('bidModal').classList.add('hidden'); }
 
-    // ✅ ОБНОВЛЁННАЯ ФУНКЦИЯ: с предупреждением о коэффициенте
     async function placeBid(auctionId, minBid) { 
         const amount = document.getElementById('bidAmount').value; 
         if (!amount || Number(amount) < minBid) { 
             alert(`Мин. ${minBid} DKP`); 
             return; 
         } 
-        
         const repeatCoef = window._currentRepeatCoef || 1;
         let confirmMsg = `Ставка ${amount} DKP`;
         if (repeatCoef > 1) {
             const finalAmount = Math.round(amount * repeatCoef);
             confirmMsg += `\n\n⚠️ С учётом коэффициента за повторную покупку (×${repeatCoef.toFixed(2)}) с вас спишется: ${finalAmount} DKP`;
         }
-        
         if (!confirm(confirmMsg + '?')) return; 
-        
         try { 
-            const response = await fetch(SCRIPT_URL, { 
-                method: 'POST', 
-                body: JSON.stringify({ 
-                    action: 'placeBid', 
-                    auctionId: auctionId, 
-                    bidder: currentUser, 
-                    amount: Number(amount) 
-                }), 
-                redirect: 'follow' 
-            }); 
+            const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'placeBid', auctionId: auctionId, bidder: currentUser, amount: Number(amount) }), redirect: 'follow' }); 
             const result = await response.json(); 
             if (result.success) { 
                 alert(result.message); 
@@ -2374,7 +3542,6 @@
         } catch (error) { alert('Ошибка: ' + error.message); }
     }
 
-    // ===== УПРАВЛЕНИЕ ФОНОМ САЙТА =====
     async function loadSiteBackgroundSettings() {
         const preview = document.getElementById('bgPreview');
         if (!preview) return;
@@ -2418,7 +3585,7 @@
         } catch (error) { msg.className = 'message error'; msg.innerText = '❌ Ошибка связи'; msg.style.display = 'block'; }
     }
 
-    // ✅ ДОБАВЛЕН ИНФОРСЕР
+    // ✅ С ИНФОРСЕРОМ
     async function loadProfessionIconsAdmin() {
         const list = document.getElementById('professionIconsList');
         if (!list) return;
@@ -2455,22 +3622,16 @@
                 document.getElementById('auctionCoefficientList').value = (s.coefficientSelectiveList || []).join(', ');
                 document.getElementById('customDaysRow').style.display = s.repeatBanPeriod === 'custom_days' ? 'flex' : 'none';
                 document.getElementById('selectiveListRow').style.display = s.coefficientMode === 'selective' ? 'flex' : 'none';
-                
                 const autoExtendEl = document.getElementById('auctionAutoExtendEnabled');
                 if (autoExtendEl) autoExtendEl.checked = s.autoExtendEnabled || false;
                 const randomCloseEl = document.getElementById('auctionRandomCloseEnabled');
                 if (randomCloseEl) randomCloseEl.checked = s.randomCloseEnabled || false;
-                
-                // ✅ НОВЫЕ НАСТРОЙКИ: повторная покупка
                 const repeatPurchaseEl = document.getElementById('auctionRepeatPurchaseCoefEnabled');
                 if (repeatPurchaseEl) repeatPurchaseEl.checked = s.repeatPurchaseCoefEnabled || false;
-                
                 const baseCoefEl = document.getElementById('auctionRepeatPurchaseBaseCoef');
                 if (baseCoefEl) baseCoefEl.value = s.repeatPurchaseBaseCoef || 1.5;
-                
                 const maxCountEl = document.getElementById('auctionRepeatPurchaseMaxCount');
                 if (maxCountEl) maxCountEl.value = s.repeatPurchaseMaxCount || 5;
-                
                 updateRepeatPurchasePreview();
             }
         } catch (error) { console.error(error); }
@@ -2480,13 +3641,11 @@
         const msg = document.getElementById('auctionSettingsMessage');
         const listStr = document.getElementById('auctionCoefficientList').value;
         const selectiveList = listStr ? listStr.split(',').map(s => s.trim()).filter(s => s) : [];
-        
         const autoExtendEl = document.getElementById('auctionAutoExtendEnabled');
         const randomCloseEl = document.getElementById('auctionRandomCloseEnabled');
         const repeatPurchaseEl = document.getElementById('auctionRepeatPurchaseCoefEnabled');
         const baseCoefEl = document.getElementById('auctionRepeatPurchaseBaseCoef');
         const maxCountEl = document.getElementById('auctionRepeatPurchaseMaxCount');
-        
         try {
             const response = await fetch(SCRIPT_URL, { 
                 method: 'POST', 
@@ -2514,20 +3673,15 @@
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
     }
 
-    // ✅ НОВАЯ ФУНКЦИЯ: Обновление превью коэффициентов
     function updateRepeatPurchasePreview() {
         const baseCoefEl = document.getElementById('auctionRepeatPurchaseBaseCoef');
         const maxCountEl = document.getElementById('auctionRepeatPurchaseMaxCount');
         if (!baseCoefEl || !maxCountEl) return;
-        
         const baseCoef = parseFloat(baseCoefEl.value) || 1.5;
-        const maxCount = parseInt(maxCountEl.value) || 5;
-        
         const previewBase = document.getElementById('previewBaseCoef');
         const preview3 = document.getElementById('previewCoef3');
         const preview4 = document.getElementById('previewCoef4');
         const preview5 = document.getElementById('previewCoef5');
-        
         if (previewBase) previewBase.innerText = baseCoef.toFixed(1);
         if (preview3) preview3.innerText = (baseCoef * 2).toFixed(1);
         if (preview4) preview4.innerText = (baseCoef * 3).toFixed(1);
@@ -2773,13 +3927,13 @@
                 let html = '<option value="">— Выберите предмет —</option>';
                 Object.keys(bySection).sort().forEach(section => {
                     html += `<optgroup label="${section}">`;
-                    bySection[section].forEach((item, idx) => {
+                    bySection[section].forEach((item) => {
                         const badges = [];
                         if (item.isPrime) badges.push('П');
                         if (item.isBoss) badges.push('Б');
                         if (item.enhancement > 0) badges.push(`+${item.enhancement}`);
                         const badgeStr = badges.length > 0 ? ` [${badges.join(',')}]` : '';
-                        html += `<option value="${item.id}" data-idx="${result.items.indexOf(item)}">${item.name} (${item.tier || 'т0'}, ${item.color})${badgeStr}</option>`;
+                        html += `<option value="${item.id}">${item.name} (${item.tier || 'т0'}, ${item.color})${badgeStr}</option>`;
                     });
                     html += `</optgroup>`;
                 });
@@ -2954,7 +4108,6 @@
 
     function closeNotificationsModal() { document.getElementById('notificationsModal').classList.add('hidden'); }
 
-    // ✅ ОБНОВЛЁННЫЙ РЕНДЕР: с кнопками "✓" (прочитано) и "✕" (удалить)
     function renderNotificationsList(notifications) {
         const list = document.getElementById('notificationsList');
         if (!list) return;
@@ -2990,7 +4143,6 @@
         }).join('');
     }
 
-    // ✅ НОВОЕ: Пометить уведомление как прочитанное
     async function markNotificationRead(notifId) {
         try {
             await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'markNotificationRead', notificationId: notifId, nickname: currentUser }), redirect: 'follow' });
@@ -2998,7 +4150,6 @@
         } catch (e) { console.error(e); }
     }
 
-    // ✅ НОВОЕ: Удалить уведомление
     async function deleteNotification(notifId) {
         if (!confirm('Удалить это уведомление?')) return;
         try {
@@ -3062,11 +4213,9 @@
         if (toastTimeout) clearTimeout(toastTimeout);
     }
 
-    // ✅ УЛУЧШЕННЫЙ ЗВУК: разные тона для разных типов уведомлений
     function playNotificationSound(type = 'default') {
         try {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
             const soundConfig = {
                 'bid_outbid': { freq: 400, duration: 0.3, type: 'sawtooth' },
                 'auction_ending': { freq: 600, duration: 0.4, type: 'triangle' },
@@ -3076,23 +4225,17 @@
                 'auction_won': { freq: 1000, duration: 0.5, type: 'sine' },
                 'default': { freq: 800, duration: 0.3, type: 'sine' }
             };
-            
             const config = soundConfig[type] || soundConfig['default'];
-            
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
             oscillator.connect(gainNode);
             gainNode.connect(audioContext.destination);
-            
             oscillator.frequency.value = config.freq;
             oscillator.type = config.type;
-            
             gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + config.duration);
-            
             oscillator.start(audioContext.currentTime);
             oscillator.stop(audioContext.currentTime + config.duration);
-            
             if (type === 'auction_won') {
                 setTimeout(() => {
                     const osc2 = audioContext.createOscillator();
