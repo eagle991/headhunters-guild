@@ -53,7 +53,7 @@
         .screen { display: none; width: 100%; max-width: 1300px; padding: 15px; margin: 0 auto; position: relative; }
         .screen.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .public-title, .panel-title, .top-panel-title, .player-nick, .data-value, .ranking-nick, .event-name, .auction-title, .dkp-highlight, .auth-title, .top-value, .calendar-date, .calendar-event-title, .event-stat-name, .submission-event { text-shadow: 0 0 3px var(--accent-glow); }
+        .public-title, .panel-title, .top-panel-title, .player-nick, .data-value, .ranking-nick, .event-name, .auction-title, .dkp-highlight, .auth-title, .top-value { text-shadow: 0 0 3px var(--accent-glow); }
         body.has-bg-image .public-title, body.has-bg-image .panel-title, body.has-bg-image .auth-title { text-shadow: 0 0 10px var(--accent-glow), 2px 2px 4px rgba(0,0,0,0.8); }
         .public-hero { position: relative; height: 280px; margin-bottom: 20px; border-radius: var(--radius-lg); overflow: hidden; background: var(--gradient-hero); box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
         .public-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px); }
@@ -156,6 +156,7 @@
         .btn-compare:hover { background: var(--warning); color: #fff; }
         body[data-theme="dark"] .btn-compare:hover { color: #000; }
         .btn-back { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); margin-bottom: 10px; }
+        .btn-back:hover { background: var(--accent); color: #fff; }
         .btn-remove { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); font-size: 10px; padding: 3px 8px; }
         .btn-remove:hover { background: var(--danger); color: #fff; }
         .btn-role { padding: 3px 8px; font-size: 10px; }
@@ -495,7 +496,7 @@
     </style>
 </head>
 <body data-theme="light">
-<div id="publicScreen" class="screen active">
+    <div id="publicScreen" class="screen active">
     <div class="public-hero">
         <div class="public-hero-content">
             <div class="public-title">RF ONLINE NEXT</div>
@@ -508,7 +509,7 @@
         <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="topLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
     </div>
-    <div class="footer">© RF Online Next | v15.0</div>
+    <div class="footer">© RF Online Next | v15.1</div>
 </div>
 
 <div id="authScreen" class="screen">
@@ -592,6 +593,7 @@
                 <div>
                     <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-family: var(--font-display); font-weight: 700; text-transform: uppercase;">🛡 Экипировка</div>
                     <div class="equipment-slots" id="equipmentSlotsGrid"></div>
+                    <button class="btn-edit" onclick="showEquipmentEditForm()" style="margin-top: 10px;">✎ Изменить экипировку</button>
                 </div>
             </div>
             <div id="approvedDataGrid" class="data-grid hidden"></div>
@@ -619,10 +621,17 @@
             <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)"><div id="skillsList" class="skills-list"></div><button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 10px;">Отправить</button></form>
             <div id="skillsMessage" class="message"></div>
         </div>
-        <div class="cabinet-section hidden" id="equipmentFormSection">
-            <div class="panel-title">🛡 Экипировка (выбор) <span id="equipmentStatus"></span></div>
-            <div id="equipmentApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEquipmentEditForm()">✎ Изменить</button></div>
-            <form id="equipmentForm" class="hidden" onsubmit="savePlayerItems(event)"><div class="equipment-section-tabs" id="equipmentSectionTabs"></div><div id="equipmentItemsList"></div><button type="submit" class="submit-btn" id="saveEquipmentBtn" style="margin-top: 10px;">Отправить</button></form>
+        <!-- ✅ БЕЗ hidden — форма экипировки всегда доступна -->
+        <div class="cabinet-section" id="equipmentFormSection">
+            <div class="panel-title">🛡 Экипировка <span id="equipmentStatus"></span></div>
+            <div id="equipmentApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div></div>
+            <div id="equipmentEmpty" class="empty-state hidden">Экипировка отсутствует.</div>
+            <form id="equipmentForm" class="hidden" onsubmit="savePlayerItems(event)">
+                <button type="button" class="btn-back" onclick="backToInventory()" style="margin-bottom: 10px;">← Назад к инвентарю</button>
+                <div class="equipment-section-tabs" id="equipmentSectionTabs"></div>
+                <div id="equipmentItemsList"></div>
+                <button type="submit" class="submit-btn" id="saveEquipmentBtn" style="margin-top: 10px;">Отправить на проверку</button>
+            </form>
             <div id="equipmentMessage" class="message"></div>
         </div>
         <div class="cabinet-section">
@@ -953,119 +962,20 @@
 </div>
 
 <!-- Модальные окна -->
-<div id="imageModal" class="modal-overlay hidden" onclick="closeImageModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeImageModal()">✕</button>
-        <img id="modalImage" src="" alt="Screenshot">
-    </div>
-</div>
-<div id="bidModal" class="modal-overlay hidden" onclick="closeBidModal()">
-    <div class="modal-content" style="max-width: 580px;" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeBidModal()">✕</button>
-        <div id="bidModalContent"></div>
-    </div>
-</div>
-<div id="iconModal" class="modal-overlay hidden" onclick="closeIconModal()">
-    <div class="modal-content" style="max-width: 440px;" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeIconModal()">✕</button>
-        <h3 id="iconModalTitle" style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">🖼 ИКОНКА</h3>
-        <div id="iconPreview" style="text-align: center; margin-bottom: 12px; min-height: 80px; display: flex; align-items: center; justify-content: center; background: var(--bg-soft); border-radius: var(--radius-sm); border: 2px dashed var(--border);"><div style="color: var(--text-dim);">Загрузка...</div></div>
-        <div class="icon-upload-area" id="iconUploadArea" onclick="document.getElementById('iconFileInput').click()">
-            <div style="font-size: 24px; margin-bottom: 5px;">📤</div>
-            <div style="color: var(--text-main); font-size: 12px; font-weight: 600;">Выберите или перетащите</div>
-            <div id="iconSizeHint" style="color: var(--text-dim); font-size: 10px; margin-top: 3px;">JPG, PNG</div>
-            <input type="file" id="iconFileInput" accept="image/*" style="display: none;" onchange="handleIconFileSelect(event)">
-        </div>
-        <div class="action-buttons" style="margin-top: 12px;"><button class="btn-remove" onclick="deleteCurrentIcon()" style="width: 100%; padding: 6px;">🗑 Удалить</button></div>
-    </div>
-</div>
-<div id="editEventModal" class="modal-overlay hidden" onclick="closeEditEventModal()">
-    <div class="modal-content" style="max-width: 480px;" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeEditEventModal()">✕</button>
-        <h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ МЕРОПРИЯТИЯ</h3>
-        <div style="margin-bottom: 12px;"><div style="font-size: 11px; color: var(--text-dim); margin-bottom: 4px;">ID:</div><div id="editEventId" style="font-size: 12px; padding: 5px 8px; background: var(--bg-soft); border-radius: var(--radius-sm);"></div></div>
-        <div class="form-group"><label>Название</label><input type="text" id="editEventName" placeholder="Название..."></div>
-        <div class="form-group"><label>Стоимость DKP</label><input type="number" id="editEventDkp" min="0" placeholder="100"></div>
-        <div style="padding: 10px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">⚠️ Изменение DKP повлияет только на будущие начисления.</div>
-        <button type="button" class="submit-btn" onclick="saveEventEdit()">💾 Сохранить изменения</button>
-        <div id="editEventMessage" class="message"></div>
-    </div>
-</div>
-<div id="deleteEventModal" class="modal-overlay hidden" onclick="closeDeleteEventModal()">
-    <div class="modal-content" style="max-width: 520px;" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeDeleteEventModal()">✕</button>
-        <h3 style="color: var(--danger); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">🗑 УДАЛЕНИЕ МЕРОПРИЯТИЯ</h3>
-        <div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm);">
-            <div style="font-size: 11px; color: var(--text-dim);">Мероприятие:</div>
-            <div id="deleteEventName" style="font-size: 14px; font-weight: 700; font-family: var(--font-display);"></div>
-            <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">ID: <span id="deleteEventId"></span></div>
-        </div>
-        <div style="padding: 10px; background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); margin-bottom: 12px;">
-            <div style="font-size: 12px; color: var(--danger); font-weight: 700; margin-bottom: 6px;">⚠️ ВНИМАНИЕ!</div>
-            <div style="font-size: 11px; color: var(--danger);">Это действие необратимо. Выберите параметры удаления:</div>
-        </div>
-        <div class="checkbox-group" style="margin-bottom: 8px;"><input type="checkbox" id="deleteEventRelated" checked><label for="deleteEventRelated" style="margin: 0; cursor: pointer;">Удалить связанные данные (посещаемость, заявки, иконку)</label></div>
-        <div class="checkbox-group" style="margin-bottom: 12px;"><input type="checkbox" id="deleteEventRevertDkp"><label for="deleteEventRevertDkp" style="margin: 0; cursor: pointer;">Вернуть DKP всем игрокам, кто получил за это мероприятие</label></div>
-        <div id="revertWarning" style="display: none; padding: 8px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">💡 При возврате DKP: у игроков может образоваться отрицательный баланс.</div>
-        <div style="display: flex; gap: 8px;">
-            <button type="button" class="submit-btn" style="background: var(--border); color: var(--text-main);" onclick="closeDeleteEventModal()">Отмена</button>
-            <button type="button" class="submit-btn" style="background: var(--danger);" onclick="confirmDeleteEvent()">🗑 Удалить</button>
-        </div>
-        <div id="deleteEventMessage" class="message"></div>
-        <div id="deleteEventStats" style="margin-top: 10px;"></div>
-    </div>
-</div>
-<div id="dkpDetailsModal" class="modal-overlay hidden" onclick="closeDkpDetailsModal()">
-    <div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeDkpDetailsModal()">✕</button>
-        <h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">📋 ДЕТАЛИ ОПЕРАЦИИ</h3>
-        <div id="dkpDetailsContent"></div>
-    </div>
-</div>
-<div id="editDkpEntryModal" class="modal-overlay hidden" onclick="closeEditDkpEntryModal()">
-    <div class="modal-content" style="max-width: 480px;" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeEditDkpEntryModal()">✕</button>
-        <h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ ЗАПИСИ</h3>
-        <div class="form-group"><label>Причина / Комментарий</label><input type="text" id="editDkpEntryReason" placeholder="Причина..."></div>
-        <button type="button" class="submit-btn" onclick="saveDkpHistoryEntryEdit()">💾 Сохранить</button>
-        <div id="editDkpEntryMessage" class="message"></div>
-    </div>
-</div>
-<div id="editAuctionModal" class="modal-overlay hidden" onclick="closeEditAuctionModal()">
-    <div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeEditAuctionModal()">✕</button>
-        <h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ АУКЦИОНА</h3>
-        <div style="margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm);">
-            <div style="font-size: 10px; color: var(--text-dim);">Аукцион:</div>
-            <div id="editAuctionInfo" style="font-size: 13px; font-weight: 700;"></div>
-        </div>
-        <div class="form-group"><label>Новый победитель</label><select id="editAuctionWinner"></select></div>
-        <div class="form-group"><label>Новая сумма (DKP)</label><input type="number" id="editAuctionAmount" min="0" placeholder="100"></div>
-        <div style="padding: 8px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">⚠️ DKP будет пересчитано: у старого победителя вернётся, у нового спишется.</div>
-        <button type="button" class="submit-btn" onclick="saveCompletedAuctionEdit()">💾 Сохранить</button>
-        <div id="editAuctionMessage" class="message"></div>
-    </div>
-</div>
-<div id="notificationsModal" class="modal-overlay hidden" onclick="closeNotificationsModal()">
-    <div class="modal-content" style="max-width: 500px; max-height: 80vh;" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeNotificationsModal()">✕</button>
-        <h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 15px;">🔔 УВЕДОМЛЕНИЯ</h3>
-        <div style="display: flex; gap: 6px; margin-bottom: 12px;"><button class="submit-btn" style="flex: 1;" onclick="markAllNotificationsRead()">✓ Прочитано все</button></div>
-        <div id="notificationsList" style="max-height: 60vh; overflow-y: auto;"></div>
-    </div>
-</div>
-<div id="toastNotification" class="toast-notification hidden">
-    <div class="toast-icon">🔔</div>
-    <div class="toast-content">
-        <div class="toast-title" id="toastTitle">Новое уведомление</div>
-        <div class="toast-message" id="toastMessage"></div>
-    </div>
-    <button class="toast-close" onclick="hideToast()">✕</button>
-</div>
+<div id="imageModal" class="modal-overlay hidden" onclick="closeImageModal()"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeImageModal()">✕</button><img id="modalImage" src="" alt="Screenshot"></div></div>
+<div id="bidModal" class="modal-overlay hidden" onclick="closeBidModal()"><div class="modal-content" style="max-width: 580px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeBidModal()">✕</button><div id="bidModalContent"></div></div></div>
+<div id="iconModal" class="modal-overlay hidden" onclick="closeIconModal()"><div class="modal-content" style="max-width: 440px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeIconModal()">✕</button><h3 id="iconModalTitle" style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">🖼 ИКОНКА</h3><div id="iconPreview" style="text-align: center; margin-bottom: 12px; min-height: 80px; display: flex; align-items: center; justify-content: center; background: var(--bg-soft); border-radius: var(--radius-sm); border: 2px dashed var(--border);"><div style="color: var(--text-dim);">Загрузка...</div></div><div class="icon-upload-area" id="iconUploadArea" onclick="document.getElementById('iconFileInput').click()"><div style="font-size: 24px; margin-bottom: 5px;">📤</div><div style="color: var(--text-main); font-size: 12px; font-weight: 600;">Выберите или перетащите</div><div id="iconSizeHint" style="color: var(--text-dim); font-size: 10px; margin-top: 3px;">JPG, PNG</div><input type="file" id="iconFileInput" accept="image/*" style="display: none;" onchange="handleIconFileSelect(event)"></div><div class="action-buttons" style="margin-top: 12px;"><button class="btn-remove" onclick="deleteCurrentIcon()" style="width: 100%; padding: 6px;">🗑 Удалить</button></div></div></div>
+<div id="editEventModal" class="modal-overlay hidden" onclick="closeEditEventModal()"><div class="modal-content" style="max-width: 480px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeEditEventModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ МЕРОПРИЯТИЯ</h3><div style="margin-bottom: 12px;"><div style="font-size: 11px; color: var(--text-dim); margin-bottom: 4px;">ID:</div><div id="editEventId" style="font-size: 12px; padding: 5px 8px; background: var(--bg-soft); border-radius: var(--radius-sm);"></div></div><div class="form-group"><label>Название</label><input type="text" id="editEventName" placeholder="Название..."></div><div class="form-group"><label>Стоимость DKP</label><input type="number" id="editEventDkp" min="0" placeholder="100"></div><div style="padding: 10px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">⚠️ Изменение DKP повлияет только на будущие начисления.</div><button type="button" class="submit-btn" onclick="saveEventEdit()">💾 Сохранить изменения</button><div id="editEventMessage" class="message"></div></div></div>
+<div id="deleteEventModal" class="modal-overlay hidden" onclick="closeDeleteEventModal()"><div class="modal-content" style="max-width: 520px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeDeleteEventModal()">✕</button><h3 style="color: var(--danger); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">🗑 УДАЛЕНИЕ МЕРОПРИЯТИЯ</h3><div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm);"><div style="font-size: 11px; color: var(--text-dim);">Мероприятие:</div><div id="deleteEventName" style="font-size: 14px; font-weight: 700; font-family: var(--font-display);"></div><div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">ID: <span id="deleteEventId"></span></div></div><div style="padding: 10px; background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); margin-bottom: 12px;"><div style="font-size: 12px; color: var(--danger); font-weight: 700; margin-bottom: 6px;">⚠️ ВНИМАНИЕ!</div><div style="font-size: 11px; color: var(--danger);">Это действие необратимо. Выберите параметры удаления:</div></div><div class="checkbox-group" style="margin-bottom: 8px;"><input type="checkbox" id="deleteEventRelated" checked><label for="deleteEventRelated" style="margin: 0; cursor: pointer;">Удалить связанные данные (посещаемость, заявки, иконку)</label></div><div class="checkbox-group" style="margin-bottom: 12px;"><input type="checkbox" id="deleteEventRevertDkp"><label for="deleteEventRevertDkp" style="margin: 0; cursor: pointer;">Вернуть DKP всем игрокам, кто получил за это мероприятие</label></div><div id="revertWarning" style="display: none; padding: 8px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">💡 При возврате DKP: у игроков может образоваться отрицательный баланс.</div><div style="display: flex; gap: 8px;"><button type="button" class="submit-btn" style="background: var(--border); color: var(--text-main);" onclick="closeDeleteEventModal()">Отмена</button><button type="button" class="submit-btn" style="background: var(--danger);" onclick="confirmDeleteEvent()">🗑 Удалить</button></div><div id="deleteEventMessage" class="message"></div><div id="deleteEventStats" style="margin-top: 10px;"></div></div></div>
+<div id="dkpDetailsModal" class="modal-overlay hidden" onclick="closeDkpDetailsModal()"><div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeDkpDetailsModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">📋 ДЕТАЛИ ОПЕРАЦИИ</h3><div id="dkpDetailsContent"></div></div></div>
+<div id="editDkpEntryModal" class="modal-overlay hidden" onclick="closeEditDkpEntryModal()"><div class="modal-content" style="max-width: 480px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeEditDkpEntryModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ ЗАПИСИ</h3><div class="form-group"><label>Причина / Комментарий</label><input type="text" id="editDkpEntryReason" placeholder="Причина..."></div><button type="button" class="submit-btn" onclick="saveDkpHistoryEntryEdit()">💾 Сохранить</button><div id="editDkpEntryMessage" class="message"></div></div></div>
+<div id="editAuctionModal" class="modal-overlay hidden" onclick="closeEditAuctionModal()"><div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeEditAuctionModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ АУКЦИОНА</h3><div style="margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm);"><div style="font-size: 10px; color: var(--text-dim);">Аукцион:</div><div id="editAuctionInfo" style="font-size: 13px; font-weight: 700;"></div></div><div class="form-group"><label>Новый победитель</label><select id="editAuctionWinner"></select></div><div class="form-group"><label>Новая сумма (DKP)</label><input type="number" id="editAuctionAmount" min="0" placeholder="100"></div><div style="padding: 8px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">⚠️ DKP будет пересчитано: у старого победителя вернётся, у нового спишется.</div><button type="button" class="submit-btn" onclick="saveCompletedAuctionEdit()">💾 Сохранить</button><div id="editAuctionMessage" class="message"></div></div></div>
+<div id="notificationsModal" class="modal-overlay hidden" onclick="closeNotificationsModal()"><div class="modal-content" style="max-width: 500px; max-height: 80vh;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeNotificationsModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 15px;">🔔 УВЕДОМЛЕНИЯ</h3><div style="display: flex; gap: 6px; margin-bottom: 12px;"><button class="submit-btn" style="flex: 1;" onclick="markAllNotificationsRead()">✓ Прочитано все</button></div><div id="notificationsList" style="max-height: 60vh; overflow-y: auto;"></div></div></div>
+<div id="toastNotification" class="toast-notification hidden"><div class="toast-icon">🔔</div><div class="toast-content"><div class="toast-title" id="toastTitle">Новое уведомление</div><div class="toast-message" id="toastMessage"></div></div><button class="toast-close" onclick="hideToast()">✕</button></div>
 
-<script>    
-    const APP_VERSION = '15.0';
-    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbzOHfYA_DwLhvLJuFvl2ieC671kF9ns4XdgrQLvfrtsSBMt7kTwjk4xUQSnYPQhYH2f/exec';
+<script>
+        const APP_VERSION = '15.1';
+    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbxQEefcKOM_5HYWVHXitFMu0tKt_yr2iKV2wYBeiz84QWOREuWoN9BCA65Am7JsyCwX/exec';
     const SCRIPT_URL = SCRIPT_URL_BASE + '?v=' + APP_VERSION + '&_t=' + Date.now();
     
     let currentUser = null; let currentRole = null;
@@ -1308,9 +1218,45 @@
         if (tab === 'settings') { loadAllSettings(); loadSiteBackgroundSettings(); loadProfessionIconsAdmin(); }
     }
 
-    function showEditForm() { document.getElementById('approvedMessage').classList.add('hidden'); document.getElementById('approvedDataGrid').classList.add('hidden'); document.getElementById('mmorpgInventoryView').classList.add('hidden'); document.getElementById('playerDataForm').classList.remove('hidden'); }
+    function showEditForm() {
+        document.getElementById('approvedMessage').classList.add('hidden');
+        document.getElementById('approvedDataGrid').classList.add('hidden');
+        document.getElementById('mmorpgInventoryView').classList.add('hidden');
+        document.getElementById('playerDataForm').classList.remove('hidden');
+    }
+
     function showSkillsEditForm() { document.getElementById('skillsApprovedMessage').classList.add('hidden'); document.getElementById('approvedSkillsList').classList.add('hidden'); document.getElementById('skillsForm').classList.remove('hidden'); }
-    function showEquipmentEditForm() { document.getElementById('equipmentForm').classList.remove('hidden'); }
+
+    // ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ
+    function showEquipmentEditForm() {
+        const inventory = document.getElementById('mmorpgInventoryView');
+        if (inventory) inventory.classList.add('hidden');
+        const approvedMsg = document.getElementById('equipmentApprovedMessage');
+        if (approvedMsg) approvedMsg.classList.add('hidden');
+        const form = document.getElementById('equipmentForm');
+        if (form) form.classList.remove('hidden');
+        buildEquipmentTabs();
+        if (equipmentSections.length > 0 && !currentEquipmentSection) {
+            selectEquipmentSection(equipmentSections[0]);
+        } else {
+            renderEquipmentItems();
+        }
+    }
+
+    // ✅ НОВАЯ ФУНКЦИЯ
+    function backToInventory() {
+        const form = document.getElementById('equipmentForm');
+        if (form) form.classList.add('hidden');
+        const inventory = document.getElementById('mmorpgInventoryView');
+        if (inventory) {
+            inventory.classList.remove('hidden');
+            renderMmorpgInventory();
+        }
+        const approvedMsg = document.getElementById('equipmentApprovedMessage');
+        if (approvedMsg && myPlayerItems && myPlayerItems.status === 'approved') {
+            approvedMsg.classList.remove('hidden');
+        }
+    }
 
     async function handleAuth(e, action) {
         e.preventDefault();
@@ -1373,7 +1319,8 @@
         document.getElementById('characterNameDisplay').innerText = currentUser;
         const profIcon = document.getElementById('characterProfIcon');
         if (profIcon) profIcon.outerHTML = getProfessionIconHtml(myPlayerData.profession, 'large');
-        document.getElementById('characterProfName').innerText = myPlayerData.profession || '—';
+        const profName = document.getElementById('characterProfName');
+        if (profName) profName.innerText = myPlayerData.profession || '—';
         const statsMini = document.getElementById('characterStatsMini');
         statsMini.innerHTML = `
             <div class="stat-mini"><span class="stat-mini-label">БМ</span><span class="stat-mini-value">${Number(myPlayerData.bm).toLocaleString('ru-RU')}</span></div>
@@ -1511,10 +1458,42 @@
             const emptyState = document.getElementById('equipmentEmpty');
             if (result.success) {
                 myPlayerItems = result.data; playerItemSelections = result.data.selections || {};
-                if (result.data.status === 'approved') { statusSpan.innerHTML = '<span class="status-badge status-approved">Подтверждено</span>'; form.classList.add('hidden'); approvedMsg.classList.remove('hidden'); emptyState.classList.add('hidden'); renderMmorpgInventory(); }
-                else if (result.data.status === 'pending') { statusSpan.innerHTML = '<span class="status-badge status-pending">На проверке</span>'; form.classList.remove('hidden'); approvedMsg.classList.add('hidden'); emptyState.classList.remove('hidden'); }
-                else { statusSpan.innerHTML = '<span class="status-badge status-rejected">Отклонено</span>'; form.classList.remove('hidden'); approvedMsg.classList.add('hidden'); emptyState.classList.remove('hidden'); }
-            } else { statusSpan.innerHTML = ''; form.classList.remove('hidden'); approvedMsg.classList.add('hidden'); emptyState.classList.remove('hidden'); myPlayerItems = { selections: {}, status: '' }; playerItemSelections = {}; }
+                // ✅ ИСПРАВЛЕНО: показываем инвентарь и сообщение о подтверждении
+                if (result.data.status === 'approved') { 
+                    statusSpan.innerHTML = '<span class="status-badge status-approved">Подтверждено</span>'; 
+                    form.classList.add('hidden'); 
+                    approvedMsg.classList.remove('hidden');
+                    emptyState.classList.add('hidden');
+                    const inventory = document.getElementById('mmorpgInventoryView');
+                    if (inventory) {
+                        inventory.classList.remove('hidden');
+                        renderMmorpgInventory();
+                    }
+                } else if (result.data.status === 'pending') { 
+                    statusSpan.innerHTML = '<span class="status-badge status-pending">На проверке</span>'; 
+                    form.classList.add('hidden');
+                    approvedMsg.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    const inventory = document.getElementById('mmorpgInventoryView');
+                    if (inventory) inventory.classList.add('hidden');
+                } else { 
+                    statusSpan.innerHTML = '<span class="status-badge status-rejected">Отклонено</span>'; 
+                    form.classList.remove('hidden');
+                    approvedMsg.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    const inventory = document.getElementById('mmorpgInventoryView');
+                    if (inventory) inventory.classList.add('hidden');
+                }
+            } else { 
+                statusSpan.innerHTML = ''; 
+                form.classList.remove('hidden'); 
+                approvedMsg.classList.add('hidden'); 
+                emptyState.classList.remove('hidden');
+                const inventory = document.getElementById('mmorpgInventoryView');
+                if (inventory) inventory.classList.add('hidden');
+                myPlayerItems = { selections: {}, status: '' }; 
+                playerItemSelections = {}; 
+            }
             buildEquipmentTabs();
             if (equipmentSections.length > 0 && !currentEquipmentSection) selectEquipmentSection(equipmentSections[0]);
         } catch (error) { console.error(error); }
@@ -1551,7 +1530,43 @@
 
     function selectItem(itemId, section) { if (playerItemSelections[section] === itemId) delete playerItemSelections[section]; else playerItemSelections[section] = itemId; renderEquipmentItems(); }
 
-    async function savePlayerItems(e) { e.preventDefault(); const btn = document.getElementById('saveEquipmentBtn'); const msg = document.getElementById('equipmentMessage'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span> ...'; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'savePlayerItems', nickname: currentUser, selections: playerItemSelections }), redirect: 'follow' }); const result = await response.json(); if (result.success) { msg.className = 'message success'; msg.innerText = result.message; setTimeout(() => { loadPlayerItems(); renderMmorpgInventory(); }, 1000); } else { msg.className = 'message error'; msg.innerText = result.message; } } catch (error) { msg.className = 'message error'; msg.innerText = 'Ошибка.'; } finally { btn.disabled = false; btn.innerText = 'Отправить'; msg.style.display = 'block'; } }
+    async function savePlayerItems(e) {
+        e.preventDefault();
+        const btn = document.getElementById('saveEquipmentBtn');
+        const msg = document.getElementById('equipmentMessage');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="loader"></span> ...';
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'savePlayerItems',
+                    nickname: currentUser,
+                    selections: playerItemSelections
+                }),
+                redirect: 'follow'
+            });
+            const result = await response.json();
+            if (result.success) {
+                msg.className = 'message success';
+                msg.innerText = result.message;
+                setTimeout(() => {
+                    loadPlayerItems();
+                    msg.style.display = 'none';
+                }, 1000);
+            } else {
+                msg.className = 'message error';
+                msg.innerText = result.message;
+            }
+        } catch (error) {
+            msg.className = 'message error';
+            msg.innerText = 'Ошибка.';
+        } finally {
+            btn.disabled = false;
+            btn.innerText = 'Отправить на проверку';
+            msg.style.display = 'block';
+        }
+    }
 
     async function loadMyDkp() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerDKP', nickname: currentUser }), redirect: 'follow' }); const result = await response.json(); if (result.success) { myDkpData = result.data; document.getElementById('myDkpBalance').innerText = Number(result.data.balance).toLocaleString('ru-RU'); document.getElementById('userDkpBadge').innerText = `💰 ${Number(result.data.balance).toLocaleString('ru-RU')} DKP`; renderDkpHistory(result.data.history || []); loadFrozenDkpInfo(); } } catch (error) { console.error(error); } }
 
@@ -1695,7 +1710,7 @@
 
     function addScreenshots(files) { const remaining = 5 - uploadedScreenshots.length; if (remaining <= 0) { showDkpSubmitMessage('Макс. 5', 'error'); return; } const MAX_FILE_SIZE = 2 * 1024 * 1024; const MAX_TOTAL_SIZE = 8 * 1024 * 1024; let existingSize = uploadedScreenshots.reduce((sum, s) => sum + (s.file ? s.file.size : 0), 0); const toAdd = []; let totalNewSize = 0; for (let i = 0; i < Math.min(files.length, remaining); i++) { const file = files[i]; if (!file.type.startsWith('image/')) continue; if (file.size > MAX_FILE_SIZE) { showDkpSubmitMessage(`"${file.name}" > 2 МБ`, 'error'); continue; } if (existingSize + totalNewSize + file.size > MAX_TOTAL_SIZE) { showDkpSubmitMessage(`Общий > 8 МБ`, 'error'); continue; } toAdd.push(file); totalNewSize += file.size; } if (toAdd.length === 0) return; toAdd.forEach(file => { const id = 'ss_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5); const reader = new FileReader(); const screenshotObj = { id, file, base64: null, url: null, screenshotId: null, status: 'uploading', error: null }; uploadedScreenshots.push(screenshotObj); renderScreenshotsPreview(); reader.onload = async (e) => { try { screenshotObj.base64 = e.target.result; const compressed = await compressImage(e.target.result, 1200, 0.8); screenshotObj.base64 = compressed; const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'saveScreenshot', imageData: compressed, filename: file.name }), redirect: 'follow' }); if (!response.ok) throw new Error('HTTP ' + response.status); const result = await response.json(); if (result.success) { screenshotObj.screenshotId = result.screenshotId; screenshotObj.url = compressed; screenshotObj.status = 'done'; } else { screenshotObj.status = 'error'; screenshotObj.error = result.message; } } catch (err) { screenshotObj.status = 'error'; screenshotObj.error = err.message; } renderScreenshotsPreview(); if (uploadedScreenshots.every(s => s.status !== 'uploading')) runOcrOnScreenshots(); }; reader.onerror = () => { screenshotObj.status = 'error'; screenshotObj.error = 'Ошибка чтения'; renderScreenshotsPreview(); }; reader.readAsDataURL(file); }); }
 
-    function compressImage(base64, maxSize, quality) { return new Promise((resolve) => { const img = new Image(); img.onload = () => { let { width, height } = img; let targetMax = Math.min(maxSize, 1200); let targetQuality = Math.min(quality, 0.8); if (width > height && width > targetMax) { height = Math.round((height * targetMax) / width); width = targetMax; } else if (height > targetMax) { width = Math.round((width * targetMax) / height); height = targetMax; } const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height); resolve(canvas.toDataURL('image/jpeg', targetQuality)); }; img.onerror = () => resolve(base64); img.src = base64; }); }
+    function compressImage(base64, maxSize, quality) { return new Promise((resolve) => { const img = new Image(); img.onload = () => { let { width, height } = img; let targetMax = Math.min(maxSize, 1920); let targetQuality = Math.min(quality, 0.85); if (width > height && width > targetMax) { height = Math.round((height * targetMax) / width); width = targetMax; } else if (height > targetMax) { width = Math.round((width * targetMax) / height); height = targetMax; } const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height); resolve(canvas.toDataURL('image/jpeg', targetQuality)); }; img.onerror = () => resolve(base64); img.src = base64; }); }
 
     function renderScreenshotsPreview() { const preview = document.getElementById('screenshotsPreview'); preview.innerHTML = uploadedScreenshots.map(s => { const sizeInfo = s.file ? ` <span style="font-size: 9px; color: var(--text-dim);">(${(s.file.size / 1024).toFixed(0)} КБ)</span>` : ''; let statusHtml = ''; if (s.status === 'uploading') statusHtml = '<div class="upload-progress">...</div>'; else if (s.status === 'error') statusHtml = `<div class="upload-progress" style="color: var(--danger);">✕</div>`; else if (s.status === 'done') statusHtml = `<div class="upload-progress" style="color: var(--success);">✓${sizeInfo}</div>`; return `<div class="screenshot-thumb">${s.base64 ? `<img src="${s.base64}" alt="screenshot" onclick="openImageModal('${s.base64}')" style="cursor: pointer;">` : ''}<button class="remove-btn" onclick="removeScreenshot('${s.id}')">✕</button>${statusHtml}</div>`; }).join(''); }
 
@@ -1856,8 +1871,9 @@
 
     function showDkpSubmitMessage(text, type) { const msg = document.getElementById('dkpSubmitMessage'); msg.className = `message ${type}`; msg.innerText = text; msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 8000); }
 
-    async function loadDkpRating() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('dkpRatingList'); if (result.success && result.players.length > 0) { list.innerHTML = result.players.map((player, index) => { const position = index + 1; let positionClass = ''; if (position === 1) positionClass = 'top-1'; else if (position === 2) positionClass = 'top-2'; else if (position === 3) positionClass = 'top-3'; return `<div class="ranking-item"><div class="ranking-position ${positionClass}">#${position}</div><div class="ranking-info"><div class="ranking-nick">${renderPlayerNickWithBioColor(player.nickname)}</div></div><div class="ranking-bm" style="color: var(--dkp);">${Number(player.balance).toLocaleString('ru-RU')} 💰</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет данных</div>'; } } catch (error) { console.error(error); } } 
-        // ===== МЕРОПРИЯТИЯ =====
+    async function loadDkpRating() { try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllDKP' }), redirect: 'follow' }); const result = await response.json(); const list = document.getElementById('dkpRatingList'); if (result.success && result.players.length > 0) { list.innerHTML = result.players.map((player, index) => { const position = index + 1; let positionClass = ''; if (position === 1) positionClass = 'top-1'; else if (position === 2) positionClass = 'top-2'; else if (position === 3) positionClass = 'top-3'; return `<div class="ranking-item"><div class="ranking-position ${positionClass}">#${position}</div><div class="ranking-info"><div class="ranking-nick">${renderPlayerNickWithBioColor(player.nickname)}</div></div><div class="ranking-bm" style="color: var(--dkp);">${Number(player.balance).toLocaleString('ru-RU')} 💰</div></div>`; }).join(''); } else { list.innerHTML = '<div class="empty-state">Нет данных</div>'; } } catch (error) { console.error(error); } }
+
+    // ===== МЕРОПРИЯТИЯ =====
     async function loadAdminEvents() {
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' });
@@ -1865,23 +1881,7 @@
             const list = document.getElementById('adminEventsList');
             if (result.success && result.events.length > 0) {
                 allEvents = result.events;
-                list.innerHTML = result.events.map(event => `
-                    <div class="event-card">
-                        <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
-                            <div id="eventIcon_${event.id}" class="icon-preview" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div>
-                            <div class="event-info">
-                                <div class="event-name">${event.name}</div>
-                                <div class="event-meta">${event.createdBy || '—'} | ${event.date} | <span style="color: var(--dkp); font-weight: 700; font-family: var(--font-display);">💰 ${event.dkp} DKP</span></div>
-                            </div>
-                        </div>
-                        <div class="event-dkp">+${event.dkp}</div>
-                        <div class="action-buttons">
-                            <button class="btn-edit" onclick="openEditEventModal('${event.id}', '${event.name.replace(/'/g, "\\'")}', ${event.dkp})" style="width: auto; margin-top: 0;">✎ Изм.</button>
-                            <button class="btn-edit" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button>
-                            <button class="btn-remove" onclick="openDeleteEventModal('${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="padding: 5px 10px;">🗑</button>
-                        </div>
-                    </div>
-                `).join('');
+                list.innerHTML = result.events.map(event => `<div class="event-card"><div style="display: flex; align-items: center; gap: 10px; flex: 1;"><div id="eventIcon_${event.id}" class="icon-preview" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="event-info"><div class="event-name">${event.name}</div><div class="event-meta">${event.createdBy || '—'} | ${event.date} | <span style="color: var(--dkp); font-weight: 700; font-family: var(--font-display);">💰 ${event.dkp} DKP</span></div></div></div><div class="event-dkp">+${event.dkp}</div><div class="action-buttons"><button class="btn-edit" onclick="openEditEventModal('${event.id}', '${event.name.replace(/'/g, "\\'")}', ${event.dkp})" style="width: auto; margin-top: 0;">✎ Изм.</button><button class="btn-edit" onclick="openIconModal('event', '${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="width: auto; margin-top: 0;">🖼</button><button class="btn-remove" onclick="openDeleteEventModal('${event.id}', '${event.name.replace(/'/g, "\\'")}')" style="padding: 5px 10px;">🗑</button></div></div>`).join('');
                 result.events.forEach(event => loadEventIcon(event.id));
             } else { list.innerHTML = '<div class="empty-state">Нет мероприятий</div>'; }
         } catch (error) { console.error(error); }
@@ -1933,19 +1933,15 @@
                 msg.className = 'message success'; msg.innerText = '✅ ' + result.message; msg.style.display = 'block';
                 if (result.stats) {
                     const s = result.stats;
-                    let statsHtml = '<div style="padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 11px;">';
-                    statsHtml += '<div style="font-weight: 700; color: var(--accent); margin-bottom: 6px; font-family: var(--font-display);">📊 СТАТИСТИКА УДАЛЕНИЯ:</div>';
+                    let statsHtml = '<div style="padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 11px;"><div style="font-weight: 700; color: var(--accent); margin-bottom: 6px; font-family: var(--font-display);">📊 СТАТИСТИКА УДАЛЕНИЯ:</div>';
                     statsHtml += `<div style="color: var(--text-dim);">• Записей посещаемости удалено: <b style="color: var(--text-main);">${s.attendanceDeleted || 0}</b></div>`;
                     statsHtml += `<div style="color: var(--text-dim);">• Заявок DKP удалено: <b style="color: var(--text-main);">${s.submissionsDeleted || 0}</b></div>`;
                     if (s.iconDeleted) statsHtml += `<div style="color: var(--text-dim);">• Иконка: <b style="color: var(--danger);">удалена</b></div>`;
                     if (s.dkpReverted > 0) {
                         statsHtml += `<div style="color: var(--warning); margin-top: 4px;">• Возвращено DKP: <b>${s.dkpReverted.toFixed(2)}</b> (игроков: <b>${s.affectedPlayers || 0}</b>)</div>`;
                         if (s.playersDetails && Object.keys(s.playersDetails).length > 0) {
-                            statsHtml += '<div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border);">';
-                            statsHtml += '<div style="color: var(--text-dim); margin-bottom: 4px;">Детализация по игрокам:</div>';
-                            Object.entries(s.playersDetails).forEach(([nick, amount]) => {
-                                statsHtml += `<div style="color: var(--text-main); font-size: 10px;">• ${nick}: <span style="color: var(--success);">+${amount.toFixed(2)} DKP</span></div>`;
-                            });
+                            statsHtml += '<div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border);"><div style="color: var(--text-dim); margin-bottom: 4px;">Детализация по игрокам:</div>';
+                            Object.entries(s.playersDetails).forEach(([nick, amount]) => { statsHtml += `<div style="color: var(--text-main); font-size: 10px;">• ${nick}: <span style="color: var(--success);">+${amount.toFixed(2)} DKP</span></div>`; });
                             statsHtml += '</div>';
                         }
                     }
@@ -1967,15 +1963,7 @@
 
     function closeEditDkpModal() { const modal = document.getElementById('editDkpModal'); if (modal) modal.remove(); window.currentEditDkp = null; }
     function removeEditNick(idx) { const input = document.getElementById('editNick_' + idx); if (input) input.parentElement.remove(); }
-    function addEditNickField() {
-        const list = document.getElementById('editDkpNicksList');
-        const idx = list.children.length;
-        const div = document.createElement('div');
-        div.className = 'nick-item';
-        div.innerHTML = `<input type="text" value="" id="editNick_${idx}" placeholder="Ник..."><button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button>`;
-        list.appendChild(div);
-        div.querySelector('input').focus();
-    }
+    function addEditNickField() { const list = document.getElementById('editDkpNicksList'); const idx = list.children.length; const div = document.createElement('div'); div.className = 'nick-item'; div.innerHTML = `<input type="text" value="" id="editNick_${idx}" placeholder="Ник..."><button class="remove-nick-btn" onclick="removeEditNick(${idx})">✕</button>`; list.appendChild(div); div.querySelector('input').focus(); }
     async function saveDkpSubmission(submissionId) { const list = document.getElementById('editDkpNicksList'); const inputs = list.querySelectorAll('input'); const nicks = []; inputs.forEach(input => { const val = input.value.trim(); if (val) nicks.push(val); }); if (nicks.length === 0) { alert('Добавьте участника'); return; } try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateDkpSubmission', submissionId: submissionId, nicks: nicks }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert('Обновлено!'); closeEditDkpModal(); loadPendingDkp(); } else alert('Ошибка: ' + result.message); } catch (error) { alert('Ошибка: ' + error.message); } }
     async function deleteDkpSubmission(submissionId) { if (!confirm('Удалить заявку?')) return; try { const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteDkpSubmission', submissionId: submissionId }), redirect: 'follow' }); const result = await response.json(); if (result.success) { alert('Удалена'); loadPendingDkp(); } else alert('Ошибка: ' + result.message); } catch (error) { alert('Ошибка: ' + error.message); } }
 
@@ -2132,16 +2120,8 @@
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveAuctionDeletion', requestId: requestId }), redirect: 'follow' });
             const result = await response.json();
-            if (result.success) {
-                msg.className = 'message success';
-                msg.innerText = '✅ ' + result.message;
-                msg.style.display = 'block';
-                setTimeout(() => { loadAuctionDeletionRequests(); loadCompletedAuctions(); msg.style.display = 'none'; }, 1500);
-            } else {
-                msg.className = 'message error';
-                msg.innerText = '❌ ' + result.message;
-                msg.style.display = 'block';
-            }
+            if (result.success) { msg.className = 'message success'; msg.innerText = '✅ ' + result.message; msg.style.display = 'block'; setTimeout(() => { loadAuctionDeletionRequests(); loadCompletedAuctions(); msg.style.display = 'none'; }, 1500); }
+            else { msg.className = 'message error'; msg.innerText = '❌ ' + result.message; msg.style.display = 'block'; }
         } catch (error) { msg.className = 'message error'; msg.innerText = '❌ Ошибка связи'; msg.style.display = 'block'; }
     }
 
@@ -2151,12 +2131,7 @@
         try {
             const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectAuctionDeletion', requestId: requestId }), redirect: 'follow' });
             const result = await response.json();
-            if (result.success) {
-                msg.className = 'message error';
-                msg.innerText = result.message;
-                msg.style.display = 'block';
-                setTimeout(() => { loadAuctionDeletionRequests(); msg.style.display = 'none'; }, 1500);
-            }
+            if (result.success) { msg.className = 'message error'; msg.innerText = result.message; msg.style.display = 'block'; setTimeout(() => { loadAuctionDeletionRequests(); msg.style.display = 'none'; }, 1500); }
         } catch (error) { console.error(error); }
     }
 
@@ -2260,10 +2235,7 @@
                             <div class="event-stat-card">
                                 <div class="event-stat-header">
                                     ${stat.iconData ? `<img src="${stat.iconData}" style="width: 48px; height: 24px; object-fit: cover; border-radius: 3px; border: 2px solid var(--dkp);">` : `<div style="width: 48px; height: 24px; background: var(--bg-panel); border: 2px solid var(--border); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🏆</div>`}
-                                    <div style="flex: 1;">
-                                        <div class="event-stat-name">${stat.name}</div>
-                                        <div class="event-stat-total">Всего: ${stat.total}</div>
-                                    </div>
+                                    <div style="flex: 1;"><div class="event-stat-name">${stat.name}</div><div class="event-stat-total">Всего: ${stat.total}</div></div>
                                 </div>
                                 <div class="progress-row"><div class="progress-label"><span>Месяц</span><span style="color: var(--accent);">${stat.month}</span></div><div class="progress-track"><div class="progress-fill month" style="width: ${monthPercent}%;"></div></div></div>
                                 <div class="progress-row"><div class="progress-label"><span>Неделя</span><span style="color: var(--success);">${stat.week}</span></div><div class="progress-track"><div class="progress-fill week" style="width: ${weekPercent}%;"></div></div></div>
@@ -3265,12 +3237,6 @@
             oscillator.start(audioContext.currentTime);
             oscillator.stop(audioContext.currentTime + 0.3);
         } catch (e) { console.log('Звук не воспроизведён:', e); }
-    }
-
-    function requestNotificationPermission() {
-        if ('Notification' in window && Notification.permission === 'default') {
-            setTimeout(() => { Notification.requestPermission().then(perm => { console.log('Разрешение на уведомления:', perm); }); }, 3000);
-        }
     }
 </script>
 </body>
