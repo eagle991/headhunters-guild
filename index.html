@@ -434,13 +434,23 @@
         .notification-item:hover { border-color: var(--accent); }
         .notification-item.unread { background: var(--accent-soft); border-left-color: var(--warning); }
         .notification-item.type-bid_outbid { border-left-color: var(--danger); }
+        .notification-item.type-auction_ending { border-left-color: var(--warning); }
         .notification-item.type-new_auction { border-left-color: var(--success); }
         .notification-item.type-auction_won { border-left-color: var(--dkp); }
+        .notification-item.type-achievement { border-left-color: var(--gold); }
+        .notification-item.type-level_up { border-left-color: var(--accent); }
+        .notification-item.type-purchase { border-left-color: var(--success); }
+        .notification-item.type-daily_bonus { border-left-color: var(--warning); }
         .notification-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
         .notification-type { font-size: 10px; font-weight: 700; font-family: var(--font-display); text-transform: uppercase; }
         .notification-type.bid_outbid { color: var(--danger); }
+        .notification-type.auction_ending { color: var(--warning); }
         .notification-type.new_auction { color: var(--success); }
         .notification-type.auction_won { color: var(--dkp); }
+        .notification-type.achievement { color: var(--gold); }
+        .notification-type.level_up { color: var(--accent); }
+        .notification-type.purchase { color: var(--success); }
+        .notification-type.daily_bonus { color: var(--warning); }
         .notification-date { font-size: 9px; color: var(--text-dim); }
         .notification-message { font-size: 12px; color: var(--text-main); line-height: 1.4; }
         .notif-action-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); width: 24px; height: 24px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: 0.2s; padding: 0; }
@@ -450,8 +460,13 @@
         .toast-notification { position: fixed; top: 20px; right: 20px; background: var(--bg-panel); border: 2px solid var(--accent); border-radius: var(--radius-md); padding: 12px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 20px var(--accent-glow); z-index: 10001; max-width: 400px; animation: toastSlideIn 0.4s ease; }
         .toast-notification.hidden { display: none; }
         .toast-notification.type-bid_outbid { border-color: var(--danger); }
+        .toast-notification.type-auction_ending { border-color: var(--warning); }
         .toast-notification.type-new_auction { border-color: var(--success); }
         .toast-notification.type-auction_won { border-color: var(--dkp); }
+        .toast-notification.type-achievement { border-color: var(--gold); }
+        .toast-notification.type-level_up { border-color: var(--accent); }
+        .toast-notification.type-purchase { border-color: var(--success); }
+        .toast-notification.type-daily_bonus { border-color: var(--warning); }
         @keyframes toastSlideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .toast-icon { font-size: 24px; }
         .toast-content { flex: 1; }
@@ -486,6 +501,90 @@
         .slot-badge { font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: 700; font-family: var(--font-display); }
         .bg-preview { width: 100%; height: 150px; border: 2px dashed var(--border); border-radius: var(--radius-md); background-size: cover; background-position: center; background-color: var(--bg-soft); display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 12px; margin-bottom: 10px; position: relative; overflow: hidden; }
         .bg-preview.has-image { border-style: solid; border-color: var(--success); }
+        
+        /* ===== v17.0: НОВЫЕ СТИЛИ ===== */
+        .achievement-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; transition: 0.3s; position: relative; overflow: hidden; }
+        .achievement-card.unlocked { border-color: var(--success); background: var(--success-soft); }
+        .achievement-card.unlocked::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--success); }
+        .achievement-card.locked { opacity: 0.6; }
+        .achievement-icon { font-size: 32px; min-width: 50px; text-align: center; }
+        .achievement-info { flex: 1; }
+        .achievement-name { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 2px; }
+        .achievement-desc { font-size: 11px; color: var(--text-dim); }
+        .achievement-reward { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--dkp); padding: 3px 10px; background: var(--warning-soft); border: 1px solid var(--dkp); border-radius: var(--radius-sm); }
+        .level-display { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 15px; margin-bottom: 12px; text-align: center; }
+        .level-number { font-family: var(--font-display); font-size: 48px; font-weight: 900; color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); }
+        .level-title { font-family: var(--font-display); font-size: 14px; color: var(--dkp); margin-bottom: 10px; font-weight: 700; }
+        .xp-bar { width: 100%; height: 12px; background: var(--border); border-radius: 6px; overflow: hidden; margin-top: 8px; }
+        .xp-bar-fill { height: 100%; background: var(--gradient-btn); transition: width 0.5s; }
+        .xp-text { font-size: 11px; color: var(--text-dim); margin-top: 4px; font-family: var(--font-display); }
+        .announcement-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 8px; position: relative; overflow: hidden; }
+        .announcement-card.type-important { border-left: 4px solid var(--danger); background: var(--danger-soft); }
+        .announcement-card.type-event { border-left: 4px solid var(--warning); background: var(--warning-soft); }
+        .announcement-card.type-info { border-left: 4px solid var(--accent); background: var(--accent-soft); }
+        .announcement-card.type-success { border-left: 4px solid var(--success); background: var(--success-soft); }
+        .announcement-title { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .announcement-message { font-size: 12px; color: var(--text-main); line-height: 1.5; }
+        .announcement-meta { font-size: 10px; color: var(--text-dim); margin-top: 6px; }
+        .daily-bonus-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 15px; margin-bottom: 12px; text-align: center; }
+        .daily-bonus-title { font-family: var(--font-display); font-size: 14px; color: var(--accent); margin-bottom: 10px; font-weight: 700; }
+        .daily-rewards { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 10px; }
+        .daily-reward-day { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 2px; text-align: center; font-size: 10px; }
+        .daily-reward-day.claimed { background: var(--success-soft); border-color: var(--success); color: var(--success); }
+        .daily-reward-day.today { background: var(--warning-soft); border-color: var(--warning); color: var(--warning); font-weight: 700; animation: pulse 2s infinite; }
+        .daily-reward-day .day-num { font-family: var(--font-display); font-weight: 700; font-size: 11px; }
+        .daily-reward-day .day-reward { font-size: 9px; color: var(--dkp); font-weight: 700; }
+        .streak-info { font-family: var(--font-display); font-size: 12px; color: var(--warning); margin-bottom: 8px; }
+        .friend-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+        .friend-nick { flex: 1; font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--accent); }
+        .friend-date { font-size: 10px; color: var(--text-dim); }
+        .cosmetic-item { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; transition: 0.3s; }
+        .cosmetic-item:hover { border-color: var(--dkp); }
+        .cosmetic-item.owned { border-color: var(--success); background: var(--success-soft); }
+        .cosmetic-icon { font-size: 32px; min-width: 50px; text-align: center; }
+        .cosmetic-info { flex: 1; }
+        .cosmetic-name { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--text-main); }
+        .cosmetic-type { font-size: 10px; color: var(--text-dim); text-transform: uppercase; }
+        .cosmetic-price { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--dkp); }
+        .rarity-common { color: var(--text-dim); border-color: var(--border); }
+        .rarity-uncommon { color: var(--success); border-color: var(--success); }
+        .rarity-rare { color: var(--accent); border-color: var(--accent); }
+        .rarity-epic { color: #a855f7; border-color: #a855f7; }
+        .rarity-legendary { color: var(--gold); border-color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+        .rarity-badge { font-size: 9px; padding: 2px 6px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); border: 1px solid; margin-left: 6px; }
+        .equip-top-item { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+        .equip-top-rank { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--accent); min-width: 35px; }
+        .equip-top-nick { flex: 1; font-family: var(--font-display); font-size: 13px; font-weight: 700; }
+        .equip-top-score { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--dkp); }
+        .log-item { background: var(--bg-soft); border-left: 3px solid var(--accent); padding: 8px 12px; margin-bottom: 4px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 11px; }
+        .log-action { font-family: var(--font-display); font-weight: 700; color: var(--accent); }
+        .log-user { color: var(--text-main); font-weight: 600; }
+        .log-details { color: var(--text-dim); font-size: 10px; }
+        .log-date { color: var(--text-dim); font-size: 10px; float: right; }
+        .feature-toggle { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+        .feature-name { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--text-main); }
+        .feature-desc { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        .feature-status { font-size: 10px; padding: 2px 8px; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-display); }
+        .feature-status.on { background: var(--success-soft); color: var(--success); border: 1px solid var(--success); }
+        .feature-status.off { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger); }
+        .missing-player { background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--danger); padding: 6px 12px; margin-bottom: 4px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+        .missing-player .nick { font-family: var(--font-display); font-weight: 700; color: var(--text-main); }
+        .twink-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+        .twink-main { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--accent); }
+        .twink-arrow { color: var(--text-dim); font-size: 14px; }
+        .twink-name { font-family: var(--font-display); font-size: 12px; color: var(--text-main); }
+        .auction-rating-item { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 6px; display: grid; grid-template-columns: 40px 1fr auto; gap: 10px; align-items: center; }
+        .auction-rating-pos { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--accent); text-align: center; }
+        .auction-rating-info { font-size: 11px; color: var(--text-dim); }
+        .auction-rating-nick { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--text-main); }
+        .auction-rating-score { font-family: var(--font-display); font-size: 16px; font-weight: 900; color: var(--dkp); }
+        .personal-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 12px; }
+        .personal-stat-card { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; text-align: center; position: relative; overflow: hidden; }
+        .personal-stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-btn); }
+        .personal-stat-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-display); font-weight: 700; margin-bottom: 4px; }
+        .personal-stat-value { font-family: var(--font-display); font-size: 20px; font-weight: 900; color: var(--accent); }
+        .personal-stat-value.dkp { color: var(--dkp); }
+        .personal-stat-value.success { color: var(--success); }
     </style>
 </head>
 <body data-theme="light">
@@ -497,12 +596,14 @@
             <button class="login-link" onclick="showAuthScreen()">▶ Войти в систему</button>
         </div>
     </div>
+    <!-- ✅ ОБЪЯВЛЕНИЯ НА ГЛАВНОЙ -->
+    <div id="announcementsBlock" style="margin-bottom: 14px;"></div>
     <div class="top-containers">
         <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по БМ</div><div id="topBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="topLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
         <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
     </div>
-    <div class="footer">© RF Online Next | v16.2</div>
+    <div class="footer">© RF Online Next | v17.0</div>
 </div>
 
 <div id="authScreen" class="screen">
@@ -607,6 +708,30 @@
             <div id="playerMessage" class="message"></div>
         </div>
         
+        <!-- ✅ v17.0: УРОВЕНЬ -->
+        <div class="cabinet-section" id="levelSection">
+            <div class="panel-title">📊 Уровень и опыт</div>
+            <div id="levelDisplay"></div>
+        </div>
+        
+        <!-- ✅ v17.0: ЕЖЕДНЕВНЫЙ БОНУС -->
+        <div class="cabinet-section" id="dailyBonusSection">
+            <div class="panel-title">🎁 Ежедневный бонус</div>
+            <div id="dailyBonusDisplay"></div>
+        </div>
+        
+        <!-- ✅ v17.0: ДОСТИЖЕНИЯ -->
+        <div class="cabinet-section" id="achievementsSection">
+            <div class="panel-title">🏆 Достижения <span id="achievementsCounter" style="font-size: 11px; color: var(--text-dim);"></span></div>
+            <div id="achievementsList"></div>
+        </div>
+        
+        <!-- ✅ v17.0: ЛИЧНАЯ СТАТИСТИКА -->
+        <div class="cabinet-section" id="personalStatsSection">
+            <div class="panel-title">📈 Моя статистика</div>
+            <div id="personalStatsDisplay"></div>
+        </div>
+        
         <div class="cabinet-section">
             <div class="panel-title">📧 Моя почта</div>
             <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Укажите email для связи с администрацией.</p>
@@ -616,6 +741,29 @@
             </div>
             <button class="submit-btn" onclick="saveUserEmail()" style="max-width: 200px;">💾 Сохранить email</button>
             <div id="emailMessage" class="message"></div>
+        </div>
+        
+        <!-- ✅ v17.0: ДРУЗЬЯ -->
+        <div class="cabinet-section" id="friendsSection">
+            <div class="panel-title">👥 Друзья <span id="friendsCounter" style="font-size: 11px; color: var(--text-dim);"></span></div>
+            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                <input type="text" id="addFriendInput" placeholder="Ник друга..." style="flex: 1;">
+                <button class="submit-btn" style="width: auto; padding: 8px 14px;" onclick="addFriend()">➕</button>
+            </div>
+            <div id="friendsList"></div>
+        </div>
+        
+        <!-- ✅ v17.0: МАГАЗИН КОСМЕТИКИ -->
+        <div class="cabinet-section" id="cosmeticsSection">
+            <div class="panel-title">🛍️ Магазин косметики</div>
+            <div id="cosmeticsShopList"></div>
+            <div id="cosmeticsMessage" class="message"></div>
+        </div>
+        
+        <!-- ✅ v17.0: ТВИНКИ -->
+        <div class="cabinet-section" id="twinksSection">
+            <div class="panel-title">🔗 Твинки</div>
+            <div id="twinksInfo"></div>
         </div>
         
         <div class="cabinet-section">
@@ -731,6 +879,9 @@
                 </div>
                 <div class="form-group"><label>Участники (пусто = все)</label><div id="auctionPlayersList" style="max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; background: var(--bg-soft);"></div></div>
                 <button type="button" class="submit-btn dkp-btn" onclick="createAuction()">🔨 Создать</button>
+                <!-- ✅ v17.0: Рейтинг перед аукционом -->
+                <button type="button" class="btn-edit" style="margin-top: 10px;" onclick="loadAuctionRating()">🎯 Показать рейтинг участников</button>
+                <div id="auctionRatingPreview" style="margin-top: 10px;"></div>
             </div>
             <div id="auctionCreateMessage" class="message"></div>
         </div>
@@ -815,6 +966,13 @@
             <button class="tab-btn" id="tabAdminItems" onclick="switchAdminTab('items', event)">⚔ Предметы</button>
             <button class="tab-btn hidden" id="tabAdminUsers" onclick="switchAdminTab('users', event)">👥 Юзеры</button>
             <button class="tab-btn" id="tabAdminSettings" onclick="switchAdminTab('settings', event)">⚙ Настройки</button>
+            <!-- ✅ v17.0: НОВЫЕ ВКЛАДКИ -->
+            <button class="tab-btn" id="tabAdminFeatures" onclick="switchAdminTab('features', event)">⚙️ Функции</button>
+            <button class="tab-btn" id="tabAdminAnnouncements" onclick="switchAdminTab('announcements', event)">📢 Объявл.</button>
+            <button class="tab-btn" id="tabAdminLog" onclick="switchAdminTab('log', event)">📝 Лог</button>
+            <button class="tab-btn" id="tabAdminMissing" onclick="switchAdminTab('missing', event)">📋 Пробелы</button>
+            <button class="tab-btn" id="tabAdminExport" onclick="switchAdminTab('export', event)">📤 Экспорт</button>
+            <button class="tab-btn" id="tabAdminTwinks" onclick="switchAdminTab('twinks', event)">🔗 Твинки</button>
         </div>
         <div id="adminPlayersContent"><div id="pendingPlayersList"></div><div id="adminMessage" class="message"></div></div>
         <div id="adminSkillsPendingContent" class="hidden"><div id="pendingSkillsList"></div><div id="adminSkillsPendingMessage" class="message"></div></div>
@@ -890,7 +1048,6 @@
         <div id="adminSettingsContent" class="hidden">
             <div class="settings-card">
                 <div class="settings-card-title">🖼️ Фон сайта</div>
-                <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Загрузите картинку для фона сайта или удалите текущую.</p>
                 <div class="bg-preview" id="bgPreview">Нет фона</div>
                 <div class="form-group"><label>Загрузить изображение</label><input type="file" id="bgFileInput" accept="image/*"></div>
                 <div style="display: flex; gap: 8px;">
@@ -901,7 +1058,6 @@
             </div>
             <div class="settings-card">
                 <div class="settings-card-title">🎭 Иконки профессий</div>
-                <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Загрузите иконки для каждой профессии.</p>
                 <div id="professionIconsList"></div>
             </div>
             <div class="settings-card">
@@ -912,6 +1068,9 @@
                 <div class="settings-row" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;"><div class="settings-label">Коэффициент DKP при победе:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionCoefficientEnabled"><span class="toggle-slider"></span></label></div></div>
                 <div class="settings-row"><div class="settings-label">Режим коэффициента:</div><div class="settings-value"><select id="auctionCoefficientMode"><option value="disabled">Выключен</option><option value="all">Для всех</option><option value="selective">Выборочно</option></select></div></div>
                 <div class="settings-row" id="selectiveListRow" style="display: none;"><div class="settings-label">Список игроков:</div><div class="settings-value"><input type="text" id="auctionCoefficientList" placeholder="Ник1, Ник2, Ник3..." style="width: 100%;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Через запятую</div></div></div>
+                
+                <div class="settings-row" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;"><div class="settings-label">⏰ Автопродление:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionAutoExtendEnabled"><span class="toggle-slider"></span></label></div></div>
+                <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 10px; padding-left: 150px;">Если ставка сделана в последние 2 минуты — аукцион продлится на 3 мин (макс. 5 раз)</div>
                 
                 <div class="settings-row" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;"><div class="settings-label">🔄 Коэф. за повторную покупку:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionRepeatPurchaseCoefEnabled"><span class="toggle-slider"></span></label></div></div>
                 <div class="settings-row"><div class="settings-label">Базовый коэффициент (2-я покупка):</div><div class="settings-value"><input type="number" id="auctionRepeatPurchaseBaseCoef" min="1.1" max="10" step="0.1" value="1.5" style="width: 100px;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">1.5 = +50%, 2 = +100%</div></div></div>
@@ -933,7 +1092,6 @@
             </div>
             <div class="settings-card">
                 <div class="settings-card-title">💰 Коэффициент DKP за мероприятия</div>
-                <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Множитель к базовому DKP. Формула: базовое × коэфБМ × коэфМероприятия</p>
                 <div class="settings-row"><div class="settings-label">Включить коэффициент:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="eventCoefEnabled"><span class="toggle-slider"></span></label></div></div>
                 <div class="settings-row"><div class="settings-label">Режим применения:</div><div class="settings-value"><select id="eventCoefMode"><option value="disabled">Выключен</option><option value="all">Для всех игроков</option><option value="selective">Выборочно (по списку)</option></select></div></div>
                 <div class="settings-row"><div class="settings-label">Значение коэффициента:</div><div class="settings-value"><input type="number" id="eventCoefValue" min="0.1" max="10" step="0.1" value="1" style="width: 100px;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">1 = без изменений, 1.5 = +50%, 0.5 = -50%</div></div></div>
@@ -980,6 +1138,77 @@
                 </div>
             </div>
         </div>
+        
+        <!-- ✅ v17.0: УПРАВЛЕНИЕ ФУНКЦИЯМИ -->
+        <div id="adminFeaturesContent" class="hidden">
+            <div class="panel-title">⚙️ Управление функциями сайта</div>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 12px;">Включайте/выключайте функции по необходимости.</p>
+            <div id="featuresList"></div>
+            <div id="featuresMessage" class="message"></div>
+        </div>
+        
+        <!-- ✅ v17.0: ОБЪЯВЛЕНИЯ -->
+        <div id="adminAnnouncementsContent" class="hidden">
+            <div class="panel-title">📢 Объявления</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Заголовок</label><input type="text" id="newAnnouncementTitle" required placeholder="ВАЖНО!"></div>
+                    <div class="form-group"><label>Тип</label><select id="newAnnouncementType"><option value="info">🔵 Информация</option><option value="event">🟡 Событие</option><option value="important">🔴 Важно</option><option value="success">🟢 Успех</option></select></div>
+                </div>
+                <div class="form-group"><label>Сообщение</label><textarea id="newAnnouncementMessage" placeholder="Текст объявления..."></textarea></div>
+                <button type="button" class="submit-btn dkp-btn" onclick="createAnnouncement()">📢 Создать объявление</button>
+            </div>
+            <div id="adminAnnouncementsList"></div>
+            <div id="announcementsMessage" class="message"></div>
+        </div>
+        
+        <!-- ✅ v17.0: ЛОГ ДЕЙСТВИЙ -->
+        <div id="adminLogContent" class="hidden">
+            <div class="panel-title">📝 Лог действий</div>
+            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                <button class="submit-btn" style="flex: 1;" onclick="loadActionLog()">🔄 Обновить</button>
+            </div>
+            <div id="actionLogList"></div>
+        </div>
+        
+        <!-- ✅ v17.0: СПИСКИ "У КОГО НЕТ" -->
+        <div id="adminMissingContent" class="hidden">
+            <div class="panel-title">📋 Списки "у кого нет"</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Тип</label><select id="missingItemType" onchange="loadMissingItemNames()"><option value="skill">🎯 Навык</option><option value="equipment">🛡️ Экипировка</option></select></div>
+                    <div class="form-group"><label>Название</label><select id="missingItemName"></select></div>
+                </div>
+                <button type="button" class="submit-btn" onclick="loadMissingList()">🔍 Найти</button>
+            </div>
+            <div id="missingListResult"></div>
+        </div>
+        
+        <!-- ✅ v17.0: ЭКСПОРТ ДАННЫХ -->
+        <div id="adminExportContent" class="hidden">
+            <div class="panel-title">📤 Экспорт данных</div>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 12px;">Выгрузите данные в CSV для анализа в Excel.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                <button class="submit-btn" onclick="exportData('players')">👥 Игроки</button>
+                <button class="submit-btn" onclick="exportData('auctions')">🔨 Аукционы</button>
+                <button class="submit-btn" onclick="exportData('dkp')">💰 DKP балансы</button>
+            </div>
+            <div id="exportResult" style="margin-top: 12px;"></div>
+        </div>
+        
+        <!-- ✅ v17.0: УПРАВЛЕНИЕ ТВИНКАМИ -->
+        <div id="adminTwinksContent" class="hidden">
+            <div class="panel-title">🔗 Управление твинками</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Основной игрок</label><input type="text" id="twinkMainNick" placeholder="Ник основного..."></div>
+                    <div class="form-group"><label>Твинк</label><input type="text" id="twinkTwinkNick" placeholder="Ник твинка..."></div>
+                </div>
+                <button type="button" class="submit-btn" onclick="linkTwinkAdmin()">🔗 Привязать</button>
+            </div>
+            <div id="adminTwinksList"></div>
+            <div id="twinksMessage" class="message"></div>
+        </div>
     </div>
 </div>
 
@@ -996,8 +1225,8 @@
 <div id="toastNotification" class="toast-notification hidden"><div class="toast-icon">🔔</div><div class="toast-content"><div class="toast-title" id="toastTitle">Новое уведомление</div><div class="toast-message" id="toastMessage"></div></div><button class="toast-close" onclick="hideToast()">✕</button></div>
 
 <script>
-        const APP_VERSION = '16.2';
-    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbwLUX6e6nBoAf8R3EJlkQtGp13G45fIFvrNGjhkFMF_QN00aoZ76bZGloXMCU9kRYRC/exec';
+        const APP_VERSION = '17.0';
+    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbxmY2PD8Ng7OV1IFuex1s2OMId70iPFbOfS7AYYm1W1R6gzai5WDU5gxMDbIHk9yzC-/exec';
     const SCRIPT_URL = SCRIPT_URL_BASE + '?v=' + APP_VERSION + '&_t=' + Date.now();
     
     let currentUser = null, currentRole = null;
@@ -1014,6 +1243,7 @@
     const NOTIFICATION_POLL_INTERVAL = 20000;
     let allRegisteredNicks = [], matchedNicksMap = {}, allProfessionIcons = {};
     let currentEditDkpEntry = null, currentEditAuctionId = null;
+    let siteFeatures = {};
 
     async function loadSiteBackground() {
         try {
@@ -1155,13 +1385,13 @@
         document.querySelectorAll('#mainTabs .tab-btn').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
         ['home','cabinet','dkp','auction','queue','calendar','players','admin'].forEach(x => { const c = document.getElementById(x + 'Content'); if (c) c.classList.toggle('hidden', x !== t); });
-        if (t === 'home') { loadPublicTops(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadTopAbsentees(); loadRecentWinners(); }
+        if (t === 'home') { loadPublicTops(); loadAnnouncements(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadTopAbsentees(); loadRecentWinners(); }
         if (t === 'players') loadAllPlayers();
         if (t === 'dkp') { loadMyDkp(); loadEventsForSelect(); }
         if (t === 'auction') { loadActiveAuctions(); loadRecentWinners(); if (currentRole === 'Админ' || currentRole === 'Модератор') document.getElementById('tabAuctionCreate').classList.remove('hidden'); }
         if (t === 'queue') { loadQueueItems(); loadPlayersForQueue(); loadAllItemsForQueueSelect(); }
         if (t === 'calendar') loadCalendarPlayers();
-        if (t === 'cabinet') { loadMyLootHistory(); renderMmorpgInventory(); loadUserEmail(); }
+        if (t === 'cabinet') { loadMyLootHistory(); renderMmorpgInventory(); loadUserEmail(); loadPlayerLevel(); loadDailyBonus(); loadAchievements(); loadPersonalStats(); loadFriends(); loadCosmeticsShop(); loadTwinksInfo(); }
         if (t === 'admin') { loadPendingPlayers(); if (currentRole === 'Админ' || currentRole === 'Модератор') loadAllUsers(); }
     }
     function switchDkpTab(t, e) { document.querySelectorAll('#dkpContent > .tabs .tab-btn').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); document.getElementById('dkpMyContent').classList.toggle('hidden', t !== 'my'); document.getElementById('dkpSubmitContent').classList.toggle('hidden', t !== 'submit'); document.getElementById('dkpRatingContent').classList.toggle('hidden', t !== 'rating'); if (t === 'my') loadMyDkp(); if (t === 'submit') loadEventsForSelect(); if (t === 'rating') loadDkpRating(); }
@@ -1170,7 +1400,7 @@
     function switchAdminTab(t, e) {
         document.querySelectorAll('#adminContent > .tabs .tab-btn').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
-        ['players','skillsPending','equipmentPending','dkpPending','events','dkpAdjust','skills','items','users','settings'].forEach(x => { const c = document.getElementById('admin' + x.charAt(0).toUpperCase() + x.slice(1) + 'Content'); if (c) c.classList.toggle('hidden', x !== t); });
+        ['players','skillsPending','equipmentPending','dkpPending','events','dkpAdjust','skills','items','users','settings','features','announcements','log','missing','export','twinks'].forEach(x => { const c = document.getElementById('admin' + x.charAt(0).toUpperCase() + x.slice(1) + 'Content'); if (c) c.classList.toggle('hidden', x !== t); });
         if (t === 'skills') loadAdminSkills();
         if (t === 'skillsPending') loadPendingSkills();
         if (t === 'equipmentPending') loadPendingEquipment();
@@ -1179,6 +1409,11 @@
         if (t === 'items') loadAdminItems();
         if (t === 'users') { loadAllUsers(); loadAuctionDeletionRequests(); }
         if (t === 'settings') { loadAllSettings(); loadSiteBackgroundSettings(); loadProfessionIconsAdmin(); }
+        if (t === 'features') loadAdminFeatures();
+        if (t === 'announcements') loadAdminAnnouncements();
+        if (t === 'log') loadActionLog();
+        if (t === 'missing') loadMissingItemNames();
+        if (t === 'twinks') loadAdminTwinksList();
     }
 
     function showEditForm() { document.getElementById('approvedMessage').classList.add('hidden'); document.getElementById('approvedDataGrid').classList.add('hidden'); document.getElementById('mmorpgInventoryView').classList.add('hidden'); document.getElementById('playerDataForm').classList.remove('hidden'); }
@@ -1221,6 +1456,7 @@
         document.getElementById('tabAdminUsers').classList.toggle('hidden', currentRole !== 'Админ');
         document.getElementById('tabQueueAdd').classList.toggle('hidden', !(currentRole === 'Админ' || currentRole === 'Модератор'));
         localStorage.setItem('rf_session', JSON.stringify({ user: currentUser, role: currentRole, timestamp: Date.now() }));
+        loadSiteFeatures();
         loadPlayerData(); loadPlayerSkills(); loadPlayerItems(); loadMyDkp(); loadPublicTops();
         loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadTopAbsentees(); loadRecentWinners(); loadMyLootHistory();
         loadUserEmail(); startNotificationPolling();
@@ -1302,9 +1538,14 @@
     }
     function buildSkillsForm() {
         const l = document.getElementById('skillsList'), ps = (myPlayerSkills && myPlayerSkills.skills) ? myPlayerSkills.skills : [];
+        const useRarity = isFeatureEnabled('skillRarity');
+        const rarityLabels = { 'common': 'Обычный', 'uncommon': 'Необычный', 'rare': 'Редкий', 'epic': 'Эпический', 'legendary': 'Легендарный' };
         l.innerHTML = allSkills.map((s, i) => {
             const ic = ps.includes(s.name), sn = s.name.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_');
-            return `<div class="skill-item ${ic ? 'checked' : ''}" onclick="toggleSkill(this, '${s.name.replace(/'/g, "\\'")}')"><div id="skillIconForm_${sn}_${i}" class="icon-preview-cabinet" style="cursor:default;" onclick="event.stopPropagation();"><span class="icon-placeholder" style="font-size:7px;">...</span></div><input type="checkbox" class="skill-checkbox" ${ic ? 'checked' : ''} onclick="event.stopPropagation(); toggleSkill(this.parentElement, '${s.name.replace(/'/g, "\\'")}');"><div class="skill-name">${s.name}</div></div>`;
+            const rarity = s.rarity || 'common';
+            const rarityClass = useRarity ? `rarity-${rarity}` : '';
+            const rarityBadge = useRarity ? `<span class="rarity-badge ${rarityClass}">${rarityLabels[rarity]}</span>` : '';
+            return `<div class="skill-item ${ic ? 'checked' : ''}" onclick="toggleSkill(this, '${s.name.replace(/'/g, "\\'")}')"><div id="skillIconForm_${sn}_${i}" class="icon-preview-cabinet" style="cursor:default;" onclick="event.stopPropagation();"><span class="icon-placeholder" style="font-size:7px;">...</span></div><input type="checkbox" class="skill-checkbox" ${ic ? 'checked' : ''} onclick="event.stopPropagation(); toggleSkill(this.parentElement, '${s.name.replace(/'/g, "\\'")}');"><div class="skill-name">${s.name}${rarityBadge}</div></div>`;
         }).join('');
         allSkills.forEach((s, i) => { const sn = s.name.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_'); loadAndDisplayIcon('skill', s.name, `skillIconForm_${sn}_${i}`, null); });
     }
@@ -1395,7 +1636,7 @@
     function compressImage(b, ms, q) { return new Promise(r => { const i = new Image(); i.onload = () => { let { width: w, height: h } = i; const tm = Math.min(ms, 1920), tq = Math.min(q, 0.85); if (w > h && w > tm) { h = Math.round((h * tm) / w); w = tm; } else if (h > tm) { w = Math.round((w * tm) / h); h = tm; } const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); r(c.toDataURL('image/jpeg', tq)); }; i.onerror = () => r(b); i.src = b; }); }
     function renderScreenshotsPreview() { document.getElementById('screenshotsPreview').innerHTML = uploadedScreenshots.map(s => { const si = s.file ? ` <span style="font-size:9px;color:var(--text-dim);">(${(s.file.size / 1024).toFixed(0)} КБ)</span>` : ''; let sh = ''; if (s.status === 'uploading') sh = '<div class="upload-progress">...</div>'; else if (s.status === 'error') sh = `<div class="upload-progress" style="color:var(--danger);">✕</div>`; else if (s.status === 'done') sh = `<div class="upload-progress" style="color:var(--success);">✓${si}</div>`; return `<div class="screenshot-thumb">${s.base64 ? `<img src="${s.base64}" alt="screenshot" onclick="openImageModal('${s.base64}')" style="cursor:pointer;">` : ''}<button class="remove-btn" onclick="removeScreenshot('${s.id}')">✕</button>${sh}</div>`; }).join(''); }
     function removeScreenshot(id) { uploadedScreenshots = uploadedScreenshots.filter(s => s.id !== id); renderScreenshotsPreview(); }
-    async function preprocessImage(b) { return new Promise(r => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'), sc = 3; c.width = i.width * sc; c.height = i.height * sc; const ctx = c.getContext('2d'); ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(i, 0, 0, c.width, c.height); const d = ctx.getImageData(0, 0, c.width, c.height).data; for (let j = 0; j < d.length; j += 4) { let R = 255 - d[j], G = 255 - d[j + 1], B = 255 - d[j + 2]; R = Math.min(255, R + 20); G = Math.min(255, G + 20); B = Math.min(255, B + 20); R = Math.min(255, Math.max(0, (R - 128) * 1.5 + 128)); G = Math.min(255, Math.max(0, (G - 128) * 1.5 + 128)); B = Math.min(255, Math.max(0, (B - 128) * 1.5 + 128)); d[j] = R; d[j + 1] = G; d[j + 2] = B; d[j + 3] = 255; } ctx.putImageData(ctx.getImageData ? new ImageData(new Uint8ClampedArray(d), c.width, c.height) : d, 0, 0); r(c.toDataURL('image/png')); }; i.onerror = () => r(b); i.src = b; }); }
+    async function preprocessImage(b) { return new Promise(r => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'), sc = 3; c.width = i.width * sc; c.height = i.height * sc; const ctx = c.getContext('2d'); ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(i, 0, 0, c.width, c.height); const id = ctx.getImageData(0, 0, c.width, c.height); const d = id.data; for (let j = 0; j < d.length; j += 4) { let R = 255 - d[j], G = 255 - d[j + 1], B = 255 - d[j + 2]; R = Math.min(255, R + 20); G = Math.min(255, G + 20); B = Math.min(255, B + 20); R = Math.min(255, Math.max(0, (R - 128) * 1.5 + 128)); G = Math.min(255, Math.max(0, (G - 128) * 1.5 + 128)); B = Math.min(255, Math.max(0, (B - 128) * 1.5 + 128)); d[j] = R; d[j + 1] = G; d[j + 2] = B; d[j + 3] = 255; } ctx.putImageData(new ImageData(new Uint8ClampedArray(d), c.width, c.height), 0, 0); r(c.toDataURL('image/png')); }; i.onerror = () => r(b); i.src = b; }); }
     async function runOcrOnScreenshots() {
         try {
             const ds = uploadedScreenshots.filter(s => s.status === 'done' && s.base64); if (ds.length === 0) return;
@@ -1475,16 +1716,428 @@
     }
     function showDkpSubmitMessage(t, ty) { const m = document.getElementById('dkpSubmitMessage'); m.className = `message ${ty}`; m.innerText = t; m.style.display = 'block'; setTimeout(() => m.style.display = 'none', 8000); }
     async function loadDkpRating() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllDKP' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('dkpRatingList'); if (res.success && res.players.length > 0) l.innerHTML = res.players.map((p, i) => { const rk = i + 1; let rc = ''; if (rk === 1) rc = 'top-1'; else if (rk === 2) rc = 'top-2'; else if (rk === 3) rc = 'top-3'; return `<div class="ranking-item"><div class="ranking-position ${rc}">#${rk}</div><div class="ranking-info"><div class="ranking-nick">${renderPlayerNickWithBioColor(p.nickname)}</div></div><div class="ranking-bm" style="color:var(--dkp);">${Number(p.balance).toLocaleString('ru-RU')} 💰</div></div>`; }).join(''); else l.innerHTML = '<div class="empty-state">Нет данных</div>'; } catch (e) {} }
+        // ===== УПРАВЛЕНИЕ ФУНКЦИЯМИ САЙТА =====
+    async function loadSiteFeatures() {
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSiteFeatures' }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { siteFeatures = {}; res.features.forEach(f => siteFeatures[f.name] = f.enabled); }
+        } catch (e) { console.error(e); }
+    }
+    function isFeatureEnabled(name) { return siteFeatures[name] === true; }
+    async function toggleFeature(name, enabled) {
+        if (!confirm(`${enabled ? 'Включить' : 'Выключить'} "${name}"?`)) { loadAdminFeatures(); return; }
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'toggleSiteFeature', featureName: name, enabled: enabled }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { siteFeatures[name] = enabled; loadAdminFeatures(); alert(res.message); }
+            else { alert('❌ ' + res.message); loadAdminFeatures(); }
+        } catch (e) { alert('❌ Ошибка'); loadAdminFeatures(); }
+    }
+    async function loadAdminFeatures() {
+        const l = document.getElementById('featuresList'); if (!l) return;
+        await loadSiteFeatures();
+        const desc = {
+            'achievements': '🏆 Система достижений', 'levels': '📊 Уровни и опыт',
+            'personalStats': '📈 Личная статистика', 'announcements': '📢 Объявления админа',
+            'actionLog': '📝 Лог действий', 'bulkOperations': '⚡ Массовые операции',
+            'cosmeticsShop': '🛍️ Магазин косметики', 'friends': '👥 Система друзей',
+            'dailyBonus': '🎁 Ежедневные бонусы', 'dataExport': '📤 Экспорт данных',
+            'twinks': '🔗 Привязка твинков', 'skillRarity': '🎨 Редкость навыков',
+            'missingLists': '📋 Списки "у кого нет"', 'equipTop': '🏅 Топ по экипировке',
+            'advancedQueue': '📊 Расширенная очередь', 'auctionRating': '🎯 Рейтинг перед аукционом',
+            'auction5min': '⏰ Уведомления за 5 мин', 'repeatCoef': '🔄 Коэф. повторной покупки',
+            'penalties': '⚠️ Штрафы за пропуски'
+        };
+        l.innerHTML = Object.keys(desc).map(n => {
+            const en = isFeatureEnabled(n);
+            return `<div class="feature-toggle"><div style="flex:1;"><div class="feature-name">${desc[n]}</div><div class="feature-desc">Код: ${n}</div></div><div style="display:flex;align-items:center;gap:8px;"><span class="feature-status ${en ? 'on' : 'off'}">${en ? '✅ ВКЛ' : '⚠️ ВЫКЛ'}</span><button class="btn-edit" style="width:auto;margin-top:0;padding:4px 10px;" onclick="toggleFeature('${n}', ${!en})">${en ? 'Выключить' : 'Включить'}</button></div></div>`;
+        }).join('');
+    }
+
+    // ===== ОБЪЯВЛЕНИЯ =====
+    async function loadAnnouncements() {
+        if (!isFeatureEnabled('announcements')) { const b = document.getElementById('announcementsBlock'); if (b) b.innerHTML = ''; return; }
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAnnouncements' }), redirect: 'follow' });
+            const res = await r.json();
+            const b = document.getElementById('announcementsBlock'); if (!b) return;
+            if (res.success && res.announcements && res.announcements.length > 0) {
+                b.innerHTML = `<div class="panel-title">📢 ОБЪЯВЛЕНИЯ</div>` + res.announcements.map(a => {
+                    const tc = a.type === 'important' ? 'type-important' : a.type === 'event' ? 'type-event' : a.type === 'success' ? 'type-success' : 'type-info';
+                    const ti = a.type === 'important' ? '🔴' : a.type === 'event' ? '🟡' : a.type === 'success' ? '🟢' : '🔵';
+                    return `<div class="announcement-card ${tc}"><div class="announcement-title">${ti} ${a.title}</div><div class="announcement-message">${a.message}</div><div class="announcement-meta">📅 ${a.date} | 👤 ${a.createdBy || 'Администрация'}</div></div>`;
+                }).join('');
+            } else b.innerHTML = '';
+        } catch (e) { console.error(e); }
+    }
+    async function loadAdminAnnouncements() {
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAnnouncements' }), redirect: 'follow' });
+            const res = await r.json();
+            const l = document.getElementById('adminAnnouncementsList'); if (!l) return;
+            if (res.success && res.announcements && res.announcements.length > 0) {
+                l.innerHTML = res.announcements.map(a => {
+                    const ti = a.type === 'important' ? '🔴' : a.type === 'event' ? '🟡' : a.type === 'success' ? '🟢' : '🔵';
+                    return `<div class="announcement-card type-${a.type}"><div style="flex:1;"><div class="announcement-title">${ti} ${a.title}</div><div class="announcement-message">${a.message}</div><div class="announcement-meta">📅 ${a.date} | 👤 ${a.createdBy || 'Администрация'}</div></div><button class="btn-remove" onclick="deleteAnnouncement('${a.id}')">🗑</button></div>`;
+                }).join('');
+            } else l.innerHTML = '<div class="empty-state">Нет объявлений</div>';
+        } catch (e) { console.error(e); }
+    }
+    async function createAnnouncement() {
+        const t = document.getElementById('newAnnouncementTitle').value.trim();
+        const m = document.getElementById('newAnnouncementMessage').value.trim();
+        const ty = document.getElementById('newAnnouncementType').value;
+        const msg = document.getElementById('announcementsMessage');
+        if (!t || !m) { msg.className = 'message error'; msg.innerText = '❌ Заполните все поля'; msg.style.display = 'block'; return; }
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'createAnnouncement', title: t, message: m, type: ty, createdBy: currentUser }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { msg.className = 'message success'; msg.innerText = '✅ ' + res.message; document.getElementById('newAnnouncementTitle').value = ''; document.getElementById('newAnnouncementMessage').value = ''; loadAdminAnnouncements(); loadAnnouncements(); }
+            else { msg.className = 'message error'; msg.innerText = '❌ ' + res.message; }
+        } catch (e) { msg.className = 'message error'; msg.innerText = '❌ Ошибка'; }
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 3000);
+    }
+    async function deleteAnnouncement(id) {
+        if (!confirm('Удалить объявление?')) return;
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteAnnouncement', id: id }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { loadAdminAnnouncements(); loadAnnouncements(); }
+            else alert('❌ ' + res.message);
+        } catch (e) { alert('❌ Ошибка'); }
+    }
+
+    // ===== ДОСТИЖЕНИЯ =====
+    async function loadAchievements() {
+        if (!isFeatureEnabled('achievements')) { const s = document.getElementById('achievementsSection'); if (s) s.style.display = 'none'; return; }
+        const s = document.getElementById('achievementsSection'); if (s) s.style.display = 'block';
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAchievements', nickname: currentUser }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) {
+                const unlockedIds = (res.unlocked || []).map(a => a.id);
+                const c = document.getElementById('achievementsCounter');
+                if (c) c.innerText = `(${unlockedIds.length}/${res.total})`;
+                const l = document.getElementById('achievementsList');
+                if (l) {
+                    l.innerHTML = res.achievements.map(a => {
+                        const u = unlockedIds.includes(a.id);
+                        return `<div class="achievement-card ${u ? 'unlocked' : 'locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-info"><div class="achievement-name">${a.name} ${u ? '✅' : '🔒'}</div><div class="achievement-desc">${a.desc}</div></div><div class="achievement-reward">💰 ${a.reward}</div></div>`;
+                    }).join('');
+                }
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    // ===== УРОВНИ И ОПЫТ =====
+    async function loadPlayerLevel() {
+        if (!isFeatureEnabled('levels')) { const s = document.getElementById('levelSection'); if (s) s.style.display = 'none'; return; }
+        const s = document.getElementById('levelSection'); if (s) s.style.display = 'block';
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerLevel', nickname: currentUser }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) {
+                const d = document.getElementById('levelDisplay');
+                if (d) d.innerHTML = `<div class="level-display"><div class="level-title">${res.title}</div><div class="level-number">Ур. ${res.level}</div><div class="xp-bar"><div class="xp-bar-fill" style="width: ${res.progress}%;"></div></div><div class="xp-text">Опыт: ${res.xp} / ${res.xpForNext} XP (${res.progress.toFixed(1)}%)</div></div>`;
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    // ===== ЕЖЕДНЕВНЫЕ БОНУСЫ =====
+    async function loadDailyBonus() {
+        if (!isFeatureEnabled('dailyBonus')) { const s = document.getElementById('dailyBonusSection'); if (s) s.style.display = 'none'; return; }
+        const s = document.getElementById('dailyBonusSection'); if (s) s.style.display = 'block';
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getDailyBonusStatus', nickname: currentUser }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) {
+                const rewards = [50, 75, 100, 150, 200, 300, 500];
+                const streak = res.streak || 0;
+                const today = streak + (res.claimed ? 0 : 1);
+                const d = document.getElementById('dailyBonusDisplay');
+                if (d) d.innerHTML = `<div class="daily-bonus-card"><div class="daily-bonus-title">🎁 Ежедневный бонус</div><div class="streak-info">🔥 Серия: ${streak} ${streak === 1 ? 'день' : (streak >= 2 && streak <= 4 ? 'дня' : 'дней')}</div><div class="daily-rewards">${rewards.map((rw, i) => { const dn = i + 1; let cls = ''; if (dn <= streak) cls = 'claimed'; else if (dn === today && !res.claimed) cls = 'today'; return `<div class="daily-reward-day ${cls}"><div class="day-num">День ${dn}</div><div class="day-reward">${rw}</div></div>`; }).join('')}</div><button class="submit-btn dkp-btn" onclick="claimDailyBonus()" ${res.claimed ? 'disabled style="opacity: 0.5;"' : ''}>${res.claimed ? '✅ Получено сегодня' : '🎁 Забрать бонус'}</button></div>`;
+            }
+        } catch (e) { console.error(e); }
+    }
+    async function claimDailyBonus() {
+        const btn = event.target; btn.disabled = true; btn.innerHTML = '<span class="loader"></span> ...';
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'claimDailyBonus', nickname: currentUser }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { alert(`🎁 ${res.message}\n\nСледующий бонус: ${res.nextReward} DKP`); loadDailyBonus(); loadMyDkp(); loadPlayerLevel(); }
+            else { alert('❌ ' + res.message); btn.disabled = false; btn.innerHTML = '🎁 Забрать бонус'; }
+        } catch (e) { alert('❌ Ошибка'); btn.disabled = false; btn.innerHTML = '🎁 Забрать бонус'; }
+    }
+
+    // ===== ЛИЧНАЯ СТАТИСТИКА =====
+    async function loadPersonalStats() {
+        if (!isFeatureEnabled('personalStats')) { const s = document.getElementById('personalStatsSection'); if (s) s.style.display = 'none'; return; }
+        const s = document.getElementById('personalStatsSection'); if (s) s.style.display = 'block';
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPersonalStats', nickname: currentUser }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success && res.stats) {
+                const st = res.stats;
+                const d = document.getElementById('personalStatsDisplay');
+                if (d) d.innerHTML = `<div class="personal-stats-grid"><div class="personal-stat-card"><div class="personal-stat-label">🏆 Побед на аукционах</div><div class="personal-stat-value">${st.auctionWins || 0}</div></div><div class="personal-stat-card"><div class="personal-stat-label">💰 Баланс DKP</div><div class="personal-stat-value dkp">${Number(st.balance || 0).toLocaleString('ru-RU')}</div></div><div class="personal-stat-card"><div class="personal-stat-label">💸 Потрачено DKP</div><div class="personal-stat-value">${Number(st.totalSpent || 0).toLocaleString('ru-RU')}</div></div><div class="personal-stat-card"><div class="personal-stat-label">💵 Заработано DKP</div><div class="personal-stat-value success">${Number(st.totalEarned || 0).toLocaleString('ru-RU')}</div></div><div class="personal-stat-card"><div class="personal-stat-label">📊 Посещаемость</div><div class="personal-stat-value">${st.attendanceRate || 0}%</div></div><div class="personal-stat-card"><div class="personal-stat-label">🎯 Мероприятий</div><div class="personal-stat-value">${(st.eventsAttended || 0) + (st.eventsMissed || 0)}</div></div><div class="personal-stat-card"><div class="personal-stat-label">🏅 Место в рейтинге</div><div class="personal-stat-value">#${st.rank || '-'} / ${st.totalPlayers || 0}</div></div></div>`;
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    // ===== ДРУЗЬЯ =====
+    async function loadFriends() {
+        if (!isFeatureEnabled('friends')) { const s = document.getElementById('friendsSection'); if (s) s.style.display = 'none'; return; }
+        const s = document.getElementById('friendsSection'); if (s) s.style.display = 'block';
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getFriends', nickname: currentUser }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) {
+                const fr = res.friends || [];
+                const c = document.getElementById('friendsCounter'); if (c) c.innerText = `(${fr.length}/50)`;
+                const l = document.getElementById('friendsList');
+                if (l) {
+                    if (fr.length === 0) l.innerHTML = '<div class="empty-state">У вас пока нет друзей</div>';
+                    else l.innerHTML = fr.map(f => `<div class="friend-card"><div class="friend-nick">${renderPlayerNickWithBioColor(f.nickname)}</div><div class="friend-date">📅 ${f.addedDate}</div><button class="btn-remove" onclick="removeFriend('${f.nickname}')">✕</button></div>`).join('');
+                }
+            }
+        } catch (e) { console.error(e); }
+    }
+    async function addFriend() {
+        const i = document.getElementById('addFriendInput');
+        const f = i.value.trim();
+        if (!f) { alert('Введите ник друга'); return; }
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addFriend', nickname: currentUser, friend: f }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { alert('✅ ' + res.message); i.value = ''; loadFriends(); }
+            else alert('❌ ' + res.message);
+        } catch (e) { alert('❌ Ошибка'); }
+    }
+    async function removeFriend(f) {
+        if (!confirm(`Удалить ${f} из друзей?`)) return;
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'removeFriend', nickname: currentUser, friend: f }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { alert('✅ Удалён'); loadFriends(); }
+            else alert('❌ ' + res.message);
+        } catch (e) { alert('❌ Ошибка'); }
+    }
+
+    // ===== МАГАЗИН КОСМЕТИКИ =====
+    async function loadCosmeticsShop() {
+        if (!isFeatureEnabled('cosmeticsShop')) { const s = document.getElementById('cosmeticsSection'); if (s) s.style.display = 'none'; return; }
+        const s = document.getElementById('cosmeticsSection'); if (s) s.style.display = 'block';
+        try {
+            const sr = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getCosmeticsShop' }), redirect: 'follow' });
+            const sres = await sr.json();
+            const pr = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerCosmetics', nickname: currentUser }), redirect: 'follow' });
+            const pres = await pr.json();
+            if (sres.success && pres.success) {
+                const ownedIds = (pres.owned || []).map(o => o.id);
+                const equipped = pres.equipped || {};
+                const l = document.getElementById('cosmeticsShopList');
+                if (l) {
+                    l.innerHTML = sres.items.map(it => {
+                        const owned = ownedIds.includes(it.id);
+                        const equipped2 = Object.values(equipped).includes(it.id);
+                        return `<div class="cosmetic-item ${owned ? 'owned' : ''}"><div class="cosmetic-icon">${it.icon}</div><div class="cosmetic-info"><div class="cosmetic-name">${it.name}</div><div class="cosmetic-type">${it.type}</div></div>${owned ? (equipped2 ? `<button class="btn-reject" onclick="unequipCosmetic('${it.type}')">Снять</button>` : `<button class="btn-approve" onclick="equipCosmetic('${it.type}', '${it.id}')">Надеть</button>`) : `<button class="btn-edit" style="width:auto;margin-top:0;" onclick="buyCosmetic('${it.id}', ${it.price})">💰 ${it.price}</button>`}</div>`;
+                    }).join('');
+                }
+            }
+        } catch (e) { console.error(e); }
+    }
+    async function buyCosmetic(id, price) {
+        if (!confirm(`Купить за ${price} DKP?`)) return;
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'buyCosmetic', nickname: currentUser, itemId: id }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { alert('✅ ' + res.message); loadCosmeticsShop(); loadMyDkp(); loadAchievements(); }
+            else alert('❌ ' + res.message);
+        } catch (e) { alert('❌ Ошибка'); }
+    }
+    async function equipCosmetic(slot, id) {
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'equipCosmetic', nickname: currentUser, slot: slot, itemId: id }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { alert('✅ Экипировано'); loadCosmeticsShop(); }
+            else alert('❌ ' + res.message);
+        } catch (e) { alert('❌ Ошибка'); }
+    }
+    async function unequipCosmetic(slot) {
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'equipCosmetic', nickname: currentUser, slot: slot, itemId: '' }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { alert('✅ Снято'); loadCosmeticsShop(); }
+            else alert('❌ ' + res.message);
+        } catch (e) { alert('❌ Ошибка'); }
+    }
+
+    // ===== ТВИНКИ =====
+    async function loadTwinksInfo() {
+        if (!isFeatureEnabled('twinks')) { const s = document.getElementById('twinksSection'); if (s) s.style.display = 'none'; return; }
+        const s = document.getElementById('twinksSection'); if (s) s.style.display = 'block';
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getMainAccount', nickname: currentUser }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) {
+                const i = document.getElementById('twinksInfo');
+                if (i) {
+                    if (res.isTwink) i.innerHTML = `<div class="twink-card"><div>🔗 Этот аккаунт привязан к основному: <b style="color: var(--accent);">${res.main}</b></div></div>`;
+                    else if (res.twinks && res.twinks.length > 0) i.innerHTML = `<div style="margin-bottom: 8px; font-size: 11px; color: var(--text-dim);">Ваши твинки:</div>` + res.twinks.map(t => `<div class="twink-card"><div class="twink-main">${currentUser}</div><div class="twink-arrow">→</div><div class="twink-name">${t}</div></div>`).join('');
+                    else i.innerHTML = `<div class="empty-state">У вас нет привязанных твинков</div>`;
+                }
+            }
+        } catch (e) { console.error(e); }
+    }
+    async function linkTwinkAdmin() {
+        const m = document.getElementById('twinkMainNick').value.trim();
+        const t = document.getElementById('twinkTwinkNick').value.trim();
+        const msg = document.getElementById('twinksMessage');
+        if (!m || !t) { msg.className = 'message error'; msg.innerText = '❌ Заполните поля'; msg.style.display = 'block'; return; }
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'linkTwink', mainNick: m, twinkNick: t }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { msg.className = 'message success'; msg.innerText = '✅ ' + res.message; document.getElementById('twinkMainNick').value = ''; document.getElementById('twinkTwinkNick').value = ''; }
+            else { msg.className = 'message error'; msg.innerText = '❌ ' + res.message; }
+        } catch (e) { msg.className = 'message error'; msg.innerText = '❌ Ошибка'; }
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 3000);
+    }
+    async function loadAdminTwinksList() {
+        const l = document.getElementById('adminTwinksList');
+        if (!l) return;
+        l.innerHTML = '<div class="empty-state">Используйте форму выше для привязки твинков</div>';
+    }
+
+    // ===== ЛОГ ДЕЙСТВИЙ =====
+    async function loadActionLog() {
+        if (!isFeatureEnabled('actionLog')) return;
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActionLog', limit: 200 }), redirect: 'follow' });
+            const res = await r.json();
+            const l = document.getElementById('actionLogList'); if (!l) return;
+            if (res.success && res.logs && res.logs.length > 0) {
+                l.innerHTML = res.logs.map(log => `<div class="log-item"><span class="log-date">${log.date}</span><div><span class="log-action">${log.action}</span> — <span class="log-user">${log.user}</span></div>${log.details ? `<div class="log-details">${log.details}</div>` : ''}</div>`).join('');
+            } else l.innerHTML = '<div class="empty-state">Лог пуст</div>';
+        } catch (e) { console.error(e); }
+    }
+
+    // ===== СПИСКИ "У КОГО НЕТ" =====
+    async function loadMissingItemNames() {
+        const ty = document.getElementById('missingItemType').value;
+        const ns = document.getElementById('missingItemName');
+        if (!ns) return;
+        try {
+            if (ty === 'skill') {
+                const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkills' }), redirect: 'follow' });
+                const res = await r.json();
+                if (res.success) ns.innerHTML = '<option value="">— Выберите навык —</option>' + res.skills.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+            } else {
+                const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' });
+                const res = await r.json();
+                if (res.success) ns.innerHTML = '<option value="">— Выберите предмет —</option>' + res.items.map(i => `<option value="${i.name}">${i.name} (${i.section})</option>`).join('');
+            }
+        } catch (e) { console.error(e); }
+    }
+    async function loadMissingList() {
+        if (!isFeatureEnabled('missingLists')) return;
+        const ty = document.getElementById('missingItemType').value;
+        const nm = document.getElementById('missingItemName').value;
+        const r = document.getElementById('missingListResult');
+        if (!nm) { r.innerHTML = '<div class="empty-state">Выберите элемент</div>'; return; }
+        r.innerHTML = '<div class="loading-overlay"><span class="loader"></span> Загрузка...</div>';
+        try {
+            const res = await (await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getMissingItems', itemType: ty, itemName: nm }), redirect: 'follow' })).json();
+            if (res.success) {
+                if (res.missing.length === 0) r.innerHTML = `<div class="empty-state">✅ У всех есть "${nm}"</div>`;
+                else r.innerHTML = `<div style="margin-bottom: 10px; font-size: 12px; color: var(--text-dim);">У ${res.missing.length} из ${res.total} игроков нет "${nm}":</div>` + res.missing.map(n => `<div class="missing-player"><span class="nick">${renderPlayerNickWithBioColor(n)}</span></div>`).join('');
+            } else r.innerHTML = `<div class="empty-state">❌ ${res.message}</div>`;
+        } catch (e) { r.innerHTML = '<div class="empty-state">❌ Ошибка</div>'; }
+    }
+
+    // ===== ТОП ПО ЭКИПИРОВКЕ =====
+    async function loadEquipmentTop() {
+        if (!isFeatureEnabled('equipTop')) return [];
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentTop' }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) return res.top || [];
+        } catch (e) { console.error(e); }
+        return [];
+    }
+
+    // ===== РЕЙТИНГ ПЕРЕД АУКЦИОНОМ =====
+    async function loadAuctionRating() {
+        if (!isFeatureEnabled('auctionRating')) { document.getElementById('auctionRatingPreview').innerHTML = ''; return; }
+        const iname = document.getElementById('auctionItemName').value;
+        if (!iname) { alert('Сначала выберите предмет'); return; }
+        const b = document.getElementById('auctionRatingPreview');
+        b.innerHTML = '<div class="loading-overlay"><span class="loader"></span> Загрузка...</div>';
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionRating', itemKey: iname }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success && res.rating && res.rating.length > 0) {
+                b.innerHTML = `<div class="panel-title" style="font-size: 12px;">🎯 Рейтинг участников (топ-20)</div>` + res.rating.map((rt, i) => `<div class="auction-rating-item"><div class="auction-rating-pos">#${i + 1}</div><div><div class="auction-rating-nick">${renderPlayerNickWithBioColor(rt.nickname)}</div><div class="auction-rating-info">БМ: ${Number(rt.bm).toLocaleString('ru-RU')} | Посещ.: ${rt.attendanceRate}% | DKP: ${Number(rt.balance).toLocaleString('ru-RU')}</div></div><div class="auction-rating-score">${rt.totalScore}</div></div>`).join('');
+            } else b.innerHTML = '<div class="empty-state">Нет данных</div>';
+        } catch (e) { b.innerHTML = '<div class="empty-state">❌ Ошибка</div>'; }
+    }
+
+    // ===== ЭКСПОРТ ДАННЫХ =====
+    async function exportData(ty) {
+        if (!isFeatureEnabled('dataExport')) { alert('Функция выключена'); return; }
+        const r = document.getElementById('exportResult');
+        r.innerHTML = '<div class="loading-overlay"><span class="loader"></span> Генерация...</div>';
+        try {
+            const res = await (await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'exportData', type: ty }), redirect: 'follow' })).json();
+            if (res.success && res.csv) {
+                const blob = new Blob(['\uFEFF' + res.csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `rf_export_${ty}_${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                r.innerHTML = `<div class="message success" style="display: block;">✅ Файл ${ty}.csv скачан!</div>`;
+                setTimeout(() => r.innerHTML = '', 3000);
+            } else r.innerHTML = `<div class="message error" style="display: block;">❌ ${res.message || 'Ошибка'}</div>`;
+        } catch (e) { r.innerHTML = '<div class="message error" style="display: block;">❌ Ошибка связи</div>'; }
+    }
 
     // ===== МЕРОПРИЯТИЯ =====
-    async function loadAdminEvents() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('adminEventsList'); if (res.success && res.events.length > 0) { allEvents = res.events; l.innerHTML = res.events.map(e => `<div class="event-card"><div style="display:flex;align-items:center;gap:10px;flex:1;"><div id="eventIcon_${e.id}" class="icon-preview" onclick="openIconModal('event','${e.id}','${e.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="event-info"><div class="event-name">${e.name}</div><div class="event-meta">${e.createdBy || '—'} | ${e.date} | <span style="color:var(--dkp);font-weight:700;font-family:var(--font-display);">💰 ${e.dkp} DKP</span></div></div></div><div class="event-dkp">+${e.dkp}</div><div class="action-buttons"><button class="btn-edit" onclick="openEditEventModal('${e.id}','${e.name.replace(/'/g, "\\'")}',${e.dkp})" style="width:auto;margin-top:0;">✎ Изм.</button><button class="btn-edit" onclick="openIconModal('event','${e.id}','${e.name.replace(/'/g, "\\'")}')" style="width:auto;margin-top:0;">🖼</button><button class="btn-remove" onclick="openDeleteEventModal('${e.id}','${e.name.replace(/'/g, "\\'")}')" style="padding:5px 10px;">🗑</button></div></div>`).join(''); res.events.forEach(e => loadEventIcon(e.id)); } else l.innerHTML = '<div class="empty-state">Нет мероприятий</div>'; } catch (e) {} }
+    async function loadAdminEvents() {
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' });
+            const res = await r.json();
+            const l = document.getElementById('adminEventsList');
+            if (res.success && res.events.length > 0) {
+                allEvents = res.events;
+                l.innerHTML = res.events.map(e => `<div class="event-card"><div style="display:flex;align-items:center;gap:10px;flex:1;"><div id="eventIcon_${e.id}" class="icon-preview" onclick="openIconModal('event','${e.id}','${e.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="event-info"><div class="event-name">${e.name}</div><div class="event-meta">${e.createdBy || '—'} | ${e.date} | <span style="color:var(--dkp);font-weight:700;font-family:var(--font-display);">💰 ${e.dkp} DKP</span></div></div></div><div class="event-dkp">+${e.dkp}</div><div class="action-buttons"><button class="btn-edit" onclick="openEditEventModal('${e.id}','${e.name.replace(/'/g, "\\'")}',${e.dkp})" style="width:auto;margin-top:0;">✎ Изм.</button><button class="btn-edit" onclick="openIconModal('event','${e.id}','${e.name.replace(/'/g, "\\'")}')" style="width:auto;margin-top:0;">🖼</button><button class="btn-remove" onclick="openDeleteEventModal('${e.id}','${e.name.replace(/'/g, "\\'")}')" style="padding:5px 10px;">🗑</button></div></div>`).join('');
+                res.events.forEach(e => loadEventIcon(e.id));
+            } else l.innerHTML = '<div class="empty-state">Нет мероприятий</div>';
+        } catch (e) { console.error(e); }
+    }
     async function loadEventIcon(id) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEventIcon', eventId: id }), redirect: 'follow' }); const res = await r.json(); const c = document.getElementById(`eventIcon_${id}`); if (c && res.success && res.iconData) c.innerHTML = `<img src="${res.iconData}" style="width:100%;height:100%;object-fit:cover;">`; else if (c) c.innerHTML = '<span class="icon-placeholder">Нет</span>'; } catch (e) {} }
     async function addEvent(e) { e.preventDefault(); const n = document.getElementById('newEventName').value, d = document.getElementById('newEventDkp').value, m = document.getElementById('adminEventsMessage'); if (!n || !d) { m.className = 'message error'; m.innerText = 'Заполните поля'; m.style.display = 'block'; return; } try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addEvent', name: n, dkp: Number(d), createdBy: currentUser }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = res.message; document.getElementById('newEventName').value = ''; document.getElementById('newEventDkp').value = ''; setTimeout(() => { loadAdminEvents(); m.style.display = 'none'; }, 800); } else { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка.'; m.style.display = 'block'; } }
     async function removeEvent(id) { if (!confirm('Удалить?')) return; const m = document.getElementById('adminEventsMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'removeEvent', eventId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(() => { loadAdminEvents(); m.style.display = 'none'; }, 800); } else { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка.'; m.style.display = 'block'; } }
     let currentEditEventId = null;
     function openEditEventModal(id, n, d) { currentEditEventId = id; document.getElementById('editEventId').innerText = id; document.getElementById('editEventName').value = n; document.getElementById('editEventDkp').value = d; document.getElementById('editEventMessage').style.display = 'none'; document.getElementById('editEventModal').classList.remove('hidden'); }
     function closeEditEventModal() { document.getElementById('editEventModal').classList.add('hidden'); currentEditEventId = null; }
-    async function saveEventEdit() { if (!currentEditEventId) return; const nn = document.getElementById('editEventName').value.trim(), nd = document.getElementById('editEventDkp').value, m = document.getElementById('editEventMessage'); if (!nn) { m.className = 'message error'; m.innerText = 'Введите название'; m.style.display = 'block'; return; } if (nd === '' || isNaN(nd) || Number(nd) < 0) { m.className = 'message error'; m.innerText = 'Укажите DKP'; m.style.display = 'block'; return; } try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateEvent', eventId: currentEditEventId, newName: nn, newDkp: Number(nd) }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = '✅ ' + res.message; m.style.display = 'block'; setTimeout(() => { closeEditEventModal(); loadAdminEvents(); loadEventsForSelect(); }, 1500); } else { m.className = 'message error'; m.innerText = '❌ ' + res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = '❌ Ошибка'; m.style.display = 'block'; } }
+    async function saveEventEdit() {
+        if (!currentEditEventId) return;
+        const nn = document.getElementById('editEventName').value.trim(), nd = document.getElementById('editEventDkp').value, m = document.getElementById('editEventMessage');
+        if (!nn) { m.className = 'message error'; m.innerText = 'Введите название'; m.style.display = 'block'; return; }
+        if (nd === '' || isNaN(nd) || Number(nd) < 0) { m.className = 'message error'; m.innerText = 'Укажите DKP'; m.style.display = 'block'; return; }
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateEvent', eventId: currentEditEventId, newName: nn, newDkp: Number(nd) }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success) { m.className = 'message success'; m.innerText = '✅ ' + res.message; m.style.display = 'block'; setTimeout(() => { closeEditEventModal(); loadAdminEvents(); loadEventsForSelect(); }, 1500); }
+            else { m.className = 'message error'; m.innerText = '❌ ' + res.message; m.style.display = 'block'; }
+        } catch (e) { m.className = 'message error'; m.innerText = '❌ Ошибка'; m.style.display = 'block'; }
+    }
     let currentDeleteEventId = null, currentDeleteEventName = null;
     function openDeleteEventModal(id, n) { currentDeleteEventId = id; currentDeleteEventName = n; document.getElementById('deleteEventId').innerText = id; document.getElementById('deleteEventName').innerText = n; document.getElementById('deleteEventRelated').checked = true; document.getElementById('deleteEventRevertDkp').checked = false; document.getElementById('revertWarning').style.display = 'none'; document.getElementById('deleteEventMessage').style.display = 'none'; document.getElementById('deleteEventStats').innerHTML = ''; document.getElementById('deleteEventModal').classList.remove('hidden'); }
     function closeDeleteEventModal() { document.getElementById('deleteEventModal').classList.add('hidden'); currentDeleteEventId = null; currentDeleteEventName = null; }
@@ -1502,12 +2155,29 @@
             const res = await r.json();
             if (res.success) {
                 m.className = 'message success'; m.innerText = '✅ ' + res.message; m.style.display = 'block';
-                if (res.stats) { const s = res.stats; let sh = '<div style="padding:10px;background:var(--bg-soft);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:11px;"><div style="font-weight:700;color:var(--accent);margin-bottom:6px;font-family:var(--font-display);">📊 СТАТИСТИКА:</div>'; sh += `<div style="color:var(--text-dim);">• Посещаемости удалено: <b style="color:var(--text-main);">${s.attendanceDeleted || 0}</b></div>`; sh += `<div style="color:var(--text-dim);">• Заявок DKP удалено: <b style="color:var(--text-main);">${s.submissionsDeleted || 0}</b></div>`; if (s.iconDeleted) sh += `<div style="color:var(--text-dim);">• Иконка: <b style="color:var(--danger);">удалена</b></div>`; if (s.dkpReverted > 0) { sh += `<div style="color:var(--warning);margin-top:4px;">• Возвращено DKP: <b>${s.dkpReverted.toFixed(2)}</b> (игроков: <b>${s.affectedPlayers || 0}</b>)</div>`; if (s.playersDetails && Object.keys(s.playersDetails).length > 0) { sh += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed var(--border);"><div style="color:var(--text-dim);margin-bottom:4px;">Детализация:</div>'; Object.entries(s.playersDetails).forEach(([n, a]) => sh += `<div style="color:var(--text-main);font-size:10px;">• ${n}: <span style="color:var(--success);">+${a.toFixed(2)} DKP</span></div>`); sh += '</div>'; } } sh += '</div>'; sb.innerHTML = sh; }
+                if (res.stats) {
+                    const s = res.stats;
+                    let sh = '<div style="padding:10px;background:var(--bg-soft);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:11px;"><div style="font-weight:700;color:var(--accent);margin-bottom:6px;font-family:var(--font-display);">📊 СТАТИСТИКА:</div>';
+                    sh += `<div style="color:var(--text-dim);">• Посещаемости удалено: <b style="color:var(--text-main);">${s.attendanceDeleted || 0}</b></div>`;
+                    sh += `<div style="color:var(--text-dim);">• Заявок DKP удалено: <b style="color:var(--text-main);">${s.submissionsDeleted || 0}</b></div>`;
+                    if (s.iconDeleted) sh += `<div style="color:var(--text-dim);">• Иконка: <b style="color:var(--danger);">удалена</b></div>`;
+                    if (s.dkpReverted > 0) {
+                        sh += `<div style="color:var(--warning);margin-top:4px;">• Возвращено DKP: <b>${s.dkpReverted.toFixed(2)}</b> (игроков: <b>${s.affectedPlayers || 0}</b>)</div>`;
+                        if (s.playersDetails && Object.keys(s.playersDetails).length > 0) {
+                            sh += '<div style="margin-top:6px;padding-top:6px;border-top:1px dashed var(--border);"><div style="color:var(--text-dim);margin-bottom:4px;">Детализация:</div>';
+                            Object.entries(s.playersDetails).forEach(([n, a]) => sh += `<div style="color:var(--text-main);font-size:10px;">• ${n}: <span style="color:var(--success);">+${a.toFixed(2)} DKP</span></div>`);
+                            sh += '</div>';
+                        }
+                    }
+                    sh += '</div>';
+                    sb.innerHTML = sh;
+                }
                 setTimeout(() => { closeDeleteEventModal(); loadAdminEvents(); loadEventsForSelect(); loadEventStats(); loadTopAbsentees(); }, 3000);
             } else { m.className = 'message error'; m.innerText = '❌ ' + res.message; m.style.display = 'block'; }
         } catch (e) { m.className = 'message error'; m.innerText = '❌ Ошибка'; m.style.display = 'block'; }
     }
-    async function loadPendingDkp() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingDkpList'); if (res.success && res.submissions.length > 0) l.innerHTML = res.submissions.map(s => `<div class="dkp-submission-card"><div class="submission-header"><div><div class="submission-event">🏆 ${s.eventName} (+${s.eventDkp})</div><div class="submission-meta">${s.submitter} | ${s.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDkp('${s.id}')">✓</button><button class="btn-reject" onclick="rejectDkp('${s.id}')">✕</button><button class="btn-edit" onclick="editDkpSubmission('${s.id}')" style="width:auto;margin-top:0;">✎</button><button class="btn-remove" onclick="deleteDkpSubmission('${s.id}')">🗑</button></div></div>${s.screenshots && s.screenshots.length > 0 ? `<div class="submission-screenshots">${s.screenshots.map((im, i) => `<img src="${im}" onclick="openImageModal('${im}')" alt="${i + 1}">`).join('')}</div>` : ''}<div style="font-size:10px;color:var(--text-dim);margin-top:6px;">Игроки (${s.nicks.length}):</div><div class="submission-nicks">${s.nicks.map(n => `<span class="submission-nick-tag">${n}</span>`).join('')}</div></div>`).join(''); else l.innerHTML = '<div class="empty-state">Нет заявок</div>'; } catch (e) {} }
+
+    async function loadPendingDkp() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingDkpList'); if (res.success && res.submissions.length > 0) l.innerHTML = res.submissions.map(s => `<div class="dkp-submission-card"><div class="submission-header"><div><div class="submission-event">🏆 ${s.eventName} (+${s.eventDkp})</div><div class="submission-meta">${s.submitter} | ${s.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDkp('${s.id}')">✓</button><button class="btn-reject" onclick="rejectDkp('${s.id}')">✕</button><button class="btn-edit" onclick="editDkpSubmission('${s.id}')" style="width:auto;margin-top:0;">✎</button><button class="btn-remove" onclick="deleteDkpSubmission('${s.id}')">🗑</button></div></div>${s.screenshots && s.screenshots.length > 0 ? `<div class="submission-screenshots">${s.screenshots.map((im, i) => `<img src="${im}" onclick="openImageModal('${im}')" alt="${i + 1}">`).join('')}</div>` : ''}<div style="font-size:10px;color:var(--text-dim);margin-top:6px;">Игроки (${s.nicks.length}):</div><div class="submission-nicks">${s.nicks.map(n => `<span class="submission-nick-tag">${n}</span>`).join('')}</div></div>`).join(''); else l.innerHTML = '<div class="empty-state">Нет заявок</div>'; } catch (e) { console.error(e); } }
     async function approveDkp(id) { if (!confirm('Подтвердить и начислить DKP?')) return; const m = document.getElementById('adminDkpPendingMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveDKP', submissionId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { let d = res.message + '\n\n'; if (res.results && res.results.length > 0) { d += 'Детализация:\n'; res.results.forEach(x => { let c = `БМ=${x.bm}, коэфБМ=${x.coefficient.toFixed(2)}`; if (x.useEventCoef) c += `, коэфМероприятия=${x.eventCoefficient.toFixed(2)}`; d += `• ${x.nick}: ${c}, +${x.finalDkp}\n`; }); } alert(d); m.className = 'message success'; m.innerText = res.message; setTimeout(() => { loadPendingDkp(); m.style.display = 'none'; }, 1500); } else { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка.'; m.style.display = 'block'; } }
     async function rejectDkp(id) { if (!confirm('Отклонить?')) return; const m = document.getElementById('adminDkpPendingMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectDKP', submissionId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message error'; m.innerText = res.message; setTimeout(() => { loadPendingDkp(); m.style.display = 'none'; }, 800); } } catch (e) {} }
     async function editDkpSubmission(id) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getDkpSubmission', submissionId: id }), redirect: 'follow' }); const res = await r.json(); if (!res.success) { alert('Ошибка: ' + res.message); return; } const s = res.submission; const m = document.createElement('div'); m.className = 'modal-overlay'; m.id = 'editDkpModal'; m.innerHTML = `<div class="modal-content" style="max-width:580px;max-height:90vh;overflow-y:auto;"><button class="modal-close" onclick="closeEditDkpModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:12px;font-size:14px;">✎ ${s.eventName}</h3><div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-dim);">Отправитель:</div><div style="font-size:12px;">${s.submitter}</div></div><div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-dim);">Базовые DKP:</div><div style="font-size:16px;color:var(--dkp);font-weight:700;font-family:var(--font-display);">${s.eventDkp}</div></div>${s.screenshots && s.screenshots.length > 0 ? `<div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-dim);margin-bottom:5px;">Скриншоты:</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${s.screenshots.map((im, i) => `<img src="${im}" onclick="openImageModal('${im}')" style="width:180px;height:auto;border-radius:3px;border:1px solid var(--border);cursor:pointer;">`).join('')}</div></div>` : ''}<div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-dim);margin-bottom:5px;">Участники (${s.nicks.length}):</div><div id="editDkpNicksList" style="display:flex;flex-direction:column;gap:5px;">${s.nicks.map((n, i) => `<div class="nick-item"><input type="text" value="${n.replace(/"/g, '&quot;')}" id="editNick_${i}" placeholder="Ник..."><button class="remove-nick-btn" onclick="removeEditNick(${i})">✕</button></div>`).join('')}</div><button type="button" class="btn-edit" onclick="addEditNickField()" style="margin-top:8px;width:auto;">+ Добавить</button></div><button type="button" class="submit-btn dkp-btn" onclick="saveDkpSubmission('${s.id}')">💾 Сохранить</button></div>`; document.body.appendChild(m); window.currentEditDkp = { id: s.id, nicks: [...s.nicks] }; } catch (e) { alert('Ошибка: ' + e.message); } }
@@ -1518,23 +2188,40 @@
     async function deleteDkpSubmission(id) { if (!confirm('Удалить заявку?')) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteDkpSubmission', submissionId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert('Удалена'); loadPendingDkp(); } else alert('Ошибка: ' + res.message); } catch (e) { alert('Ошибка: ' + e.message); } }
     async function adjustDkp(e) { e.preventDefault(); const n = document.getElementById('adjustDkpNick').value, a = document.getElementById('adjustDkpAmount').value, r = document.getElementById('adjustDkpReason').value, m = document.getElementById('adminDkpAdjustMessage'); if (!n || !a) { m.className = 'message error'; m.innerText = 'Заполните поля'; m.style.display = 'block'; return; } try { const rs = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'adjustDKP', nickname: n, amount: Number(a), reason: r || 'Ручная', adjustedBy: currentUser }), redirect: 'follow' }); const res = await rs.json(); if (res.success) { m.className = 'message success'; m.innerText = res.message; document.getElementById('adjustDkpNick').value = ''; document.getElementById('adjustDkpAmount').value = ''; document.getElementById('adjustDkpReason').value = ''; setTimeout(() => m.style.display = 'none', 2000); } else { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка.'; m.style.display = 'block'; } }
 
-    async function loadAdminSkills() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkills' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('adminSkillsList'); if (res.success && res.skills.length > 0) { l.innerHTML = res.skills.map(s => { const sn = s.name.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_'); return `<div class="admin-skill-item"><div style="display:flex;align-items:center;gap:8px;flex:1;"><div id="skillIcon_${sn}" class="icon-preview-small" onclick="openIconModal('skill','${s.name.replace(/'/g, "\\'")}','${s.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div><span class="admin-skill-name">${s.name}</span>${s.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background:var(--accent-soft);color:var(--accent);border-color:var(--accent);">Станд.</span>'}</div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('skill','${s.name.replace(/'/g, "\\'")}','${s.name.replace(/'/g, "\\'")}')" style="width:auto;margin-top:0;">🖼</button>${s.isAdminCreated ? `<button class="btn-remove" onclick="removeSkill('${s.name.replace(/'/g, "\\'")}')">✕</button>` : ''}</div></div>`; }).join(''); res.skills.forEach(s => loadSkillIcon(s.name)); } else l.innerHTML = '<div class="empty-state">Пусто</div>'; } catch (e) {} }
+    async function loadAdminSkills() {
+        try {
+            const an = isFeatureEnabled('skillRarity') ? 'getSkillsWithRarity' : 'getSkills';
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: an }), redirect: 'follow' });
+            const res = await r.json();
+            const l = document.getElementById('adminSkillsList');
+            const rl = { 'common': 'Обычный', 'uncommon': 'Необычный', 'rare': 'Редкий', 'epic': 'Эпический', 'legendary': 'Легендарный' };
+            if (res.success && res.skills.length > 0) {
+                l.innerHTML = res.skills.map(s => {
+                    const sn = s.name.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_');
+                    const rarity = s.rarity || 'common';
+                    return `<div class="admin-skill-item"><div style="display:flex;align-items:center;gap:8px;flex:1;"><div id="skillIcon_${sn}" class="icon-preview-small" onclick="openIconModal('skill','${s.name.replace(/'/g, "\\'")}','${s.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div><span class="admin-skill-name">${s.name}</span>${s.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background:var(--accent-soft);color:var(--accent);border-color:var(--accent);">Станд.</span>'}${isFeatureEnabled('skillRarity') ? `<span class="rarity-badge rarity-${rarity}">${rl[rarity]}</span>` : ''}</div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('skill','${s.name.replace(/'/g, "\\'")}','${s.name.replace(/'/g, "\\'")}')" style="width:auto;margin-top:0;">🖼</button>${isFeatureEnabled('skillRarity') ? `<select onchange="setSkillRarity('${s.name.replace(/'/g, "\\'")}', this.value)" style="width:auto;padding:3px 6px;font-size:10px;"><option value="common" ${rarity === 'common' ? 'selected' : ''}>Обычный</option><option value="uncommon" ${rarity === 'uncommon' ? 'selected' : ''}>Необычный</option><option value="rare" ${rarity === 'rare' ? 'selected' : ''}>Редкий</option><option value="epic" ${rarity === 'epic' ? 'selected' : ''}>Эпический</option><option value="legendary" ${rarity === 'legendary' ? 'selected' : ''}>Легендарный</option></select>` : ''}${s.isAdminCreated ? `<button class="btn-remove" onclick="removeSkill('${s.name.replace(/'/g, "\\'")}')">✕</button>` : ''}</div></div>`;
+                }).join('');
+                res.skills.forEach(s => loadSkillIcon(s.name));
+            } else l.innerHTML = '<div class="empty-state">Пусто</div>';
+        } catch (e) { console.error(e); }
+    }
     async function loadSkillIcon(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkillIcon', skillName: n }), redirect: 'follow' }); const res = await r.json(); const sn = n.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_'); const c = document.getElementById(`skillIcon_${sn}`); if (c && res.success && res.iconData) c.innerHTML = `<img src="${res.iconData}" style="width:100%;height:100%;object-fit:cover;">`; else if (c) c.innerHTML = '<span class="icon-placeholder">Нет</span>'; } catch (e) {} }
     async function addSkill(e) { e.preventDefault(); const i = document.getElementById('newSkillName'), m = document.getElementById('adminSkillsMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addSkill', skillName: i.value }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = res.message; i.value = ''; setTimeout(() => { loadAdminSkills(); m.style.display = 'none'; }, 800); } else { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка.'; m.style.display = 'block'; } }
     async function removeSkill(n) { if (!confirm(`Удалить "${n}"?`)) return; const m = document.getElementById('adminSkillsMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'removeSkill', skillName: n }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(() => { loadAdminSkills(); m.style.display = 'none'; }, 800); } else { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка.'; m.style.display = 'block'; } }
-    async function loadPendingSkills() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingSkills' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingSkillsList'); if (res.success && res.players.length > 0) l.innerHTML = res.players.map(p => `<div class="player-card"><div class="player-card-header"><div class="player-nick">${p.nickname}</div><div class="action-buttons"><button class="btn-approve" onclick="approveSkills('${p.nickname}')">✓</button><button class="btn-reject" onclick="rejectSkills('${p.nickname}')">✕</button></div></div><div class="approved-skills">${p.skills.length > 0 ? p.skills.map(s => `<div class="approved-skill-badge">${s}</div>`).join('') : '<div style="color:var(--text-dim);">Пусто</div>'}</div></div>`).join(''); else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) {} }
+    async function setSkillRarity(n, r) { try { const rs = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'setSkillRarity', skillName: n, rarity: r }), redirect: 'follow' }); const res = await rs.json(); if (res.success) loadAdminSkills(); else alert('❌ ' + res.message); } catch (e) { alert('❌ Ошибка'); } }
+    async function loadPendingSkills() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingSkills' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingSkillsList'); if (res.success && res.players.length > 0) l.innerHTML = res.players.map(p => `<div class="player-card"><div class="player-card-header"><div class="player-nick">${p.nickname}</div><div class="action-buttons"><button class="btn-approve" onclick="approveSkills('${p.nickname}')">✓</button><button class="btn-reject" onclick="rejectSkills('${p.nickname}')">✕</button></div></div><div class="approved-skills">${p.skills.length > 0 ? p.skills.map(s => `<div class="approved-skill-badge">${s}</div>`).join('') : '<div style="color:var(--text-dim);">Пусто</div>'}</div></div>`).join(''); else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) { console.error(e); } }
     async function approveSkills(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveSkills', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminSkillsPendingMessage'); if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(() => { loadPendingSkills(); m.style.display = 'none'; }, 800); } } catch (e) {} }
     async function rejectSkills(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectSkills', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminSkillsPendingMessage'); if (res.success) { m.className = 'message error'; m.innerText = res.message; setTimeout(() => { loadPendingSkills(); m.style.display = 'none'; }, 800); } } catch (e) {} }
-    async function loadPendingEquipment() { try { const ir = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' }); const ires = await ir.json(); if (ires.success) allItems = ires.items; const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingItems' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingEquipmentList'); if (res.success && res.players.length > 0) { l.innerHTML = res.players.map(p => { const sh = Object.entries(p.selections || {}).map(([s, iid]) => { const it = allItems.find(i => i.id === iid); if (!it) return ''; const bc = getIconBorderColor(it.color); return `<div class="approved-eq-item"><div id="pendingItemIcon_${iid}" class="icon-preview-cabinet" style="border-color:${bc};"><span class="icon-placeholder" style="font-size:7px;">...</span></div><div class="approved-eq-section">${s}:</div><div class="approved-eq-name">${it.name}</div><div class="item-badges">${it.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${it.enhancement > 0 ? `<span class="item-badge enhance">+${it.enhancement}</span>` : ''}${it.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}${it.tier ? `<span class="item-badge ${getColorClass(it.color)}">${it.tier}</span>` : ''}<span class="item-badge ${getColorClass(it.color)}">${it.color}</span></div></div>`; }).join(''); return `<div class="player-card"><div class="player-card-header"><div class="player-nick">${p.nickname}</div><div class="action-buttons"><button class="btn-approve" onclick="approveEquipment('${p.nickname}')">✓</button><button class="btn-reject" onclick="rejectEquipment('${p.nickname}')">✕</button></div></div><div class="approved-equipment">${sh || '<div style="color:var(--text-dim);">Пусто</div>'}</div></div>`; }).join(''); res.players.forEach(p => Object.entries(p.selections || {}).forEach(([s, iid]) => { const it = allItems.find(i => i.id === iid); if (it) loadAndDisplayIcon('item', iid, `pendingItemIcon_${iid}`, it.color); })); } else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) {} }
+    async function loadPendingEquipment() { try { const ir = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' }); const ires = await ir.json(); if (ires.success) allItems = ires.items; const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingItems' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingEquipmentList'); if (res.success && res.players.length > 0) { l.innerHTML = res.players.map(p => { const sh = Object.entries(p.selections || {}).map(([s, iid]) => { const it = allItems.find(i => i.id === iid); if (!it) return ''; const bc = getIconBorderColor(it.color); return `<div class="approved-eq-item"><div id="pendingItemIcon_${iid}" class="icon-preview-cabinet" style="border-color:${bc};"><span class="icon-placeholder" style="font-size:7px;">...</span></div><div class="approved-eq-section">${s}:</div><div class="approved-eq-name">${it.name}</div><div class="item-badges">${it.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${it.enhancement > 0 ? `<span class="item-badge enhance">+${it.enhancement}</span>` : ''}${it.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}${it.tier ? `<span class="item-badge ${getColorClass(it.color)}">${it.tier}</span>` : ''}<span class="item-badge ${getColorClass(it.color)}">${it.color}</span></div></div>`; }).join(''); return `<div class="player-card"><div class="player-card-header"><div class="player-nick">${p.nickname}</div><div class="action-buttons"><button class="btn-approve" onclick="approveEquipment('${p.nickname}')">✓</button><button class="btn-reject" onclick="rejectEquipment('${p.nickname}')">✕</button></div></div><div class="approved-equipment">${sh || '<div style="color:var(--text-dim);">Пусто</div>'}</div></div>`; }).join(''); res.players.forEach(p => Object.entries(p.selections || {}).forEach(([s, iid]) => { const it = allItems.find(i => i.id === iid); if (it) loadAndDisplayIcon('item', iid, `pendingItemIcon_${iid}`, it.color); })); } else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) { console.error(e); } }
     async function approveEquipment(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveItems', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminEquipmentPendingMessage'); if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(() => { loadPendingEquipment(); m.style.display = 'none'; }, 800); } } catch (e) {} }
     async function rejectEquipment(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectItems', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminEquipmentPendingMessage'); if (res.success) { m.className = 'message error'; m.innerText = res.message; setTimeout(() => { loadPendingEquipment(); m.style.display = 'none'; }, 800); } } catch (e) {} }
-    async function loadAdminItems() { try { if (equipmentSections.length === 0) { const sr = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentSections' }), redirect: 'follow' }); const sres = await sr.json(); if (sres.success) equipmentSections = sres.sections; } const ir = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' }); const ires = await ir.json(); if (ires.success) allItems = ires.items; document.getElementById('newItemSection').innerHTML = equipmentSections.map(s => `<option value="${s}">${s}</option>`).join(''); document.getElementById('adminItemSectionTabs').innerHTML = equipmentSections.map(s => `<button type="button" class="eq-tab ${s === currentAdminItemSection ? 'active' : ''}" onclick="selectAdminItemSection('${s}')">${s}</button>`).join(''); if (!currentAdminItemSection && equipmentSections.length > 0) currentAdminItemSection = equipmentSections[0]; renderAdminItems(); } catch (e) {} }
+    async function loadAdminItems() { try { if (equipmentSections.length === 0) { const sr = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentSections' }), redirect: 'follow' }); const sres = await sr.json(); if (sres.success) equipmentSections = sres.sections; } const ir = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' }); const ires = await ir.json(); if (ires.success) allItems = ires.items; document.getElementById('newItemSection').innerHTML = equipmentSections.map(s => `<option value="${s}">${s}</option>`).join(''); document.getElementById('adminItemSectionTabs').innerHTML = equipmentSections.map(s => `<button type="button" class="eq-tab ${s === currentAdminItemSection ? 'active' : ''}" onclick="selectAdminItemSection('${s}')">${s}</button>`).join(''); if (!currentAdminItemSection && equipmentSections.length > 0) currentAdminItemSection = equipmentSections[0]; renderAdminItems(); } catch (e) { console.error(e); } }
     function selectAdminItemSection(s) { currentAdminItemSection = s; document.querySelectorAll('#adminItemSectionTabs .eq-tab').forEach(t => t.classList.toggle('active', t.innerText === s)); renderAdminItems(); }
     function renderAdminItems() { const l = document.getElementById('adminItemsList'), its = allItems.filter(i => i.section === currentAdminItemSection); if (its.length === 0) { l.innerHTML = '<div class="empty-state">Нет</div>'; return; } l.innerHTML = its.map(it => { const bc = getIconBorderColor(it.color); return `<div class="admin-item-card"><div style="display:flex;align-items:center;gap:8px;flex:1;"><div id="itemIcon_${it.id}" class="icon-preview-small" style="border:2px solid ${bc};" onclick="openIconModal('item',${it.id},'${it.name.replace(/'/g, "\\'")}')"><span class="icon-placeholder">...</span></div><div class="admin-item-info"><div class="admin-item-name">${it.name}</div><div class="admin-item-meta">${it.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${it.enhancement > 0 ? `<span class="item-badge enhance">+${it.enhancement}</span>` : ''}${it.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}${it.tier ? `<span class="item-badge ${getColorClass(it.color)}">${it.tier}</span>` : ''}<span class="item-badge ${getColorClass(it.color)}">${it.color}</span>${it.isAdminCreated ? '<span class="admin-skill-tag">Админ</span>' : '<span class="admin-skill-tag" style="background:var(--accent-soft);color:var(--accent);border-color:var(--accent);">Станд.</span>'}</div></div></div><div class="action-buttons"><button class="btn-edit" onclick="openIconModal('item',${it.id},'${it.name.replace(/'/g, "\\'")}')" style="width:auto;margin-top:0;">🖼</button>${it.isAdminCreated ? `<button class="btn-remove" onclick="removeItem(${it.id})">✕</button>` : ''}</div></div>`; }).join(''); its.forEach(it => loadItemIcon(it.id)); }
     async function loadItemIcon(id) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItemIcon', itemId: id }), redirect: 'follow' }); const res = await r.json(); const c = document.getElementById(`itemIcon_${id}`); if (c && res.success && res.iconData) { const it = allItems.find(i => i.id === id), bc = it ? getIconBorderColor(it.color) : 'var(--border)'; c.innerHTML = `<img src="${res.iconData}" style="width:100%;height:100%;object-fit:cover;border-radius:3px;">`; c.style.border = `2px solid ${bc}`; } else if (c) c.innerHTML = '<span class="icon-placeholder">Нет</span>'; } catch (e) {} }
     async function addItem(e) { e.preventDefault(); const m = document.getElementById('adminItemsMessage'); const p = { action: 'addItem', name: document.getElementById('newItemName').value, section: document.getElementById('newItemSection').value, isPrime: document.getElementById('newItemPrime').checked, enhancement: parseInt(document.getElementById('newItemEnhancement').value) || 0, isBoss: document.getElementById('newItemBoss').checked, tier: document.getElementById('newItemTier').value, color: document.getElementById('newItemColor').value }; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(p), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = res.message; document.getElementById('newItemName').value = ''; document.getElementById('newItemEnhancement').value = '0'; document.getElementById('newItemPrime').checked = false; document.getElementById('newItemBoss').checked = false; setTimeout(() => { loadAdminItems(); m.style.display = 'none'; }, 800); } else { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка.'; m.style.display = 'block'; } }
     async function removeItem(id) { if (!confirm('Удалить?')) return; const m = document.getElementById('adminItemsMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'removeItem', itemId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(() => { loadAdminItems(); m.style.display = 'none'; }, 800); } else { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка.'; m.style.display = 'block'; } }
-    async function loadPendingPlayers() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingPlayers' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingPlayersList'); if (res.success && res.players.length > 0) l.innerHTML = res.players.map(p => `<div class="player-card"><div class="player-card-header"><div class="player-nick">${p.nickname}</div><div class="action-buttons"><button class="btn-approve" onclick="approvePlayer('${p.nickname}')">✓</button><button class="btn-reject" onclick="rejectPlayer('${p.nickname}')">✕</button></div></div><div class="data-grid"><div class="data-item"><div class="data-label">БМ</div><div class="data-value">${p.bm}</div></div><div class="data-item"><div class="data-label">Уровень</div><div class="data-value">${p.level}</div></div><div class="data-item"><div class="data-label">Атака</div><div class="data-value">${p.attack}</div></div><div class="data-item"><div class="data-label">Защита</div><div class="data-value">${p.defense}</div></div><div class="data-item"><div class="data-label">Меткость</div><div class="data-value">${p.accuracy}</div></div><div class="data-item"><div class="data-label">Уклонение</div><div class="data-value">${p.evasion}</div></div><div class="data-item"><div class="data-label">Коллекции</div><div class="data-value">${p.collections}</div></div><div class="data-item"><div class="data-label">Профессия</div><div class="data-value">${p.profession}</div></div></div></div>`).join(''); else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) {} }
+    async function loadPendingPlayers() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingPlayers' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingPlayersList'); if (res.success && res.players.length > 0) l.innerHTML = res.players.map(p => `<div class="player-card"><div class="player-card-header"><div class="player-nick">${p.nickname}</div><div class="action-buttons"><button class="btn-approve" onclick="approvePlayer('${p.nickname}')">✓</button><button class="btn-reject" onclick="rejectPlayer('${p.nickname}')">✕</button></div></div><div class="data-grid"><div class="data-item"><div class="data-label">БМ</div><div class="data-value">${p.bm}</div></div><div class="data-item"><div class="data-label">Уровень</div><div class="data-value">${p.level}</div></div><div class="data-item"><div class="data-label">Атака</div><div class="data-value">${p.attack}</div></div><div class="data-item"><div class="data-label">Защита</div><div class="data-value">${p.defense}</div></div><div class="data-item"><div class="data-label">Меткость</div><div class="data-value">${p.accuracy}</div></div><div class="data-item"><div class="data-label">Уклонение</div><div class="data-value">${p.evasion}</div></div><div class="data-item"><div class="data-label">Коллекции</div><div class="data-value">${p.collections}</div></div><div class="data-item"><div class="data-label">Профессия</div><div class="data-value">${p.profession}</div></div></div></div>`).join(''); else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) { console.error(e); } }
     async function approvePlayer(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approvePlayer', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminMessage'); if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(() => { loadPendingPlayers(); m.style.display = 'none'; }, 800); } } catch (e) {} }
     async function rejectPlayer(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectPlayer', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminMessage'); if (res.success) { m.className = 'message error'; m.innerText = res.message; setTimeout(() => { loadPendingPlayers(); m.style.display = 'none'; }, 800); } } catch (e) {} }
     async function loadAllUsers() { if (currentRole !== 'Админ' && currentRole !== 'Модератор') return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllUsers' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('usersList'); if (res.success && res.users.length > 0) { l.innerHTML = res.users.map(u => { const rc = u.role === 'Админ' ? 'admin' : (u.role === 'Модератор' ? 'mod' : 'player'), is = u.nickname === currentUser; let rb = ''; if (currentRole === 'Админ' && !is) { if (u.role !== 'Админ') rb += `<button class="btn-role btn-role-admin" onclick="setUserRole('${u.nickname}','Админ')">⬆ Админ</button>`; if (u.role !== 'Модератор') rb += `<button class="btn-role btn-role-mod" onclick="setUserRole('${u.nickname}','Модератор')">⬆ Мод</button>`; if (u.role !== 'Игрок') rb += `<button class="btn-role btn-role-player" onclick="setUserRole('${u.nickname}','Игрок')">⬇ Игрок</button>`; } let db = ''; if (!is) { if (currentRole === 'Админ') db = `<button class="btn-remove" onclick="deleteUser('${u.nickname}')">🗑</button>`; else if (currentRole === 'Модератор' && u.role === 'Игрок') db = `<button class="btn-remove" onclick="requestUserDeletion('${u.nickname}')">🗑 Запрос</button>`; } else rb = '<span style="color:var(--text-dim);font-size:10px;font-style:italic;">Вы</span>'; const ei = u.email ? ` | 📧 ${u.email}` : ''; return `<div class="player-card"><div class="player-card-header"><div><span class="player-nick">${u.nickname}</span><span class="user-role-tag ${rc}">${u.role}</span></div><div class="action-buttons">${rb}${db}</div></div><div style="color:var(--text-dim);font-size:10px;">${u.date || '—'}${ei}</div></div>`; }).join(''); } else l.innerHTML = '<div class="empty-state">Нет</div>'; const ds = document.getElementById('deletionRequestsSection'); if (ds) { if (currentRole === 'Админ') { ds.style.display = 'block'; loadDeletionRequests(); } else ds.style.display = 'none'; } } catch (e) {} }
@@ -1544,7 +2231,7 @@
     async function loadDeletionRequests() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getDeletionRequests' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('deletionRequestsList'); if (res.success && res.requests.length > 0) l.innerHTML = res.requests.map(q => `<div class="player-card"><div class="player-card-header"><div><div class="player-nick">🗑️ ${q.nickname}</div><div style="font-size:10px;color:var(--text-dim);margin-top:2px;">От: ${q.requestedBy} | ${q.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDeletion('${q.id}')">✓</button><button class="btn-reject" onclick="rejectDeletion('${q.id}')">✕</button></div></div><div style="font-size:11px;color:var(--text-dim);margin-top:5px;">${q.reason}</div></div>`).join(''); else l.innerHTML = '<div class="empty-state">Нет заявок</div>'; } catch (e) {} }
     async function approveDeletion(id) { if (!confirm('Подтвердить удаление?')) return; const m = document.getElementById('deletionRequestsMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveDeletion', requestId: id, approvedBy: currentUser }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = res.message; m.style.display = 'block'; setTimeout(() => { loadDeletionRequests(); loadAllUsers(); m.style.display = 'none'; }, 1000); } else { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка.'; m.style.display = 'block'; } }
     async function rejectDeletion(id) { if (!confirm('Отклонить?')) return; const m = document.getElementById('deletionRequestsMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectDeletion', requestId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; setTimeout(() => { loadDeletionRequests(); m.style.display = 'none'; }, 800); } } catch (e) {} }
-    async function loadAuctionDeletionRequests() { if (currentRole !== 'Админ') return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDeletionRequests' }), redirect: 'follow' }); const res = await r.json(); const s = document.getElementById('auctionDeletionRequestsSection'), l = document.getElementById('auctionDeletionRequestsList'); if (!s || !l) return; if (res.success && res.requests && res.requests.length > 0) { s.style.display = 'block'; l.innerHTML = res.requests.map(q => { const i = q.auctionInfo || {}; return `<div class="player-card"><div class="player-card-header"><div><div class="player-nick">🗑️ Аукцион #${i.number || '?'}: ${i.name || 'Неизвестно'}</div><div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Победитель: ${i.winner || '—'} | Заявка от: ${q.requestedBy} | ${q.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveAuctionDeletion('${q.id}','${q.auctionId}')">✓</button><button class="btn-reject" onclick="rejectAuctionDeletion('${q.id}')">✕</button></div></div></div>`; }).join(''); } else { if (currentRole === 'Админ') s.style.display = 'block'; l.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (e) {} }
+    async function loadAuctionDeletionRequests() { if (currentRole !== 'Админ') return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDeletionRequests' }), redirect: 'follow' }); const res = await r.json(); const s = document.getElementById('auctionDeletionRequestsSection'), l = document.getElementById('auctionDeletionRequestsList'); if (!s || !l) return; if (res.success && res.requests && res.requests.length > 0) { s.style.display = 'block'; l.innerHTML = res.requests.map(q => { const i = q.auctionInfo || {}; return `<div class="player-card"><div class="player-card-header"><div><div class="player-nick">🗑️ Аукцион #${i.number || '?'}: ${i.name || 'Неизвестно'}</div><div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Победитель: ${i.winner || '—'} | Заявка от: ${q.requestedBy} | ${q.date}</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveAuctionDeletion('${q.id}')">✓</button><button class="btn-reject" onclick="rejectAuctionDeletion('${q.id}')">✕</button></div></div></div>`; }).join(''); } else { if (currentRole === 'Админ') s.style.display = 'block'; l.innerHTML = '<div class="empty-state">Нет заявок</div>'; } } catch (e) {} }
     async function approveAuctionDeletion(id) { if (!confirm('Подтвердить удаление? DKP будут возвращены.')) return; const m = document.getElementById('auctionDeletionRequestsMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveAuctionDeletion', requestId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = '✅ ' + res.message; m.style.display = 'block'; setTimeout(() => { loadAuctionDeletionRequests(); loadCompletedAuctions(); m.style.display = 'none'; }, 1500); } else { m.className = 'message error'; m.innerText = '❌ ' + res.message; m.style.display = 'block'; } } catch (e) { m.className = 'message error'; m.innerText = '❌ Ошибка'; m.style.display = 'block'; } }
     async function rejectAuctionDeletion(id) { if (!confirm('Отклонить?')) return; const m = document.getElementById('auctionDeletionRequestsMessage'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectAuctionDeletion', requestId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message error'; m.innerText = res.message; m.style.display = 'block'; setTimeout(() => { loadAuctionDeletionRequests(); m.style.display = 'none'; }, 1500); } } catch (e) {} }
     async function loadAllPlayers() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayers' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('rankingList'); if (res.success && res.players.length > 0) l.innerHTML = res.players.map((p, i) => { const rk = i + 1; let rc = ''; if (rk === 1) rc = 'top-1'; else if (rk === 2) rc = 'top-2'; else if (rk === 3) rc = 'top-3'; return `<div class="ranking-item"><div class="ranking-position ${rc}">#${rk}</div><div class="ranking-info"><div class="ranking-nick">${renderPlayerNickWithBioColor(p.nickname, p.role)} ${getProfessionIconHtml(p.profession)}</div><div class="ranking-stats">Ур. ${p.level} | ${p.profession} | Ат: ${p.attack} | Защ: ${p.defense}</div></div><div class="ranking-bm">БМ: ${Number(p.bm).toLocaleString('ru-RU')}</div><button class="btn-compare" onclick="compareWithPlayer('${p.nickname}')">⚔</button></div>`; }).join(''); else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) {} }
@@ -1569,8 +2256,18 @@
     function renderCalendar(recs, sd, ed, pf) { const g = document.getElementById('calendarGrid'), s = document.getElementById('calendarStats'); if (!recs || recs.length === 0) { g.innerHTML = '<div class="empty-state">Нет данных</div>'; s.innerHTML = ''; return; } const gr = {}; recs.forEach(r => { if (!gr[r.date]) gr[r.date] = {}; if (!gr[r.date][r.eventName]) gr[r.date][r.eventName] = { attended: [], missed: [], eventDkp: r.eventDkp }; if (r.status === 'attended') gr[r.date][r.eventName].attended.push({ nickname: r.nickname, dkpEarned: r.dkpEarned }); else gr[r.date][r.eventName].missed.push(r.nickname); }); let ta = 0, tm = 0, td = 0; recs.forEach(r => { if (r.status === 'attended') { ta++; td += r.dkpEarned; } else tm++; }); const te = Object.keys(gr).reduce((s, d) => s + Object.keys(gr[d]).length, 0), ar = ta + tm > 0 ? Math.round((ta / (ta + tm)) * 100) : 0; s.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;margin-bottom:12px;"><div class="data-item"><div class="data-label">Период</div><div class="data-value" style="font-size:10px;">${sd} — ${ed}</div></div><div class="data-item"><div class="data-label">Мероприятий</div><div class="data-value">${te}</div></div><div class="data-item"><div class="data-label">Посещений</div><div class="data-value" style="color:var(--success);">${ta}</div></div><div class="data-item"><div class="data-label">Пропусков</div><div class="data-value" style="color:var(--danger);">${tm}</div></div><div class="data-item"><div class="data-label">Посещ.</div><div class="data-value" style="color:var(--dkp);">${ar}%</div></div><div class="data-item"><div class="data-label">DKP</div><div class="data-value" style="color:var(--dkp);">${td.toFixed(1)}</div></div></div>`; const ds = Object.keys(gr).sort(); g.innerHTML = ds.map(d => { const evs = gr[d]; const eh = Object.entries(evs).map(([n, da]) => `<div class="calendar-event"><div class="calendar-event-title">🏆 ${n} <span style="font-size:10px;color:var(--text-dim);">(+${da.eventDkp})</span></div>${da.attended.length > 0 ? `<div style="margin-bottom:4px;"><span class="calendar-label attended">✓ (${da.attended.length}):</span><div class="calendar-players">${da.attended.map(p => `<span class="calendar-nick-attended">${p.nickname} <span style="font-size:8px;">(+${p.dkpEarned})</span></span>`).join('')}</div></div>` : ''}${da.missed.length > 0 ? `<div><span class="calendar-label missed">✕ (${da.missed.length}):</span><div class="calendar-players">${da.missed.map(n => `<span class="calendar-nick-missed">${n}</span>`).join('')}</div></div>` : ''}</div>`).join(''); return `<div class="calendar-day"><div class="calendar-date">📅 ${d}</div>${eh}</div>`; }).join(''); }
 
     // ===== АУКЦИОН =====
-    async function loadActiveAuctions() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActiveAuctions' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('activeAuctionsList'); if (res.success && res.auctions.length > 0) { l.innerHTML = res.auctions.map(a => { const tl = getTimeLeft(a.endTime), cc = getColorClass(a.itemColor), ia = a.allowedPlayers.length === 0 || a.allowedPlayers.includes(currentUser), cb = ia && a.currentBidder !== currentUser, gb = a.itemGiven ? '<span class="given-badge given">✅ ВЫДАН</span>' : '<span class="given-badge not-given">⚠️ НЕ ВЫДАН</span>'; return `<div class="auction-card"><div class="auction-header"><div style="display:flex;gap:10px;align-items:flex-start;"><div class="auction-item-icon" id="auctionItemIcon_${a.id}" style="border-color:${getIconBorderColor(a.itemColor)};"><span class="icon-placeholder" style="font-size:7px;">...</span></div><div><div class="auction-title"><span class="auction-number-badge">#${a.auctionNumber || '?'}</span>🔨 ${a.itemName}</div><div style="font-size:10px;color:var(--text-dim);margin-top:3px;">${a.itemSection} | ${a.itemTier} | <span class="item-badge ${cc}">${a.itemColor}</span>${a.itemEnhancement > 0 ? ` <span class="item-badge enhance">+${a.itemEnhancement}</span>` : ''}${a.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${a.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div></div></div><div class="timer-display" id="timer_${a.id}" data-end="${a.endTime}">${tl}</div></div><div class="auction-info"><div class="auction-info-item"><div class="auction-info-label">Текущая</div><div class="auction-info-value" style="color:var(--dkp);">${a.currentBid} DKP</div>${a.currentBidder ? `<div style="font-size:10px;color:var(--accent);">👑 ${a.currentBidder}</div>` : '<div style="font-size:10px;color:var(--text-dim);">Ставок нет</div>'}</div><div class="auction-info-item"><div class="auction-info-label">Мин. ставка</div><div class="auction-info-value" style="color:var(--success);">${a.currentBid + 1} DKP</div></div></div>${a.minAttendance > 0 ? `<div style="font-size:10px;color:var(--text-dim);margin-bottom:6px;">📊 Мин. посещ.: ${a.minAttendance}%</div>` : ''}${a.priorityOnly ? `<div style="font-size:10px;color:var(--warning);margin-bottom:6px;">⚠️ Только приоритет</div>` : ''}<div style="margin-bottom:8px;">${gb}</div><div class="action-buttons"><button class="btn-compare" onclick="openBidModal('${a.id}')" ${!cb ? 'disabled style="opacity:0.5;"' : ''}>💰 Ставка</button>${(currentRole === 'Админ' || currentRole === 'Модератор') ? `<button class="btn-remove" onclick="cancelAuction('${a.id}')">✕ Отмена</button><button class="btn-approve" onclick="completeAuction('${a.id}')">✓ Завершить</button><button class="btn-edit" style="width:auto;margin-top:0;" onclick="markItemGiven('${a.id}',${!a.itemGiven})">${a.itemGiven ? '↩ Отменить выдачу' : '✓ Выдать предмет'}</button>` : ''}</div></div>`; }).join(''); startCountdowns(); res.auctions.forEach(a => loadAuctionItemIcon(a.id, a.itemName, a.itemSection, a.itemColor, `auctionItemIcon_${a.id}`)); } else l.innerHTML = '<div class="empty-state">Нет активных аукционов</div>'; } catch (e) {} }
-    async function loadCompletedAuctions() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getCompletedAuctions' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('completedAuctionsList'); if (res.success && res.auctions.length > 0) { l.innerHTML = res.auctions.map((a, i) => { const cc = getColorClass(a.itemColor), st = a.status === 'completed' ? '✅ Завершён' : '❌ Отменён', sc = a.status === 'completed' ? 'var(--success)' : 'var(--danger)', gb = a.itemGiven ? '<span class="given-badge given">✅ Предмет выдан</span>' : '<span class="given-badge not-given">⚠️ Предмет НЕ выдан</span>'; return `<div class="player-card"><div class="player-card-header"><div style="display:flex;gap:10px;align-items:flex-start;"><div class="auction-item-icon" id="completedItemIcon_${a.id}_${i}" style="border-color:${getIconBorderColor(a.itemColor)};"><span class="icon-placeholder" style="font-size:7px;">...</span></div><div><div class="player-nick" style="color:var(--dkp);font-size:13px;"><span class="auction-number-badge">#${a.auctionNumber || '?'}</span>🔨 ${a.itemName}</div><div style="font-size:10px;color:var(--text-dim);margin-top:3px;">${a.itemSection} | ${a.itemTier} | <span class="item-badge ${cc}">${a.itemColor}</span></div></div></div><div style="text-align:right;"><div style="font-size:10px;color:var(--text-dim);">Победитель:</div><div style="font-size:13px;color:var(--accent);font-weight:700;font-family:var(--font-display);">🏆 ${a.currentBidder || 'Нет'}</div><div style="font-size:12px;color:var(--dkp);font-weight:700;">${a.currentBid} DKP</div></div></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);flex-wrap:wrap;gap:6px;"><div style="font-size:10px;color:${sc};font-weight:700;">${st} | ${a.endTime}</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">${gb}${(currentRole === 'Админ' || currentRole === 'Модератор') && a.status === 'completed' ? `<button class="btn-edit" style="width:auto;margin-top:0;font-size:10px;padding:4px 8px;" onclick="markItemGiven('${a.id}',${!a.itemGiven})">${a.itemGiven ? '↩ Отменить' : '✓ Выдать'}</button><button class="btn-edit" style="width:auto;margin-top:0;font-size:10px;padding:4px 8px;" onclick="openEditCompletedAuctionModal('${a.id}')">✎ Ред.</button><button class="btn-remove" style="padding:4px 8px;" onclick="deleteCompletedAuction('${a.id}')">🗑 Удалить</button>` : ''}</div></div></div>`; }).join(''); res.auctions.forEach((a, i) => loadAuctionItemIcon(`completed_${a.id}_${i}`, a.itemName, a.itemSection, a.itemColor, `completedItemIcon_${a.id}_${i}`)); } else l.innerHTML = '<div class="empty-state">Нет завершённых аукционов</div>'; } catch (e) {} }
+    async function loadActiveAuctions() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActiveAuctions' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('activeAuctionsList'); if (res.success && res.auctions.length > 0) { const active = res.auctions.filter(a => !a.isExpired), expired = res.auctions.filter(a => a.isExpired); let html = ''; if (expired.length > 0) { html += `<div style="margin-bottom:16px;padding:12px;background:var(--danger-soft);border:1px solid var(--danger);border-radius:var(--radius-md);"><div style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--danger);margin-bottom:8px;">⚠️ ТРЕБУЮТ ЗАВЕРШЕНИЯ (${expired.length})</div><div style="font-size:11px;color:var(--text-dim);">Время этих аукционов истекло. Администратор должен завершить их вручную.</div></div>`; html += expired.map(a => renderAuctionCard(a, true)).join(''); } if (active.length > 0) { if (expired.length > 0) html += `<div style="margin:16px 0 12px 0;font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--accent);">🔥 АКТИВНЫЕ АУКЦИОНЫ (${active.length})</div>`; html += active.map(a => renderAuctionCard(a, false)).join(''); } l.innerHTML = html; startCountdowns(); res.auctions.forEach(a => loadAuctionItemIcon(a.id, a.itemName, a.itemSection, a.itemColor, `auctionItemIcon_${a.id}`)); } else l.innerHTML = '<div class="empty-state">Нет активных аукционов</div>'; } catch (e) { console.error(e); } }
+    function renderAuctionCard(a, isExpired) {
+        const tl = isExpired ? '<span style="color:var(--danger);font-weight:700;">⏰ ВРЕМЯ ИСТЕКЛО</span>' : getTimeLeft(a.endTime);
+        const cc = getColorClass(a.itemColor);
+        const ia = a.allowedPlayers.length === 0 || a.allowedPlayers.includes(currentUser);
+        const cb = ia && a.currentBidder !== currentUser && !isExpired;
+        const gb = a.itemGiven ? '<span class="given-badge given">✅ ВЫДАН</span>' : '<span class="given-badge not-given">⚠️ НЕ ВЫДАН</span>';
+        const ei = a.extensionsCount > 0 ? `<div style="font-size:10px;color:var(--warning);margin-top:3px;">⏰ Продлений: ${a.extensionsCount}/5</div>` : '';
+        const es = isExpired ? 'border-color:var(--danger);opacity:0.85;' : '';
+        return `<div class="auction-card" style="${es}"><div class="auction-header"><div style="display:flex;gap:10px;align-items:flex-start;"><div class="auction-item-icon" id="auctionItemIcon_${a.id}" style="border-color:${getIconBorderColor(a.itemColor)};"><span class="icon-placeholder" style="font-size:7px;">...</span></div><div><div class="auction-title">${isExpired ? '<span style="color:var(--danger);font-size:11px;">⚠️ </span>' : ''}<span class="auction-number-badge">#${a.auctionNumber || '?'}</span>🔨 ${a.itemName}</div><div style="font-size:10px;color:var(--text-dim);margin-top:3px;">${a.itemSection} | ${a.itemTier} | <span class="item-badge ${cc}">${a.itemColor}</span>${a.itemEnhancement > 0 ? ` <span class="item-badge enhance">+${a.itemEnhancement}</span>` : ''}${a.isPrime ? '<span class="item-badge prime">Прайм</span>' : ''}${a.isBoss ? '<span class="item-badge boss">Босс</span>' : ''}</div>${ei}</div></div><div class="timer-display" id="timer_${a.id}" data-end="${a.endTime}" style="${isExpired ? 'background:var(--danger-soft);border-color:var(--danger);color:var(--danger);animation:none;' : ''}">${tl}</div></div><div class="auction-info"><div class="auction-info-item"><div class="auction-info-label">Текущая</div><div class="auction-info-value" style="color:var(--dkp);">${a.currentBid} DKP</div>${a.currentBidder ? `<div style="font-size:10px;color:var(--accent);">👑 ${a.currentBidder}</div>` : '<div style="font-size:10px;color:var(--text-dim);">Ставок нет</div>'}</div><div class="auction-info-item"><div class="auction-info-label">Мин. ставка</div><div class="auction-info-value" style="color:var(--success);">${a.currentBid + 1} DKP</div></div></div>${a.minAttendance > 0 ? `<div style="font-size:10px;color:var(--text-dim);margin-bottom:6px;">📊 Мин. посещ.: ${a.minAttendance}%</div>` : ''}${a.priorityOnly ? `<div style="font-size:10px;color:var(--warning);margin-bottom:6px;">⚠️ Только приоритет</div>` : ''}<div style="margin-bottom:8px;">${gb}</div><div class="action-buttons">${!isExpired ? `<button class="btn-compare" onclick="openBidModal('${a.id}')" ${!cb ? 'disabled style="opacity:0.5;"' : ''}>💰 Ставка</button>` : ''}${(currentRole === 'Админ' || currentRole === 'Модератор') ? `<button class="btn-remove" onclick="cancelAuction('${a.id}')">✕ Отмена</button><button class="btn-approve" onclick="completeAuction('${a.id}')">✓ Завершить</button><button class="btn-edit" style="width:auto;margin-top:0;" onclick="markItemGiven('${a.id}',${!a.itemGiven})">${a.itemGiven ? '↩ Отменить выдачу' : '✓ Выдать предмет'}</button>` : ''}</div></div>`;
+    }
+    async function loadCompletedAuctions() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getCompletedAuctions' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('completedAuctionsList'); if (res.success && res.auctions.length > 0) { l.innerHTML = res.auctions.map((a, i) => { const cc = getColorClass(a.itemColor), st = a.status === 'completed' ? '✅ Завершён' : '❌ Отменён', sc = a.status === 'completed' ? 'var(--success)' : 'var(--danger)', gb = a.itemGiven ? '<span class="given-badge given">✅ Предмет выдан</span>' : '<span class="given-badge not-given">⚠️ Предмет НЕ выдан</span>'; return `<div class="player-card"><div class="player-card-header"><div style="display:flex;gap:10px;align-items:flex-start;"><div class="auction-item-icon" id="completedItemIcon_${a.id}_${i}" style="border-color:${getIconBorderColor(a.itemColor)};"><span class="icon-placeholder" style="font-size:7px;">...</span></div><div><div class="player-nick" style="color:var(--dkp);font-size:13px;"><span class="auction-number-badge">#${a.auctionNumber || '?'}</span>🔨 ${a.itemName}</div><div style="font-size:10px;color:var(--text-dim);margin-top:3px;">${a.itemSection} | ${a.itemTier} | <span class="item-badge ${cc}">${a.itemColor}</span></div></div></div><div style="text-align:right;"><div style="font-size:10px;color:var(--text-dim);">Победитель:</div><div style="font-size:13px;color:var(--accent);font-weight:700;font-family:var(--font-display);">🏆 ${a.currentBidder || 'Нет'}</div><div style="font-size:12px;color:var(--dkp);font-weight:700;">${a.currentBid} DKP</div></div></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);flex-wrap:wrap;gap:6px;"><div style="font-size:10px;color:${sc};font-weight:700;">${st} | ${a.endTime}</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">${gb}${(currentRole === 'Админ' || currentRole === 'Модератор') && a.status === 'completed' ? `<button class="btn-edit" style="width:auto;margin-top:0;font-size:10px;padding:4px 8px;" onclick="markItemGiven('${a.id}',${!a.itemGiven})">${a.itemGiven ? '↩ Отменить' : '✓ Выдать'}</button><button class="btn-edit" style="width:auto;margin-top:0;font-size:10px;padding:4px 8px;" onclick="openEditCompletedAuctionModal('${a.id}')">✎ Ред.</button><button class="btn-remove" style="padding:4px 8px;" onclick="deleteCompletedAuction('${a.id}')">🗑 Удалить</button>` : ''}</div></div></div>`; }).join(''); res.auctions.forEach((a, i) => loadAuctionItemIcon(`completed_${a.id}_${i}`, a.itemName, a.itemSection, a.itemColor, `completedItemIcon_${a.id}_${i}`)); } else l.innerHTML = '<div class="empty-state">Нет завершённых аукционов</div>'; } catch (e) { console.error(e); } }
     async function deleteCompletedAuction(id) { if (!confirm('Удалить завершённый аукцион?\n\n⚠️ DKP будут возвращены победителю!\nЭто действие необратимо!')) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteCompletedAuction', auctionId: id, role: currentRole, requestedBy: currentUser }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert('✅ ' + res.message); loadCompletedAuctions(); loadRecentWinners(); loadMyDkp(); } else alert('❌ ' + res.message); } catch (e) { alert('❌ Ошибка: ' + e.message); } }
     async function openEditCompletedAuctionModal(id) { currentEditAuctionId = id; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' }); const res = await r.json(); if (res.success) document.getElementById('editAuctionWinner').innerHTML = '<option value="">— Выберите игрока —</option>' + res.nicks.map(n => `<option value="${n}">${n}</option>`).join(''); } catch (e) {} try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { const a = res.auction; document.getElementById('editAuctionInfo').innerHTML = `<div style="font-weight:700;">#${a.auctionNumber} — ${a.itemName}</div><div style="font-size:11px;color:var(--text-dim);margin-top:4px;">Текущий победитель: <b style="color:var(--accent);">${a.currentBidder || 'Нет'}</b> | Сумма: <b style="color:var(--dkp);">${a.currentBid} DKP</b></div>`; document.getElementById('editAuctionWinner').value = a.currentBidder || ''; document.getElementById('editAuctionAmount').value = a.currentBid; } } catch (e) {} document.getElementById('editAuctionMessage').style.display = 'none'; document.getElementById('editAuctionModal').classList.remove('hidden'); }
     function closeEditAuctionModal() { document.getElementById('editAuctionModal').classList.add('hidden'); currentEditAuctionId = null; }
@@ -1586,7 +2283,6 @@
             const res = await r.json();
             if (!res.success) { alert('Ошибка: ' + res.message); return; }
             const a = res.auction, mb = a.currentBid + 1, cc = getColorClass(a.itemColor), bi = a.playerBalance || { total: 0, frozen: 0, available: 0 }, ca = bi.available >= mb;
-            // Коэффициент повторной покупки
             let rpi = ''; window._currentRepeatCoef = 1;
             try {
                 const rpr = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getRepeatPurchaseInfo', nickname: currentUser, itemKey: a.itemKey || a.itemName }), redirect: 'follow' });
@@ -1607,8 +2303,8 @@
     async function placeBid(id, mb) { const a = document.getElementById('bidAmount').value; if (!a || Number(a) < mb) { alert(`Мин. ${mb} DKP`); return; } const rc = window._currentRepeatCoef || 1; let cm = `Ставка ${a} DKP`; if (rc > 1) { const fa = Math.round(a * rc); cm += `\n\n⚠️ С учётом коэф. повторной покупки (×${rc.toFixed(2)}) спишется: ${fa} DKP`; } if (!confirm(cm + '?')) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'placeBid', auctionId: id, bidder: currentUser, amount: Number(a) }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert(res.message); closeBidModal(); loadActiveAuctions(); loadMyDkp(); } else alert('Ошибка: ' + res.message); } catch (e) { alert('Ошибка: ' + e.message); } }
     async function cancelAuction(id) { if (!confirm('Отменить?')) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'cancelAuction', auctionId: id, cancelledBy: currentRole }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert(res.message); loadActiveAuctions(); } else alert('Ошибка: ' + res.message); } catch (e) { alert('Ошибка: ' + e.message); } }
     async function completeAuction(id) { if (!confirm('Завершить аукцион вручную?')) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'completeAuction', auctionId: id }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert(res.message); loadActiveAuctions(); loadCompletedAuctions(); loadRecentWinners(); loadMyLootHistory(); loadMyDkp(); } else alert('Ошибка: ' + res.message); } catch (e) { alert('Ошибка: ' + e.message); } }
-    function getTimeLeft(et) { const e = new Date(et), n = new Date(), d = e - n; if (d <= 0) return 'Завершён'; const h = Math.floor(d / (1000 * 60 * 60)), m = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60)), s = Math.floor((d % (1000 * 60)) / 1000); return `${h}ч ${m}м ${s}с`; }
-    function startCountdowns() { if (countdownInterval) clearInterval(countdownInterval); countdownInterval = setInterval(() => { document.querySelectorAll('.timer-display').forEach(el => { const et = el.getAttribute('data-end'); if (et) el.innerText = getTimeLeft(et); }); }, 1000); }
+    function getTimeLeft(et) { const e = new Date(et), n = new Date(), d = e - n; if (d <= 0) return '<span style="color:var(--danger);font-weight:700;">⏰ ВРЕМЯ ИСТЕКЛО</span>'; const h = Math.floor(d / (1000 * 60 * 60)), m = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60)), s = Math.floor((d % (1000 * 60)) / 1000); return `${h}ч ${m}м ${s}с`; }
+    function startCountdowns() { if (countdownInterval) clearInterval(countdownInterval); countdownInterval = setInterval(() => { document.querySelectorAll('.timer-display').forEach(el => { const et = el.getAttribute('data-end'); if (et) { const nc = getTimeLeft(et); if (!el.innerHTML.includes('ВРЕМЯ ИСТЕКЛО') || !nc.includes('ВРЕМЯ ИСТЕКЛО')) el.innerHTML = nc; } }); }, 1000); }
 
     // ===== ИКОНКИ =====
     function openIconModal(t, id, n) { currentIconType = t; currentIconId = id; currentIconName = n; const m = document.getElementById('iconModal'), ti = document.getElementById('iconModalTitle'), sh = document.getElementById('iconSizeHint'), p = document.getElementById('iconPreview'); if (t === 'event') { ti.innerHTML = `🎯 ${n}`; sh.innerText = '300×150 px'; } else if (t === 'skill') { ti.innerHTML = `🎯 ${n}`; sh.innerText = '56×56 px'; } else if (t === 'profession') { ti.innerHTML = `🎭 ${n}`; sh.innerText = '56×56 px'; } else { ti.innerHTML = `⚔ ${n}`; sh.innerText = '56×56 px'; } p.innerHTML = '<div style="color:var(--text-dim);">Загрузка...</div>'; m.classList.remove('hidden'); loadIconPreview(t, id); const ua = document.getElementById('iconUploadArea'); ua.ondragover = e => { e.preventDefault(); ua.classList.add('dragover'); }; ua.ondragleave = () => ua.classList.remove('dragover'); ua.ondrop = e => { e.preventDefault(); ua.classList.remove('dragover'); const f = Array.from(e.dataTransfer.files).filter(x => x.type.startsWith('image/')); if (f.length > 0) { const fi = document.getElementById('iconFileInput'), dt = new DataTransfer(); dt.items.add(f[0]); fi.files = dt.files; handleIconFileSelect({ target: fi }); } }; }
@@ -1624,8 +2320,8 @@
     async function deleteProfessionIcon(p) { if (!confirm(`Удалить иконку "${p}"?`)) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteProfessionIcon', profession: p }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert('✅ Удалена'); loadProfessionIconsAdmin(); loadAllProfessionIcons(); } else alert('❌ ' + res.message); } catch (e) { alert('❌ Ошибка: ' + e.message); } }
 
     // ===== НАСТРОЙКИ =====
-    async function loadAuctionSettings() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionSettings' }), redirect: 'follow' }); const res = await r.json(); if (res.success && res.settings) { const s = res.settings; document.getElementById('auctionRepeatBanEnabled').checked = s.repeatBanEnabled; document.getElementById('auctionRepeatBanPeriod').value = s.repeatBanPeriod; document.getElementById('auctionRepeatBanDays').value = s.repeatBanDays; document.getElementById('auctionCoefficientEnabled').checked = s.coefficientEnabled; document.getElementById('auctionCoefficientMode').value = s.coefficientMode; document.getElementById('auctionCoefficientList').value = (s.coefficientSelectiveList || []).join(', '); document.getElementById('customDaysRow').style.display = s.repeatBanPeriod === 'custom_days' ? 'flex' : 'none'; document.getElementById('selectiveListRow').style.display = s.coefficientMode === 'selective' ? 'flex' : 'none'; const rp = document.getElementById('auctionRepeatPurchaseCoefEnabled'); if (rp) rp.checked = s.repeatPurchaseCoefEnabled || false; const bc = document.getElementById('auctionRepeatPurchaseBaseCoef'); if (bc) bc.value = s.repeatPurchaseBaseCoef || 1.5; const mc = document.getElementById('auctionRepeatPurchaseMaxCount'); if (mc) mc.value = s.repeatPurchaseMaxCount || 5; updateRepeatPurchasePreview(); } } catch (e) {} }
-    async function saveAuctionSettings() { const m = document.getElementById('auctionSettingsMessage'), ls = document.getElementById('auctionCoefficientList').value, sl = ls ? ls.split(',').map(s => s.trim()).filter(s => s) : [], rp = document.getElementById('auctionRepeatPurchaseCoefEnabled'), bc = document.getElementById('auctionRepeatPurchaseBaseCoef'), mc = document.getElementById('auctionRepeatPurchaseMaxCount'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAuctionSettings', repeatBanEnabled: document.getElementById('auctionRepeatBanEnabled').checked, repeatBanPeriod: document.getElementById('auctionRepeatBanPeriod').value, repeatBanDays: Number(document.getElementById('auctionRepeatBanDays').value), coefficientEnabled: document.getElementById('auctionCoefficientEnabled').checked, coefficientMode: document.getElementById('auctionCoefficientMode').value, coefficientSelectiveList: sl, repeatPurchaseCoefEnabled: rp ? rp.checked : false, repeatPurchaseBaseCoef: bc ? Number(bc.value) : 1.5, repeatPurchaseMaxCount: mc ? Number(mc.value) : 5 }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = '✅ Настройки сохранены'; } else m.className = 'message error', m.innerText = res.message; } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка связи'; } m.style.display = 'block'; setTimeout(() => m.style.display = 'none', 3000); }
+    async function loadAuctionSettings() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionSettings' }), redirect: 'follow' }); const res = await r.json(); if (res.success && res.settings) { const s = res.settings; document.getElementById('auctionRepeatBanEnabled').checked = s.repeatBanEnabled; document.getElementById('auctionRepeatBanPeriod').value = s.repeatBanPeriod; document.getElementById('auctionRepeatBanDays').value = s.repeatBanDays; document.getElementById('auctionCoefficientEnabled').checked = s.coefficientEnabled; document.getElementById('auctionCoefficientMode').value = s.coefficientMode; document.getElementById('auctionCoefficientList').value = (s.coefficientSelectiveList || []).join(', '); document.getElementById('customDaysRow').style.display = s.repeatBanPeriod === 'custom_days' ? 'flex' : 'none'; document.getElementById('selectiveListRow').style.display = s.coefficientMode === 'selective' ? 'flex' : 'none'; const ae = document.getElementById('auctionAutoExtendEnabled'); if (ae) ae.checked = s.autoExtendEnabled || false; const rp = document.getElementById('auctionRepeatPurchaseCoefEnabled'); if (rp) rp.checked = s.repeatPurchaseCoefEnabled || false; const bc = document.getElementById('auctionRepeatPurchaseBaseCoef'); if (bc) bc.value = s.repeatPurchaseBaseCoef || 1.5; const mc = document.getElementById('auctionRepeatPurchaseMaxCount'); if (mc) mc.value = s.repeatPurchaseMaxCount || 5; updateRepeatPurchasePreview(); } } catch (e) {} }
+    async function saveAuctionSettings() { const m = document.getElementById('auctionSettingsMessage'), ls = document.getElementById('auctionCoefficientList').value, sl = ls ? ls.split(',').map(s => s.trim()).filter(s => s) : [], ae = document.getElementById('auctionAutoExtendEnabled'), rp = document.getElementById('auctionRepeatPurchaseCoefEnabled'), bc = document.getElementById('auctionRepeatPurchaseBaseCoef'), mc = document.getElementById('auctionRepeatPurchaseMaxCount'); try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAuctionSettings', repeatBanEnabled: document.getElementById('auctionRepeatBanEnabled').checked, repeatBanPeriod: document.getElementById('auctionRepeatBanPeriod').value, repeatBanDays: Number(document.getElementById('auctionRepeatBanDays').value), coefficientEnabled: document.getElementById('auctionCoefficientEnabled').checked, coefficientMode: document.getElementById('auctionCoefficientMode').value, coefficientSelectiveList: sl, autoExtendEnabled: ae ? ae.checked : false, repeatPurchaseCoefEnabled: rp ? rp.checked : false, repeatPurchaseBaseCoef: bc ? Number(bc.value) : 1.5, repeatPurchaseMaxCount: mc ? Number(mc.value) : 5 }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = '✅ Настройки сохранены'; } else m.className = 'message error', m.innerText = res.message; } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка связи'; } m.style.display = 'block'; setTimeout(() => m.style.display = 'none', 3000); }
     function updateRepeatPurchasePreview() { const bc = document.getElementById('auctionRepeatPurchaseBaseCoef'); if (!bc) return; const v = parseFloat(bc.value) || 1.5; const pb = document.getElementById('previewBaseCoef'), p3 = document.getElementById('previewCoef3'), p4 = document.getElementById('previewCoef4'), p5 = document.getElementById('previewCoef5'); if (pb) pb.innerText = v.toFixed(1); if (p3) p3.innerText = (v * 2).toFixed(1); if (p4) p4.innerText = (v * 3).toFixed(1); if (p5) p5.innerText = (v * 4).toFixed(1); }
     async function loadEventCoefficientSettings() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEventCoefficientSettings' }), redirect: 'follow' }); const res = await r.json(); if (res.success && res.settings) { const s = res.settings; document.getElementById('eventCoefEnabled').checked = s.enabled; document.getElementById('eventCoefMode').value = s.mode; document.getElementById('eventCoefValue').value = s.value; document.getElementById('eventCoefList').value = (s.selectiveList || []).join(', '); document.getElementById('eventCoefListRow').style.display = s.mode === 'selective' ? 'flex' : 'none'; } } catch (e) {} }
     async function saveEventCoefficientSettings() { const m = document.getElementById('eventCoefSettingsMessage'), ls = document.getElementById('eventCoefList').value, sl = ls ? ls.split(',').map(s => s.trim()).filter(s => s) : []; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'saveEventCoefficientSettings', enabled: document.getElementById('eventCoefEnabled').checked, mode: document.getElementById('eventCoefMode').value, value: Number(document.getElementById('eventCoefValue').value), selectiveList: sl }), redirect: 'follow' }); const res = await r.json(); if (res.success) { m.className = 'message success'; m.innerText = '✅ Сохранено'; } else m.className = 'message error', m.innerText = res.message; } catch (e) { m.className = 'message error'; m.innerText = 'Ошибка'; } m.style.display = 'block'; setTimeout(() => m.style.display = 'none', 3000); }
@@ -1662,7 +2358,7 @@
     function renderNotificationsList(ns) {
         const l = document.getElementById('notificationsList'); if (!l) return;
         if (ns.length === 0) { l.innerHTML = '<div class="empty-state">Нет уведомлений</div>'; return; }
-        const tl = { 'bid_outbid': '💔 Ставка перебита', 'new_auction': '🔨 Новый аукцион', 'auction_won': '🏆 Победа!' };
+        const tl = { 'bid_outbid': '💔 Ставка перебита', 'auction_ending': '⏰ Аукцион заканчивается', 'new_auction': '🔨 Новый аукцион', 'auction_won': '🏆 Победа!', 'achievement': '🏆 Достижение', 'level_up': '📊 Новый уровень', 'purchase': '🛍️ Покупка', 'daily_bonus': '🎁 Ежедневный бонус' };
         l.innerHTML = ns.map(n => {
             const t = tl[n.type] || '📢 Уведомление';
             const rb = n.isRead ? `<button class="notif-action-btn read" title="Прочитано" disabled>✓</button>` : `<button class="notif-action-btn mark-read" onclick="event.stopPropagation(); markNotificationRead('${n.id}')" title="Пометить как прочитанное">✓</button>`;
@@ -1671,13 +2367,13 @@
     }
     async function markNotificationRead(id) { try { await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'markNotificationRead', notificationId: id, nickname: currentUser }), redirect: 'follow' }); loadNotifications(); } catch (e) {} }
     async function deleteNotification(id) { if (!confirm('Удалить уведомление?')) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteNotification', notificationId: id, nickname: currentUser }), redirect: 'follow' }); const res = await r.json(); if (res.success) loadNotifications(); else alert('❌ ' + res.message); } catch (e) { alert('❌ Ошибка: ' + e.message); } }
-    async function handleNotificationClick(id, rid, t) { try { await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'markNotificationRead', notificationId: id, nickname: currentUser }), redirect: 'follow' }); } catch (e) {} if (t === 'bid_outbid' || t === 'auction_won') { closeNotificationsModal(); switchMainTab('auction', { target: document.querySelector('#mainTabs .tab-btn[data-tab="auction"]') }); if (rid) setTimeout(() => openBidModal(rid), 300); } else if (t === 'new_auction') { closeNotificationsModal(); switchMainTab('auction', { target: document.querySelector('#mainTabs .tab-btn[data-tab="auction"]') }); } loadNotifications(); }
+    async function handleNotificationClick(id, rid, t) { try { await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'markNotificationRead', notificationId: id, nickname: currentUser }), redirect: 'follow' }); } catch (e) {} if (t === 'bid_outbid' || t === 'auction_ending' || t === 'auction_won') { closeNotificationsModal(); switchMainTab('auction', { target: document.querySelector('#mainTabs .tab-btn[data-tab="auction"]') }); if (rid) setTimeout(() => openBidModal(rid), 300); } else if (t === 'new_auction') { closeNotificationsModal(); switchMainTab('auction', { target: document.querySelector('#mainTabs .tab-btn[data-tab="auction"]') }); } loadNotifications(); }
     async function markAllNotificationsRead() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'clearAllNotifications', nickname: currentUser }), redirect: 'follow' }); const res = await r.json(); if (res.success) loadNotifications(); } catch (e) {} }
-    function showBrowserNotification(n) { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); if ('Notification' in window && Notification.permission === 'granted') { const tl = { 'bid_outbid': '💔 Ставка перебита', 'new_auction': '🔨 Новый аукцион', 'auction_won': '🏆 Победа!' }; const nt = new Notification(tl[n.type] || '🔔 Уведомление', { body: n.message, tag: n.id, requireInteraction: false }); nt.onclick = () => { window.focus(); nt.close(); handleNotificationClick(n.id, n.relatedId || '', n.type); }; setTimeout(() => nt.close(), 8000); } }
+    function showBrowserNotification(n) { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); if ('Notification' in window && Notification.permission === 'granted') { const tl = { 'bid_outbid': '💔 Ставка перебита', 'auction_ending': '⏰ Аукцион заканчивается', 'new_auction': '🔨 Новый аукцион', 'auction_won': '🏆 Победа!', 'achievement': '🏆 Достижение', 'level_up': '📊 Новый уровень', 'purchase': '🛍️ Покупка', 'daily_bonus': '🎁 Ежедневный бонус' }; const nt = new Notification(tl[n.type] || '🔔 Уведомление', { body: n.message, tag: n.id, requireInteraction: false }); nt.onclick = () => { window.focus(); nt.close(); handleNotificationClick(n.id, n.relatedId || '', n.type); }; setTimeout(() => nt.close(), 8000); } }
     let toastTimeout = null;
-    function showToast(n) { const t = document.getElementById('toastNotification'); if (!t) return; const tl = { 'bid_outbid': '💔 Ставка перебита', 'new_auction': '🔨 Новый аукцион', 'auction_won': '🏆 Победа!' }; document.getElementById('toastTitle').innerText = tl[n.type] || 'Уведомление'; document.getElementById('toastMessage').innerText = n.message; t.className = 'toast-notification type-' + n.type; if (toastTimeout) clearTimeout(toastTimeout); toastTimeout = setTimeout(() => t.classList.add('hidden'), 6000); }
+    function showToast(n) { const t = document.getElementById('toastNotification'); if (!t) return; const tl = { 'bid_outbid': '💔 Ставка перебита', 'auction_ending': '⏰ Аукцион заканчивается', 'new_auction': '🔨 Новый аукцион', 'auction_won': '🏆 Победа!', 'achievement': '🏆 Достижение', 'level_up': '📊 Новый уровень', 'purchase': '🛍️ Покупка', 'daily_bonus': '🎁 Ежедневный бонус' }; document.getElementById('toastTitle').innerText = tl[n.type] || 'Уведомление'; document.getElementById('toastMessage').innerText = n.message; t.className = 'toast-notification type-' + n.type; if (toastTimeout) clearTimeout(toastTimeout); toastTimeout = setTimeout(() => t.classList.add('hidden'), 6000); }
     function hideToast() { const t = document.getElementById('toastNotification'); if (t) t.classList.add('hidden'); if (toastTimeout) clearTimeout(toastTimeout); }
-    function playNotificationSound(t = 'default') { try { const ac = new (window.AudioContext || window.webkitAudioContext)(), sc = { 'bid_outbid': { freq: 400, duration: 0.3, type: 'sawtooth' }, 'new_auction': { freq: 800, duration: 0.2, type: 'sine' }, 'auction_won': { freq: 1000, duration: 0.5, type: 'sine' }, 'default': { freq: 800, duration: 0.3, type: 'sine' } }, c = sc[t] || sc['default'], o = ac.createOscillator(), g = ac.createGain(); o.connect(g); g.connect(ac.destination); o.frequency.value = c.freq; o.type = c.type; g.gain.setValueAtTime(0.15, ac.currentTime); g.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + c.duration); o.start(ac.currentTime); o.stop(ac.currentTime + c.duration); if (t === 'auction_won') setTimeout(() => { const o2 = ac.createOscillator(), g2 = ac.createGain(); o2.connect(g2); g2.connect(ac.destination); o2.frequency.value = 1200; o2.type = 'sine'; g2.gain.setValueAtTime(0.15, ac.currentTime); g2.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + 0.3); o2.start(ac.currentTime); o2.stop(ac.currentTime + 0.3); }, 200); } catch (e) {} }
+    function playNotificationSound(t = 'default') { try { const ac = new (window.AudioContext || window.webkitAudioContext)(), sc = { 'bid_outbid': { freq: 400, duration: 0.3, type: 'sawtooth' }, 'auction_ending': { freq: 600, duration: 0.4, type: 'triangle' }, 'new_auction': { freq: 800, duration: 0.2, type: 'sine' }, 'auction_won': { freq: 1000, duration: 0.5, type: 'sine' }, 'achievement': { freq: 1200, duration: 0.3, type: 'sine' }, 'level_up': { freq: 900, duration: 0.4, type: 'triangle' }, 'purchase': { freq: 700, duration: 0.2, type: 'sine' }, 'daily_bonus': { freq: 850, duration: 0.3, type: 'sine' }, 'default': { freq: 800, duration: 0.3, type: 'sine' } }, c = sc[t] || sc['default'], o = ac.createOscillator(), g = ac.createGain(); o.connect(g); g.connect(ac.destination); o.frequency.value = c.freq; o.type = c.type; g.gain.setValueAtTime(0.15, ac.currentTime); g.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + c.duration); o.start(ac.currentTime); o.stop(ac.currentTime + c.duration); if (t === 'auction_won') setTimeout(() => { const o2 = ac.createOscillator(), g2 = ac.createGain(); o2.connect(g2); g2.connect(ac.destination); o2.frequency.value = 1200; o2.type = 'sine'; g2.gain.setValueAtTime(0.15, ac.currentTime); g2.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + 0.3); o2.start(ac.currentTime); o2.stop(ac.currentTime + 0.3); }, 200); } catch (e) {} }
 </script>
 </body>
 </html>
