@@ -596,7 +596,6 @@
             <button class="login-link" onclick="showAuthScreen()">▶ Войти в систему</button>
         </div>
     </div>
-    <!-- ✅ ОБЪЯВЛЕНИЯ НА ГЛАВНОЙ -->
     <div id="announcementsBlock" style="margin-bottom: 14px;"></div>
     <div class="top-containers">
         <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по БМ</div><div id="topBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
@@ -708,25 +707,21 @@
             <div id="playerMessage" class="message"></div>
         </div>
         
-        <!-- ✅ v17.0: УРОВЕНЬ -->
         <div class="cabinet-section" id="levelSection">
             <div class="panel-title">📊 Уровень и опыт</div>
             <div id="levelDisplay"></div>
         </div>
         
-        <!-- ✅ v17.0: ЕЖЕДНЕВНЫЙ БОНУС -->
         <div class="cabinet-section" id="dailyBonusSection">
             <div class="panel-title">🎁 Ежедневный бонус</div>
             <div id="dailyBonusDisplay"></div>
         </div>
         
-        <!-- ✅ v17.0: ДОСТИЖЕНИЯ -->
         <div class="cabinet-section" id="achievementsSection">
             <div class="panel-title">🏆 Достижения <span id="achievementsCounter" style="font-size: 11px; color: var(--text-dim);"></span></div>
             <div id="achievementsList"></div>
         </div>
         
-        <!-- ✅ v17.0: ЛИЧНАЯ СТАТИСТИКА -->
         <div class="cabinet-section" id="personalStatsSection">
             <div class="panel-title">📈 Моя статистика</div>
             <div id="personalStatsDisplay"></div>
@@ -743,7 +738,6 @@
             <div id="emailMessage" class="message"></div>
         </div>
         
-        <!-- ✅ v17.0: ДРУЗЬЯ -->
         <div class="cabinet-section" id="friendsSection">
             <div class="panel-title">👥 Друзья <span id="friendsCounter" style="font-size: 11px; color: var(--text-dim);"></span></div>
             <div style="display: flex; gap: 6px; margin-bottom: 10px;">
@@ -753,14 +747,12 @@
             <div id="friendsList"></div>
         </div>
         
-        <!-- ✅ v17.0: МАГАЗИН КОСМЕТИКИ -->
         <div class="cabinet-section" id="cosmeticsSection">
             <div class="panel-title">🛍️ Магазин косметики</div>
             <div id="cosmeticsShopList"></div>
             <div id="cosmeticsMessage" class="message"></div>
         </div>
         
-        <!-- ✅ v17.0: ТВИНКИ -->
         <div class="cabinet-section" id="twinksSection">
             <div class="panel-title">🔗 Твинки</div>
             <div id="twinksInfo"></div>
@@ -879,7 +871,6 @@
                 </div>
                 <div class="form-group"><label>Участники (пусто = все)</label><div id="auctionPlayersList" style="max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; background: var(--bg-soft);"></div></div>
                 <button type="button" class="submit-btn dkp-btn" onclick="createAuction()">🔨 Создать</button>
-                <!-- ✅ v17.0: Рейтинг перед аукционом -->
                 <button type="button" class="btn-edit" style="margin-top: 10px;" onclick="loadAuctionRating()">🎯 Показать рейтинг участников</button>
                 <div id="auctionRatingPreview" style="margin-top: 10px;"></div>
             </div>
@@ -966,7 +957,6 @@
             <button class="tab-btn" id="tabAdminItems" onclick="switchAdminTab('items', event)">⚔ Предметы</button>
             <button class="tab-btn hidden" id="tabAdminUsers" onclick="switchAdminTab('users', event)">👥 Юзеры</button>
             <button class="tab-btn" id="tabAdminSettings" onclick="switchAdminTab('settings', event)">⚙ Настройки</button>
-            <!-- ✅ v17.0: НОВЫЕ ВКЛАДКИ -->
             <button class="tab-btn" id="tabAdminFeatures" onclick="switchAdminTab('features', event)">⚙️ Функции</button>
             <button class="tab-btn" id="tabAdminAnnouncements" onclick="switchAdminTab('announcements', event)">📢 Объявл.</button>
             <button class="tab-btn" id="tabAdminLog" onclick="switchAdminTab('log', event)">📝 Лог</button>
@@ -1139,7 +1129,6 @@
             </div>
         </div>
         
-        <!-- ✅ v17.0: УПРАВЛЕНИЕ ФУНКЦИЯМИ -->
         <div id="adminFeaturesContent" class="hidden">
             <div class="panel-title">⚙️ Управление функциями сайта</div>
             <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 12px;">Включайте/выключайте функции по необходимости.</p>
@@ -1147,7 +1136,6 @@
             <div id="featuresMessage" class="message"></div>
         </div>
         
-        <!-- ✅ v17.0: ОБЪЯВЛЕНИЯ -->
         <div id="adminAnnouncementsContent" class="hidden">
             <div class="panel-title">📢 Объявления</div>
             <div class="add-item-form">
@@ -1162,7 +1150,6 @@
             <div id="announcementsMessage" class="message"></div>
         </div>
         
-        <!-- ✅ v17.0: ЛОГ ДЕЙСТВИЙ -->
         <div id="adminLogContent" class="hidden">
             <div class="panel-title">📝 Лог действий</div>
             <div style="display: flex; gap: 8px; margin-bottom: 12px;">
@@ -1171,7 +1158,6 @@
             <div id="actionLogList"></div>
         </div>
         
-        <!-- ✅ v17.0: СПИСКИ "У КОГО НЕТ" -->
         <div id="adminMissingContent" class="hidden">
             <div class="panel-title">📋 Списки "у кого нет"</div>
             <div class="add-item-form">
@@ -1184,7 +1170,6 @@
             <div id="missingListResult"></div>
         </div>
         
-        <!-- ✅ v17.0: ЭКСПОРТ ДАННЫХ -->
         <div id="adminExportContent" class="hidden">
             <div class="panel-title">📤 Экспорт данных</div>
             <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 12px;">Выгрузите данные в CSV для анализа в Excel.</p>
@@ -1196,7 +1181,6 @@
             <div id="exportResult" style="margin-top: 12px;"></div>
         </div>
         
-        <!-- ✅ v17.0: УПРАВЛЕНИЕ ТВИНКАМИ -->
         <div id="adminTwinksContent" class="hidden">
             <div class="panel-title">🔗 Управление твинками</div>
             <div class="add-item-form">
@@ -1226,7 +1210,7 @@
 
 <script>
         const APP_VERSION = '17.0';
-    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbxmY2PD8Ng7OV1IFuex1s2OMId70iPFbOfS7AYYm1W1R6gzai5WDU5gxMDbIHk9yzC-/exec';
+    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbzXrmvEbS5eL1yVoQwso_d1IUH1QKtqrkxMDixANc86YrxA4U6kP3jdjf7Yp27BY1ca/exec';
     const SCRIPT_URL = SCRIPT_URL_BASE + '?v=' + APP_VERSION + '&_t=' + Date.now();
     
     let currentUser = null, currentRole = null;
@@ -1539,13 +1523,13 @@
     function buildSkillsForm() {
         const l = document.getElementById('skillsList'), ps = (myPlayerSkills && myPlayerSkills.skills) ? myPlayerSkills.skills : [];
         const useRarity = isFeatureEnabled('skillRarity');
-        const rarityLabels = { 'common': 'Обычный', 'uncommon': 'Необычный', 'rare': 'Редкий', 'epic': 'Эпический', 'legendary': 'Легендарный' };
+        const rl = { 'common': 'Обычный', 'uncommon': 'Необычный', 'rare': 'Редкий', 'epic': 'Эпический', 'legendary': 'Легендарный' };
         l.innerHTML = allSkills.map((s, i) => {
             const ic = ps.includes(s.name), sn = s.name.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_');
             const rarity = s.rarity || 'common';
-            const rarityClass = useRarity ? `rarity-${rarity}` : '';
-            const rarityBadge = useRarity ? `<span class="rarity-badge ${rarityClass}">${rarityLabels[rarity]}</span>` : '';
-            return `<div class="skill-item ${ic ? 'checked' : ''}" onclick="toggleSkill(this, '${s.name.replace(/'/g, "\\'")}')"><div id="skillIconForm_${sn}_${i}" class="icon-preview-cabinet" style="cursor:default;" onclick="event.stopPropagation();"><span class="icon-placeholder" style="font-size:7px;">...</span></div><input type="checkbox" class="skill-checkbox" ${ic ? 'checked' : ''} onclick="event.stopPropagation(); toggleSkill(this.parentElement, '${s.name.replace(/'/g, "\\'")}');"><div class="skill-name">${s.name}${rarityBadge}</div></div>`;
+            const rc = useRarity ? `rarity-${rarity}` : '';
+            const rb = useRarity ? `<span class="rarity-badge ${rc}">${rl[rarity]}</span>` : '';
+            return `<div class="skill-item ${ic ? 'checked' : ''}" onclick="toggleSkill(this, '${s.name.replace(/'/g, "\\'")}')"><div id="skillIconForm_${sn}_${i}" class="icon-preview-cabinet" style="cursor:default;" onclick="event.stopPropagation();"><span class="icon-placeholder" style="font-size:7px;">...</span></div><input type="checkbox" class="skill-checkbox" ${ic ? 'checked' : ''} onclick="event.stopPropagation(); toggleSkill(this.parentElement, '${s.name.replace(/'/g, "\\'")}');"><div class="skill-name">${s.name}${rb}</div></div>`;
         }).join('');
         allSkills.forEach((s, i) => { const sn = s.name.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_'); loadAndDisplayIcon('skill', s.name, `skillIconForm_${sn}_${i}`, null); });
     }
@@ -1716,7 +1700,8 @@
     }
     function showDkpSubmitMessage(t, ty) { const m = document.getElementById('dkpSubmitMessage'); m.className = `message ${ty}`; m.innerText = t; m.style.display = 'block'; setTimeout(() => m.style.display = 'none', 8000); }
     async function loadDkpRating() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllDKP' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('dkpRatingList'); if (res.success && res.players.length > 0) l.innerHTML = res.players.map((p, i) => { const rk = i + 1; let rc = ''; if (rk === 1) rc = 'top-1'; else if (rk === 2) rc = 'top-2'; else if (rk === 3) rc = 'top-3'; return `<div class="ranking-item"><div class="ranking-position ${rc}">#${rk}</div><div class="ranking-info"><div class="ranking-nick">${renderPlayerNickWithBioColor(p.nickname)}</div></div><div class="ranking-bm" style="color:var(--dkp);">${Number(p.balance).toLocaleString('ru-RU')} 💰</div></div>`; }).join(''); else l.innerHTML = '<div class="empty-state">Нет данных</div>'; } catch (e) {} }
-        // ===== УПРАВЛЕНИЕ ФУНКЦИЯМИ САЙТА =====
+
+    // ===== УПРАВЛЕНИЕ ФУНКЦИЯМИ САЙТА =====
     async function loadSiteFeatures() {
         try {
             const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSiteFeatures' }), redirect: 'follow' });
@@ -2106,8 +2091,7 @@
             } else r.innerHTML = `<div class="message error" style="display: block;">❌ ${res.message || 'Ошибка'}</div>`;
         } catch (e) { r.innerHTML = '<div class="message error" style="display: block;">❌ Ошибка связи</div>'; }
     }
-
-    // ===== МЕРОПРИЯТИЯ =====
+        // ===== МЕРОПРИЯТИЯ =====
     async function loadAdminEvents() {
         try {
             const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' });
