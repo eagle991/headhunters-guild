@@ -627,6 +627,658 @@
     </style>
 </head>
 <body data-theme="light">
+    <div id="publicScreen" class="screen active">
+    <div class="public-hero">
+        <div class="public-hero-content">
+            <div class="public-title">RF ONLINE NEXT</div>
+            <div class="public-subtitle">Глобальный рейтинг пилотов</div>
+            <button class="login-link" onclick="showAuthScreen()">▶ Войти в систему</button>
+        </div>
+    </div>
+    <div id="announcementsBlock" style="margin-bottom: 14px; display: none;"></div>
+    <div class="top-containers" id="publicTopContainers" style="display: none;">
+        <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по БМ</div><div id="topBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+        <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="topLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+        <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="topDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+    </div>
+    <div id="publicLoginPrompt" style="text-align: center; padding: 40px; color: var(--text-dim); font-family: var(--font-display); font-size: 13px;">
+        🔒 Топы и объявления доступны после входа в систему
+    </div>
+    <div class="footer">© RF Online Next | v17.3</div>
+</div>
+
+<div id="authScreen" class="screen">
+    <div class="auth-container">
+        <div class="auth-title">RF Online</div>
+        <div class="auth-subtitle">Система идентификации</div>
+        <div id="savedIndicator" style="text-align: center; margin-bottom: 8px; display: none;"><span class="saved-indicator">✓ Данные сохранены</span></div>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchAuthTab('login', event)">Вход</button>
+            <button class="tab-btn" onclick="switchAuthTab('register', event)">Регистрация</button>
+            <button class="tab-btn" onclick="switchAuthTab('guest', event)">👁 Гость</button>
+        </div>
+        <form id="loginForm" onsubmit="handleAuth(event, 'login')">
+            <div class="form-group"><label>Позывной</label><input type="text" id="loginNick" required placeholder="Введите позывной..."></div>
+            <div class="form-group"><label>Код доступа</label><input type="password" id="loginPass" required placeholder="Введите код..."></div>
+            <div class="checkbox-group" style="margin-bottom: 10px;"><input type="checkbox" id="rememberMe"><label for="rememberMe" style="margin: 0; cursor: pointer;">🔒 Запомнить меня</label></div>
+            <button type="submit" class="submit-btn" id="loginBtn">Войти</button>
+            <div style="text-align: center; margin-top: 8px;"><button type="button" class="btn-edit" style="width: auto; padding: 5px 12px; font-size: 10px;" onclick="clearSavedCredentials()">🗑 Очистить сохраненные</button></div>
+        </form>
+        <form id="registerForm" class="hidden" onsubmit="handleAuth(event, 'register')">
+            <div class="form-group"><label>Новый позывной</label><input type="text" id="regNick" required placeholder="Придумайте ник..."></div>
+            <div class="form-group"><label>Код доступа</label><input type="password" id="regPass" required placeholder="Придумайте пароль..."></div>
+            <div class="form-group"><label>Ключ доступа (Админ/Мод)</label><input type="password" id="regKey" placeholder="Пусто для роли Игрок"></div>
+            <button type="submit" class="submit-btn" id="regBtn">Зарегистрироваться</button>
+        </form>
+        <form id="guestForm" class="hidden" onsubmit="handleAuth(event, 'guest')">
+            <div style="background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); padding: 10px; margin-bottom: 12px; font-size: 11px; color: var(--warning);">
+                👁 <b>Гостевой режим</b><br>
+                <span style="color: var(--text-dim);">Вы сможете смотреть рейтинги, статистику и объявления, но не сможете участвовать в аукционах, загружать скриншоты DKP или получать предметы.</span>
+            </div>
+            <div class="form-group"><label>Позывной</label><input type="text" id="guestNick" required placeholder="Придумайте ник..." minlength="3" maxlength="20"></div>
+            <div class="form-group"><label>Код доступа</label><input type="password" id="guestPass" required placeholder="Минимум 4 символа" minlength="4"></div>
+            <button type="submit" class="submit-btn" id="guestBtn" style="background: var(--gradient-dkp); border-color: var(--dkp);">👁 Войти как гость</button>
+            <div style="text-align: center; margin-top: 8px; font-size: 10px; color: var(--text-dim);">Можно потом зарегистрироваться как игрок</div>
+        </form>
+        <div id="authMessage" class="message"></div>
+    </div>
+</div>
+
+<div id="mainScreen" class="screen">
+    <div class="header-bar">
+        <div class="user-info">
+            Позывной: <span id="playerNick"></span>
+            <span class="role-badge" id="roleBadge">Игрок</span>
+            <span class="dkp-badge" id="userDkpBadge">💰 0 DKP</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px;">
+            <button class="notification-bell" onclick="openNotificationsModal()" id="notificationBell" title="Уведомления">🔔<span class="notification-badge hidden" id="notificationBadge">0</span></button>
+            <button class="theme-toggle" onclick="forceReload()" title="Обновить сайт">🔄</button>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleBtn">🌙 Темная</button>
+            <button class="logout-btn" onclick="logout()">⏻ Выход</button>
+        </div>
+    </div>
+    <div id="guestBanner" class="guest-banner hidden">
+        <div style="flex: 1;">
+            👁 <b>Вы в гостевом режиме</b> — просмотр без участия. 
+            <a href="#" onclick="showUpgradeToPlayerModal(); return false;" style="color: var(--accent); font-weight: 700;">Стать игроком →</a>
+        </div>
+    </div>
+    <div class="tabs" id="mainTabs">
+        <button class="tab-btn active" data-tab="home" onclick="switchMainTab('home', event)">🏠 Главная</button>
+        <button class="tab-btn" data-tab="cabinet" onclick="switchMainTab('cabinet', event)">👤 Кабинет</button>
+        <button class="tab-btn" data-tab="dkp" onclick="switchMainTab('dkp', event)">💰 DKP</button>
+        <button class="tab-btn" data-tab="auction" onclick="switchMainTab('auction', event)">🔨 Аукцион</button>
+        <button class="tab-btn" data-tab="queue" onclick="switchMainTab('queue', event)">📦 Очередь</button>
+        <button class="tab-btn" data-tab="calendar" onclick="switchMainTab('calendar', event)">📅 Календарь</button>
+        <button class="tab-btn" data-tab="players" onclick="switchMainTab('players', event)">👥 Игроки</button>
+        <button class="tab-btn hidden" data-tab="admin" id="tabAdmin" onclick="switchMainTab('admin', event)">⚙ Админ</button>
+    </div>
+
+    <div id="homeContent" class="panel">
+        <div class="top-containers">
+            <div class="top-panel"><div class="top-panel-title">🏆 Топ-10 по БМ</div><div id="mainTopBmList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+            <div class="top-panel"><div class="top-panel-title">⭐ Топ-10 по Уровню</div><div id="mainTopLevelList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+            <div class="top-panel dkp-panel"><div class="top-panel-title">💰 Топ-10 по DKP</div><div id="mainTopDkpList" class="top-list"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div>
+        </div>
+        <div style="margin-top: 18px;"><div class="panel-title">📊 Статистика мероприятий</div><div id="eventStatsBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">📊 Активность сегодня</div><div id="todayActivityBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">📈 Активность за неделю</div><div id="weeklyActivityBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">⚠️ Топ-10 неактивных (за месяц)</div><div id="topAbsenteesBlock"></div></div>
+        <div style="margin-top: 14px;"><div class="panel-title">🏆 Последние победители аукционов</div><div id="recentWinnersBlock"></div></div>
+    </div>
+
+    <div id="cabinetContent" class="panel hidden">
+        <div class="cabinet-section">
+            <div class="panel-title">🎮 Персонаж <span id="playerStatus"></span></div>
+            <div id="approvedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div><button class="btn-edit" onclick="showEditForm()">✎ Изменить</button></div>
+            <div id="mmorpgInventoryView" class="mmorpg-inventory hidden">
+                <div class="character-panel">
+                    <div class="character-silhouette" id="characterSilhouette"><span id="characterSilhouetteContent">👤</span></div>
+                    <div class="character-name" id="characterNameDisplay"></div>
+                    <div class="character-profession">
+                        <div id="characterProfIcon" class="profession-icon-large">⚔</div>
+                        <span id="characterProfName">—</span>
+                    </div>
+                    <div class="character-stats-mini" id="characterStatsMini"></div>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-family: var(--font-display); font-weight: 700; text-transform: uppercase;">🛡 Экипировка</div>
+                    <div class="equipment-slots" id="equipmentSlotsGrid"></div>
+                    <button class="btn-edit" onclick="showEquipmentEditForm()" style="margin-top: 10px;">✎ Изменить экипировку</button>
+                </div>
+            </div>
+            <div id="approvedDataGrid" class="data-grid hidden"></div>
+            <div id="cabinetEmpty" class="empty-state hidden">Данные отсутствуют или на проверке.</div>
+            
+            <div id="characterScreenshotsBlock" class="hidden" style="margin: 15px 0; padding: 12px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md);">
+                <div style="font-family: var(--font-display); font-size: 12px; color: var(--accent); font-weight: 700; margin-bottom: 10px; text-transform: uppercase;">📸 Автозаполнение из скриншотов</div>
+                <div class="character-screenshot-upload">
+                    <div class="screenshot-upload-block" id="screenshotBlock1" onclick="document.getElementById('charScreenshot1').click()">
+                        <div class="upload-title">📊 Скриншот 1: БМ и Уровень</div>
+                        <div id="screenshotPreview1" style="min-height: 120px; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 11px; width: 100%;">
+                            Нажмите или перетащите<br><span style="font-size: 9px; margin-top: 4px; display: block;">Боевая мощь + Опыт</span>
+                        </div>
+                        <input type="file" id="charScreenshot1" accept="image/*" style="display: none;" onchange="handleCharacterScreenshot(event, 1)">
+                        <div class="upload-hint">Справа от "Боевая мощь" = БМ<br>Над "Опыт" = Уровень</div>
+                    </div>
+                    <div class="screenshot-upload-block" id="screenshotBlock2" onclick="document.getElementById('charScreenshot2').click()">
+                        <div class="upload-title">⚔️ Скриншот 2: Атака/Защита/Меткость/Уклонение</div>
+                        <div id="screenshotPreview2" style="min-height: 120px; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 11px; width: 100%;">
+                            Нажмите или перетащите<br><span style="font-size: 9px; margin-top: 4px; display: block;">Статы персонажа</span>
+                        </div>
+                        <input type="file" id="charScreenshot2" accept="image/*" style="display: none;" onchange="handleCharacterScreenshot(event, 2)">
+                        <div class="upload-hint">Общая атака / Общ. защита / Общ. метк. / Уклонение</div>
+                    </div>
+                </div>
+                <div id="charScreenshotOcrProgress" class="ocr-progress hidden" style="margin-top: 10px;">
+                    <div class="progress-text" id="charOcrProgressText">Распознавание...</div>
+                    <div class="progress-bar"><div class="progress-bar-fill" id="charOcrProgressBar"></div></div>
+                </div>
+                <div id="parsedStatsBlock" style="margin-top: 10px; display: none;">
+                    <div style="font-size: 11px; color: var(--success); font-weight: 700; margin-bottom: 6px; font-family: var(--font-display);">✅ Распознанные значения (можно редактировать):</div>
+                    <div class="parsed-stats" id="parsedStatsGrid"></div>
+                    <button type="button" class="submit-btn" style="margin-top: 10px;" onclick="applyParsedStats()">📥 Применить к форме</button>
+                </div>
+                <div id="charScreenshotMessage" class="message"></div>
+            </div>
+            
+            <form id="playerDataForm" class="hidden" onsubmit="savePlayerData(event)">
+                <div class="data-grid">
+                    <div class="form-group"><label>БМ</label><input type="number" id="bm" required placeholder="150000"></div>
+                    <div class="form-group"><label>Уровень</label><input type="number" id="level" required placeholder="60"></div>
+                    <div class="form-group"><label>Атака</label><input type="number" id="attack" required placeholder="5000"></div>
+                    <div class="form-group"><label>Защита</label><input type="number" id="defense" required placeholder="3000"></div>
+                    <div class="form-group"><label>Меткость</label><input type="number" id="accuracy" required placeholder="2000"></div>
+                    <div class="form-group"><label>Уклонение</label><input type="number" id="evasion" required placeholder="1500"></div>
+                </div>
+                <div class="form-group"><label>Коллекции</label><input type="text" id="collections" required placeholder="Перечислите..."></div>
+                <div class="form-group"><label>Профессия</label><select id="profession" required><option value="">Выберите...</option><option value="Демолишер">Демолишер</option><option value="Арбитр">Арбитр</option><option value="Каратель">Каратель</option><option value="Фантом">Фантом</option><option value="Дредноут">Дредноут</option><option value="Сайфер">Сайфер</option><option value="Техник">Техник</option><option value="Инфорсер">Инфорсер</option></select></div>
+                <button type="submit" class="submit-btn" id="saveDataBtn">Отправить</button>
+            </form>
+            <div id="playerMessage" class="message"></div>
+        </div>
+        
+        <div class="cabinet-section" id="levelSection">
+            <div class="panel-title">📊 Уровень и опыт</div>
+            <div id="levelDisplay"></div>
+        </div>
+        <div class="cabinet-section" id="dailyBonusSection">
+            <div class="panel-title">🎁 Ежедневный бонус</div>
+            <div id="dailyBonusDisplay"></div>
+        </div>
+        <div class="cabinet-section" id="achievementsSection">
+            <div class="panel-title">🏆 Достижения <span id="achievementsCounter" style="font-size: 11px; color: var(--text-dim);"></span></div>
+            <div id="achievementsList"></div>
+        </div>
+        <div class="cabinet-section" id="personalStatsSection">
+            <div class="panel-title">📈 Моя статистика</div>
+            <div id="personalStatsDisplay"></div>
+        </div>
+        <div class="cabinet-section">
+            <div class="panel-title">📧 Моя почта</div>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Укажите email для связи с администрацией.</p>
+            <div class="form-group"><label>Email</label><input type="email" id="userEmail" placeholder="example@mail.com"></div>
+            <button class="submit-btn" onclick="saveUserEmail()" style="max-width: 200px;">💾 Сохранить email</button>
+            <div id="emailMessage" class="message"></div>
+        </div>
+        <div class="cabinet-section" id="friendsSection">
+            <div class="panel-title">👥 Друзья <span id="friendsCounter" style="font-size: 11px; color: var(--text-dim);"></span></div>
+            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                <input type="text" id="addFriendInput" placeholder="Ник друга..." style="flex: 1;">
+                <button class="submit-btn" style="width: auto; padding: 8px 14px;" onclick="addFriend()">➕</button>
+            </div>
+            <div id="friendsList"></div>
+        </div>
+        <div class="cabinet-section" id="cosmeticsSection">
+            <div class="panel-title">🛍️ Магазин косметики</div>
+            <div id="cosmeticsShopList"></div>
+            <div id="cosmeticsMessage" class="message"></div>
+        </div>
+        <div class="cabinet-section" id="twinksSection">
+            <div class="panel-title">🔗 Твинки</div>
+            <div id="twinksInfo"></div>
+        </div>
+        <div class="cabinet-section">
+            <div class="panel-title">🎯 Навыки <span id="skillsStatus"></span></div>
+            <div id="skillsApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div><button class="btn-edit" onclick="showSkillsEditForm()">✎ Изменить</button></div>
+            <div id="approvedSkillsList" class="approved-skills"></div>
+            <div id="skillsEmpty" class="empty-state hidden">Навыки отсутствуют.</div>
+            <form id="skillsForm" class="hidden" onsubmit="savePlayerSkills(event)"><div id="skillsList" class="skills-list"></div><button type="submit" class="submit-btn" id="saveSkillsBtn" style="margin-top: 10px;">Отправить</button></form>
+            <div id="skillsMessage" class="message"></div>
+        </div>
+        <div class="cabinet-section" id="equipmentFormSection">
+            <div class="panel-title">🛡 Экипировка <span id="equipmentStatus"></span></div>
+            <div id="equipmentApprovedMessage" class="hidden"><div class="message success" style="display: block; margin-bottom: 10px;">✓ Подтверждено</div></div>
+            <div id="equipmentEmpty" class="empty-state hidden">Экипировка отсутствует.</div>
+            <form id="equipmentForm" class="hidden" onsubmit="savePlayerItems(event)">
+                <button type="button" class="btn-back" onclick="backToInventory()" style="margin-bottom: 10px;">← Назад к инвентарю</button>
+                <div class="equipment-section-tabs" id="equipmentSectionTabs"></div>
+                <div id="equipmentItemsList"></div>
+                <button type="submit" class="submit-btn" id="saveEquipmentBtn" style="margin-top: 10px;">Отправить на проверку</button>
+            </form>
+            <div id="equipmentMessage" class="message"></div>
+        </div>
+        <div class="cabinet-section">
+            <div class="panel-title">🎁 История лута (мои выигрыши)</div>
+            <div id="myLootHistory"></div>
+        </div>
+    </div>
+
+    <div id="dkpContent" class="panel hidden">
+        <div class="tabs">
+            <button class="tab-btn active" id="tabDkpMy" onclick="switchDkpTab('my', event)">💼 Мои DKP</button>
+            <button class="tab-btn" id="tabDkpSubmit" onclick="switchDkpTab('submit', event)">📸 Скриншоты</button>
+            <button class="tab-btn" id="tabDkpRating" onclick="switchDkpTab('rating', event)">🏆 Рейтинг</button>
+        </div>
+        <div id="dkpMyContent">
+            <div class="panel-title">💼 Мои DKP</div>
+            <div style="text-align: center; padding: 18px; background: var(--bg-soft); border-radius: var(--radius-md); margin-bottom: 14px; border: 1px solid var(--border);">
+                <div style="font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; font-weight: 700; font-family: var(--font-display);">Баланс</div>
+                <div id="myDkpBalance" class="dkp-highlight" style="font-size: 36px; font-family: var(--font-display);">0</div>
+                <div style="font-size: 12px; color: var(--dkp); margin-top: 3px; font-weight: 700; font-family: var(--font-display);">DKP</div>
+            </div>
+            <div id="frozenDkpBlock"></div>
+            <div class="panel-title" style="font-size: 12px;">📜 История операций <span style="font-size: 9px; color: var(--text-dim);">(клик для деталей)</span></div>
+            <div id="myDkpHistory"></div>
+        </div>
+        <div id="dkpSubmitContent" class="hidden">
+            <div class="panel-title">📸 Загрузка скриншотов</div>
+            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 10px;">До 5 скриншотов, макс. 2 МБ каждый. Ники автоматически сверяются с базой.</p>
+            <div class="form-group"><label>Мероприятие</label><select id="dkpEventSelect" required><option value="">— Выберите —</option></select></div>
+            <div class="screenshot-upload-area" id="screenshotUploadArea" onclick="document.getElementById('screenshotInput').click()">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">Нажмите или перетащите</div>
+                <div class="upload-hint">До 5 изображений, до 2 МБ</div>
+                <input type="file" id="screenshotInput" accept="image/*" multiple style="display: none;" onchange="handleScreenshotSelect(event)">
+            </div>
+            <div class="screenshots-preview" id="screenshotsPreview"></div>
+            <div id="ocrProgressBlock" class="ocr-progress hidden"><div class="progress-text" id="ocrProgressText">Распознавание...</div><div class="progress-bar"><div class="progress-bar-fill" id="ocrProgressBar"></div></div></div>
+            <div id="recognizedNicksBlock" class="hidden">
+                <div class="panel-title" style="font-size: 12px;">👥 Распознанные ники <span style="font-size: 9px; color: var(--text-dim);">(сверяются с базой)</span></div>
+                <div id="ocrMatchInfo" style="font-size: 10px; color: var(--text-dim); margin-bottom: 8px; padding: 6px 10px; background: var(--bg-soft); border-radius: var(--radius-sm); border-left: 2px solid var(--accent);"></div>
+                <div class="recognized-nicks-list" id="recognizedNicksList"></div>
+                <div id="unrecognizedNicksBlock" style="margin-top: 12px; padding: 10px; background: var(--bg-soft); border: 1px dashed var(--border); border-radius: var(--radius-sm);">
+                    <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 6px; font-weight: 700; font-family: var(--font-display);">📋 Игроки, которых не удалось распознать (клик для добавления):</div>
+                    <div id="unrecognizedNicksList" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
+                </div>
+                <button type="button" class="btn-edit" onclick="addEmptyNickField()" style="margin-top: 10px; margin-bottom: 10px;">+ Добавить пустое поле</button>
+            </div>
+            <button type="button" class="submit-btn dkp-btn" id="submitDkpBtn" onclick="submitDkpSubmission()" style="margin-top: 10px;">📤 Отправить</button>
+            <div id="dkpSubmitMessage" class="message"></div>
+        </div>
+        <div id="dkpRatingContent" class="hidden"><div class="panel-title">🏆 Рейтинг DKP</div><div id="dkpRatingList" class="ranking-list"></div></div>
+    </div>
+
+    <div id="auctionContent" class="panel hidden">
+        <div class="tabs">
+            <button class="tab-btn active" id="tabAuctionActive" onclick="switchAuctionTab('active', event)">🔨 Активные</button>
+            <button class="tab-btn" id="tabAuctionCompleted" onclick="switchAuctionTab('completed', event)">✅ Завершённые</button>
+            <button class="tab-btn hidden" id="tabAuctionCreate" onclick="switchAuctionTab('create', event)">➕ Создать</button>
+        </div>
+        <div id="auctionActiveContent">
+            <div style="margin-bottom: 12px;"><div class="panel-title" style="font-size: 12px;">🏆 Последние победы</div><div id="auctionRecentWins"></div></div>
+            <div id="activeAuctionsList"></div>
+        </div>
+        <div id="auctionCompletedContent" class="hidden"><div id="completedAuctionsList"></div></div>
+        <div id="auctionCreateContent" class="hidden">
+            <div class="panel-title">➕ Создание аукциона</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Раздел</label><select id="auctionItemSection" onchange="loadAuctionItems()"><option value="">— Выберите —</option><option value="Оружие">Оружие</option><option value="Шея">Шея</option><option value="Грудь">Грудь</option><option value="Штаны">Штаны</option><option value="Колени">Колени</option><option value="Венец">Венец</option><option value="Серьга">Серьга</option><option value="Ожерелье">Ожерелье</option><option value="Браслет">Браслет</option><option value="Кольцо">Кольцо</option><option value="Привод">Привод</option><option value="Звездочет">Звездочет</option><option value="Руки">Руки</option><option value="Биокостюм">Биокостюм</option><option value="Ровер">Ровер</option></select></div>
+                    <div class="form-group"><label>Предмет</label><select id="auctionItemSelect" onchange="fillAuctionItemDetails()"><option value="">— Сначала раздел —</option></select></div>
+                </div>
+                <input type="hidden" id="auctionItemName">
+                <div class="form-row">
+                    <div class="form-group"><label>Тир</label><input type="text" id="auctionItemTier" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                    <div class="form-group"><label>Цвет</label><input type="text" id="auctionItemColor" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                    <div class="form-group"><label>Заточка</label><input type="text" id="auctionItemEnhancement" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                </div>
+                <div class="form-row">
+                    <div class="checkbox-group"><input type="checkbox" id="auctionIsPrime" readonly disabled><label for="auctionIsPrime">Прайм</label></div>
+                    <div class="checkbox-group"><input type="checkbox" id="auctionIsBoss" readonly disabled><label for="auctionIsBoss">Босс</label></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Начальная цена (DKP)</label><input type="number" id="auctionStartPrice" required placeholder="100" min="1"></div>
+                    <div class="form-group"><label>Длительность (часы)</label><input type="number" id="auctionDuration" required placeholder="24" min="1" max="168"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Мин. посещаемость (%)</label><select id="auctionMinAttendance"><option value="0">Без ограничений</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="40">40%</option><option value="50">50%</option><option value="60">60%</option><option value="70">70%</option><option value="80">80%</option><option value="90">90%</option><option value="100">100%</option></select></div>
+                    <div class="checkbox-group" style="align-self: flex-end; padding-bottom: 10px;"><input type="checkbox" id="auctionPriorityOnly"><label for="auctionPriorityOnly">Только приоритет</label></div>
+                </div>
+                <div class="form-group"><label>Участники (пусто = все)</label><div id="auctionPlayersList" style="max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px; background: var(--bg-soft);"></div></div>
+                <button type="button" class="submit-btn dkp-btn" onclick="createAuction()">🔨 Создать</button>
+                <button type="button" class="btn-edit" style="margin-top: 10px;" onclick="loadAuctionRating()">🎯 Показать рейтинг участников</button>
+                <div id="auctionRatingPreview" style="margin-top: 10px;"></div>
+            </div>
+            <div id="auctionCreateMessage" class="message"></div>
+        </div>
+    </div>
+
+    <div id="queueContent" class="panel hidden">
+        <div class="tabs">
+            <button class="tab-btn active" id="tabQueueList" onclick="switchQueueTab('list', event)">📋 Очередь выдачи</button>
+            <button class="tab-btn hidden" id="tabQueueAdd" onclick="switchQueueTab('add', event)">➕ Добавить предмет</button>
+            <button class="tab-btn" id="tabQueueMyLoot" onclick="switchQueueTab('myloot', event)">🎁 Мой лут</button>
+        </div>
+        <div id="queueListContent">
+            <div class="panel-title">📋 Очередь выдачи предметов</div>
+            <p style="color: var(--text-dim); font-size: 12px; margin-bottom: 12px;">Предметы, которые админ выдаёт игрокам напрямую (без аукциона).</p>
+            <div id="queueItemsList"></div>
+        </div>
+        <div id="queueAddContent" class="hidden">
+            <div class="panel-title">➕ Добавить предмет в очередь</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Выбрать из предметов</label><select id="queueItemSelect" onchange="fillQueueItemDetails()"><option value="">— Выберите предмет —</option></select></div>
+                    <div class="form-group"><label>Получатель</label><select id="queueRecipient" required><option value="">— Выберите игрока —</option></select></div>
+                </div>
+                <input type="hidden" id="queueItemName">
+                <div class="form-row">
+                    <div class="form-group"><label>Раздел</label><input type="text" id="queueItemSection" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                    <div class="form-group"><label>Тир</label><input type="text" id="queueItemTier" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                    <div class="form-group"><label>Цвет</label><input type="text" id="queueItemColor" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Заточка</label><input type="text" id="queueItemEnhancement" readonly style="background: var(--bg-soft); color: var(--text-dim);"></div>
+                    <div class="checkbox-group" style="align-self: flex-end;"><input type="checkbox" id="queueItemPrime" readonly disabled><label for="queueItemPrime">Прайм</label></div>
+                    <div class="checkbox-group" style="align-self: flex-end;"><input type="checkbox" id="queueItemBoss" readonly disabled><label for="queueItemBoss">Босс</label></div>
+                </div>
+                <div class="form-group"><label>Заметки (опционально)</label><textarea id="queueItemNotes" placeholder="Причина выдачи, комментарий..."></textarea></div>
+                <button type="button" class="submit-btn" onclick="createQueueItem()">➕ Добавить в очередь</button>
+            </div>
+            <div id="queueAddMessage" class="message"></div>
+        </div>
+        <div id="queueMyLootContent" class="hidden">
+            <div class="panel-title">🎁 Мой общий лут (аукцион + очередь)</div>
+            <div id="myUnifiedLootStats" style="margin-bottom: 15px;"></div>
+            <div class="panel-title" style="font-size: 12px;">📜 Полная история</div>
+            <div id="myUnifiedLootHistory"></div>
+        </div>
+    </div>
+
+    <div id="calendarContent" class="panel hidden">
+        <div class="panel-title">📅 Календарь посещений</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: flex-end;">
+            <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;"><label>С даты</label><input type="date" id="calendarStartDate"></div>
+            <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;"><label>По дату</label><input type="date" id="calendarEndDate"></div>
+            <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;"><label>Игрок</label><select id="calendarPlayerFilter"><option value="">Все</option></select></div>
+            <button class="submit-btn" style="width: auto; padding: 8px 14px;" onclick="loadCalendar()">🔍</button>
+            <button class="submit-btn dkp-btn" style="width: auto; padding: 8px 14px;" onclick="loadMyCalendar()">👤 Моя</button>
+        </div>
+        <div id="calendarStats" style="margin-bottom: 14px;"></div>
+        <div id="calendarGrid"></div>
+    </div>
+
+    <div id="playersContent" class="panel hidden">
+        <div id="playersList"><div class="panel-title">🏅 Рейтинг игроков</div><div id="rankingList" class="ranking-list"></div></div>
+        <div id="compareView" class="hidden">
+            <button class="btn-back" onclick="backToRanking()">← Назад</button>
+            <div class="panel-title">⚔ Сравнение</div>
+            <div class="compare-container">
+                <div class="compare-column"><div class="compare-title" id="myNick">Мой</div><div id="myStats"></div></div>
+                <div class="compare-column"><div class="compare-title" id="compareNick">Противник</div><div id="compareStats"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminContent" class="panel hidden">
+        <div class="tabs">
+            <button class="tab-btn active" id="tabAdminPlayers" onclick="switchAdminTab('players', event)">📋 Игроки</button>
+            <button class="tab-btn" id="tabAdminSkillsPending" onclick="switchAdminTab('skillsPending', event)">🔍 Навыки</button>
+            <button class="tab-btn" id="tabAdminEquipmentPending" onclick="switchAdminTab('equipmentPending', event)">🛡 Экип</button>
+            <button class="tab-btn" id="tabAdminDkpPending" onclick="switchAdminTab('dkpPending', event)">💰 Заявки</button>
+            <button class="tab-btn" id="tabAdminEvents" onclick="switchAdminTab('events', event)">🎯 Мероприятия</button>
+            <button class="tab-btn" id="tabAdminDkpAdjust" onclick="switchAdminTab('dkpAdjust', event)">💵 Ручное</button>
+            <button class="tab-btn" id="tabAdminSkills" onclick="switchAdminTab('skills', event)">🎯 Навыки</button>
+            <button class="tab-btn" id="tabAdminItems" onclick="switchAdminTab('items', event)">⚔ Предметы</button>
+            <button class="tab-btn hidden" id="tabAdminUsers" onclick="switchAdminTab('users', event)">👥 Юзеры</button>
+            <button class="tab-btn" id="tabAdminSettings" onclick="switchAdminTab('settings', event)">⚙ Настройки</button>
+            <button class="tab-btn" id="tabAdminFeatures" onclick="switchAdminTab('features', event)">⚙️ Функции</button>
+            <button class="tab-btn" id="tabAdminAnnouncements" onclick="switchAdminTab('announcements', event)">📢 Объявл.</button>
+            <button class="tab-btn" id="tabAdminLog" onclick="switchAdminTab('log', event)">📝 Лог</button>
+            <button class="tab-btn" id="tabAdminMissing" onclick="switchAdminTab('missing', event)">📋 Пробелы</button>
+            <button class="tab-btn" id="tabAdminExport" onclick="switchAdminTab('export', event)">📤 Экспорт</button>
+            <button class="tab-btn" id="tabAdminTwinks" onclick="switchAdminTab('twinks', event)">🔗 Твинки</button>
+        </div>
+        <div id="adminPlayersContent"><div id="pendingPlayersList"></div><div id="adminMessage" class="message"></div></div>
+        <div id="adminSkillsPendingContent" class="hidden"><div id="pendingSkillsList"></div><div id="adminSkillsPendingMessage" class="message"></div></div>
+        <div id="adminEquipmentPendingContent" class="hidden"><div id="pendingEquipmentList"></div><div id="adminEquipmentPendingMessage" class="message"></div></div>
+        <div id="adminDkpPendingContent" class="hidden"><div id="pendingDkpList"></div><div id="adminDkpPendingMessage" class="message"></div></div>
+        <div id="adminEventsContent" class="hidden">
+            <div class="panel-title">🎯 Мероприятия</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Название</label><input type="text" id="newEventName" required placeholder="Рейд..."></div>
+                    <div class="form-group"><label>DKP</label><input type="number" id="newEventDkp" required placeholder="100" min="0"></div>
+                </div>
+                <button type="submit" class="submit-btn dkp-btn" onclick="addEvent(event)">+ Создать</button>
+            </div>
+            <div id="adminEventsList"></div>
+            <div id="adminEventsMessage" class="message"></div>
+        </div>
+        <div id="adminDkpAdjustContent" class="hidden">
+            <div class="panel-title">💵 Ручное DKP</div>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">+ начисление, - списание.</p>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Ник</label><input type="text" id="adjustDkpNick" required placeholder="Ник..."></div>
+                    <div class="form-group"><label>Сумма</label><input type="number" id="adjustDkpAmount" required placeholder="100"></div>
+                </div>
+                <div class="form-group"><label>Причина</label><input type="text" id="adjustDkpReason" placeholder="Бонус..."></div>
+                <button type="submit" class="submit-btn dkp-btn" onclick="adjustDkp(event)">💰 Применить</button>
+            </div>
+            <div id="adminDkpAdjustMessage" class="message"></div>
+        </div>
+        <div id="adminSkillsContent" class="hidden">
+            <div class="panel-title">🎯 Навыки</div>
+            <form onsubmit="addSkill(event)" style="margin-bottom: 10px;">
+                <div class="form-group"><label>Новый навык</label><input type="text" id="newSkillName" required placeholder="Название..."></div>
+                <button type="submit" class="submit-btn">+ Добавить</button>
+            </form>
+            <div id="adminSkillsList"></div><div id="adminSkillsMessage" class="message"></div>
+        </div>
+        <div id="adminItemsContent" class="hidden">
+            <div class="panel-title">⚔ Предметы</div>
+            <div class="equipment-section-tabs" id="adminItemSectionTabs"></div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Название</label><input type="text" id="newItemName" required placeholder="Меч..."></div>
+                    <div class="form-group"><label>Раздел</label><select id="newItemSection"></select></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Заточка</label><input type="number" id="newItemEnhancement" min="0" max="15" value="0"></div>
+                    <div class="form-group"><label>Тир</label><select id="newItemTier"><option value="">—</option><option value="т1">т1</option><option value="т2">т2</option><option value="т3">т3</option><option value="т4">т4</option><option value="т5">т5</option><option value="т6">т6</option><option value="т7">т7</option><option value="т8">т8</option><option value="т9">т9</option><option value="т10">т10</option><option value="т11">т11</option><option value="т12">т12</option></select></div>
+                    <div class="form-group"><label>Цвет</label><select id="newItemColor"><option value="Белый">Белый</option><option value="Зеленый">Зеленый</option><option value="Синий">Синий</option><option value="Фиолетовый">Фиолетовый</option><option value="Желтый">Желтый</option><option value="Красный">Красный</option></select></div>
+                </div>
+                <div class="form-row">
+                    <div class="checkbox-group"><input type="checkbox" id="newItemPrime"><label for="newItemPrime">Прайм</label></div>
+                    <div class="checkbox-group"><input type="checkbox" id="newItemBoss"><label for="newItemBoss">Босс</label></div>
+                </div>
+                <button type="submit" class="submit-btn" onclick="addItem(event)">+ Добавить</button>
+            </div>
+            <div id="adminItemsList"></div><div id="adminItemsMessage" class="message"></div>
+        </div>
+        <div id="adminUsersContent" class="hidden">
+            <div class="panel-title">👥 Пользователи</div>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 10px;">Управление ролями, блокировка и удаление.</p>
+            <div id="usersList"></div><div id="adminUsersMessage" class="message"></div>
+            <div id="deletionRequestsSection" style="margin-top: 18px; display: none;">
+                <div class="panel-title">🗑️ Заявки на удаление</div>
+                <div id="deletionRequestsList"></div><div id="deletionRequestsMessage" class="message"></div>
+            </div>
+            <div id="auctionDeletionRequestsSection" style="margin-top: 18px; display: none;">
+                <div class="panel-title">🗑️ Заявки на удаление аукционов</div>
+                <div id="auctionDeletionRequestsList"></div><div id="auctionDeletionRequestsMessage" class="message"></div>
+            </div>
+        </div>
+        <div id="adminSettingsContent" class="hidden">
+            <div class="settings-card">
+                <div class="settings-card-title">🖼️ Фон сайта</div>
+                <div class="bg-preview" id="bgPreview">Нет фона</div>
+                <div class="form-group"><label>Загрузить изображение</label><input type="file" id="bgFileInput" accept="image/*"></div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="submit-btn" style="flex: 1;" onclick="uploadSiteBackground()">📤 Загрузить фон</button>
+                    <button class="submit-btn dkp-btn" style="flex: 1;" onclick="deleteSiteBackground()">🗑 Удалить фон</button>
+                </div>
+                <div id="bgSettingsMessage" class="message"></div>
+            </div>
+            <div class="settings-card">
+                <div class="settings-card-title">🎭 Иконки профессий</div>
+                <div id="professionIconsList"></div>
+            </div>
+            <div class="settings-card">
+                <div class="settings-card-title">🔨 Настройки аукциона</div>
+                <div class="settings-row"><div class="settings-label">Запрет повторных побед:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionRepeatBanEnabled"><span class="toggle-slider"></span></label></div></div>
+                <div class="settings-row"><div class="settings-label">Период запрета:</div><div class="settings-value"><select id="auctionRepeatBanPeriod"><option value="week">Неделя</option><option value="month">Месяц</option><option value="custom_days">Свои дни</option><option value="forever">Навсегда</option></select></div></div>
+                <div class="settings-row" id="customDaysRow" style="display: none;"><div class="settings-label">Количество дней:</div><div class="settings-value"><input type="number" id="auctionRepeatBanDays" min="1" max="365" value="30" style="width: 100px;"></div></div>
+                <div class="settings-row" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;"><div class="settings-label">Коэффициент DKP при победе:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionCoefficientEnabled"><span class="toggle-slider"></span></label></div></div>
+                <div class="settings-row"><div class="settings-label">Режим коэффициента:</div><div class="settings-value"><select id="auctionCoefficientMode"><option value="disabled">Выключен</option><option value="all">Для всех</option><option value="selective">Выборочно</option></select></div></div>
+                <div class="settings-row" id="selectiveListRow" style="display: none;"><div class="settings-label">Список игроков:</div><div class="settings-value"><input type="text" id="auctionCoefficientList" placeholder="Ник1, Ник2, Ник3..." style="width: 100%;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Через запятую</div></div></div>
+                <div class="settings-row" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;"><div class="settings-label">⏰ Автопродление:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionAutoExtendEnabled"><span class="toggle-slider"></span></label></div></div>
+                <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 10px; padding-left: 150px;">Если ставка сделана в последние 2 минуты — аукцион продлится на 3 мин (макс. 5 раз)</div>
+                <div class="settings-row" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;"><div class="settings-label">🔄 Коэф. за повторную покупку:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="auctionRepeatPurchaseCoefEnabled"><span class="toggle-slider"></span></label></div></div>
+                <div class="settings-row"><div class="settings-label">Базовый коэффициент (2-я покупка):</div><div class="settings-value"><input type="number" id="auctionRepeatPurchaseBaseCoef" min="1.1" max="10" step="0.1" value="1.5" style="width: 100px;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">1.5 = +50%, 2 = +100%</div></div></div>
+                <div class="settings-row"><div class="settings-label">Макс. покупок до сброса:</div><div class="settings-value"><input type="number" id="auctionRepeatPurchaseMaxCount" min="2" max="20" value="5" style="width: 100px;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">После N покупок — сброс к ×1.0</div></div></div>
+                <div style="padding: 10px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: var(--radius-sm); margin: 10px 0; font-size: 11px; color: var(--text-main);">
+                    <div style="font-weight: 700; color: var(--accent); margin-bottom: 6px; font-family: var(--font-display);">📊 КАК РАБОТАЕТ:</div>
+                    <div style="color: var(--text-dim); line-height: 1.6;">
+                        • <b>1-я покупка</b> предмета: ×1.0 (базовая цена)<br>
+                        • <b>2-я покупка</b>: ×<span id="previewBaseCoef">1.5</span> (базовый коэф)<br>
+                        • <b>3-я покупка</b>: ×<span id="previewCoef3">3.0</span><br>
+                        • <b>4-я покупка</b>: ×<span id="previewCoef4">4.5</span><br>
+                        • <b>5-я покупка</b>: ×<span id="previewCoef5">6.0</span><br>
+                        • <b>6-я покупка</b>: <span style="color: var(--success);">СБРОС → ×1.0</span>
+                    </div>
+                </div>
+                <button class="submit-btn" style="margin-top: 12px;" onclick="saveAuctionSettings()">💾 Сохранить настройки аукциона</button>
+                <div id="auctionSettingsMessage" class="message"></div>
+            </div>
+            <div class="settings-card">
+                <div class="settings-card-title">💰 Коэффициент DKP за мероприятия</div>
+                <div class="settings-row"><div class="settings-label">Включить коэффициент:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="eventCoefEnabled"><span class="toggle-slider"></span></label></div></div>
+                <div class="settings-row"><div class="settings-label">Режим применения:</div><div class="settings-value"><select id="eventCoefMode"><option value="disabled">Выключен</option><option value="all">Для всех игроков</option><option value="selective">Выборочно (по списку)</option></select></div></div>
+                <div class="settings-row"><div class="settings-label">Значение коэффициента:</div><div class="settings-value"><input type="number" id="eventCoefValue" min="0.1" max="10" step="0.1" value="1" style="width: 100px;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">1 = без изменений, 1.5 = +50%, 0.5 = -50%</div></div></div>
+                <div class="settings-row" id="eventCoefListRow" style="display: none;"><div class="settings-label">Список игроков:</div><div class="settings-value"><input type="text" id="eventCoefList" placeholder="Ник1, Ник2, Ник3..." style="width: 100%;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Через запятую</div></div></div>
+                <button class="submit-btn" style="margin-top: 12px;" onclick="saveEventCoefficientSettings()">💾 Сохранить коэффициент мероприятий</button>
+                <div id="eventCoefSettingsMessage" class="message"></div>
+            </div>
+            <div class="settings-card">
+                <div class="settings-card-title">👥 Индивидуальные коэффициенты мероприятий</div>
+                <div class="settings-row"><div class="settings-label">Игрок:</div><div class="settings-value"><select id="playerEventCoefSelect" onchange="loadPlayerEventCoefSettings()"><option value="">— Выберите игрока —</option></select></div></div>
+                <div id="playerEventCoefForm" style="display: none;">
+                    <div class="settings-row"><div class="settings-label">Индивидуальный коэф:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="playerEventCoefEnabled"><span class="toggle-slider"></span></label></div></div>
+                    <div class="settings-row"><div class="settings-label">Режим:</div><div class="settings-value"><select id="playerEventCoefMode"><option value="disabled">Выключен (использовать общий)</option><option value="fixed">Фиксированный множитель</option></select></div></div>
+                    <div class="settings-row"><div class="settings-label">Значение:</div><div class="settings-value"><input type="number" id="playerEventCoefValue" min="0.1" max="10" step="0.1" value="1" style="width: 100px;"></div></div>
+                    <button class="submit-btn" style="margin-top: 10px;" onclick="savePlayerEventCoefSettings()">💾 Сохранить для игрока</button>
+                    <div id="playerEventCoefMessage" class="message"></div>
+                </div>
+            </div>
+            <div class="settings-card">
+                <div class="settings-card-title">⚠️ Глобальные настройки штрафов</div>
+                <div class="settings-row"><div class="settings-label">Включить штрафы:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="penaltyEnabled"><span class="toggle-slider"></span></label></div></div>
+                <div class="settings-row"><div class="settings-label">Процент списания (%):</div><div class="settings-value"><input type="number" id="penaltyPercent" min="0" max="100" value="10" style="width: 100px;"></div></div>
+                <div class="settings-row"><div class="settings-label">Тип периода:</div><div class="settings-value"><select id="penaltyPeriodType"><option value="week">Неделя</option><option value="month">Месяц</option><option value="custom_days">Свои дни</option><option value="miss_percent">% пропусков</option></select></div></div>
+                <div class="settings-row" id="penaltyCustomDaysRow" style="display: none;"><div class="settings-label">Количество дней:</div><div class="settings-value"><input type="number" id="penaltyCustomDays" min="1" max="365" value="7" style="width: 100px;"></div></div>
+                <div class="settings-row" id="penaltyMissPercentRow" style="display: none;"><div class="settings-label">Порог пропусков (%):</div><div class="settings-value"><input type="number" id="penaltyMissPercent" min="0" max="100" value="50" style="width: 100px;"><div style="font-size: 10px; color: var(--text-dim); margin-top: 3px;">Штраф при превышении</div></div></div>
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                    <button class="submit-btn" style="flex: 1;" onclick="savePenaltySettings()">💾 Сохранить</button>
+                    <button class="submit-btn dkp-btn" style="flex: 1;" onclick="applyPenalties()">⚡ Применить штрафы</button>
+                </div>
+                <div id="penaltySettingsMessage" class="message"></div>
+                <div id="penaltyResultsBlock" style="margin-top: 12px;"></div>
+            </div>
+            <div class="settings-card">
+                <div class="settings-card-title">👥 Индивидуальные настройки штрафов</div>
+                <div class="settings-row"><div class="settings-label">Игрок:</div><div class="settings-value"><select id="playerPenaltySelect" onchange="loadPlayerPenaltySettings()"><option value="">— Выберите игрока —</option></select></div></div>
+                <div id="playerPenaltyForm" style="display: none;">
+                    <div class="settings-row"><div class="settings-label">Индивидуальные штрафы:</div><div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="playerPenaltyEnabled"><span class="toggle-slider"></span></label></div></div>
+                    <div class="settings-row"><div class="settings-label">Процент списания:</div><div class="settings-value"><input type="number" id="playerPenaltyPercent" min="0" max="100" value="10" style="width: 100px;"></div></div>
+                    <div class="settings-row"><div class="settings-label">Тип периода:</div><div class="settings-value"><select id="playerPenaltyPeriodType"><option value="week">Неделя</option><option value="month">Месяц</option><option value="custom_days">Свои дни</option><option value="miss_percent">% пропусков</option></select></div></div>
+                    <div class="settings-row" id="playerCustomDaysRow" style="display: none;"><div class="settings-label">Количество дней:</div><div class="settings-value"><input type="number" id="playerPenaltyCustomDays" min="1" max="365" value="7" style="width: 100px;"></div></div>
+                    <div class="settings-row" id="playerMissPercentRow" style="display: none;"><div class="settings-label">Порог пропусков (%):</div><div class="settings-value"><input type="number" id="playerPenaltyMissPercent" min="0" max="100" value="50" style="width: 100px;"></div></div>
+                    <button class="submit-btn" style="margin-top: 10px;" onclick="savePlayerPenaltySettings()">💾 Сохранить для игрока</button>
+                    <div id="playerPenaltyMessage" class="message"></div>
+                </div>
+            </div>
+        </div>
+        <div id="adminFeaturesContent" class="hidden">
+            <div class="panel-title">⚙️ Управление функциями сайта</div>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 12px;">Включайте/выключайте функции по необходимости.</p>
+            <div id="featuresList"></div>
+            <div id="featuresMessage" class="message"></div>
+        </div>
+        <div id="adminAnnouncementsContent" class="hidden">
+            <div class="panel-title">📢 Объявления</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Заголовок</label><input type="text" id="newAnnouncementTitle" required placeholder="ВАЖНО!"></div>
+                    <div class="form-group"><label>Тип</label><select id="newAnnouncementType"><option value="info">🔵 Информация</option><option value="event">🟡 Событие</option><option value="important">🔴 Важно</option><option value="success">🟢 Успех</option></select></div>
+                </div>
+                <div class="form-group"><label>Сообщение</label><textarea id="newAnnouncementMessage" placeholder="Текст объявления..."></textarea></div>
+                <button type="button" class="submit-btn dkp-btn" onclick="createAnnouncement()">📢 Создать объявление</button>
+            </div>
+            <div id="adminAnnouncementsList"></div>
+            <div id="announcementsMessage" class="message"></div>
+        </div>
+        <div id="adminLogContent" class="hidden">
+            <div class="panel-title">📝 Лог действий</div>
+            <div style="display: flex; gap: 8px; margin-bottom: 12px;"><button class="submit-btn" style="flex: 1;" onclick="loadActionLog()">🔄 Обновить</button></div>
+            <div id="actionLogList"></div>
+        </div>
+        <div id="adminMissingContent" class="hidden">
+            <div class="panel-title">📋 Списки "у кого нет"</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Тип</label><select id="missingItemType" onchange="loadMissingItemNames()"><option value="skill">🎯 Навык</option><option value="equipment">🛡️ Экипировка</option></select></div>
+                    <div class="form-group"><label>Название</label><select id="missingItemName"></select></div>
+                </div>
+                <button type="button" class="submit-btn" onclick="loadMissingList()">🔍 Найти</button>
+            </div>
+            <div id="missingListResult"></div>
+        </div>
+        <div id="adminExportContent" class="hidden">
+            <div class="panel-title">📤 Экспорт данных</div>
+            <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 12px;">Выгрузите данные в CSV для анализа в Excel.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                <button class="submit-btn" onclick="exportData('players')">👥 Игроки</button>
+                <button class="submit-btn" onclick="exportData('auctions')">🔨 Аукционы</button>
+                <button class="submit-btn" onclick="exportData('dkp')">💰 DKP балансы</button>
+            </div>
+            <div id="exportResult" style="margin-top: 12px;"></div>
+        </div>
+        <div id="adminTwinksContent" class="hidden">
+            <div class="panel-title">🔗 Управление твинками</div>
+            <div class="add-item-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Основной игрок</label><input type="text" id="twinkMainNick" placeholder="Ник основного..."></div>
+                    <div class="form-group"><label>Твинк</label><input type="text" id="twinkTwinkNick" placeholder="Ник твинка..."></div>
+                </div>
+                <button type="button" class="submit-btn" onclick="linkTwinkAdmin()">🔗 Привязать</button>
+            </div>
+            <div id="adminTwinksList"></div>
+            <div id="twinksMessage" class="message"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальные окна -->
+<div id="imageModal" class="modal-overlay hidden" onclick="closeImageModal()"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeImageModal()">✕</button><img id="modalImage" src="" alt="Screenshot"></div></div>
+<div id="bidModal" class="modal-overlay hidden" onclick="closeBidModal()"><div class="modal-content" style="max-width: 580px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeBidModal()">✕</button><div id="bidModalContent"></div></div></div>
+<div id="iconModal" class="modal-overlay hidden" onclick="closeIconModal()"><div class="modal-content" style="max-width: 440px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeIconModal()">✕</button><h3 id="iconModalTitle" style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">🖼 ИКОНКА</h3><div id="iconPreview" style="text-align: center; margin-bottom: 12px; min-height: 80px; display: flex; align-items: center; justify-content: center; background: var(--bg-soft); border-radius: var(--radius-sm); border: 2px dashed var(--border);"><div style="color: var(--text-dim);">Загрузка...</div></div><div class="icon-upload-area" id="iconUploadArea" onclick="document.getElementById('iconFileInput').click()"><div style="font-size: 24px; margin-bottom: 5px;">📤</div><div style="color: var(--text-main); font-size: 12px; font-weight: 600;">Выберите или перетащите</div><div id="iconSizeHint" style="color: var(--text-dim); font-size: 10px; margin-top: 3px;">JPG, PNG</div><input type="file" id="iconFileInput" accept="image/*" style="display: none;" onchange="handleIconFileSelect(event)"></div><div class="action-buttons" style="margin-top: 12px;"><button class="btn-remove" onclick="deleteCurrentIcon()" style="width: 100%; padding: 6px;">🗑 Удалить</button></div></div></div>
+<div id="editEventModal" class="modal-overlay hidden" onclick="closeEditEventModal()"><div class="modal-content" style="max-width: 480px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeEditEventModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ МЕРОПРИЯТИЯ</h3><div style="margin-bottom: 12px;"><div style="font-size: 11px; color: var(--text-dim); margin-bottom: 4px;">ID:</div><div id="editEventId" style="font-size: 12px; padding: 5px 8px; background: var(--bg-soft); border-radius: var(--radius-sm);"></div></div><div class="form-group"><label>Название</label><input type="text" id="editEventName" placeholder="Название..."></div><div class="form-group"><label>Стоимость DKP</label><input type="number" id="editEventDkp" min="0" placeholder="100"></div><div style="padding: 10px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">⚠️ Изменение DKP повлияет только на будущие начисления.</div><button type="button" class="submit-btn" onclick="saveEventEdit()">💾 Сохранить изменения</button><div id="editEventMessage" class="message"></div></div></div>
+<div id="deleteEventModal" class="modal-overlay hidden" onclick="closeDeleteEventModal()"><div class="modal-content" style="max-width: 520px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeDeleteEventModal()">✕</button><h3 style="color: var(--danger); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">🗑 УДАЛЕНИЕ МЕРОПРИЯТИЯ</h3><div style="margin-bottom: 12px; padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm);"><div style="font-size: 11px; color: var(--text-dim);">Мероприятие:</div><div id="deleteEventName" style="font-size: 14px; font-weight: 700; font-family: var(--font-display);"></div><div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">ID: <span id="deleteEventId"></span></div></div><div style="padding: 10px; background: var(--danger-soft); border: 1px solid var(--danger); border-radius: var(--radius-sm); margin-bottom: 12px;"><div style="font-size: 12px; color: var(--danger); font-weight: 700; margin-bottom: 6px;">⚠️ ВНИМАНИЕ!</div><div style="font-size: 11px; color: var(--danger);">Это действие необратимо. Выберите параметры удаления:</div></div><div class="checkbox-group" style="margin-bottom: 8px;"><input type="checkbox" id="deleteEventRelated" checked><label for="deleteEventRelated" style="margin: 0; cursor: pointer;">Удалить связанные данные (посещаемость, заявки, иконку)</label></div><div class="checkbox-group" style="margin-bottom: 12px;"><input type="checkbox" id="deleteEventRevertDkp"><label for="deleteEventRevertDkp" style="margin: 0; cursor: pointer;">Вернуть DKP всем игрокам, кто получил за это мероприятие</label></div><div id="revertWarning" style="display: none; padding: 8px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">💡 При возврате DKP: у игроков может образоваться отрицательный баланс.</div><div style="display: flex; gap: 8px;"><button type="button" class="submit-btn" style="background: var(--border); color: var(--text-main);" onclick="closeDeleteEventModal()">Отмена</button><button type="button" class="submit-btn" style="background: var(--danger);" onclick="confirmDeleteEvent()">🗑 Удалить</button></div><div id="deleteEventMessage" class="message"></div><div id="deleteEventStats" style="margin-top: 10px;"></div></div></div>
+<div id="dkpDetailsModal" class="modal-overlay hidden" onclick="closeDkpDetailsModal()"><div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeDkpDetailsModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">📋 ДЕТАЛИ ОПЕРАЦИИ</h3><div id="dkpDetailsContent"></div></div></div>
+<div id="editDkpEntryModal" class="modal-overlay hidden" onclick="closeEditDkpEntryModal()"><div class="modal-content" style="max-width: 480px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeEditDkpEntryModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ ЗАПИСИ</h3><div class="form-group"><label>Причина / Комментарий</label><input type="text" id="editDkpEntryReason" placeholder="Причина..."></div><button type="button" class="submit-btn" onclick="saveDkpHistoryEntryEdit()">💾 Сохранить</button><div id="editDkpEntryMessage" class="message"></div></div></div>
+<div id="editAuctionModal" class="modal-overlay hidden" onclick="closeEditAuctionModal()"><div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeEditAuctionModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ АУКЦИОНА</h3><div style="margin-bottom: 10px; padding: 8px; background: var(--bg-soft); border-radius: var(--radius-sm);"><div style="font-size: 10px; color: var(--text-dim);">Аукцион:</div><div id="editAuctionInfo" style="font-size: 13px; font-weight: 700;"></div></div><div class="form-group"><label>Новый победитель</label><select id="editAuctionWinner"></select></div><div class="form-group"><label>Новая сумма (DKP)</label><input type="number" id="editAuctionAmount" min="0" placeholder="100"></div><div style="padding: 8px; background: var(--warning-soft); border: 1px solid var(--warning); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--warning);">⚠️ DKP будет пересчитано: у старого победителя вернётся, у нового спишется.</div><button type="button" class="submit-btn" onclick="saveCompletedAuctionEdit()">💾 Сохранить</button><div id="editAuctionMessage" class="message"></div></div></div>
+<div id="notificationsModal" class="modal-overlay hidden" onclick="closeNotificationsModal()"><div class="modal-content" style="max-width: 500px; max-height: 80vh;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeNotificationsModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 15px;">🔔 УВЕДОМЛЕНИЯ</h3><div style="display: flex; gap: 6px; margin-bottom: 12px;"><button class="submit-btn" style="flex: 1;" onclick="markAllNotificationsRead()">✓ Прочитано все</button></div><div id="notificationsList" style="max-height: 60vh; overflow-y: auto;"></div></div></div>
+<div id="toastNotification" class="toast-notification hidden"><div class="toast-icon">🔔</div><div class="toast-content"><div class="toast-title" id="toastTitle">Новое уведомление</div><div class="toast-message" id="toastMessage"></div></div><button class="toast-close" onclick="hideToast()">✕</button></div>
+<div id="editAnnouncementModal" class="modal-overlay hidden" onclick="closeEditAnnouncementModal()"><div class="modal-content" style="max-width: 500px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeEditAnnouncementModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">✎ РЕДАКТИРОВАНИЕ ОБЪЯВЛЕНИЯ</h3><input type="hidden" id="editAnnouncementId"><div class="form-group"><label>Заголовок</label><input type="text" id="editAnnouncementTitle"></div><div class="form-group"><label>Тип</label><select id="editAnnouncementType"><option value="info">🔵 Информация</option><option value="event">🟡 Событие</option><option value="important">🔴 Важно</option><option value="success">🟢 Успех</option></select></div><div class="form-group"><label>Сообщение</label><textarea id="editAnnouncementMessage"></textarea></div><button type="button" class="submit-btn" onclick="saveEditAnnouncement()">💾 Сохранить</button><div id="editAnnouncementMsg" class="message"></div></div></div>
+<div id="upgradeModal" class="modal-overlay hidden" onclick="closeUpgradeModal()"><div class="modal-content" style="max-width: 450px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeUpgradeModal()">✕</button><h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">⬆️ СТАТЬ ИГРОКОМ</h3><div style="padding: 10px; background: var(--bg-soft); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--text-dim);">Ваш гостевой аккаунт <b style="color: var(--accent);" id="upgradeNick"></b> будет повышен до статуса "Игрок". Вы сможете участвовать в аукционах, загружать скриншоты DKP и получать предметы.</div><div class="form-group"><label>Ключ доступа (опционально)</label><input type="password" id="upgradeKey" placeholder="Пусто для роли Игрок"></div><button type="button" class="submit-btn" onclick="upgradeToPlayer()">⬆️ Повысить до Игрока</button><div id="upgradeMessage" class="message"></div></div></div>
+<div id="banModal" class="modal-overlay hidden" onclick="closeBanModal()"><div class="modal-content" style="max-width: 450px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeBanModal()">✕</button><h3 style="color: var(--danger); font-family: var(--font-display); margin-bottom: 12px; font-size: 14px;">🚫 БЛОКИРОВКА ПОЛЬЗОВАТЕЛЯ</h3><input type="hidden" id="banNickname"><div style="padding: 10px; background: var(--danger-soft); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 11px; color: var(--danger);">Пользователь <b id="banNicknameDisplay"></b> будет заблокирован. Его активные ставки будут отменены.</div><div class="form-group"><label>Причина блокировки</label><textarea id="banReason" placeholder="Укажите причину..."></textarea></div><button type="button" class="submit-btn" style="background: var(--danger); border-color: var(--danger);" onclick="confirmBanUser()">🚫 Заблокировать</button><div id="banMessage" class="message"></div></div></div>
+<div id="screenshotZoomModal" class="screenshot-zoom-modal hidden" onclick="closeScreenshotZoom()"><img id="zoomedImage" src="" alt="Screenshot"><div class="zoom-controls" onclick="event.stopPropagation()"><button class="zoom-btn" onclick="zoomImage(-0.2)">−</button><button class="zoom-btn" onclick="zoomImage(0)" title="Сброс">⊙</button><button class="zoom-btn" onclick="zoomImage(0.2)">+</button></div></div>
+
+<script>
         const APP_VERSION = '17.3';
     const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbyZptotFd6iAIFgCG1fwjonRA18X-i-I6ccGmCXmaDYxbdPfUr-CNqKrdhFZQxmaKjs/exec';
     const SCRIPT_URL = SCRIPT_URL_BASE + '?v=' + APP_VERSION + '&_t=' + Date.now();
@@ -2945,7 +3597,7 @@
             if (r) r.innerHTML = '<div class="message error" style="display: block;">❌ Ошибка связи</div>'; 
         }
     }
-           // ===== МЕРОПРИЯТИЯ =====
+        // ===== МЕРОПРИЯТИЯ =====
     async function loadAdminEvents() { 
         try { 
             const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEvents' }), redirect: 'follow' }); 
@@ -4521,7 +5173,7 @@
             else alert('Ошибка: ' + res.message); 
         } catch (e) { alert('Ошибка: ' + e.message); } 
     }
-                    // ===== АУКЦИОН =====
+        // ===== АУКЦИОН =====
     async function loadActiveAuctions() { 
         try { 
             const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActiveAuctions' }), redirect: 'follow' }); 
@@ -5050,7 +5702,7 @@
             }
         }, 1000); 
     }
-                    // ===== ИКОНКИ =====
+        // ===== ИКОНКИ =====
     function openIconModal(t, id, n) { 
         currentIconType = t; 
         currentIconId = id; 
