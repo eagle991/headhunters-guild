@@ -671,6 +671,34 @@
         .nick-with-color[onclick]:hover { background: var(--accent-soft); transform: scale(1.05); }
         .queue-item-recipient[onclick] { cursor: pointer; text-decoration: underline; text-decoration-style: dotted; }
         .queue-item-recipient[onclick]:hover { color: var(--accent-hover); }
+        
+        /* ===== 🆕 ИНДИВИДУАЛЬНЫЕ ЗАТОЧКИ ПРЕДМЕТОВ ===== */
+        .item-enh-box {
+            display: inline-flex; align-items: center; gap: 2px;
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 1px 3px;
+            font-family: var(--font-display); font-size: 9px; font-weight: 700;
+            color: var(--accent); margin-left: 4px;
+        }
+        .item-enh-box.editable { border-color: var(--accent); background: var(--accent-soft); }
+        .item-enh-input {
+            width: 36px; background: transparent; border: none;
+            color: var(--accent); font-family: var(--font-display);
+            font-size: 10px; font-weight: 900; text-align: center; padding: 0;
+        }
+        .item-enh-input:focus { outline: 2px solid var(--accent); border-radius: 2px; }
+        .item-enh-btn {
+            background: var(--bg-soft); border: 1px solid var(--border);
+            color: var(--accent); width: 16px; height: 16px;
+            border-radius: 3px; cursor: pointer; font-size: 10px;
+            line-height: 1; padding: 0; font-weight: 700;
+        }
+        .item-enh-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .item-enh-display {
+            color: var(--accent); font-family: var(--font-display);
+            font-size: 10px; font-weight: 900; margin-left: 3px;
+        }
+        .item-card.selected .item-enh-input { color: var(--success); }
     </style>
 </head>
 <body data-theme="light">
@@ -699,7 +727,7 @@
     <div id="publicLoginPrompt" style="text-align: center; padding: 30px; color: var(--text-dim); font-family: var(--font-display); font-size: 12px;">
         🔒 Топы и объявления доступны после входа в систему
     </div>
-    <div class="footer">© RF Online Next | v17.8</div>
+    <div class="footer">© RF Online Next | v17.9</div>
 </div>
 
 <div id="authScreen" class="screen">
@@ -965,7 +993,26 @@
             <div class="panel-title">➕ Создание аукциона</div>
             <div class="add-item-form">
                 <div class="form-row">
-                    <div class="form-group"><label>Раздел</label><select id="auctionItemSection" onchange="loadAuctionItems()"><option value="">— Выберите —</option></select></div>
+                    <div class="form-group"><label>Раздел</label>
+                        <select id="auctionItemSection" onchange="loadAuctionItems()">
+                            <option value="">— Выберите раздел —</option>
+                            <option value="Оружие">Оружие</option>
+                            <option value="Шея">Шея</option>
+                            <option value="Грудь">Грудь</option>
+                            <option value="Штаны">Штаны</option>
+                            <option value="Колени">Колени</option>
+                            <option value="Венец">Венец</option>
+                            <option value="Серьга">Серьга</option>
+                            <option value="Ожерелье">Ожерелье</option>
+                            <option value="Браслет">Браслет</option>
+                            <option value="Кольцо">Кольцо</option>
+                            <option value="Привод">Привод</option>
+                            <option value="Звездочет">Звездочет</option>
+                            <option value="Руки">Руки</option>
+                            <option value="Биокостюм">Биокостюм</option>
+                            <option value="Ровер">Ровер</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label>Предмет</label>
                         <div class="item-select-with-preview">
@@ -1369,7 +1416,7 @@
     </div>
 </div>
 
-<!-- ✅ МОДАЛКА ПРОСМОТРА КАБИНЕТА ИГРОКА (ТОЛЬКО ЧТЕНИЕ) -->
+<!-- ✅ МОДАЛКА ПРОСМОТРА КАБИНЕТА ИГРОКА -->
 <div id="viewPlayerModal" class="modal-overlay hidden" onclick="closeViewPlayerModal()">
     <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
         <button class="modal-close" onclick="closeViewPlayerModal()">✕</button>
@@ -1384,8 +1431,8 @@
 </div>
 
 <script>
-        const APP_VERSION = '17.8';
-    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbypMTNk0l5U5OQsGS5OViZWXWJVqZG0S-RHTBnTqbk-cVTvPbHjS_9ISCQ7WImnhjEH/exec';
+        const APP_VERSION = '17.9';
+    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbygI6HXy9p3aPWyOXfk0uo8NmWlSbfMIrUdgQUwpNb9Ekx801r5txdLojBWYp9Eq2hh/exec';
     const SCRIPT_URL = SCRIPT_URL_BASE + '?v=' + APP_VERSION + '&_t=' + Date.now();
     const ADMIN_KEY = 'ADMIN_SECRET_2026';
     const MOD_KEY = 'MOD_SECRET_2026';
@@ -1411,11 +1458,23 @@
     let lastRecognizedText = { 1: '', 2: '' };
     let currentTopType = { 'publicTopList': 'bm', 'mainTopList': 'bm' };
 
+    // ===== УТИЛИТЫ =====
     function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
     function escapeForOnclick(str) { if (!str) return ''; return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, ''); }
     function getIconBorderColor(c) { const colors = { 'Белый': '#94a3b8', 'Зеленый': 'var(--success)', 'Синий': 'var(--accent)', 'Фиолетовый': '#6b4aa8', 'Желтый': 'var(--gold)', 'Красный': 'var(--danger)' }; return colors[c] || 'var(--border)'; }
     function getColorClass(c) { const cls = { 'Белый': 'color-white', 'Зеленый': 'color-green', 'Синий': 'color-blue', 'Фиолетовый': 'color-purple', 'Желтый': 'color-yellow', 'Красный': 'color-red' }; return cls[c] || 'color-white'; }
     function getRoleBadge(r) { if (r === 'Админ') return ' <span style="color:var(--danger);font-size:9px;font-weight:700;">[АДМИН]</span>'; if (r === 'Модератор') return ' <span style="color:var(--warning);font-size:9px;font-weight:700;">[МОД]</span>'; if (r === 'Гость') return ' <span style="color:var(--text-dim);font-size:9px;font-weight:700;">[ГОСТЬ]</span>'; return ''; }
+    
+    // ✅ Хелпер для работы с новой структурой selections {id, enh}
+    function getSelectionInfo(selObj, section, fallbackBase) {
+        if (!selObj || !selObj[section]) return null;
+        const v = selObj[section];
+        let id, enh;
+        if (typeof v === 'object' && v.id !== undefined) { id = Number(v.id); enh = Number(v.enh) || 0; }
+        else { id = Number(v); enh = 0; }
+        if (fallbackBase && enh === 0 && allItems[id]) enh = Number(allItems[id].enhancement) || 0;
+        return { id: id, enh: enh };
+    }
 
     async function loadSiteBackground() {
         try {
@@ -1442,8 +1501,7 @@
 
     window.addEventListener('DOMContentLoaded', function() {
         const savedTheme = localStorage.getItem('rf_theme') || 'light';
-        document.body.setAttribute('data-theme', savedTheme);
-        updateThemeButton(savedTheme);
+        document.body.setAttribute('data-theme', savedTheme); updateThemeButton(savedTheme);
         const sl = localStorage.getItem('rf_saved_login'); const sp = localStorage.getItem('rf_saved_password');
         if (sl && sp) { const n = document.getElementById('loginNick'); const p = document.getElementById('loginPass'); const r = document.getElementById('rememberMe'); const i = document.getElementById('savedIndicator'); if (n) n.value = sl; if (p) p.value = sp; if (r) r.checked = true; if (i) i.style.display = 'block'; }
         const ss = localStorage.getItem('rf_session');
@@ -1582,7 +1640,7 @@
         if (t === 'home') { loadPublicTops(); loadAnnouncements(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadRecentWinners(); }
         if (t === 'players') loadAllPlayers();
         if (t === 'dkp') { loadMyDkp(); loadEventsForSelect(); if (currentRole === 'Гость') { const submitTab = document.getElementById('tabDkpSubmit'); if (submitTab) submitTab.classList.add('hidden'); const myContent = document.getElementById('dkpMyContent'); if (myContent) myContent.classList.remove('hidden'); const submitContent = document.getElementById('dkpSubmitContent'); if (submitContent) submitContent.classList.add('hidden'); const ratingContent = document.getElementById('dkpRatingContent'); if (ratingContent) ratingContent.classList.add('hidden'); } }
-        if (t === 'auction') { loadActiveAuctions(); loadRecentWinners(); }
+        if (t === 'auction') { loadActiveAuctions(); loadRecentWinners(); loadAuctionSectionsDynamic(); }
         if (t === 'queue') { loadQueueItems(); loadPlayersForQueue(); loadAllItemsForQueueSelect(); }
         if (t === 'calendar') loadCalendarPlayers();
         if (t === 'cabinet') { loadMyLootHistory(); renderMmorpgInventory(); loadUserEmail(); loadPlayerLevel(); loadDailyBonus(); loadAchievements(); loadPersonalStats(); loadFriends(); loadCosmeticsShop(); loadTwinksInfo(); loadCharacterScreenshots(); }
@@ -1590,7 +1648,7 @@
     }
 
     function switchDkpTab(t, e) { document.querySelectorAll('#dkpContent > .tabs .tab-btn').forEach(function(b) { b.classList.remove('active'); }); if (e && e.target) e.target.classList.add('active'); const my = document.getElementById('dkpMyContent'); if (my) my.classList.toggle('hidden', t !== 'my'); const submit = document.getElementById('dkpSubmitContent'); if (submit) submit.classList.toggle('hidden', t !== 'submit'); const rating = document.getElementById('dkpRatingContent'); if (rating) rating.classList.toggle('hidden', t !== 'rating'); if (t === 'my') loadMyDkp(); if (t === 'submit') loadEventsForSelect(); if (t === 'rating') loadDkpRating(); }
-    function switchAuctionTab(t, e) { document.querySelectorAll('#auctionContent > .tabs .tab-btn').forEach(function(b) { b.classList.remove('active'); }); if (e && e.target) e.target.classList.add('active'); const active = document.getElementById('auctionActiveContent'); if (active) active.classList.toggle('hidden', t !== 'active'); const completed = document.getElementById('auctionCompletedContent'); if (completed) completed.classList.toggle('hidden', t !== 'completed'); const create = document.getElementById('auctionCreateContent'); if (create) create.classList.toggle('hidden', t !== 'create'); if (t === 'active') loadActiveAuctions(); if (t === 'completed') loadCompletedAuctions(); if (t === 'create') loadPlayersForAuction(); }
+    function switchAuctionTab(t, e) { document.querySelectorAll('#auctionContent > .tabs .tab-btn').forEach(function(b) { b.classList.remove('active'); }); if (e && e.target) e.target.classList.add('active'); const active = document.getElementById('auctionActiveContent'); if (active) active.classList.toggle('hidden', t !== 'active'); const completed = document.getElementById('auctionCompletedContent'); if (completed) completed.classList.toggle('hidden', t !== 'completed'); const create = document.getElementById('auctionCreateContent'); if (create) create.classList.toggle('hidden', t !== 'create'); if (t === 'active') loadActiveAuctions(); if (t === 'completed') loadCompletedAuctions(); if (t === 'create') { loadPlayersForAuction(); loadAuctionSectionsDynamic(); } }
     function switchQueueTab(t, e) { document.querySelectorAll('#queueContent > .tabs .tab-btn').forEach(function(b) { b.classList.remove('active'); }); if (e && e.target) e.target.classList.add('active'); const list = document.getElementById('queueListContent'); if (list) list.classList.toggle('hidden', t !== 'list'); const add = document.getElementById('queueAddContent'); if (add) add.classList.toggle('hidden', t !== 'add'); const loot = document.getElementById('queueMyLootContent'); if (loot) loot.classList.toggle('hidden', t !== 'myloot'); if (t === 'list') loadQueueItems(); if (t === 'add') { loadPlayersForQueue(); loadAllItemsForQueueSelect(); } if (t === 'myloot') { loadMyUnifiedLootStats(); loadMyUnifiedLootHistory(); } }
     
     function switchAdminTab(t, e) {
@@ -1639,7 +1697,6 @@
         }
     }
 
-    // ===== ГЛАВНЫЙ ЭКРАН =====
     function showMainScreen() {
         document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
         const main = document.getElementById('mainScreen'); if (main) main.classList.add('active');
@@ -1657,7 +1714,7 @@
         setTimeout(loadAnnouncements, 1000);
     }
 
-    // ===== MMORPG ИНВЕНТАРЬ =====
+    // ===== MMORPG ИНВЕНТАРЬ (с индивидуальными заточками) =====
     function renderMmorpgInventory() {
         if (!myPlayerData || myPlayerData.status !== 'approved') return;
         const inv = document.getElementById('mmorpgInventoryView'); if (!inv) return; inv.classList.remove('hidden');
@@ -1670,16 +1727,29 @@
         const pn = document.getElementById('characterProfName'); if (pn) pn.innerText = myPlayerData.profession || '—';
         const statsMini = document.getElementById('characterStatsMini');
         if (statsMini) { statsMini.innerHTML = '<div class="stat-mini"><span class="stat-mini-label">БМ</span><span class="stat-mini-value">' + Number(myPlayerData.bm).toLocaleString('ru-RU') + '</span></div><div class="stat-mini"><span class="stat-mini-label">Ур.</span><span class="stat-mini-value">' + myPlayerData.level + '</span></div><div class="stat-mini"><span class="stat-mini-label">Ат.</span><span class="stat-mini-value">' + myPlayerData.attack + '</span></div><div class="stat-mini"><span class="stat-mini-label">Защ.</span><span class="stat-mini-value">' + myPlayerData.defense + '</span></div><div class="stat-mini"><span class="stat-mini-label">Мет.</span><span class="stat-mini-value">' + myPlayerData.accuracy + '</span></div><div class="stat-mini"><span class="stat-mini-label">Укл.</span><span class="stat-mini-value">' + myPlayerData.evasion + '</span></div>'; }
-        const sg = document.getElementById('equipmentSlotsGrid'); const sel = (myPlayerItems && myPlayerItems.selections) ? myPlayerItems.selections : {};
+        const sg = document.getElementById('equipmentSlotsGrid');
+        const sel = playerItemSelections || {};
         if (sg) {
             let html = '';
             for (let i = 0; i < equipmentSections.length; i++) {
-                const sec = equipmentSections[i]; const iid = sel[sec]; const it = iid ? allItems.find(function(x) { return x.id === iid; }) : null; const bc = it ? getIconBorderColor(it.color) : 'var(--border)';
-                if (it) { html += '<div class="equipment-slot equipped" style="border-color:' + bc + ';" onclick="showEquipmentEditForm()"><div class="slot-label">' + sec + '</div><div class="slot-icon" id="slotIcon_' + it.id + '" style="border-color:' + bc + ';"><span class="icon-placeholder" style="font-size:7px;">...</span></div><div class="slot-item-name">' + escapeHtml(it.name) + '</div><div class="slot-badges">'; if (it.isPrime) html += '<span class="slot-badge" style="background:var(--warning-soft);color:var(--gold);border:1px solid var(--gold);">П</span>'; if (it.enhancement > 0) html += '<span class="slot-badge" style="background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);">+' + it.enhancement + '</span>'; if (it.isBoss) html += '<span class="slot-badge" style="background:var(--danger-soft);color:var(--danger);border:1px solid var(--danger);">Б</span>'; html += '<span class="slot-badge item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.tier || '') + '</span></div></div>'; }
-                else { html += '<div class="equipment-slot empty" onclick="showEquipmentEditForm()"><div class="slot-label">' + sec + '</div><div class="slot-icon">—</div><div class="slot-item-name" style="color:var(--text-dim);">Пусто</div></div>'; }
+                const sec = equipmentSections[i];
+                const info = getSelectionInfo(sel, sec, true);
+                const it = info ? allItems.find(function(x) { return x.id === info.id; }) : null;
+                const enh = info ? info.enh : 0;
+                const bc = it ? getIconBorderColor(it.color) : 'var(--border)';
+                if (it) {
+                    html += '<div class="equipment-slot equipped" style="border-color:' + bc + ';" onclick="showEquipmentEditForm()"><div class="slot-label">' + escapeHtml(sec) + '</div><div class="slot-icon" id="slotIcon_' + it.id + '" style="border-color:' + bc + ';"><span class="icon-placeholder" style="font-size:7px;">...</span></div><div class="slot-item-name">' + escapeHtml(it.name) + '</div><div class="slot-badges">';
+                    if (it.isPrime) html += '<span class="slot-badge" style="background:var(--warning-soft);color:var(--gold);border:1px solid var(--gold);">П</span>';
+                    if (enh > 0) html += '<span class="slot-badge" style="background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);">+' + enh + '</span>';
+                    if (it.isBoss) html += '<span class="slot-badge" style="background:var(--danger-soft);color:var(--danger);border:1px solid var(--danger);">Б</span>';
+                    html += '<span class="slot-badge item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.tier || '') + '</span></div></div>';
+                } else { html += '<div class="equipment-slot empty" onclick="showEquipmentEditForm()"><div class="slot-label">' + escapeHtml(sec) + '</div><div class="slot-icon">—</div><div class="slot-item-name" style="color:var(--text-dim);">Пусто</div></div>'; }
             }
             sg.innerHTML = html;
-            Object.values(sel).forEach(function(iid) { const it = allItems.find(function(x) { return x.id === iid; }); if (it) loadAndDisplayIcon('item', iid, 'slotIcon_' + iid, it.color); });
+            for (const sec in sel) {
+                const info = getSelectionInfo(sel, sec, false);
+                if (info) { const it = allItems.find(function(x) { return x.id === info.id; }); if (it) loadAndDisplayIcon('item', info.id, 'slotIcon_' + info.id, it.color); }
+            }
         }
     }
 
@@ -1785,7 +1855,7 @@
         finally { if (b) { b.disabled = false; b.innerText = 'Отправить'; } if (m) m.style.display = 'block'; } 
     }
 
-    // ===== ЭКИПИРОВКА =====
+    // ===== 🆕 ЭКИПИРОВКА С ИНДИВИДУАЛЬНЫМИ ЗАТОЧКАМИ =====
     async function loadPlayerItems() {
         try {
             const sr = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentSections' }), redirect: 'follow' }); const sres = await sr.json(); if (sres.success) equipmentSections = sres.sections;
@@ -1793,7 +1863,15 @@
             const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerItems', nickname: currentUser }), redirect: 'follow' }); const res = await r.json();
             const f = document.getElementById('equipmentForm'); const am = document.getElementById('equipmentApprovedMessage'); const ss = document.getElementById('equipmentStatus'); const es = document.getElementById('equipmentEmpty'); const inv = document.getElementById('mmorpgInventoryView');
             if (res.success) {
-                myPlayerItems = res.data; playerItemSelections = res.data.selections || {};
+                myPlayerItems = res.data;
+                // ✅ Нормализуем selections в формат { id, enh }
+                playerItemSelections = {};
+                for (const sec in res.data.selections) {
+                    const v = res.data.selections[sec];
+                    if (v === null || v === undefined) continue;
+                    if (typeof v === 'object' && v.id !== undefined) playerItemSelections[sec] = { id: Number(v.id), enh: Number(v.enh) || 0 };
+                    else playerItemSelections[sec] = { id: Number(v), enh: 0 };
+                }
                 if (res.data.status === 'approved') { if (ss) ss.innerHTML = '<span class="status-badge status-approved">Подтверждено</span>'; if (f) f.classList.add('hidden'); if (am) am.classList.remove('hidden'); if (es) es.classList.add('hidden'); if (inv) { inv.classList.remove('hidden'); renderMmorpgInventory(); } }
                 else if (res.data.status === 'pending') { if (ss) ss.innerHTML = '<span class="status-badge status-pending">На проверке</span>'; if (f) f.classList.add('hidden'); if (am) am.classList.add('hidden'); if (es) es.classList.remove('hidden'); if (inv) inv.classList.add('hidden'); }
                 else { if (ss) ss.innerHTML = '<span class="status-badge status-rejected">Отклонено</span>'; if (f) f.classList.remove('hidden'); if (am) am.classList.add('hidden'); if (es) es.classList.remove('hidden'); if (inv) inv.classList.add('hidden'); }
@@ -1803,26 +1881,83 @@
     }
     function buildEquipmentTabs() { const el = document.getElementById('equipmentSectionTabs'); if (!el) return; let html = ''; for (let i = 0; i < equipmentSections.length; i++) { const s = equipmentSections[i]; html += '<button type="button" class="eq-tab ' + (s === currentEquipmentSection ? 'active' : '') + '" onclick="selectEquipmentSection(\'' + escapeForOnclick(s) + '\')">' + escapeHtml(s) + '</button>'; } el.innerHTML = html; }
     function selectEquipmentSection(s) { currentEquipmentSection = s; buildEquipmentTabs(); renderEquipmentItems(); }
+    
+    // ✅ КЛЮЧЕВАЯ ФУНКЦИЯ v17.9 — рендер предметов с индивидуальными заточками
     function renderEquipmentItems() {
         const l = document.getElementById('equipmentItemsList'); if (!l) return;
         const its = allItems.filter(function(i) { return i.section === currentEquipmentSection; });
         if (its.length === 0) { l.innerHTML = '<div class="empty-state">Нет предметов</div>'; return; }
+        const current = playerItemSelections[currentEquipmentSection]; // { id, enh } или undefined
         let html = '';
         for (let i = 0; i < its.length; i++) {
-            const it = its[i]; const sel = playerItemSelections[currentEquipmentSection] === it.id; const bc = getIconBorderColor(it.color);
-            html += '<div class="item-card ' + (sel ? 'selected' : '') + '" onclick="selectItem(' + it.id + ', \'' + escapeForOnclick(currentEquipmentSection) + '\')"><div class="item-header"><div id="itemIconForm_' + it.id + '" class="icon-preview-cabinet" style="border-color:' + bc + ';cursor:default;" onclick="event.stopPropagation();"><span class="icon-placeholder" style="font-size:7px;">...</span></div><div style="flex:1;"><div class="item-name">' + escapeHtml(it.name) + '</div><div class="item-badges">';
-            if (it.isPrime) html += '<span class="item-badge prime">Прайм</span>'; if (it.enhancement > 0) html += '<span class="item-badge enhance">+' + it.enhancement + '</span>'; if (it.isBoss) html += '<span class="item-badge boss">Босс</span>';
+            const it = its[i];
+            const isSelected = current && current.id === it.id;
+            const selEnh = isSelected ? current.enh : 0;
+            const bc = getIconBorderColor(it.color);
+            html += '<div class="item-card ' + (isSelected ? 'selected' : '') + '" onclick="selectItem(' + it.id + ', \'' + escapeForOnclick(currentEquipmentSection) + '\')">';
+            html += '<div class="item-header">';
+            html += '<div id="itemIconForm_' + it.id + '" class="icon-preview-cabinet" style="border-color:' + bc + ';cursor:default;" onclick="event.stopPropagation();"><span class="icon-placeholder" style="font-size:7px;">...</span></div>';
+            html += '<div style="flex:1;">';
+            html += '<div class="item-name">' + escapeHtml(it.name);
+            if (isSelected) {
+                // ✅ Редактируемая заточка для выбранного предмета
+                html += '<span class="item-enh-box editable" onclick="event.stopPropagation()"> 🔧 +';
+                html += '<input type="number" class="item-enh-input" min="0" max="15" value="' + selEnh + '" ';
+                html += 'onchange="updateItemEnh(\'' + escapeForOnclick(currentEquipmentSection) + '\', ' + it.id + ', this.value)" ';
+                html += 'onclick="event.stopPropagation()">';
+                html += '<button class="item-enh-btn" onclick="event.stopPropagation(); stepEnh(\'' + escapeForOnclick(currentEquipmentSection) + '\', ' + it.id + ', -1)">−</button>';
+                html += '<button class="item-enh-btn" onclick="event.stopPropagation(); stepEnh(\'' + escapeForOnclick(currentEquipmentSection) + '\', ' + it.id + ', 1)">+</button>';
+                html += '</span>';
+            } else {
+                // ✅ Базовая заточка справочника (серая, не редактируется)
+                if (it.enhancement > 0) html += '<span class="item-enh-display" style="opacity:0.5;" title="Базовая заточка справочника">🔧 +' + it.enhancement + '</span>';
+            }
+            html += '</div>';
+            html += '<div class="item-badges">';
+            if (it.isPrime) html += '<span class="item-badge prime">Прайм</span>';
+            if (!isSelected && it.enhancement > 0) html += '<span class="item-badge enhance">+' + it.enhancement + '</span>';
+            if (it.isBoss) html += '<span class="item-badge boss">Босс</span>';
             if (it.tier) html += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.tier) + '</span>';
-            html += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.color) + '</span></div></div></div></div>';
+            html += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.color) + '</span>';
+            html += '</div></div></div></div>';
         }
-        l.innerHTML = html; for (let i = 0; i < its.length; i++) { const it = its[i]; loadAndDisplayIcon('item', it.id, 'itemIconForm_' + it.id, it.color); }
+        l.innerHTML = html;
+        for (let i = 0; i < its.length; i++) { const it = its[i]; loadAndDisplayIcon('item', it.id, 'itemIconForm_' + it.id, it.color); }
     }
-    function selectItem(id, s) { if (playerItemSelections[s] === id) delete playerItemSelections[s]; else playerItemSelections[s] = id; renderEquipmentItems(); }
+    
+    // ✅ Обновлённый selectItem — при выборе предмета заточка = базовая из справочника
+    function selectItem(id, section) {
+        const it = allItems.find(function(x) { return x.id === id; });
+        const current = playerItemSelections[section];
+        if (current && current.id === id) {
+            delete playerItemSelections[section];
+        } else {
+            playerItemSelections[section] = { id: id, enh: it ? (Number(it.enhancement) || 0) : 0 };
+        }
+        renderEquipmentItems();
+    }
+    
+    // ✅ НОВЫЕ функции для изменения индивидуальной заточки
+    function updateItemEnh(section, id, val) {
+        if (!playerItemSelections[section] || playerItemSelections[section].id !== id) return;
+        const n = Math.max(0, Math.min(15, parseInt(val) || 0));
+        playerItemSelections[section].enh = n;
+        renderEquipmentItems();
+    }
+    function stepEnh(section, id, delta) {
+        if (!playerItemSelections[section] || playerItemSelections[section].id !== id) return;
+        const cur = playerItemSelections[section].enh || 0;
+        playerItemSelections[section].enh = Math.max(0, Math.min(15, cur + delta));
+        renderEquipmentItems();
+    }
+    
     async function savePlayerItems(e) { 
         e.preventDefault(); const b = document.getElementById('saveEquipmentBtn'); const m = document.getElementById('equipmentMessage');
         if (b) { b.disabled = true; b.innerHTML = '<span class="loader"></span> ...'; }
-        try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'savePlayerItems', nickname: currentUser, selections: playerItemSelections }), redirect: 'follow' }); const res = await r.json(); if (m) { if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(function() { loadPlayerItems(); m.style.display = 'none'; }, 1000); } else { m.className = 'message error'; m.innerText = res.message; } } }
-        catch (e) { if (m) { m.className = 'message error'; m.innerText = 'Ошибка.'; } } 
+        try { 
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'savePlayerItems', nickname: currentUser, selections: playerItemSelections }), redirect: 'follow' }); const res = await r.json(); 
+            if (m) { if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(function() { loadPlayerItems(); m.style.display = 'none'; }, 1000); } else { m.className = 'message error'; m.innerText = res.message; } }
+        } catch (e) { if (m) { m.className = 'message error'; m.innerText = 'Ошибка.'; } } 
         finally { if (b) { b.disabled = false; b.innerText = 'Отправить на проверку'; } if (m) m.style.display = 'block'; } 
     }
 
@@ -1901,6 +2036,8 @@
     function renderScreenshotsPreview() { const el = document.getElementById('screenshotsPreview'); if (!el) return; let html = ''; for (let i = 0; i < uploadedScreenshots.length; i++) { const s = uploadedScreenshots[i]; const si = s.file ? ' <span style="font-size:8px;color:var(--text-dim);">(' + (s.file.size / 1024).toFixed(0) + ' КБ)</span>' : ''; let sh = ''; if (s.status === 'uploading') sh = '<div class="upload-progress">...</div>'; else if (s.status === 'error') sh = '<div class="upload-progress" style="color:var(--danger);">✕</div>'; else if (s.status === 'done') sh = '<div class="upload-progress" style="color:var(--success);">✓' + si + '</div>'; html += '<div class="screenshot-thumb">'; if (s.base64) html += '<img src="' + s.base64 + '" alt="screenshot" onclick="openImageModal(\'' + escapeForOnclick(s.base64) + '\')" style="cursor:pointer;">'; html += '<button class="remove-btn" onclick="removeScreenshot(\'' + escapeForOnclick(s.id) + '\')">✕</button>' + sh + '</div>'; } el.innerHTML = html; }
     function removeScreenshot(id) { uploadedScreenshots = uploadedScreenshots.filter(function(s) { return s.id !== id; }); renderScreenshotsPreview(); }
     async function preprocessImage(b) { return new Promise(function(resolve) { const i = new Image(); i.onload = function() { const c = document.createElement('canvas'); const sc = 3; c.width = i.width * sc; c.height = i.height * sc; const ctx = c.getContext('2d'); ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(i, 0, 0, c.width, c.height); const id = ctx.getImageData(0, 0, c.width, c.height); const d = id.data; for (let j = 0; j < d.length; j += 4) { let R = 255 - d[j]; let G = 255 - d[j + 1]; let B = 255 - d[j + 2]; R = Math.min(255, R + 20); G = Math.min(255, G + 20); B = Math.min(255, B + 20); R = Math.min(255, Math.max(0, (R - 128) * 1.5 + 128)); G = Math.min(255, Math.max(0, (G - 128) * 1.5 + 128)); B = Math.min(255, Math.max(0, (B - 128) * 1.5 + 128)); d[j] = R; d[j + 1] = G; d[j + 2] = B; d[j + 3] = 255; } ctx.putImageData(new ImageData(new Uint8ClampedArray(d), c.width, c.height), 0, 0); resolve(c.toDataURL('image/png')); }; i.onerror = function() { resolve(b); }; i.src = b; }); }
+    
+    // ✅ ИСПРАВЛЕННЫЙ runOcrOnScreenshots — зелёная рамка для точных совпадений
     async function runOcrOnScreenshots() {
         try {
             const ds = uploadedScreenshots.filter(function(s) { return s.status === 'done' && s.base64; }); if (ds.length === 0) return;
@@ -1917,7 +2054,7 @@
             if (pt) pt.innerText = '🔍 Сверка с базой (' + rn.length + ')...'; if (pbr) pbr.style.width = '97%';
             try { const vr = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' }); const vres = await vr.json(); if (vres.success) allRegisteredNicks = vres.nicks.map(function(n) { return String(n); }); } catch (e) {}
             const cn = []; const ms = { exact: 0, similar: 0, unknown: 0 };
-            for (let i = 0; i < rn.length; i++) { const n = rn[i]; const mr = findBestMatch(n, allRegisteredNicks); if (mr.type === 'exact') { cn.push(mr.nickname); matchedNicksMap[n] = mr.nickname; ms.exact++; } else if (mr.type === 'similar') { cn.push(mr.nickname); matchedNicksMap[n] = mr.nickname; ms.similar++; } else { cn.push(n); ms.unknown++; } }
+            for (let i = 0; i < rn.length; i++) { const n = rn[i]; const mr = findBestMatch(n, allRegisteredNicks); if (mr.type === 'exact') { cn.push(mr.nickname); ms.exact++; } else if (mr.type === 'similar') { cn.push(mr.nickname); matchedNicksMap[n] = mr.nickname; ms.similar++; } else { cn.push(n); ms.unknown++; } }
             recognizedNicks = cn; if (pbr) pbr.style.width = '100%';
             if (mi) mi.innerHTML = '<div style="display:flex;gap:8px;flex-wrap:wrap;font-family:var(--font-display);"><span style="color:var(--success);">✓ Точных: <b>' + ms.exact + '</b></span><span style="color:var(--warning);">≈ Исправлено: <b>' + ms.similar + '</b></span><span style="color:var(--text-dim);">? Не распознано: <b>' + ms.unknown + '</b></span></div>';
             if (pt) pt.innerText = '✅ Готово: ' + cn.length + ' ников'; renderRecognizedNicks(); renderUnrecognizedNicks(); nb.classList.remove('hidden');
@@ -1925,8 +2062,69 @@
     }
     function findBestMatch(rn, ns) { if (!ns || ns.length === 0) return { type: 'unknown', nickname: rn }; const rl = rn.toLowerCase().trim(); for (let i = 0; i < ns.length; i++) { if (ns[i].toLowerCase() === rl) return { type: 'exact', nickname: ns[i] }; } let bm = null, bd = Infinity, bs = 0; for (let i = 0; i < ns.length; i++) { const nl = ns[i].toLowerCase(); const d = levenshteinDistance(rl, nl); const ml = Math.max(rl.length, nl.length); const s = 1 - d / ml; if (s >= 0.7 && d < bd) { bd = d; bm = ns[i]; bs = s; } } if (bm) return { type: 'similar', nickname: bm, original: rn, similarity: Math.round(bs * 100) }; return { type: 'unknown', nickname: rn }; }
     function levenshteinDistance(a, b) { if (a.length === 0) return b.length; if (b.length === 0) return a.length; const m = []; for (let i = 0; i <= b.length; i++) m[i] = [i]; for (let j = 0; j <= a.length; j++) m[0][j] = j; for (let i = 1; i <= b.length; i++) { for (let j = 1; j <= a.length; j++) { if (b.charAt(i - 1) === a.charAt(j - 1)) m[i][j] = m[i - 1][j - 1]; else m[i][j] = Math.min(m[i - 1][j - 1] + 1, m[i][j - 1] + 1, m[i - 1][j] + 1); } } return m[b.length][a.length]; }
-    function renderRecognizedNicks() { const l = document.getElementById('recognizedNicksList'); if (!l) return; let html = ''; for (let i = 0; i < recognizedNicks.length; i++) { const n = recognizedNicks[i]; const sn = escapeHtml(n); let mb = ''; for (const o in matchedNicksMap) { const c = matchedNicksMap[o]; if (c === n && o !== n) { const s = findBestMatch(o, allRegisteredNicks).similarity || 0; let bc = 'low'; if (s >= 90) bc = 'high'; else if (s >= 75) bc = 'medium'; mb = '<span class="match-badge ' + bc + '" title="Распознано как: ' + escapeHtml(o) + '">≈ ' + s + '%</span><span class="original-nick" title="Распознано как: ' + escapeHtml(o) + '">' + escapeHtml(o) + '</span>'; break; } } html += '<div class="nick-item"><input type="text" value="' + sn + '" onchange="updateNick(' + i + ', this.value)" placeholder="Ник игрока...">' + mb + '<button class="remove-nick-btn" onclick="removeNick(' + i + ')">✕</button></div>'; } l.innerHTML = html; }
-    function renderUnrecognizedNicks() { const l = document.getElementById('unrecognizedNicksList'); const b = document.getElementById('unrecognizedNicksBlock'); if (!l || !b) return; const rs = new Set(recognizedNicks.map(function(n) { return n.toLowerCase().trim(); })); const un = allRegisteredNicks.filter(function(n) { return !rs.has(n.toLowerCase().trim()); }); if (un.length === 0) { b.style.display = 'none'; return; } b.style.display = 'block'; let html = ''; for (let i = 0; i < un.length; i++) { html += '<button type="button" class="unrecognized-nick-btn" onclick="addNickFromList(this, \'' + escapeForOnclick(un[i]) + '\')">' + escapeHtml(un[i]) + '</button>'; } l.innerHTML = html; }
+    
+    // ✅ ИСПРАВЛЕННЫЙ renderRecognizedNicks — зелёная рамка для точных совпадений
+    function renderRecognizedNicks() {
+        const l = document.getElementById('recognizedNicksList'); 
+        if (!l) return;
+        let html = '';
+        for (let i = 0; i < recognizedNicks.length; i++) {
+            const n = recognizedNicks[i];
+            const sn = escapeHtml(n);
+            let mb = '';
+            let isExact = false;
+            let correctedFrom = null;
+            let similarity = 0;
+            
+            // ✅ Проверяем точное совпадение с базой
+            for (let j = 0; j < allRegisteredNicks.length; j++) {
+                if (allRegisteredNicks[j].toLowerCase() === n.toLowerCase()) { isExact = true; break; }
+            }
+            
+            // ✅ Проверяем, был ли ник исправлен
+            for (const o in matchedNicksMap) {
+                const c = matchedNicksMap[o];
+                if (c === n && o !== n) { correctedFrom = o; const s = findBestMatch(o, allRegisteredNicks).similarity || 0; similarity = s; break; }
+            }
+            
+            if (correctedFrom) {
+                let bc = 'low'; if (similarity >= 90) bc = 'high'; else if (similarity >= 75) bc = 'medium'; 
+                mb = '<span class="match-badge ' + bc + '" title="Распознано как: ' + escapeHtml(correctedFrom) + '">≈ ' + similarity + '%</span><span class="original-nick" title="Распознано как: ' + escapeHtml(correctedFrom) + '">' + escapeHtml(correctedFrom) + '</span>';
+            }
+            
+            let borderColor, bgColor, statusIcon;
+            if (isExact) {
+                borderColor = 'var(--success)'; bgColor = 'var(--success-soft)';
+                statusIcon = '<span style="color:var(--success);font-size:10px;margin-left:4px;font-weight:700;" title="Точно совпадает с базой">✓</span>';
+            } else if (correctedFrom) {
+                borderColor = 'var(--warning)'; bgColor = 'var(--warning-soft)';
+                statusIcon = '<span style="color:var(--warning);font-size:10px;margin-left:4px;font-weight:700;" title="Исправлено по сходству">≈</span>';
+            } else {
+                borderColor = 'var(--border)'; bgColor = 'var(--bg-soft)';
+                statusIcon = '<span style="color:var(--text-dim);font-size:10px;margin-left:4px;font-weight:700;" title="Не найдено в базе">?</span>';
+            }
+            
+            html += '<div class="nick-item" style="border-color:' + borderColor + ';background:' + bgColor + ';padding:4px 8px;">';
+            html += '<input type="text" value="' + sn + '" onchange="updateNick(' + i + ', this.value)" placeholder="Ник игрока..." style="background:transparent;border:none;flex:1;">';
+            html += statusIcon + mb;
+            html += '<button class="remove-nick-btn" onclick="removeNick(' + i + ')">✕</button>';
+            html += '</div>';
+        }
+        l.innerHTML = html;
+    }
+    
+    function renderUnrecognizedNicks() {
+        const l = document.getElementById('unrecognizedNicksList');
+        const b = document.getElementById('unrecognizedNicksBlock');
+        if (!l || !b) return;
+        const rs = new Set(recognizedNicks.map(function(n) { return n.toLowerCase().trim(); }));
+        const un = allRegisteredNicks.filter(function(n) { return !rs.has(n.toLowerCase().trim()); });
+        if (un.length === 0) { b.style.display = 'none'; return; }
+        b.style.display = 'block';
+        let html = '<div style="font-size:9px;color:var(--text-dim);margin-bottom:4px;">📋 Ещё есть в базе, но не распознаны (кликните чтобы добавить):</div>';
+        for (let i = 0; i < un.length; i++) { html += '<button type="button" class="unrecognized-nick-btn" onclick="addNickFromList(this, \'' + escapeForOnclick(un[i]) + '\')">' + escapeHtml(un[i]) + '</button>'; }
+        l.innerHTML = html;
+    }
     function addNickFromList(btn, n) { if (recognizedNicks.some(function(x) { return x.toLowerCase() === n.toLowerCase(); })) { btn.classList.add('added'); btn.innerText = '✓ ' + n; return; } recognizedNicks.push(n); renderRecognizedNicks(); renderUnrecognizedNicks(); setTimeout(function() { const l = document.getElementById('recognizedNicksList'); if (l && l.lastElementChild) l.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100); }
     function extractNicksFromText(t) { try { if (!t || typeof t !== 'string') return []; const sw = new Set(['headhunters','неа','управление','группой','рейдовая','группа','проверить','готовность','пригласить','набор','настройки','команда','команда1','команда2','команда3','команда4','команда5','команда6','команда7','команда8','команда9','команда10','guild','clan','alliance','raid','party','team','squad','group','management','control','hh','rf','online','next','head','hunters','headhunter','1','2','3','4','5','6','7','8','9','10','иии','ллл','ннн','ааа','ооо','еее']); const ls = t.split(/\n|\r/); const aw = []; const wf = {}; for (let i = 0; i < ls.length; i++) { const cl = ls[i].trim(); if (!cl) continue; const tokens = cl.split(/[\s\t\|\/\\:\+\=\[\]\(\)]+/); for (let j = 0; j < tokens.length; j++) { let c = tokens[j].trim().replace(/^["'`\[\(\{]+|["'`\]\)\}]+$/g, '').replace(/[^\w\u0400-\u04FF\-_]/g, ''); if (c.length >= 2 && c.length <= 16) { aw.push(c); const lo = c.toLowerCase(); wf[lo] = (wf[lo] || 0) + 1; } } } const ns = []; const sn = new Set(); for (let i = 0; i < aw.length; i++) { const w = aw[i]; const lw = w.toLowerCase(); if (sn.has(lw) || sw.has(lw) || wf[lw] > 3 || /^\d+$/.test(w) || !/[A-Za-z\u0410-\u044F\u0400-\u04FF]/.test(w) || /^(.)\1{2,}$/.test(w) || (w.length === 2 && !/[A-Z\u0410-\u042F]/.test(w))) continue; sn.add(lw); ns.push(w); } return ns; } catch (e) { return []; } }
     function updateNick(i, v) { recognizedNicks[i] = v.trim(); renderUnrecognizedNicks(); }
@@ -2023,7 +2221,7 @@
     async function linkTwinkAdmin() { const m = document.getElementById('twinkMainNick').value.trim(); const t = document.getElementById('twinkTwinkNick').value.trim(); const msg = document.getElementById('twinksMessage'); if (!m || !t) { if (msg) { msg.className = 'message error'; msg.innerText = '❌ Заполните поля'; msg.style.display = 'block'; } return; } try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'linkTwink', mainNick: m, twinkNick: t }), redirect: 'follow' }); const res = await r.json(); if (msg) { if (res.success) { msg.className = 'message success'; msg.innerText = '✅ ' + res.message; document.getElementById('twinkMainNick').value = ''; document.getElementById('twinkTwinkNick').value = ''; } else { msg.className = 'message error'; msg.innerText = '❌ ' + res.message; } } } catch (e) { if (msg) { msg.className = 'message error'; msg.innerText = '❌ Ошибка'; } } if (msg) { msg.style.display = 'block'; setTimeout(function() { msg.style.display = 'none'; }, 3000); } }
     async function loadAdminTwinksList() { const l = document.getElementById('adminTwinksList'); if (!l) return; l.innerHTML = '<div class="empty-state">Используйте форму выше для привязки твинков</div>'; }
 
-    // ===== ЛОГ, СПИСКИ, ТОП, РЕЙТИНГ, ЭКСПОРТ =====
+    // ===== ЛОГ, СПИСКИ, ЭКСПОРТ =====
     async function loadActionLog() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getActionLog', limit: 200 }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('actionLogList'); if (!l) return; if (res.success && res.logs && res.logs.length > 0) { let html = ''; for (let i = 0; i < res.logs.length; i++) { const log = res.logs[i]; html += '<div class="log-item"><span class="log-date">' + escapeHtml(log.date) + '</span><div><span class="log-action">' + escapeHtml(log.action) + '</span> — <span class="log-user">' + escapeHtml(log.user) + '</span></div>'; if (log.details) html += '<div class="log-details">' + escapeHtml(log.details) + '</div>'; html += '</div>'; } l.innerHTML = html; } else l.innerHTML = '<div class="empty-state">Лог пуст</div>'; } catch (e) { console.error(e); } }
     async function clearActionLog() { if (!confirm('Вы уверены, что хотите очистить все логи действий? Это действие необратимо.')) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'clearActionLog' }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert('✅ ' + res.message); loadActionLog(); } else alert('❌ ' + res.message); } catch (e) { alert('❌ Ошибка: ' + e.message); } }
     async function loadMissingItemNames() { const ty = document.getElementById('missingItemType').value; const ns = document.getElementById('missingItemName'); if (!ns) return; try { if (ty === 'skill') { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkills' }), redirect: 'follow' }); const res = await r.json(); if (res.success) { let html = '<option value="">— Выберите навык —</option>'; for (let i = 0; i < res.skills.length; i++) html += '<option value="' + escapeHtml(res.skills[i].name) + '">' + escapeHtml(res.skills[i].name) + '</option>'; ns.innerHTML = html; } } else { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' }); const res = await r.json(); if (res.success) { let html = '<option value="">— Выберите предмет —</option>'; for (let i = 0; i < res.items.length; i++) html += '<option value="' + escapeHtml(res.items[i].name) + '">' + escapeHtml(res.items[i].name) + ' (' + escapeHtml(res.items[i].section) + ')</option>'; ns.innerHTML = html; } } } catch (e) { console.error(e); } }
@@ -2031,15 +2229,41 @@
     async function loadAuctionRating() { if (!isFeatureEnabled('auctionRating')) { const p = document.getElementById('auctionRatingPreview'); if (p) p.innerHTML = ''; return; } const iname = document.getElementById('auctionItemName').value; if (!iname) { alert('Сначала выберите предмет'); return; } const b = document.getElementById('auctionRatingPreview'); if (b) b.innerHTML = '<div class="loading-overlay"><span class="loader"></span> Загрузка...</div>'; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionRating', itemKey: iname }), redirect: 'follow' }); const res = await r.json(); if (res.success && res.rating && res.rating.length > 0 && b) { let html = '<div class="panel-title" style="font-size: 11px;">🎯 Рейтинг участников (топ-20)</div>'; for (let i = 0; i < res.rating.length; i++) { const rt = res.rating[i]; html += '<div class="auction-rating-item"><div class="auction-rating-pos">#' + (i + 1) + '</div><div><div class="auction-rating-nick">' + renderPlayerNickWithBioColor(rt.nickname, null, true) + '</div><div class="auction-rating-info">БМ: ' + Number(rt.bm).toLocaleString('ru-RU') + ' | Посещ.: ' + rt.attendanceRate + '% | DKP: ' + Number(rt.balance).toLocaleString('ru-RU') + '</div></div><div class="auction-rating-score">' + rt.totalScore + '</div></div>'; } b.innerHTML = html; } else if (b) b.innerHTML = '<div class="empty-state">Нет данных</div>'; } catch (e) { if (b) b.innerHTML = '<div class="empty-state">❌ Ошибка</div>'; } }
     async function exportData(ty) { if (!isFeatureEnabled('dataExport')) { alert('Функция выключена'); return; } const r = document.getElementById('exportResult'); if (r) r.innerHTML = '<div class="loading-overlay"><span class="loader"></span> Генерация...</div>'; try { const res = await (await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'exportData', type: ty }), redirect: 'follow' })).json(); if (res.success && res.csv && r) { const blob = new Blob(['\uFEFF' + res.csv], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'rf_export_' + ty + '_' + new Date().toISOString().split('T')[0] + '.csv'; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); r.innerHTML = '<div class="message success" style="display: block;">✅ Файл ' + ty + '.csv скачан!</div>'; setTimeout(function() { r.innerHTML = ''; }, 3000); } else if (r) r.innerHTML = '<div class="message error" style="display: block;">❌ ' + escapeHtml(res.message || 'Ошибка') + '</div>'; } catch (e) { if (r) r.innerHTML = '<div class="message error" style="display: block;">❌ Ошибка связи</div>'; } }
 
-    // ===== УПРАВЛЕНИЕ РАЗДЕЛАМИ ЭКИПИРОВКИ =====
-    async function loadEquipmentSectionsDynamic() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentSectionsList' }), redirect: 'follow' }); const res = await r.json(); if (res.success && res.sections && res.sections.length > 0) { equipmentSections = res.sections; } else { equipmentSections = ['Оружие','Шея','Грудь','Штаны','Колени','Венец','Серьга','Ожерелье','Браслет','Кольцо','Привод','Звездочет','Руки','Биокостюм','Ровер']; } const ns = document.getElementById('newItemSection'); if (ns) { let html = ''; for (let i = 0; i < equipmentSections.length; i++) html += '<option value="' + escapeHtml(equipmentSections[i]) + '">' + escapeHtml(equipmentSections[i]) + '</option>'; ns.innerHTML = html; } const sl = document.getElementById('sectionsList'); if (sl) { let html = ''; for (let i = 0; i < equipmentSections.length; i++) { html += '<div style="background:var(--bg-panel); padding:3px 6px; border-radius:var(--radius-sm); border:1px solid var(--border); font-size:10px; display:flex; align-items:center; gap:4px;">' + escapeHtml(equipmentSections[i]) + '<button onclick="deleteEquipmentSection(\'' + escapeForOnclick(equipmentSections[i]) + '\')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:12px; line-height:1;">&times;</button></div>'; } sl.innerHTML = html; } } catch (e) { console.error('Ошибка загрузки разделов:', e); } }
-    async function addEquipmentSection() { const name = document.getElementById('newSectionName').value.trim(); if (!name) { alert('Введите название раздела'); return; } try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addEquipmentSection', name: name }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert('✅ ' + res.message); document.getElementById('newSectionName').value = ''; loadEquipmentSectionsDynamic(); } else alert('❌ ' + res.message); } catch (e) { alert('❌ Ошибка: ' + e.message); } }
-    async function deleteEquipmentSection(name) { if (!confirm('Удалить раздел "' + name + '"?')) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteEquipmentSection', name: name }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert('✅ ' + res.message); loadEquipmentSectionsDynamic(); } else alert('❌ ' + res.message); } catch (e) { alert('❌ Ошибка: ' + e.message); } }
+    // ===== УПРАВЛЕНИЕ РАЗДЕЛАМИ =====
+    async function loadEquipmentSectionsDynamic() {
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentSectionsList' }), redirect: 'follow' });
+            const res = await r.json();
+            if (res.success && res.sections && res.sections.length > 0) equipmentSections = res.sections;
+            else equipmentSections = ['Оружие','Шея','Грудь','Штаны','Колени','Венец','Серьга','Ожерелье','Браслет','Кольцо','Привод','Звездочет','Руки','Биокостюм','Ровер'];
+            const ns = document.getElementById('newItemSection');
+            if (ns) { let html = ''; for (let i = 0; i < equipmentSections.length; i++) html += '<option value="' + escapeHtml(equipmentSections[i]) + '">' + escapeHtml(equipmentSections[i]) + '</option>'; ns.innerHTML = html; }
+            const sl = document.getElementById('sectionsList');
+            if (sl) { let html = ''; for (let i = 0; i < equipmentSections.length; i++) { html += '<div style="background:var(--bg-panel); padding:3px 6px; border-radius:var(--radius-sm); border:1px solid var(--border); font-size:10px; display:flex; align-items:center; gap:4px;">' + escapeHtml(equipmentSections[i]) + '<button onclick="deleteEquipmentSection(\'' + escapeForOnclick(equipmentSections[i]) + '\')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:12px; line-height:1;">&times;</button></div>'; } sl.innerHTML = html; }
+        } catch (e) { console.error('Ошибка загрузки разделов:', e); }
+    }
+    async function loadAuctionSectionsDynamic() {
+        try {
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentSectionsList' }), redirect: 'follow' });
+            const res = await r.json();
+            const sel = document.getElementById('auctionItemSection');
+            if (sel && res.success && res.sections && res.sections.length > 0) {
+                const currentValue = sel.value;
+                let html = '<option value="">— Выберите раздел —</option>';
+                for (let i = 0; i < res.sections.length; i++) {
+                    html += '<option value="' + escapeHtml(res.sections[i]) + '"' + (res.sections[i] === currentValue ? ' selected' : '') + '>' + escapeHtml(res.sections[i]) + '</option>';
+                }
+                sel.innerHTML = html;
+            }
+        } catch (e) { console.error('Ошибка загрузки разделов аукциона:', e); }
+    }
+    async function addEquipmentSection() { const name = document.getElementById('newSectionName').value.trim(); if (!name) { alert('Введите название раздела'); return; } try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addEquipmentSection', name: name }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert('✅ ' + res.message); document.getElementById('newSectionName').value = ''; loadEquipmentSectionsDynamic(); loadAuctionSectionsDynamic(); } else alert('❌ ' + res.message); } catch (e) { alert('❌ Ошибка: ' + e.message); } }
+    async function deleteEquipmentSection(name) { if (!confirm('Удалить раздел "' + name + '"?')) return; try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteEquipmentSection', name: name }), redirect: 'follow' }); const res = await r.json(); if (res.success) { alert('✅ ' + res.message); loadEquipmentSectionsDynamic(); loadAuctionSectionsDynamic(); } else alert('❌ ' + res.message); } catch (e) { alert('❌ Ошибка: ' + e.message); } }
 
     // ===== АРХИВ DKP =====
     async function archiveDKP() { if (!confirm('Создать резервную копию всех текущих балансов DKP в лист "DKP_Archive"?')) return; const msg = document.getElementById('archiveMessage'); if (msg) { msg.className = 'message'; msg.innerText = '⏳ Создание архива...'; msg.style.display = 'block'; } try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'archiveDKP' }), redirect: 'follow' }); const res = await r.json(); if (msg) { if (res.success) { msg.className = 'message success'; msg.innerText = res.message; } else { msg.className = 'message error'; msg.innerText = '❌ ' + res.message; } } } catch (e) { if (msg) { msg.className = 'message error'; msg.innerText = '❌ Ошибка сети: ' + e.message; } } if (msg) setTimeout(function() { msg.style.display = 'none'; }, 6000); }
 
-    // ===== ПРОСМОТР КАБИНЕТА ИГРОКА =====
+    // ===== ПРОСМОТР КАБИНЕТА ИГРОКА (с индивидуальными заточками) =====
     async function viewPlayerCabinet(nickname) {
         const modal = document.getElementById('viewPlayerModal'); const content = document.getElementById('viewPlayerContent'); const nickSpan = document.getElementById('viewPlayerNick');
         if (!modal || !content || !nickSpan) return;
@@ -2077,10 +2301,27 @@
                 }
                 html += '</div></div>';
             } else if (skillsRes.success && skillsRes.data) { html += '<div style="margin-top: 12px;"><div class="panel-title" style="font-size: 11px;">🎯 Навыки</div><div class="empty-state" style="padding:8px;">Нет навыков</div></div>'; }
+            // ✅ Экипировка с индивидуальными заточками
             if (itemsRes.success && itemsRes.data && itemsRes.data.selections && Object.keys(itemsRes.data.selections).length > 0) {
                 html += '<div style="margin-top: 12px;"><div class="panel-title" style="font-size: 11px;">🛡 Экипировка</div><div class="approved-equipment">';
                 const sel = itemsRes.data.selections;
-                for (const sec in sel) { const iid = sel[sec]; const it = allItems.find(function(x) { return x.id === iid; }); if (it) { const bc = getIconBorderColor(it.color); html += '<div class="approved-eq-item" style="border-color:' + bc + ';"><div class="approved-eq-section">' + escapeHtml(sec) + ':</div><div class="approved-eq-name">' + escapeHtml(it.name) + '</div><div class="item-badges">'; if (it.isPrime) html += '<span class="item-badge prime">Прайм</span>'; if (it.enhancement > 0) html += '<span class="item-badge enhance">+' + it.enhancement + '</span>'; if (it.isBoss) html += '<span class="item-badge boss">Босс</span>'; if (it.tier) html += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.tier) + '</span>'; html += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.color) + '</span></div></div>'; } }
+                for (const sec in sel) {
+                    const entry = sel[sec]; if (!entry) continue;
+                    const itemId = (typeof entry === 'object') ? entry.id : entry;
+                    const enh = (typeof entry === 'object' && entry.enh !== undefined) ? Number(entry.enh) : 0;
+                    const it = allItems.find(function(x) { return x.id === itemId; });
+                    if (it) {
+                        const bc = getIconBorderColor(it.color);
+                        html += '<div class="approved-eq-item" style="border-color:' + bc + ';"><div class="approved-eq-section">' + escapeHtml(sec) + ':</div><div class="approved-eq-name">' + escapeHtml(it.name);
+                        if (enh > 0) html += ' <span class="item-enh-display">🔧 +' + enh + '</span>';
+                        html += '</div><div class="item-badges">';
+                        if (it.isPrime) html += '<span class="item-badge prime">Прайм</span>';
+                        if (enh > 0) html += '<span class="item-badge enhance">+' + enh + '</span>';
+                        if (it.isBoss) html += '<span class="item-badge boss">Босс</span>';
+                        if (it.tier) html += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.tier) + '</span>';
+                        html += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.color) + '</span></div></div>';
+                    }
+                }
                 html += '</div></div>';
             } else if (itemsRes.success && itemsRes.data) { html += '<div style="margin-top: 12px;"><div class="panel-title" style="font-size: 11px;">🛡 Экипировка</div><div class="empty-state" style="padding:8px;">Нет экипировки</div></div>'; }
             content.innerHTML = html;
@@ -2099,7 +2340,7 @@
     let currentDeleteEventId = null, currentDeleteEventName = null;
     function openDeleteEventModal(id, n) { currentDeleteEventId = id; currentDeleteEventName = n; document.getElementById('deleteEventId').innerText = id; document.getElementById('deleteEventName').innerText = n; document.getElementById('deleteEventRelated').checked = true; document.getElementById('deleteEventRevertDkp').checked = false; const rw = document.getElementById('revertWarning'); if (rw) rw.style.display = 'none'; const dm = document.getElementById('deleteEventMessage'); if (dm) dm.style.display = 'none'; const ds = document.getElementById('deleteEventStats'); if (ds) ds.innerHTML = ''; document.getElementById('deleteEventModal').classList.remove('hidden'); }
     function closeDeleteEventModal() { document.getElementById('deleteEventModal').classList.add('hidden'); currentDeleteEventId = null; currentDeleteEventName = null; }
-    async function confirmDeleteEvent() { if (!currentDeleteEventId) return; const dr = document.getElementById('deleteEventRelated').checked; const rd = document.getElementById('deleteEventRevertDkp').checked; let cm = 'Удалить "' + currentDeleteEventName + '"?'; if (dr) cm += '\n\nБудут удалены: посещаемость, заявки, иконка.'; if (rd) cm += '\n\n⚠️ DKP будет возвращено!'; if (!confirm(cm)) return; const m = document.getElementById('deleteEventMessage'); const sb = document.getElementById('deleteEventStats'); if (m) { m.innerText = 'Удаление...'; m.className = 'message'; m.style.display = 'block'; } try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteEventWithHistory', eventId: currentDeleteEventId, deleteRelated: dr, revertDkp: rd }), redirect: 'follow' }); const res = await r.json(); if (m) { if (res.success) { m.className = 'message success'; m.innerText = '✅ ' + res.message; m.style.display = 'block'; if (res.stats && sb) { const s = res.stats; let sh = '<div style="padding:8px;background:var(--bg-soft);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:10px;"><div style="font-weight:700;color:var(--accent);margin-bottom:4px;font-family:var(--font-display);">📊 СТАТИСТИКА:</div><div style="color:var(--text-dim);">• Посещаемости удалено: <b style="color:var(--text-main);">' + (s.attendanceDeleted || 0) + '</b></div><div style="color:var(--text-dim);">• Заявок DKP удалено: <b style="color:var(--text-main);">' + (s.submissionsDeleted || 0) + '</b></div>'; if (s.iconDeleted) sh += '<div style="color:var(--text-dim);">• Иконка: <b style="color:var(--danger);">удалена</b></div>'; if (s.dkpReverted > 0) { sh += '<div style="color:var(--warning);margin-top:3px;">• Возвращено DKP: <b>' + s.dkpReverted.toFixed(2) + '</b> (игроков: <b>' + (s.affectedPlayers || 0) + '</b>)</div>'; if (s.playersDetails && Object.keys(s.playersDetails).length > 0) { sh += '<div style="margin-top:4px;padding-top:4px;border-top:1px dashed var(--border);"><div style="color:var(--text-dim);margin-bottom:3px;">Детализация:</div>'; for (const n in s.playersDetails) sh += '<div style="color:var(--text-main);font-size:9px;">• ' + n + ': <span style="color:var(--success);">+' + s.playersDetails[n].toFixed(2) + ' DKP</span></div>'; sh += '</div>'; } } sh += '</div>'; sb.innerHTML = sh; } setTimeout(function() { closeDeleteEventModal(); loadAdminEvents(); loadEventsForSelect(); loadEventStats(); }, 3000); } else { m.className = 'message error'; m.innerText = '❌ ' + res.message; m.style.display = 'block'; } } } catch (e) { if (m) { m.className = 'message error'; m.innerText = '❌ Ошибка'; m.style.display = 'block'; } } }
+    async function confirmDeleteEvent() { if (!currentDeleteEventId) return; const dr = document.getElementById('deleteEventRelated').checked; const rd = document.getElementById('deleteEventRevertDkp').checked; let cm = 'Удалить "' + currentDeleteEventName + '"?'; if (dr) cm += '\n\nБудут удалены: посещаемость, заявки, иконка.'; if (rd) cm += '\n\n⚠️ DKP будет возвращено!'; if (!confirm(cm)) return; const m = document.getElementById('deleteEventMessage'); const sb = document.getElementById('deleteEventStats'); if (m) { m.innerText = 'Удаление...'; m.className = 'message'; m.style.display = 'block'; } try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteEventWithHistory', eventId: currentDeleteEventId, deleteRelated: dr, revertDkp: rd }), redirect: 'follow' }); const res = await r.json(); if (m) { if (res.success) { m.className = 'message success'; m.innerText = '✅ ' + res.message; m.style.display = 'block'; setTimeout(function() { closeDeleteEventModal(); loadAdminEvents(); loadEventsForSelect(); loadEventStats(); }, 3000); } else { m.className = 'message error'; m.innerText = '❌ ' + res.message; m.style.display = 'block'; } } } catch (e) { if (m) { m.className = 'message error'; m.innerText = '❌ Ошибка'; m.style.display = 'block'; } } }
 
     // ===== DKP АДМИНКА С МАССОВЫМИ ОПЕРАЦИЯМИ =====
     async function loadPendingDkp() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingDKP' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingDkpList'); if (!l) return; if (res.success && res.submissions.length > 0) { let html = ''; for (let i = 0; i < res.submissions.length; i++) { const s = res.submissions[i]; html += '<div class="dkp-submission-card"><div class="submission-header"><div style="display:flex;align-items:center;gap:6px;"><input type="checkbox" class="dkp-submission-checkbox" value="' + escapeForOnclick(s.id) + '" onchange="updateSelectedCount()" style="margin-right:4px;" title="Выбрать"><div><div class="submission-event">🏆 ' + escapeHtml(s.eventName) + ' (+' + s.eventDkp + ')</div><div class="submission-meta">' + escapeHtml(s.submitter) + ' | ' + escapeHtml(s.date) + '</div></div></div><div class="action-buttons"><button class="btn-approve" onclick="approveDkp(\'' + escapeForOnclick(s.id) + '\')">✓</button><button class="btn-reject" onclick="rejectDkp(\'' + escapeForOnclick(s.id) + '\')">✕</button><button class="btn-edit" onclick="editDkpSubmission(\'' + escapeForOnclick(s.id) + '\')" style="width:auto;margin-top:0;">✎</button><button class="btn-remove" onclick="deleteDkpSubmission(\'' + escapeForOnclick(s.id) + '\')">🗑</button></div></div>'; if (s.screenshots && s.screenshots.length > 0) { html += '<div class="submission-screenshots">'; for (let j = 0; j < s.screenshots.length; j++) html += '<img src="' + s.screenshots[j] + '" onclick="openImageModal(\'' + escapeForOnclick(s.screenshots[j]) + '\')" alt="' + (j + 1) + '">'; html += '</div>'; } html += '<div style="font-size:9px;color:var(--text-dim);margin-top:4px;">Игроки (' + s.nicks.length + '):</div><div class="submission-nicks">'; for (let j = 0; j < s.nicks.length; j++) html += '<span class="submission-nick-tag">' + escapeHtml(s.nicks[j]) + '</span>'; html += '</div></div>'; } l.innerHTML = html; } else l.innerHTML = '<div class="empty-state">Нет заявок</div>'; } catch (e) { console.error(e); } }
@@ -2128,7 +2369,9 @@
     async function loadPendingSkills() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingSkills' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingSkillsList'); if (!l) return; if (res.success && res.players.length > 0) { let html = ''; for (let i = 0; i < res.players.length; i++) { const p = res.players[i]; html += '<div class="player-card"><div class="player-card-header"><div class="player-nick">' + escapeHtml(p.nickname) + '</div><div class="action-buttons"><button class="btn-approve" onclick="approveSkills(\'' + escapeForOnclick(p.nickname) + '\')">✓</button><button class="btn-reject" onclick="rejectSkills(\'' + escapeForOnclick(p.nickname) + '\')">✕</button></div></div><div class="approved-skills">'; if (p.skills.length > 0) { for (let j = 0; j < p.skills.length; j++) html += '<div class="approved-skill-badge">' + escapeHtml(p.skills[j]) + '</div>'; } else html += '<div style="color:var(--text-dim);">Пусто</div>'; html += '</div></div>'; } l.innerHTML = html; } else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) { console.error(e); } }
     async function approveSkills(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveSkills', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminSkillsPendingMessage'); if (m) { if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(function() { loadPendingSkills(); m.style.display = 'none'; }, 800); } } } catch (e) {} }
     async function rejectSkills(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectSkills', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminSkillsPendingMessage'); if (m) { if (res.success) { m.className = 'message error'; m.innerText = res.message; setTimeout(function() { loadPendingSkills(); m.style.display = 'none'; }, 800); } } } catch (e) {} }
-    async function loadPendingEquipment() { try { const ir = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' }); const ires = await ir.json(); if (ires.success) allItems = ires.items; const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingItems' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingEquipmentList'); if (!l) return; if (res.success && res.players.length > 0) { let html = ''; for (let i = 0; i < res.players.length; i++) { const p = res.players[i]; html += '<div class="player-card"><div class="player-card-header"><div class="player-nick">' + escapeHtml(p.nickname) + '</div><div class="action-buttons"><button class="btn-approve" onclick="approveEquipment(\'' + escapeForOnclick(p.nickname) + '\')">✓</button><button class="btn-reject" onclick="rejectEquipment(\'' + escapeForOnclick(p.nickname) + '\')">✕</button></div></div><div class="approved-equipment">'; let sh = ''; for (const s in p.selections) { const iid = p.selections[s]; const it = allItems.find(function(x) { return x.id === iid; }); if (!it) continue; const bc = getIconBorderColor(it.color); sh += '<div class="approved-eq-item"><div id="pendingItemIcon_' + iid + '" class="icon-preview-cabinet" style="border-color:' + bc + ';"><span class="icon-placeholder" style="font-size:6px;">...</span></div><div class="approved-eq-section">' + escapeHtml(s) + ':</div><div class="approved-eq-name">' + escapeHtml(it.name) + '</div><div class="item-badges">'; if (it.isPrime) sh += '<span class="item-badge prime">Прайм</span>'; if (it.enhancement > 0) sh += '<span class="item-badge enhance">+' + it.enhancement + '</span>'; if (it.isBoss) sh += '<span class="item-badge boss">Босс</span>'; if (it.tier) sh += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.tier) + '</span>'; sh += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.color) + '</span></div></div>'; } if (sh === '') sh = '<div style="color:var(--text-dim);">Пусто</div>'; html += sh + '</div></div>'; } l.innerHTML = html; for (let i = 0; i < res.players.length; i++) { const p = res.players[i]; for (const s in p.selections) { const iid = p.selections[s]; const it = allItems.find(function(x) { return x.id === iid; }); if (it) loadAndDisplayIcon('item', iid, 'pendingItemIcon_' + iid, it.color); } } } else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) { console.error(e); } }
+    
+    // ✅ loadPendingEquipment с индивидуальными заточками
+    async function loadPendingEquipment() { try { const ir = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' }); const ires = await ir.json(); if (ires.success) allItems = ires.items; const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPendingItems' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('pendingEquipmentList'); if (!l) return; if (res.success && res.players.length > 0) { let html = ''; for (let i = 0; i < res.players.length; i++) { const p = res.players[i]; html += '<div class="player-card"><div class="player-card-header"><div class="player-nick">' + escapeHtml(p.nickname) + '</div><div class="action-buttons"><button class="btn-approve" onclick="approveEquipment(\'' + escapeForOnclick(p.nickname) + '\')">✓</button><button class="btn-reject" onclick="rejectEquipment(\'' + escapeForOnclick(p.nickname) + '\')">✕</button></div></div><div class="approved-equipment">'; let sh = ''; for (const sec in p.selections) { const entry = p.selections[sec]; if (!entry) continue; const itemId = (typeof entry === 'object') ? entry.id : entry; const enh = (typeof entry === 'object' && entry.enh !== undefined) ? Number(entry.enh) : 0; const it = allItems.find(function(x) { return x.id === itemId; }); if (!it) continue; const bc = getIconBorderColor(it.color); sh += '<div class="approved-eq-item"><div id="pendingItemIcon_' + itemId + '" class="icon-preview-cabinet" style="border-color:' + bc + ';"><span class="icon-placeholder" style="font-size:6px;">...</span></div><div class="approved-eq-section">' + escapeHtml(sec) + ':</div><div class="approved-eq-name">' + escapeHtml(it.name); if (enh > 0) sh += ' <span class="item-enh-display">🔧 +' + enh + '</span>'; sh += '</div><div class="item-badges">'; if (it.isPrime) sh += '<span class="item-badge prime">Прайм</span>'; if (enh > 0) sh += '<span class="item-badge enhance">+' + enh + '</span>'; if (it.isBoss) sh += '<span class="item-badge boss">Босс</span>'; if (it.tier) sh += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.tier) + '</span>'; sh += '<span class="item-badge ' + getColorClass(it.color) + '">' + escapeHtml(it.color) + '</span></div></div>'; } if (sh === '') sh = '<div style="color:var(--text-dim);">Пусто</div>'; html += sh + '</div></div>'; } l.innerHTML = html; for (let i = 0; i < res.players.length; i++) { const p = res.players[i]; for (const sec in p.selections) { const entry = p.selections[sec]; if (!entry) continue; const itemId = (typeof entry === 'object') ? entry.id : entry; const it = allItems.find(function(x) { return x.id === itemId; }); if (it) loadAndDisplayIcon('item', itemId, 'pendingItemIcon_' + itemId, it.color); } } } else l.innerHTML = '<div class="empty-state">Нет</div>'; } catch (e) { console.error(e); } }
     async function approveEquipment(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveItems', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminEquipmentPendingMessage'); if (m) { if (res.success) { m.className = 'message success'; m.innerText = res.message; setTimeout(function() { loadPendingEquipment(); m.style.display = 'none'; }, 800); } } } catch (e) {} }
     async function rejectEquipment(n) { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectItems', nickname: n }), redirect: 'follow' }); const res = await r.json(); const m = document.getElementById('adminEquipmentPendingMessage'); if (m) { if (res.success) { m.className = 'message error'; m.innerText = res.message; setTimeout(function() { loadPendingEquipment(); m.style.display = 'none'; }, 800); } } } catch (e) {} }
     async function loadAdminItems() { try { if (equipmentSections.length === 0) await loadEquipmentSectionsDynamic(); const ir = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' }); const ires = await ir.json(); if (ires.success) allItems = ires.items; const ns = document.getElementById('newItemSection'); if (ns) { let html = ''; for (let i = 0; i < equipmentSections.length; i++) html += '<option value="' + escapeHtml(equipmentSections[i]) + '">' + escapeHtml(equipmentSections[i]) + '</option>'; ns.innerHTML = html; } const tabs = document.getElementById('adminItemSectionTabs'); if (tabs) { let html = ''; for (let i = 0; i < equipmentSections.length; i++) { const s = equipmentSections[i]; html += '<button type="button" class="eq-tab ' + (s === currentAdminItemSection ? 'active' : '') + '" onclick="selectAdminItemSection(\'' + escapeForOnclick(s) + '\')">' + escapeHtml(s) + '</button>'; } tabs.innerHTML = html; } if (!currentAdminItemSection && equipmentSections.length > 0) currentAdminItemSection = equipmentSections[0]; renderAdminItems(); } catch (e) { console.error(e); } }
@@ -2218,7 +2461,7 @@
     function getTimeLeft(et) { const e = new Date(et); const n = new Date(); const d = e - n; if (d <= 0) return '<span style="color:var(--danger);font-weight:700;">⏰ ВРЕМЯ ИСТЕКЛО</span>'; const h = Math.floor(d / (1000 * 60 * 60)); const m = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60)); const s = Math.floor((d % (1000 * 60)) / 1000); return h + 'ч ' + m + 'м ' + s + 'с'; }
     function startCountdowns() { if (countdownInterval) clearInterval(countdownInterval); countdownInterval = setInterval(function() { const timers = document.querySelectorAll('.timer-display'); for (let i = 0; i < timers.length; i++) { const el = timers[i]; const et = el.getAttribute('data-end'); if (et) { const nc = getTimeLeft(et); if (el.innerHTML.indexOf('ВРЕМЯ ИСТЕКЛО') === -1 || nc.indexOf('ВРЕМЯ ИСТЕКЛО') === -1) el.innerHTML = nc; } } }, 1000); }
 
-    // ===== ОЧЕРЕДЬ ВЫДАЧИ С ПРИОРИТЕТАМИ =====
+    // ===== ОЧЕРЕДЬ С ПРИОРИТЕТАМИ =====
     async function loadQueueItems() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getQueueItems' }), redirect: 'follow' }); const res = await r.json(); const l = document.getElementById('queueItemsList'); if (!l) return; if (res.success && res.items.length > 0) { let priorityMap = {}; if (isFeatureEnabled('advancedQueue')) { try { const pr = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getQueuePriority', itemKey: 'all' }), redirect: 'follow' }); const pres = await pr.json(); if (pres.success && pres.queue) { for (let i = 0; i < pres.queue.length; i++) { priorityMap[pres.queue[i].nickname.toLowerCase()] = pres.queue[i].priority; } } } catch (e) {} } let html = ''; for (let i = 0; i < res.items.length; i++) { const it = res.items[i]; const bc = getIconBorderColor(it.itemColor); const sc = it.status === 'given' ? 'given' : 'pending'; const sb = it.status === 'given' ? '<span class="given-badge given">✅ Выдан</span>' : '<span class="given-badge not-given">⚠️ Ожидает</span>'; const recipientPriority = priorityMap[it.recipient.toLowerCase()] || 3; const priorityColors = { 1: 'var(--danger)', 2: 'var(--warning)', 3: 'var(--success)' }; const priorityLabels = { 1: 'Низкий', 2: 'Средний', 3: 'Высокий' }; const priorityColor = priorityColors[recipientPriority] || 'var(--success)'; const priorityLabel = priorityLabels[recipientPriority] || 'Высокий'; html += '<div class="queue-item-card ' + sc + '"><div style="width:36px;height:36px;border:2px solid ' + bc + ';border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;background:var(--bg-panel);font-size:16px;overflow:hidden;" id="queueItemIcon_' + i + '"><span class="icon-placeholder" style="font-size:6px;">...</span></div><div class="queue-item-info"><div class="queue-item-name">' + escapeHtml(it.itemName) + '</div><div class="queue-item-meta">' + escapeHtml(it.itemSection) + ' | ' + escapeHtml(it.itemTier) + ' | ' + escapeHtml(it.itemColor); if (it.itemEnhancement > 0) html += ' +' + it.itemEnhancement; if (it.isPrime) html += ' 🌟'; if (it.isBoss) html += ' 👹'; html += '</div><div class="queue-item-meta">Получатель: <span class="queue-item-recipient" style="cursor:pointer;" onclick="viewPlayerCabinet(\'' + escapeForOnclick(it.recipient) + '\')">' + renderPlayerNickWithBioColor(it.recipient) + '</span> <span style="font-size:9px;color:' + priorityColor + ';font-weight:700;">[Приоритет: ' + priorityLabel + ']</span>'; if (it.notes) html += ' | 📝 ' + escapeHtml(it.notes); html += '</div><div class="queue-item-meta">Создано: ' + escapeHtml(it.dateCreated); if (it.dateGiven) html += ' | Выдано: ' + escapeHtml(it.dateGiven); html += '</div></div><div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;">' + sb; if (currentRole === 'Админ' || currentRole === 'Модератор') { html += '<button class="btn-edit" style="width:auto;margin-top:0;font-size:9px;padding:3px 6px;" onclick="markQueueItemGiven(\'' + escapeForOnclick(it.id) + '\',' + (it.status !== 'given') + ')">' + (it.status === 'given' ? '↩ Отменить' : '✓ Выдать') + '</button><button class="btn-remove" onclick="deleteQueueItem(\'' + escapeForOnclick(it.id) + '\')">🗑</button>'; } html += '</div></div>'; } l.innerHTML = html; for (let i = 0; i < res.items.length; i++) { const it = res.items[i]; loadAuctionItemIcon('queue_' + i, it.itemName, it.itemSection, it.itemColor, 'queueItemIcon_' + i); } } else l.innerHTML = '<div class="empty-state">Очередь пуста</div>'; } catch (e) {} }
     async function loadAllItemsForQueueSelect() { try { const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItemsWithIcons' }), redirect: 'follow' }); const res = await r.json(); const s = document.getElementById('queueItemSelect'); if (!s) return; let previewContainer = document.getElementById('queueItemIconPreview'); if (!previewContainer) { previewContainer = document.createElement('div'); previewContainer.id = 'queueItemIconPreview'; previewContainer.className = 'icon-preview-small'; previewContainer.style.cssText = 'width:40px;height:40px;border:2px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-soft);display:inline-flex;align-items:center;justify-content:center;margin-left:6px;vertical-align:middle;overflow:hidden;'; previewContainer.innerHTML = '<span style="font-size:9px;color:var(--text-dim);">Нет</span>'; const selParent = s.parentNode; if (selParent) selParent.appendChild(previewContainer); } previewContainer.innerHTML = '<span style="font-size:9px;color:var(--text-dim);">Выберите предмет</span>'; if (res.success && res.items && res.items.length > 0) { const bs = {}; for (let i = 0; i < res.items.length; i++) { const it = res.items[i]; if (!bs[it.section]) bs[it.section] = []; bs[it.section].push(it); } let html = '<option value="">— Выберите предмет —</option>'; const colorEmojis = { 'Белый': '⚪', 'Зеленый': '🟢', 'Синий': '🔵', 'Фиолетовый': '🟣', 'Желтый': '🟡', 'Красный': '🔴' }; const keys = Object.keys(bs).sort(); for (let i = 0; i < keys.length; i++) { const sec = keys[i]; html += '<optgroup label="' + escapeHtml(sec) + '">'; for (let j = 0; j < bs[sec].length; j++) { const it = bs[sec][j]; const cEmoji = colorEmojis[it.color] || '⚪'; const b = []; if (it.isPrime) b.push('🌟'); if (it.isBoss) b.push('👹'); if (it.enhancement > 0) b.push('+' + it.enhancement); const bs2 = b.length > 0 ? ' [' + b.join(' ') + ']' : ''; html += '<option value="' + it.id + '">' + cEmoji + ' ' + escapeHtml(it.name) + ' (' + escapeHtml(it.tier || 'т0') + ', ' + escapeHtml(it.color) + ')' + bs2 + '</option>'; } html += '</optgroup>'; } s.innerHTML = html; window._allQueueItems = res.items; } else s.innerHTML = '<option value="">— Нет предметов —</option>'; } catch (e) {} }
     function fillQueueItemDetails() { const s = document.getElementById('queueItemSelect'); const id = s ? s.value : ''; if (!id || !window._allQueueItems) return; const it = window._allQueueItems.find(function(i) { return i.id === parseInt(id); }); if (!it) return; const el1 = document.getElementById('queueItemName'); if (el1) el1.value = it.name; const el2 = document.getElementById('queueItemSection'); if (el2) el2.value = it.section; const el3 = document.getElementById('queueItemTier'); if (el3) el3.value = it.tier || ''; const el4 = document.getElementById('queueItemColor'); if (el4) el4.value = it.color || 'Белый'; const el5 = document.getElementById('queueItemEnhancement'); if (el5) el5.value = it.enhancement || 0; const el6 = document.getElementById('queueItemPrime'); if (el6) el6.checked = it.isPrime || false; const el7 = document.getElementById('queueItemBoss'); if (el7) el7.checked = it.isBoss || false; const preview = document.getElementById('queueItemIconPreview'); if (preview) { if (it.iconData) { preview.innerHTML = '<img src="' + it.iconData + '" style="width:100%;height:100%;object-fit:cover;border-radius:3px;">'; preview.style.borderColor = getIconBorderColor(it.color); preview.style.background = 'var(--bg-panel)'; } else { preview.innerHTML = '<span style="font-size:18px;">📦</span>'; preview.style.borderColor = 'var(--border)'; } } }
