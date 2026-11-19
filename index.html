@@ -1920,6 +1920,38 @@
 <div id="viewPlayerModal" class="modal-overlay hidden" onclick="closeViewPlayerModal()"><div class="modal-content" style="max-width:700px;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeViewPlayerModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:10px;font-size:14px;">👤 Кабинет: <span id="viewPlayerNick" style="color:var(--dkp);"></span></h3><div id="viewPlayerContent"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div></div>
 
 <script>
+    const APP_VERSION = '17.20';
+    const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbx00sQ3Y8MT1amA8MtpMmrohcF5Nm_qASWBcb8QOLAclUezXRO9SHOBxdm-zGFSV6Fj/exec';
+    const SCRIPT_URL = SCRIPT_URL_BASE + '?v=' + APP_VERSION + '&_t=' + Date.now();
+    const ADMIN_KEY = 'ADMIN_SECRET_2026';
+    const MOD_KEY = 'MOD_SECRET_2026';
+    
+    let currentUser = null, currentRole = null;
+    let myPlayerData = null, myPlayerSkills = null, myPlayerItems = null, myDkpData = null;
+    let allSkills = [], allItems = [], equipmentSections = [];
+    let currentEquipmentSection = null, playerItemSelections = {};
+    let currentAdminItemSection = null, allEvents = [];
+    let uploadedScreenshots = [], recognizedNicks = [];
+    let countdownInterval = null, currentAuctionItems = [];
+    let currentIconType = null, currentIconId = null, currentIconName = null;
+    let allPlayersBioColors = {}, recentAuctionHistory = [];
+    let lastNotificationCount = 0, notificationPollingInterval = null;
+    let knownNotificationIds = new Set();
+    const NOTIFICATION_POLL_INTERVAL = 20000;
+    let allRegisteredNicks = [], matchedNicksMap = {}, allProfessionIcons = {};
+    let currentEditDkpEntry = null, currentEditAuctionId = null;
+    let siteFeatures = {};
+    let characterScreenshots = { 1: null, 2: null };
+    let parsedCharacterStats = {};
+    let currentZoomLevel = 1;
+    let lastRecognizedText = { 1: '', 2: '' };
+    let currentTopType = { 'publicTopList': 'bm', 'mainTopList': 'bm' };
+    let bidCooldownInterval = null, auctionEndInterval = null;
+    if (typeof window !== 'undefined') window._playerGuilds = {};
+    let guildEmblemBase64 = null;
+    let currentDkpMode = 'global';
+    let guildUploadedScreenshots = [];
+    let guildRecognizedNicks = [];
     // ============================================================
 // 📧 EMAIL, 👥 ДРУЗЬЯ, 🛍️ КОСМЕТИКА, 🔗 ТВИНКИ
 // ============================================================
