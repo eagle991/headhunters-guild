@@ -195,29 +195,3 @@ async function loadMyUnifiedLootHistory() {
         b.innerHTML = html;
     } catch (e) { b.innerHTML = '<div class="empty-state">Ошибка</div>'; }
 }
-
-async function loadMyLootHistory() {
-    if (!currentUser) return;
-    const b = document.getElementById('myLootHistory');
-    if (!b) return;
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerUnifiedLootHistory', nickname: currentUser }), redirect: 'follow' });
-        const res = await r.json();
-        if (!res.success || !res.history || res.history.length === 0) {
-            b.innerHTML = '<div class="empty-state">Вы ещё ничего не получали</div>';
-            return;
-        }
-        let html = '';
-        for (let i = 0; i < res.history.length; i++) {
-            const h = res.history[i];
-            const sb = h.type === 'auction' ? '<span class="source-badge auction">🔨 Аукцион</span>' : '<span class="source-badge queue">📦 Очередь</span>';
-            html += '<div class="loot-item ' + (h.itemGiven ? 'given' : 'not-given') + '"><div class="loot-info"><div class="loot-name">' + escapeHtml(h.itemName) + '</div><div class="loot-date">' + escapeHtml(h.itemSection) + ' | ' + escapeHtml(h.itemTier) + ' | ' + escapeHtml(h.itemColor);
-            if (h.itemEnhancement > 0) html += ' +' + h.itemEnhancement;
-            html += ' | ' + escapeHtml(h.date) + '</div><div style="margin-top:2px;">' + sb + '</div></div>';
-            if (h.type === 'auction') html += '<div class="loot-amount">' + h.amount + ' DKP</div>';
-            else html += '<div class="loot-amount" style="color:var(--success);">Бесплатно</div>';
-            html += '</div>';
-        }
-        b.innerHTML = html;
-    } catch (e) { b.innerHTML = '<div class="empty-state">Ошибка</div>'; }
-}
