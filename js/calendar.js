@@ -181,3 +181,62 @@ async function loadEventStats() {
         } else b.innerHTML = '<div class="empty-state">Статистика недоступна</div>';
     } catch (e) { const b = document.getElementById('eventStatsBlock'); if (b) b.innerHTML = '<div class="empty-state">Ошибка</div>'; }
 }
+
+// ============================================================
+// 🏆 ПОСЛЕДНИЕ ПОБЕДИТЕЛИ (единственное определение)
+// ============================================================
+
+async function loadRecentWinners() {
+    try {
+        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionHistory', limit: 10 }), redirect: 'follow' });
+        const res = await r.json();
+        if (!res.success) return;
+        recentAuctionHistory = res.history || [];
+        const hb = document.getElementById('recentWinnersBlock');
+        if (hb) {
+            if (recentAuctionHistory.length > 0) {
+                let html = '';
+                for (let i = 0; i < recentAuctionHistory.length; i++) {
+                    const h = recentAuctionHistory[i];
+                    const bc = getIconBorderColor(h.itemColor);
+                    const gb = h.itemGiven ? '<span class="given-badge given" style="font-size:8px;">✅</span>' : '<span class="given-badge not-given" style="font-size:8px;">⚠️</span>';
+                    html += '<div class="history-winner-card"><div class="winner-icon" style="border-color:' + bc + ';" id="winnerIcon_' + h.id + '"><span class="icon-placeholder" style="font-size:6px;">...</span></div><div class="winner-info"><div class="winner-nick"><span class="nick-with-color" style="cursor:pointer;" onclick="viewPlayerCabinet(\'' + escapeForOnclick(h.winner) + '\')">' + escapeHtml(h.winner) + '</span><span style="font-size:9px;color:var(--text-dim);margin-left:4px;">— аукцион #' + h.auctionNumber + '</span></div><div class="winner-item">' + escapeHtml(h.itemName) + ' (' + escapeHtml(h.itemSection) + ', ' + escapeHtml(h.itemTier) + ', ' + escapeHtml(h.itemColor) + ')</div><div style="font-size:9px;color:var(--text-dim);margin-top:1px;">' + escapeHtml(h.winDate) + '</div></div><div class="winner-amount">' + h.winAmount + ' DKP</div>' + gb + '</div>';
+                }
+                hb.innerHTML = html;
+                for (let i = 0; i < recentAuctionHistory.length; i++) {
+                    const h = recentAuctionHistory[i];
+                    loadAuctionItemIcon(h.id, h.itemName, h.itemSection, h.itemColor, 'winnerIcon_' + h.id);
+                }
+            } else hb.innerHTML = '<div class="empty-state">Пока нет победителей</div>';
+        }
+        const ab = document.getElementById('auctionRecentWins');
+        if (ab) ab.innerHTML = hb ? hb.innerHTML : '';
+    } catch (e) {}
+}
+
+// ============================================================
+// 🎁 ИСТОРИЯ ЛУТА (единственное определение)
+// ============================================================
+
+async function loadMyLootHistory() {
+    if (!currentUser) return;
+    const b = document.getElementById('myLootHistory');
+    if (!b) return;
+    try {
+        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerUnifiedLootHistory', nickname: currentUser }), redirect: 'follow' });
+        const res = await r.json();
+        if (!res.success || !res.history || res.history.length === 0) { b.innerHTML = '<div class="empty-state">Вы ещё ничего не получали</div>'; return; }
+        let html = '';
+        for (let i = 0; i < res.history.length; i++) {
+            const h = res.history[i];
+            const sb = h.type === 'auction' ? '<span class="source-badge auction">🔨 Аукцион</span>' : '<span class="source-badge queue">📦 Очередь</span>';
+            html += '<div class="loot-item ' + (h.itemGiven ? 'given' : 'not-given') + '"><div class="loot-info"><div class="loot-name">' + escapeHtml(h.itemName) + '</div><div class="loot-date">' + escapeHtml(h.itemSection) + ' | ' + escapeHtml(h.itemTier) + ' | ' + escapeHtml(h.itemColor);
+            if (h.itemEnhancement > 0) html += ' +' + h.itemEnhancement;
+            html += ' | ' + escapeHtml(h.date) + '</div><div style="margin-top:2px;">' + sb + '</div></div>';
+            if (h.type === 'auction') html += '<div class="loot-amount">' + h.amount + ' DKP</div>';
+            else html += '<div class="loot-amount" style="color:var(--success);">Бесплатно</div>';
+            html += '</div>';
+        }
+        b.innerHTML = html;
+    } catch (e) { b.innerHTML = '<div class="empty-state">Ошибка</div>'; }
+}
