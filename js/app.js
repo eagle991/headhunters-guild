@@ -7,7 +7,6 @@
 // ============================================================
 
 function initDragAndDrop() {
-    // Основная область загрузки DKP скриншотов
     const ua = document.getElementById('screenshotUploadArea');
     if (ua) {
         ua.addEventListener('dragover', function(e) { e.preventDefault(); ua.classList.add('dragover'); });
@@ -20,7 +19,6 @@ function initDragAndDrop() {
         });
     }
     
-    // Скриншот 1: СТАТЫ
     const block1 = document.getElementById('screenshotBlock1');
     if (block1) {
         block1.addEventListener('dragover', function(e) { e.preventDefault(); block1.style.borderColor = 'var(--accent)'; block1.style.background = 'var(--accent-soft)'; });
@@ -42,7 +40,6 @@ function initDragAndDrop() {
         });
     }
     
-    // Скриншот 2: БМ и УРОВЕНЬ
     const block2 = document.getElementById('screenshotBlock2');
     if (block2) {
         block2.addEventListener('dragover', function(e) { e.preventDefault(); block2.style.borderColor = 'var(--accent)'; block2.style.background = 'var(--accent-soft)'; });
@@ -64,7 +61,6 @@ function initDragAndDrop() {
         });
     }
     
-    // Эмблема гильдии
     const area = document.getElementById('emblemUploadArea');
     if (area) {
         area.addEventListener('dragover', function(e) { e.preventDefault(); area.style.borderColor = 'var(--accent)'; area.style.background = 'var(--accent-soft)'; });
@@ -92,14 +88,12 @@ function initDragAndDrop() {
 // ============================================================
 
 function initGlobalHandlers() {
-    // Закрытие зума по клику на фон
     document.addEventListener('click', function(e) {
         const modal = document.getElementById('screenshotZoomModal');
         if (!modal || modal.classList.contains('hidden')) return;
         if (e.target === modal) closeScreenshotZoom();
     });
     
-    // Esc для закрытия модалок
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' || e.keyCode === 27) {
             const zoomModal = document.getElementById('screenshotZoomModal');
@@ -131,7 +125,6 @@ function initGlobalHandlers() {
         }
     });
     
-    // Колесо мыши для зума
     const zoomModal = document.getElementById('screenshotZoomModal');
     if (zoomModal) {
         zoomModal.addEventListener('wheel', function(e) {
@@ -151,16 +144,13 @@ window.addEventListener('DOMContentLoaded', function() {
     console.log('%c🌌 RF ONLINE NEXT v' + APP_VERSION, 'color: #2563eb; font-size: 16px; font-weight: bold;');
     console.log('%c✅ Загрузка модулей...', 'color: #10b981; font-size: 12px;');
     
-    // 1. Загрузка сохранённой темы
     const savedTheme = localStorage.getItem('rf_theme') || 'light';
     document.body.setAttribute('data-theme', savedTheme);
     updateThemeButton(savedTheme);
     
-    // 2. Инициализация глобальных обработчиков
     initDragAndDrop();
     initGlobalHandlers();
     
-    // 3. Проверка сохранённой сессии
     const savedSession = localStorage.getItem('rf_session');
     if (savedSession) {
         try {
@@ -178,7 +168,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 4. Загрузка сохранённых учётных данных
     const sl = localStorage.getItem('rf_saved_login');
     const sp = localStorage.getItem('rf_saved_password');
     if (sl && sp) {
@@ -192,30 +181,20 @@ window.addEventListener('DOMContentLoaded', function() {
         if (si) si.style.display = 'inline-block';
     }
     
-    // 5. Загрузка публичных топов
     loadPublicTops();
-    
-    // 6. Запуск периодических задач
     startPeriodicTasks();
     
     console.log('%c✅ Сайт загружен успешно', 'color: #10b981; font-size: 12px;');
 });
 
-// ============================================================
-// 🔄 ПЕРИОДИЧЕСКИЕ ЗАДАЧИ
-// ============================================================
-
 function startPeriodicTasks() {
-    // Проверка обновлений каждые 5 минут
     setTimeout(checkForUpdates, 3000);
     setInterval(checkForUpdates, 5 * 60 * 1000);
     
-    // Проверка уведомлений каждые 20 секунд
     setInterval(function() {
         if (currentUser) loadNotifications();
     }, NOTIFICATION_POLL_INTERVAL);
     
-    // Загрузка гильдий для бейджей через 2 секунды
     setTimeout(loadAllGuildsForBadges, 2000);
 }
 
@@ -235,14 +214,14 @@ function getModuleStats() {
         { name: 'dkp.js', functions: 35, variables: 0 },
         { name: 'auction.js', functions: 27, variables: 0 },
         { name: 'queue.js', functions: 10, variables: 0 },
-        { name: 'calendar.js', functions: 7, variables: 0 },
+        { name: 'calendar.js', functions: 9, variables: 0 },
         { name: 'guild.js', functions: 35, variables: 0 },
-        { name: 'guild-admin.js', functions: 14, variables: 0 },
+        { name: 'guild-admin.js', functions: 4, variables: 0 },
         { name: 'notifications.js', functions: 13, variables: 0 },
         { name: 'announcements.js', functions: 9, variables: 0 },
         { name: 'ocr.js', functions: 30, variables: 0 },
-        { name: 'admin.js', functions: 45, variables: 0 },
-        { name: 'analytics.js', functions: 12, variables: 0 },
+        { name: 'admin.js', functions: 30, variables: 0 },
+        { name: 'analytics.js', functions: 7, variables: 0 },
         { name: 'info.js', functions: 5, variables: 0 },
         { name: 'app.js', functions: 5, variables: 0 }
     ];
@@ -265,7 +244,6 @@ function getModuleStats() {
     return { functions: totalFunctions, variables: totalVariables, modules: modules.length };
 }
 
-// Экспортируем в глобальную область для отладки
 window.getModuleStats = getModuleStats;
 
 console.log('%c💡 Совет: вызовите getModuleStats() в консоли для просмотра статистики', 'color: #64748b; font-style: italic;');
