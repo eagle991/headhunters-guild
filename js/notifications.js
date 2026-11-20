@@ -80,7 +80,7 @@ function renderNotificationsList(ns) {
         'bid_outbid': { icon: '💔', label: 'Ставка перебита', badge: 'auction', target: '🔨 Аукцион' },
         'auction_ending': { icon: '⏰', label: 'Аукцион заканчивается', badge: 'auction', target: '🔨 Аукцион' },
         'new_auction': { icon: '🔨', label: 'Новый аукцион', badge: 'auction', target: '🔨 Аукцион' },
-        'auction_won': { icon: '🏆', label: 'Победа на аукционе', badge: 'auction', target: '🔨 Аукцион' },
+        'auction_won': { icon: '🏆', label: 'Победа', badge: 'auction', target: '🔨 Аукцион' },
         'auction_completed': { icon: '✅', label: 'Аукцион завершён', badge: 'auction', target: '🔨 Аукцион' },
         'auction_bid_changed': { icon: '🔔', label: 'Новая ставка', badge: 'auction', target: '🔨 Аукцион' },
         'auction_bid_outbid_personal': { icon: '💔', label: 'Ваша ставка перебита', badge: 'auction', target: '🔨 Аукцион' },
@@ -91,9 +91,9 @@ function renderNotificationsList(ns) {
         'daily_bonus': { icon: '🎁', label: 'Ежедневный бонус', badge: 'personal', target: '💰 DKP' },
         'guild_invite': { icon: '📨', label: 'Приглашение в гильдию', badge: 'guild', target: '🏰 Гильдии' },
         'guild_leadership': { icon: '👑', label: 'Передача лидерства', badge: 'guild', target: '🏰 Гильдии' },
-        'guild_promotion': { icon: '⭐', label: 'Повышение в офицеры', badge: 'guild', target: '🏰 Гильдии' },
-        'guild_demotion': { icon: '📉', label: 'Снятие с должности', badge: 'guild', target: '🏰 Гильдии' },
-        'guild_kick': { icon: '🚫', label: 'Исключение из гильдии', badge: 'guild', target: '🏰 Гильдии' },
+        'guild_promotion': { icon: '⭐', label: 'Повышение', badge: 'guild', target: '🏰 Гильдии' },
+        'guild_demotion': { icon: '📉', label: 'Снятие', badge: 'guild', target: '🏰 Гильдии' },
+        'guild_kick': { icon: '🚫', label: 'Исключение', badge: 'guild', target: '🏰 Гильдии' },
         'guild_invite_accepted': { icon: '✅', label: 'Приглашение принято', badge: 'guild', target: '🏰 Гильдии' },
         'guild_invite_rejected': { icon: '❌', label: 'Приглашение отклонено', badge: 'guild', target: '🏰 Гильдии' },
         'guild_inactive_warning': { icon: '⚠️', label: 'Неактивные гильдии', badge: 'admin', target: '🏰 Гильдии' },
@@ -223,6 +223,8 @@ function showBrowserNotification(n) {
     }
 }
 
+let toastTimeout = null;
+
 function showToast(n) {
     const t = document.getElementById('toastNotification');
     if (!t) return;
@@ -295,10 +297,8 @@ function playNotificationSound(t) {
         const c = sc[t] || sc['default'];
         const o = ac.createOscillator();
         const g = ac.createGain();
-        o.connect(g);
-        g.connect(ac.destination);
-        o.frequency.value = c.freq;
-        o.type = c.type;
+        o.connect(g); g.connect(ac.destination);
+        o.frequency.value = c.freq; o.type = c.type;
         g.gain.setValueAtTime(0.15, ac.currentTime);
         g.gain.exponentialRampToValueAtTime(0.01, ac.currentTime + c.duration);
         o.start(ac.currentTime);
