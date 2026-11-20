@@ -312,63 +312,6 @@ async function deleteCompletedAuction(id) {
     } catch (e) { alert('❌ Ошибка: ' + e.message); }
 }
 
-async function openEditCompletedAuctionModal(id) {
-    currentEditAuctionId = id;
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' });
-        const res = await r.json();
-        const sel = document.getElementById('editAuctionWinner');
-        if (res.success && sel) {
-            let html = '<option value="">— Выберите —</option>';
-            for (let i = 0; i < res.nicks.length; i++) html += '<option value="' + escapeHtml(res.nicks[i]) + '">' + escapeHtml(res.nicks[i]) + '</option>';
-            sel.innerHTML = html;
-        }
-    } catch (e) {}
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: id }), redirect: 'follow' });
-        const res = await r.json();
-        if (res.success) {
-            const a = res.auction;
-            const info = document.getElementById('editAuctionInfo');
-            if (info) info.innerHTML = '<div style="font-weight:700;">#' + a.auctionNumber + ' — ' + escapeHtml(a.itemName) + '</div><div style="font-size:10px;color:var(--text-dim);margin-top:3px;">Победитель: <b style="color:var(--accent);">' + escapeHtml(a.currentBidder || 'Нет') + '</b> | Сумма: <b style="color:var(--dkp);">' + a.currentBid + ' DKP</b></div>';
-            const winner = document.getElementById('editAuctionWinner');
-            if (winner) winner.value = a.currentBidder || '';
-            const amount = document.getElementById('editAuctionAmount');
-            if (amount) amount.value = a.currentBid;
-        }
-    } catch (e) {}
-    document.getElementById('editAuctionModal').classList.remove('hidden');
-}
-
-function closeEditAuctionModal() {
-    document.getElementById('editAuctionModal').classList.add('hidden');
-    currentEditAuctionId = null;
-}
-
-async function saveCompletedAuctionEdit() {
-    if (!currentEditAuctionId) return;
-    const nw = document.getElementById('editAuctionWinner').value;
-    const na = document.getElementById('editAuctionAmount').value;
-    const m = document.getElementById('editAuctionMessage');
-    if (!nw) { if (m) { m.className = 'message error'; m.innerText = 'Выберите победителя'; m.style.display = 'block'; } return; }
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'editCompletedAuction', auctionId: currentEditAuctionId, newWinner: nw, newAmount: Number(na), role: currentRole }), redirect: 'follow' });
-        const res = await r.json();
-        if (m) {
-            if (res.success) { m.className = 'message success'; m.innerText = '✅ ' + res.message; m.style.display = 'block'; setTimeout(function() { closeEditAuctionModal(); loadCompletedAuctions(); loadRecentWinners(); loadMyDkp(); }, 1500); }
-            else { m.className = 'message error'; m.innerText = '❌ ' + res.message; m.style.display = 'block'; }
-        }
-    } catch (e) { if (m) { m.className = 'message error'; m.innerText = '❌ Ошибка'; m.style.display = 'block'; } }
-}
-
-async function loadAuctionItemIcon(hid, iname, isec, icol, cid) {
-    try {
-        const it = allItems.find(function(i) { return i.name === iname && i.section === isec; });
-        if (it) await loadAndDisplayIcon('item', it.id, cid, icol);
-        else { const c = document.getElementById(cid); if (c) c.innerHTML = '📦'; }
-    } catch (e) {}
-}
-
 async function openBidModal(id) {
     if (currentRole === 'Гость') { alert('👁 Гости не могут делать ставки'); return; }
     try {
@@ -396,7 +339,7 @@ async function openBidModal(id) {
         let cooldownHtml = '';
         if (inCooldown) cooldownHtml = '<div class="cooldown-block" id="cooldownBlock"><div class="cooldown-title">⏳ Кулдаун</div><div class="cooldown-timer" id="cooldownTimer">--:--</div></div>';
         let endTimerHtml = '<div class="auction-end-timer' + (timeToEndMs < 5 * 60 * 1000 ? ' urgent' : '') + '" id="auctionEndTimer"><div style="color:var(--text-dim);font-size:9px;">До окончания:</div><div class="time-left" id="auctionEndTimeLeft">--:--:--</div></div>';
-        let subscribeHtml = '<div class="auction-subscribe-bar" id="auctionSubscribeBar"><div class="subscribe-hint">🔔 <b>Подписка на аукцион</b> — получайте уведомления</div><button class="subscribe-btn" id="auctionSubscribeBtn" onclick="toggleAuctionSubscription(\'' + escapeForOnclick(a.id) + '\')">Загрузка...</button><div class="subscribers-count">👥 <span class="count-value" id="auctionSubscribersCount">—</span></div></div>';
+        let subscribeHtml = '<div class="auction-subscribe-bar" id="auctionSubscribeBar"><div class="subscribe-hint">🔔 <b>Подписка на аукцион</b></div><button class="subscribe-btn" id="auctionSubscribeBtn" onclick="toggleAuctionSubscription(\'' + escapeForOnclick(a.id) + '\')">Загрузка...</button><div class="subscribers-count">👥 <span class="count-value" id="auctionSubscribersCount">—</span></div></div>';
         let content = '<h3 style="color:var(--dkp);font-family:var(--font-display);margin-bottom:10px;font-size:14px;"><span class="auction-number-badge">#' + (a.auctionNumber || '?') + '</span> 🔨 ' + escapeHtml(a.itemName) + '</h3>';
         content += subscribeHtml;
         content += endTimerHtml;
@@ -473,7 +416,8 @@ function startBidCooldownTimer(nextBidAt) {
         if (remaining <= 0) {
             clearInterval(bidCooldownInterval);
             bidCooldownInterval = null;
-            timerEl.innerText = '✅ Готово';
+            const block = document.getElementById('cooldownBlock');
+            if (block) block.innerHTML = '<div style="color:var(--success);font-weight:700;">✅ Кулдаун завершён</div>';
             if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
             if (input) input.disabled = false;
             return;
@@ -542,6 +486,63 @@ async function toggleAuctionSubscription(auctionId) {
     finally { if (btn) { btn.disabled = false; btn.style.opacity = '1'; } }
 }
 
+async function openEditCompletedAuctionModal(id) {
+    currentEditAuctionId = id;
+    try {
+        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' });
+        const res = await r.json();
+        const sel = document.getElementById('editAuctionWinner');
+        if (res.success && sel) {
+            let html = '<option value="">— Выберите —</option>';
+            for (let i = 0; i < res.nicks.length; i++) html += '<option value="' + escapeHtml(res.nicks[i]) + '">' + escapeHtml(res.nicks[i]) + '</option>';
+            sel.innerHTML = html;
+        }
+    } catch (e) {}
+    try {
+        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionDetails', auctionId: id }), redirect: 'follow' });
+        const res = await r.json();
+        if (res.success) {
+            const a = res.auction;
+            const info = document.getElementById('editAuctionInfo');
+            if (info) info.innerHTML = '<div style="font-weight:700;">#' + a.auctionNumber + ' — ' + escapeHtml(a.itemName) + '</div><div style="font-size:10px;color:var(--text-dim);margin-top:3px;">Победитель: <b style="color:var(--accent);">' + escapeHtml(a.currentBidder || 'Нет') + '</b> | Сумма: <b style="color:var(--dkp);">' + a.currentBid + ' DKP</b></div>';
+            const winner = document.getElementById('editAuctionWinner');
+            if (winner) winner.value = a.currentBidder || '';
+            const amount = document.getElementById('editAuctionAmount');
+            if (amount) amount.value = a.currentBid;
+        }
+    } catch (e) {}
+    document.getElementById('editAuctionModal').classList.remove('hidden');
+}
+
+function closeEditAuctionModal() {
+    document.getElementById('editAuctionModal').classList.add('hidden');
+    currentEditAuctionId = null;
+}
+
+async function saveCompletedAuctionEdit() {
+    if (!currentEditAuctionId) return;
+    const nw = document.getElementById('editAuctionWinner').value;
+    const na = document.getElementById('editAuctionAmount').value;
+    const m = document.getElementById('editAuctionMessage');
+    if (!nw) { if (m) { m.className = 'message error'; m.innerText = 'Выберите победителя'; m.style.display = 'block'; } return; }
+    try {
+        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'editCompletedAuction', auctionId: currentEditAuctionId, newWinner: nw, newAmount: Number(na), role: currentRole }), redirect: 'follow' });
+        const res = await r.json();
+        if (m) {
+            if (res.success) { m.className = 'message success'; m.innerText = '✅ ' + res.message; m.style.display = 'block'; setTimeout(function() { closeEditAuctionModal(); loadCompletedAuctions(); loadRecentWinners(); loadMyDkp(); }, 1500); }
+            else { m.className = 'message error'; m.innerText = '❌ ' + res.message; m.style.display = 'block'; }
+        }
+    } catch (e) { if (m) { m.className = 'message error'; m.innerText = '❌ Ошибка'; m.style.display = 'block'; } }
+}
+
+async function loadAuctionItemIcon(hid, iname, isec, icol, cid) {
+    try {
+        const it = allItems.find(function(i) { return i.name === iname && i.section === isec; });
+        if (it) await loadAndDisplayIcon('item', it.id, cid, icol);
+        else { const c = document.getElementById(cid); if (c) c.innerHTML = '📦'; }
+    } catch (e) {}
+}
+
 async function cancelAuction(id) {
     if (!confirm('Отменить?')) return;
     try {
@@ -596,34 +597,6 @@ function startCountdowns() {
             }
         }
     }, 1000);
-}
-
-async function loadRecentWinners() {
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionHistory', limit: 10 }), redirect: 'follow' });
-        const res = await r.json();
-        if (!res.success) return;
-        recentAuctionHistory = res.history || [];
-        const hb = document.getElementById('recentWinnersBlock');
-        if (hb) {
-            if (recentAuctionHistory.length > 0) {
-                let html = '';
-                for (let i = 0; i < recentAuctionHistory.length; i++) {
-                    const h = recentAuctionHistory[i];
-                    const bc = getIconBorderColor(h.itemColor);
-                    const gb = h.itemGiven ? '<span class="given-badge given" style="font-size:8px;">✅</span>' : '<span class="given-badge not-given" style="font-size:8px;">⚠️</span>';
-                    html += '<div class="history-winner-card"><div class="winner-icon" style="border-color:' + bc + ';" id="winnerIcon_' + h.id + '"><span class="icon-placeholder" style="font-size:6px;">...</span></div><div class="winner-info"><div class="winner-nick"><span class="nick-with-color" style="cursor:pointer;" onclick="viewPlayerCabinet(\'' + escapeForOnclick(h.winner) + '\')">' + escapeHtml(h.winner) + '</span><span style="font-size:9px;color:var(--text-dim);margin-left:4px;">— аукцион #' + h.auctionNumber + '</span></div><div class="winner-item">' + escapeHtml(h.itemName) + ' (' + escapeHtml(h.itemSection) + ', ' + escapeHtml(h.itemTier) + ', ' + escapeHtml(h.itemColor) + ')</div><div style="font-size:9px;color:var(--text-dim);margin-top:1px;">' + escapeHtml(h.winDate) + '</div></div><div class="winner-amount">' + h.winAmount + ' DKP</div>' + gb + '</div>';
-                }
-                hb.innerHTML = html;
-                for (let i = 0; i < recentAuctionHistory.length; i++) {
-                    const h = recentAuctionHistory[i];
-                    loadAuctionItemIcon(h.id, h.itemName, h.itemSection, h.itemColor, 'winnerIcon_' + h.id);
-                }
-            } else hb.innerHTML = '<div class="empty-state">Пока нет победителей</div>';
-        }
-        const ab = document.getElementById('auctionRecentWins');
-        if (ab) ab.innerHTML = hb ? hb.innerHTML : '';
-    } catch (e) {}
 }
 
 // ============================================================
