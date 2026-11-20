@@ -328,63 +328,6 @@ async function loadGuildDkpHistory() {
     } catch (e) { list.innerHTML = '<div class="empty-state">❌ Ошибка</div>'; }
 }
 
-function showGuildPendingDkpModal() {
-    if (!window._myGuild) return;
-    document.getElementById('guildPendingDkpModal').classList.remove('hidden');
-    loadGuildPendingDkp();
-}
-
-function closeGuildPendingDkpModal() { document.getElementById('guildPendingDkpModal').classList.add('hidden'); }
-
-async function loadGuildPendingDkp() {
-    const list = document.getElementById('guildPendingDkpList');
-    const adminList = document.getElementById('guildAdminPendingList');
-    const target = list || adminList;
-    if (!target) return;
-    target.innerHTML = '<div style="text-align:center;padding:16px;color:var(--accent);">Загрузка...</div>';
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getGuildPendingDKP', guildId: window._myGuild.id }), redirect: 'follow' });
-        const res = await r.json();
-        if (!res.success) { target.innerHTML = '<div class="empty-state">❌ ' + res.message + '</div>'; return; }
-        const submissions = res.submissions;
-        let html = '';
-        for (const s of submissions) {
-            html += '<div class="guild-submission-card"><div class="guild-submission-header"><div><div class="guild-submission-event">🎯 ' + escapeHtml(s.eventName) + ' (+' + s.eventDkp + ' DKP)</div><div class="guild-submission-meta">📤 От: ' + escapeHtml(s.submitter) + ' • 📅 ' + s.date + '</div></div><div class="action-buttons"><button class="btn-approve" onclick="approveGuildDkp(\'' + escapeForOnclick(s.id) + '\')">✓ Одобрить</button><button class="btn-reject" onclick="rejectGuildDkp(\'' + escapeForOnclick(s.id) + '\')">✕ Отклонить</button></div></div>';
-            if (s.screenshots && s.screenshots.length > 0) {
-                html += '<div class="submission-screenshots">';
-                for (let i = 0; i < s.screenshots.length; i++) html += '<img src="' + s.screenshots[i] + '" onclick="openImageModal(\'' + escapeForOnclick(s.screenshots[i]) + '\')" alt="' + (i + 1) + '">';
-                html += '</div>';
-            }
-            html += '<div style="font-size:9px;color:var(--text-dim);margin-top:4px;">Участники (' + s.nicks.length + '):</div><div class="submission-nicks">';
-            for (const nick of s.nicks) html += '<span class="submission-nick-tag">' + escapeHtml(nick) + '</span>';
-            html += '</div></div>';
-        }
-        target.innerHTML = html || '<div class="empty-state">Нет заявок на проверке</div>';
-        const countEl = document.getElementById('guildPendingCount');
-        if (countEl) countEl.innerText = submissions.length;
-    } catch (e) { target.innerHTML = '<div class="empty-state">❌ Ошибка</div>'; }
-}
-
-async function approveGuildDkp(submissionId) {
-    if (!confirm('Одобрить заявку и начислить DKP?')) return;
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'approveGuildDKP', submissionId: submissionId, guildId: window._myGuild.id, approver: currentUser }), redirect: 'follow' });
-        const res = await r.json();
-        if (res.success) { alert('✅ ' + res.message); loadGuildPendingDkp(); loadGuildDkpRanking(); }
-        else alert('❌ ' + res.message);
-    } catch (e) { alert('❌ Ошибка: ' + e.message); }
-}
-
-async function rejectGuildDkp(submissionId) {
-    if (!confirm('Отклонить заявку?')) return;
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'rejectGuildDKP', submissionId: submissionId, guildId: window._myGuild.id, requester: currentUser }), redirect: 'follow' });
-        const res = await r.json();
-        if (res.success) { alert('✅ ' + res.message); loadGuildPendingDkp(); }
-        else alert('❌ ' + res.message);
-    } catch (e) { alert('❌ Ошибка: ' + e.message); }
-}
-
 function showGuildSubmitDkpModal() {
     if (!window._myGuild) return;
     document.getElementById('guildSubmitDkpModal').classList.remove('hidden');
@@ -551,6 +494,25 @@ async function submitGuildDkpSubmission() {
             } else { msg.className = 'message error'; msg.innerText = '❌ ' + res.message; }
         }
     } catch (e) { if (msg) { msg.className = 'message error'; msg.innerText = '❌ Ошибка'; msg.style.display = 'block'; } }
+}
+
+function onGuildSelectChange() {
+    const select = document.getElementById('currentGuildSelect');
+    const guildId = select ? select.value : '';
+    if (!guildId) {
+        const info = document.getElementById('currentGuildInfo');
+        const pin = document.getElementById('guildPinBtn');
+        if (info) info.classList.add('hidden');
+        if (pin) pin.classList.remove('pinned');
+        return;
+    }
+    const info = document.getElementById('currentGuildInfo');
+    if (info) info.classList.remove('hidden');
+}
+
+function toggleGuildPin() {
+    const btn = document.getElementById('guildPinBtn');
+    if (btn) btn.classList.toggle('pinned');
 }
 
 // ============================================================
