@@ -151,7 +151,7 @@ async function showGuildInfo(guildId) {
         html += '<div class="guild-leader" style="font-size:11px;">👑 Лидер: ' + escapeHtml(guild.leader) + '</div>';
         html += '<div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Создана: ' + guild.createdAt + '</div></div></div>';
         html += '<div style="background:var(--bg-soft);padding:10px;border-radius:var(--radius-sm);margin-bottom:12px;border:1px solid var(--border);"><div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;font-weight:700;">📜 ОПИСАНИЕ:</div><div style="font-size:12px;line-height:1.4;">' + escapeHtml(guild.description || 'Нет описания') + '</div></div>';
-        html += '<div class="guild-stats" style="margin-bottom:12px;"><div class="guild-stat"><div class="guild-stat-label">Общий рейтинг</div><div class="guild-stat-value">' + res.totalRating.toLocaleString('ru-RU') + '</div></div><div class="guild-stat"><div class="guild-stat-label">Казна</div><div class="guild-stat-value" style="color:var(--dkp);">' + guild.dkp + ' DKP</div></div><div class="guild-stat"><div class="guild-stat-label">Участников</div><div class="guild-stat-value">' + members.length + '/50</div></div><div class="guild-stat"><div class="guild-stat-label">Офицеров</div><div class="guild-stat-value">' + officersCount + '/4</div></div></div>';
+        html += '<div class="guild-stats" style="margin-bottom:12px;"><div class="guild-stat"><div class="guild-stat-label">Рейтинг</div><div class="guild-stat-value">' + res.totalRating.toLocaleString('ru-RU') + '</div></div><div class="guild-stat"><div class="guild-stat-label">Казна</div><div class="guild-stat-value" style="color:var(--dkp);">' + guild.dkp + ' DKP</div></div><div class="guild-stat"><div class="guild-stat-label">Участников</div><div class="guild-stat-value">' + members.length + '/50</div></div><div class="guild-stat"><div class="guild-stat-label">Офицеров</div><div class="guild-stat-value">' + officersCount + '/4</div></div></div>';
         if (isMyGuild && canManage) {
             html += '<div class="guild-management-section"><div class="guild-management-title">⚙️ Управление</div><div class="guild-action-buttons">';
             html += '<button class="guild-action-btn" onclick="showEditGuildModal(\'' + escapeForOnclick(guildId) + '\', \'' + escapeForOnclick(guild.name) + '\', \'' + escapeForOnclick(guild.description) + '\', \'' + escapeForOnclick(guild.icon) + '\')">✏️ Редактировать</button>';
@@ -165,7 +165,8 @@ async function showGuildInfo(guildId) {
         html += '<div style="max-height:300px;overflow-y:auto;">';
         for (const m of members) {
             const roleLabel = m.role === 'leader' ? '👑 Лидер' : m.role === 'officer' ? '⭐ Офицер' : '👤 Участник';
-            html += '<div class="guild-member-item"><span class="guild-member-role ' + m.role + '">' + roleLabel + '</span><span style="flex:1;font-weight:600;font-family:var(--font-display);font-size:11px;cursor:pointer;" onclick="viewPlayerCabinet(\'' + escapeForOnclick(m.name) + '\')">' + escapeHtml(m.name) + '</span><span style="font-size:10px;color:var(--text-dim);">Ур. ' + m.level + '</span><span style="font-size:10px;color:var(--accent);font-weight:700;">' + m.bm.toLocaleString('ru-RU') + ' БМ</span>';
+            const roleClass = m.role;
+            html += '<div class="guild-member-item"><span class="guild-member-role ' + roleClass + '">' + roleLabel + '</span><span style="flex:1;font-weight:600;font-family:var(--font-display);font-size:11px;cursor:pointer;" onclick="viewPlayerCabinet(\'' + escapeForOnclick(m.name) + '\')">' + escapeHtml(m.name) + '</span><span style="font-size:10px;color:var(--text-dim);">Ур. ' + m.level + '</span><span style="font-size:10px;color:var(--accent);font-weight:700;">' + m.bm.toLocaleString('ru-RU') + ' БМ</span>';
             if (isMyGuild && m.name !== currentUser) {
                 html += '<div class="member-actions">';
                 if (isLeader) {
@@ -334,7 +335,7 @@ async function saveGuildEdit() {
 
 async function deleteCurrentGuild() {
     const guildId = document.getElementById('editGuildId').value;
-    if (!confirm('⚠️ УДАЛИТЬ ГИЛЬДИЮ НАВСЕГДА?\n\nЭто действие необратимо!\n\n• Все участники будут исключены\n• DKP из казны вернутся участникам\n\nПродолжить?')) return;
+    if (!confirm('⚠️ УДАЛИТЬ ГИЛЬДИЮ НАВСЕГДА?\n\nЭто действие необратимо!')) return;
     const confirmText = prompt('Для подтверждения введите "УДАЛИТЬ" заглавными буквами:');
     if (confirmText !== 'УДАЛИТЬ') { alert('❌ Удаление отменено'); return; }
     const msg = document.getElementById('editGuildMessage');
