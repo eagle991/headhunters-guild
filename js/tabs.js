@@ -3,7 +3,6 @@
 // ============================================================
 
 function switchMainTab(tab, event) {
-    // Снимаем активность со всех кнопок
     document.querySelectorAll('#mainTabs .tab-btn').forEach(function(btn) {
         btn.classList.remove('active');
     });
@@ -12,7 +11,6 @@ function switchMainTab(tab, event) {
         event.target.classList.add('active');
     }
 
-    // Список всех вкладок
     const tabs = ['home', 'cabinet', 'dkp', 'auction', 'queue', 'calendar', 'players', 'guilds', 'analytics', 'info', 'guildAdmin', 'admin'];
 
     for (const t of tabs) {
@@ -23,73 +21,83 @@ function switchMainTab(tab, event) {
         }
     }
 
-    // Показ/скрытие админских кнопок
+    const isAdmin = currentRole === 'Админ' || currentRole === 'Модератор';
+
     const tabAuctionCreate = document.getElementById('tabAuctionCreate');
     if (tabAuctionCreate) {
-        tabAuctionCreate.classList.toggle('hidden', !(currentRole === 'Админ' || currentRole === 'Модератор'));
+        tabAuctionCreate.classList.toggle('hidden', !isAdmin);
     }
 
     const tabQueueAdd = document.getElementById('tabQueueAdd');
     if (tabQueueAdd) {
-        tabQueueAdd.classList.toggle('hidden', !(currentRole === 'Админ' || currentRole === 'Модератор'));
+        tabQueueAdd.classList.toggle('hidden', !isAdmin);
     }
 
-    // Загрузка данных при переключении
+    const tabAdmin = document.getElementById('tabAdmin');
+    if (tabAdmin) {
+        tabAdmin.style.display = isAdmin ? '' : 'none';
+    }
+
+    const tabGuildAdmin = document.getElementById('tabGuildAdmin');
+    if (tabGuildAdmin) {
+        tabGuildAdmin.style.display = isAdmin ? '' : 'none';
+    }
+
     loadTabData(tab);
 }
 
 function loadTabData(tab) {
     switch (tab) {
         case 'home':
-            loadPublicTops();
-            loadAnnouncements();
-            loadTodayActivity();
-            loadWeeklyActivity();
-            loadEventStats();
-            loadRecentWinners();
+            if (typeof loadPublicTops === 'function') loadPublicTops();
+            if (typeof loadAnnouncements === 'function') loadAnnouncements();
+            if (typeof loadTodayActivity === 'function') loadTodayActivity();
+            if (typeof loadWeeklyActivity === 'function') loadWeeklyActivity();
+            if (typeof loadEventStats === 'function') loadEventStats();
+            if (typeof loadRecentWinners === 'function') loadRecentWinners();
             break;
 
         case 'cabinet':
-            loadPlayerData();
-            loadPlayerItems();
-            loadPlayerSkills();
-            loadCharacterScreenshots();
+            if (typeof loadPlayerData === 'function') loadPlayerData();
+            if (typeof loadPlayerItems === 'function') loadPlayerItems();
+            if (typeof loadPlayerSkills === 'function') loadPlayerSkills();
+            if (typeof loadCharacterScreenshots === 'function') loadCharacterScreenshots();
             break;
 
         case 'dkp':
-            loadMyDkp();
-            loadPlayerLootHistory();
+            if (typeof loadMyDkp === 'function') loadMyDkp();
+            if (typeof loadPlayerLootHistory === 'function') loadPlayerLootHistory();
             break;
 
         case 'auction':
-            loadAuctions();
+            if (typeof loadAuctions === 'function') loadAuctions();
             break;
 
         case 'queue':
-            loadQueueItems();
+            if (typeof loadQueueItems === 'function') loadQueueItems();
             break;
 
         case 'calendar':
-            loadCalendarPlayers();
-            loadCalendar();
+            if (typeof loadCalendarPlayers === 'function') loadCalendarPlayers();
+            if (typeof loadCalendar === 'function') loadCalendar();
             break;
 
         case 'players':
-            loadAllPlayers();
+            if (typeof loadAllPlayers === 'function') loadAllPlayers();
             break;
 
         case 'guilds':
-            loadMyGuild();
-            loadGuilds();
-            loadGuildsRating();
+            if (typeof loadMyGuild === 'function') loadMyGuild();
+            if (typeof loadGuilds === 'function') loadGuilds();
+            if (typeof loadGuildsRating === 'function') loadGuildsRating();
             break;
 
         case 'analytics':
-            loadAnalytics();
+            if (typeof loadAnalytics === 'function') loadAnalytics();
             break;
 
         case 'info':
-            loadInfoContent();
+            if (typeof loadInfoContent === 'function') loadInfoContent();
             break;
 
         case 'guildAdmin':
@@ -121,9 +129,9 @@ function switchAuctionTab(tab, event) {
         }
     }
 
-    if (tab === 'auctionList') loadAuctions();
-    if (tab === 'auctionHistory') loadAuctionHistory();
-    if (tab === 'auctionSettings') loadAuctionSettings();
+    if (tab === 'auctionList' && typeof loadAuctions === 'function') loadAuctions();
+    if (tab === 'auctionHistory' && typeof loadAuctionHistory === 'function') loadAuctionHistory();
+    if (tab === 'auctionSettings' && typeof loadAuctionSettings === 'function') loadAuctionSettings();
 }
 
 function switchDkpTab(tab, event) {
@@ -143,8 +151,8 @@ function switchDkpTab(tab, event) {
         }
     }
 
-    if (tab === 'dkpBalance') loadMyDkp();
-    if (tab === 'dkpHistory') loadPlayerLootHistory();
+    if (tab === 'dkpBalance' && typeof loadMyDkp === 'function') loadMyDkp();
+    if (tab === 'dkpHistory' && typeof loadPlayerLootHistory === 'function') loadPlayerLootHistory();
 }
 
 function showSkillsEditForm() {
@@ -159,7 +167,7 @@ function showEquipmentEditForm() {
     document.getElementById('equipmentForm')?.classList.remove('hidden');
 
     if (typeof buildEquipmentTabs === 'function') buildEquipmentTabs();
-    if (equipmentSections.length > 0 && !currentEquipmentSection) {
+    if (equipmentSections && equipmentSections.length > 0 && !currentEquipmentSection) {
         selectEquipmentSection(equipmentSections[0]);
     } else if (typeof renderEquipmentItems === 'function') {
         renderEquipmentItems();
@@ -179,3 +187,10 @@ function backToInventory() {
         approvedMsg.classList.remove('hidden');
     }
 }
+
+window.switchMainTab = switchMainTab;
+window.switchAuctionTab = switchAuctionTab;
+window.switchDkpTab = switchDkpTab;
+window.showSkillsEditForm = showSkillsEditForm;
+window.showEquipmentEditForm = showEquipmentEditForm;
+window.backToInventory = backToInventory;
