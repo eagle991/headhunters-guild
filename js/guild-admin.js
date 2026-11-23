@@ -3,8 +3,9 @@
 // ============================================================
 
 async function loadGuildAdmin() {
+    const content = document.getElementById('guildAdminContent');
+    
     if (!window._myGuild) {
-        const content = document.getElementById('guildAdminContent');
         if (content) content.innerHTML = '<div class="info-hint warning">⚠️ Вы не состоите в гильдии</div>';
         return;
     }
@@ -37,25 +38,16 @@ function switchGuildAdminTab(tab, event) {
         btn.classList.remove('active');
     });
 
-    if (event && event.target) {
-        event.target.classList.add('active');
-    }
+    if (event && event.target) event.target.classList.add('active');
 
     const contents = ['members', 'settings', 'dkp', 'invites'];
     for (const c of contents) {
-        const el = document.getElementById('guildAdmin' + capitalize(c) + 'Content');
-        if (el) {
-            el.classList.toggle('hidden', c !== tab);
-        }
+        const el = document.getElementById('guildAdmin' + c.charAt(0).toUpperCase() + c.slice(1) + 'Content');
+        if (el) el.classList.toggle('hidden', c !== tab);
     }
 
     if (tab === 'members') loadGuildAdminMembers();
     if (tab === 'settings') loadGuildAdminSettings();
-    if (tab === 'dkp') loadGuildAdminDkp();
-}
-
-function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 async function loadGuildAdminMembers() {
@@ -78,10 +70,11 @@ async function loadGuildAdminMembers() {
             return;
         }
 
+        const isLeader = window._myGuild.role === 'leader';
         let html = '';
+
         for (const m of members) {
             const roleIcon = m.role === 'leader' ? '👑' : m.role === 'officer' ? '⭐' : '👤';
-            const isLeader = window._myGuild.role === 'leader';
 
             html += '<div class="guild-member-card">';
             html += '<div class="guild-member-info">';
@@ -160,7 +153,7 @@ async function loadGuildAdminSettings() {
         const settings = res.settings || {};
 
         let html = '<div class="settings-form">';
-        html += '<div class="form-group"><label>DKP за событие</label>';
+        html += '<div class="form-group"><label>DKP за мероприятие</label>';
         html += '<input type="number" id="guildSettingDkpPerEvent" value="' + (settings.dkp_per_event || 100) + '"></div>';
 
         html += '<div class="form-group"><label><input type="checkbox" id="guildSettingAllowNegative"' + (settings.allow_negative_balance ? ' checked' : '') + '> Разрешить отрицательный баланс</label></div>';
@@ -210,7 +203,7 @@ async function saveGuildAdminSettings() {
                 msg.className = 'message error';
                 msg.innerText = '❌ ' + (res.message || 'Ошибка');
             }
-            setTimeout(() => { msg.style.display = 'none'; }, 2000);
+            setTimeout(function() { msg.style.display = 'none'; }, 2000);
         }
     } catch (e) {
         if (msg) {
@@ -220,3 +213,11 @@ async function saveGuildAdminSettings() {
         }
     }
 }
+
+window.loadGuildAdmin = loadGuildAdmin;
+window.switchGuildAdminTab = switchGuildAdminTab;
+window.loadGuildAdminMembers = loadGuildAdminMembers;
+window.promoteMember = promoteMember;
+window.kickMember = kickMember;
+window.loadGuildAdminSettings = loadGuildAdminSettings;
+window.saveGuildAdminSettings = saveGuildAdminSettings;
