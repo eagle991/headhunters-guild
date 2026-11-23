@@ -1,12 +1,7 @@
-// ============================================================
-// 🛡️ ЭКИПИРОВКА ИГРОКА
-// ============================================================
-
 async function loadPlayerItems() {
     if (!currentUser) return;
 
     try {
-        // Загружаем разделы и предметы параллельно
         const [sectionsRes, itemsRes, playerRes] = await Promise.all([
             api('getEquipmentSections'),
             api('getItems'),
@@ -28,10 +23,9 @@ async function loadPlayerItems() {
         }
 
         myPlayerItems = playerRes.data;
-        AppState.myPlayerItems = playerRes.data;
+        if (typeof AppState !== 'undefined') AppState.myPlayerItems = playerRes.data;
         playerItemSelections = {};
 
-        // Восстанавливаем выбор
         if (playerRes.data.selections) {
             for (const sec in playerRes.data.selections) {
                 const v = playerRes.data.selections[sec];
@@ -49,12 +43,15 @@ async function loadPlayerItems() {
             if (form) form.classList.add('hidden');
             if (approvedMsg) approvedMsg.classList.remove('hidden');
             if (inventory) inventory.classList.remove('hidden');
-            renderMmorpgInventory();
+            if (typeof renderMmorpgInventory === 'function') renderMmorpgInventory();
         } else {
             if (status) status.innerHTML = '<span class="status-badge status-pending">На проверке</span>';
             if (form) form.classList.remove('hidden');
             if (approvedMsg) approvedMsg.classList.add('hidden');
-            buildEquipmentTabs();
+            if (inventory) inventory.classList.add('hidden');
+            
+            // Важно: строим вкладки экипировки
+            if (typeof buildEquipmentTabs === 'function') buildEquipmentTabs();
         }
 
         if (empty) empty.classList.add('hidden');
@@ -66,7 +63,15 @@ async function loadPlayerItems() {
 
 function buildEquipmentTabs() {
     const tabs = document.getElementById('equipmentTabs');
-    if (!tabs) return;
+    if (!tabs) {
+        console.warn('equipmentTabs не найден');
+        return;
+    }
+
+    if (!equipmentSections || equipmentSections.length === 0) {
+        tabs.innerHTML = '<div class="empty-state">Нет разделов экипировки</div>';
+        return;
+    }
 
     let html = '';
     for (const section of equipmentSections) {
@@ -77,22 +82,35 @@ function buildEquipmentTabs() {
 
     if (equipmentSections.length > 0 && !currentEquipmentSection) {
         selectEquipmentSection(equipmentSections[0]);
+    } else if (currentEquipmentSection) {
+        renderEquipmentItems();
     }
 }
 
 function selectEquipmentSection(section) {
     currentEquipmentSection = section;
-    document.querySelectorAll('#equipmentTabs .tab-btn').forEach(btn => {
+    
+    document.querySelectorAll('#equipmentTabs .tab-btn').forEach(function(btn) {
         btn.classList.toggle('active', btn.textContent === section);
     });
+    
     renderEquipmentItems();
 }
 
 function renderEquipmentItems() {
     const container = document.getElementById('equipmentItemsList');
-    if (!container || !currentEquipmentSection) return;
+    if (!container) {
+        console.warn('equipmentItemsList не найден');
+        return;
+    }
+    
+    if (!currentEquipmentSection) {
+        container.innerHTML = '<div class="empty-state">Выберите раздел</div>';
+        return;
+    }
 
-    const items = allItems.filter(i => i.section === currentEquipmentSection);
+    const items = (allItems || []).filter(function(i) { return i.section === currentEquipmentSection; });
+    
     if (items.length === 0) {
         container.innerHTML = '<div class="empty-state">Нет предметов в этом разделе</div>';
         return;
@@ -111,79 +129,16 @@ function renderEquipmentItems() {
 
 function selectEquipmentItem(itemId) {
     if (!currentEquipmentSection) return;
-    const item = allItems.find(i => i.id === itemId);
+    const item = (allItems || []).find(function(i) { return i.id === itemId; });
     if (!item) return;
 
     playerItemSelections[currentEquipmentSection] = { id: itemId, name: item.name };
     renderEquipmentItems();
 }
 
-async function savePlayerItems() {
-    const msg = document.getElementById('equipmentMessage');
-
-    try {
-        showEquipmentMessage(msg, 'Сохранение...', '');
-        const res = await api('savePlayerItems', {
-            nickname: currentUser,
-            selections: playerItemSelections
-        });
-
-        if (res.success) {
-            showEquipmentMessage(msg, res.message || 'Сохранено', 'success');
-            setTimeout(() => loadPlayerItems(), 800);
-        } else {
-            showEquipmentMessage(msg, res.message || 'Ошибка', 'error');
-        }
-    } catch (e) {
-        showEquipmentMessage(msg, 'Ошибка соединения', 'error');
-    }
-}
-
-async function addEquipmentSection() {
-    const name = document.getElementById('newSectionName')?.value?.trim();
-    if (!name) {
-        alert('Введите название');
-        return;
-    }
-
-    try {
-        const res = await api('addEquipmentSection', { name: name });
-        if (res.success) {
-            alert('✅ ' + (res.message || 'Раздел добавлен'));
-            document.getElementById('newSectionName').value = '';
-            loadEquipmentSectionsDynamic();
-            loadAuctionSectionsDynamic();
-        } else {
-            alert('❌ ' + (res.message || 'Ошибка'));
-        }
-    } catch (e) {
-        alert('❌ Ошибка: ' + e.message);
-    }
-}
-
-async function deleteEquipmentSection(name) {
-    if (!confirm('Удалить раздел "' + name + '"?')) return;
-
-    try {
-        const res = await api('deleteEquipmentSection', { name: name });
-        if (res.success) {
-            alert('✅ ' + (res.message || 'Удалено'));
-            loadEquipmentSectionsDynamic();
-            loadAuctionSectionsDynamic();
-        } else {
-            alert('❌ ' + (res.message || 'Ошибка'));
-        }
-    } catch (e) {
-        alert('❌ Ошибка: ' + e.message);
-    }
-}
-
-function showEquipmentMessage(el, text, type) {
-    if (!el) return;
-    el.className = 'message' + (type ? ' ' + type : '');
-    el.innerText = text;
-    el.style.display = 'block';
-    if (type) {
-        setTimeout(() => { el.style.display = 'none'; }, 4000);
-    }
-}
+// Экспорт
+window.loadPlayerItems = loadPlayerItems;
+window.buildEquipmentTabs = buildEquipmentTabs;
+window.selectEquipmentSection = selectEquipmentSection;
+window.renderEquipmentItems = renderEquipmentItems;
+window.selectEquipmentItem = selectEquipmentItem;
