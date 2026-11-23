@@ -3,22 +3,33 @@
 // ============================================================
 
 function showAuthScreen() {
-    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    document.querySelectorAll('.screen').forEach(function(s) {
+        s.classList.remove('active');
+    });
     const a = document.getElementById('authScreen');
     if (a) a.classList.add('active');
 }
 
 function switchAuthTab(t, e) {
-    document.querySelectorAll('#authScreen .tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('#authScreen .tab-btn').forEach(function(b) {
+        b.classList.remove('active');
+    });
     if (e && e.target) e.target.classList.add('active');
+
     const m = document.getElementById('authMessage');
-    if (m) { m.className = 'message'; m.style.display = 'none'; }
+    if (m) {
+        m.className = 'message';
+        m.style.display = 'none';
+    }
+
     const lf = document.getElementById('loginForm');
     const rf = document.getElementById('registerForm');
     const gf = document.getElementById('guestForm');
+
     if (lf) lf.classList.add('hidden');
     if (rf) rf.classList.add('hidden');
     if (gf) gf.classList.add('hidden');
+
     if (t === 'login' && lf) lf.classList.remove('hidden');
     else if (t === 'register' && rf) rf.classList.remove('hidden');
     else if (t === 'guest' && gf) gf.classList.remove('hidden');
@@ -31,16 +42,16 @@ async function handleAuth(e, action) {
 
     if (action === 'login') {
         btn = document.getElementById('loginBtn');
-        payload.nickname = document.getElementById('loginNick').value.trim();
-        payload.password = document.getElementById('loginPass').value;
+        payload.nickname = document.getElementById('loginNick')?.value?.trim() || '';
+        payload.password = document.getElementById('loginPass')?.value || '';
     } else if (action === 'register') {
         btn = document.getElementById('registerBtn');
-        payload.nickname = document.getElementById('regNick').value.trim();
-        payload.password = document.getElementById('regPass').value;
-        payload.passwordConfirm = document.getElementById('regPassConfirm').value;
+        payload.nickname = document.getElementById('regNick')?.value?.trim() || '';
+        payload.password = document.getElementById('regPass')?.value || '';
+        payload.passwordConfirm = document.getElementById('regPassConfirm')?.value || '';
     } else if (action === 'guest') {
         btn = document.getElementById('guestBtn');
-        payload.nickname = document.getElementById('guestNick').value.trim();
+        payload.nickname = document.getElementById('guestNick')?.value?.trim() || '';
     }
 
     if (!payload.nickname) {
@@ -64,10 +75,12 @@ async function handleAuth(e, action) {
         if (res.success) {
             currentUser = res.nickname || payload.nickname;
             currentRole = res.role || 'Игрок';
-            AppState.currentUser = currentUser;
-            AppState.currentRole = currentRole;
 
-            // Сохраняем только сессию, без пароля
+            if (typeof AppState !== 'undefined') {
+                AppState.currentUser = currentUser;
+                AppState.currentRole = currentRole;
+            }
+
             localStorage.setItem('rf_session', JSON.stringify({
                 user: currentUser,
                 role: currentRole,
@@ -75,8 +88,13 @@ async function handleAuth(e, action) {
             }));
 
             showAuthMessage(res.message || 'Успешно', 'success');
+
             setTimeout(function() {
-                forceReload();
+                if (typeof forceReload === 'function') {
+                    forceReload();
+                } else {
+                    location.reload();
+                }
             }, 800);
         } else {
             showAuthMessage(res.message || 'Ошибка авторизации', 'error');
@@ -87,7 +105,9 @@ async function handleAuth(e, action) {
     } finally {
         if (btn) {
             btn.disabled = false;
-            btn.innerText = action === 'login' ? 'Войти' : (action === 'register' ? 'Регистрация' : 'Войти как гость');
+            if (action === 'login') btn.innerText = 'Войти';
+            else if (action === 'register') btn.innerText = 'Регистрация';
+            else btn.innerText = 'Войти как гость';
         }
     }
 }
@@ -103,15 +123,17 @@ function showAuthMessage(text, type) {
 function showUpgradeToPlayerModal() {
     const nick = document.getElementById('upgradeNick');
     if (nick) nick.innerText = currentUser;
-    document.getElementById('upgradeModal').classList.remove('hidden');
+    const modal = document.getElementById('upgradeModal');
+    if (modal) modal.classList.remove('hidden');
 }
 
 function closeUpgradeModal() {
-    document.getElementById('upgradeModal').classList.add('hidden');
+    const modal = document.getElementById('upgradeModal');
+    if (modal) modal.classList.add('hidden');
 }
 
 async function upgradeToPlayer() {
-    const key = document.getElementById('upgradeKey').value.trim();
+    const key = document.getElementById('upgradeKey')?.value?.trim() || '';
     const msg = document.getElementById('upgradeMessage');
 
     if (!key) {
@@ -140,10 +162,18 @@ async function upgradeToPlayer() {
                 msg.className = 'message success';
                 msg.innerText = '✅ ' + (res.message || 'Роль обновлена');
                 currentRole = res.newRole || currentRole;
-                AppState.currentRole = currentRole;
+
+                if (typeof AppState !== 'undefined') {
+                    AppState.currentRole = currentRole;
+                }
+
                 setTimeout(function() {
                     closeUpgradeModal();
-                    forceReload();
+                    if (typeof forceReload === 'function') {
+                        forceReload();
+                    } else {
+                        location.reload();
+                    }
                 }, 1500);
             } else {
                 msg.className = 'message error';
@@ -159,3 +189,11 @@ async function upgradeToPlayer() {
         }
     }
 }
+
+// Экспорт глобально
+window.showAuthScreen = showAuthScreen;
+window.switchAuthTab = switchAuthTab;
+window.handleAuth = handleAuth;
+window.showUpgradeToPlayerModal = showUpgradeToPlayerModal;
+window.closeUpgradeModal = closeUpgradeModal;
+window.upgradeToPlayer = upgradeToPlayer;
