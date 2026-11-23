@@ -134,11 +134,12 @@ function showMainScreen() {
     
     const homeBtn = document.querySelector('#mainTabs .tab-btn[data-tab="home"]');
     switchMainTab('home', { target: homeBtn });
-    setTimeout(loadAnnouncements, 1000);
+    setTimeout(loadEventTimers, 1000);
 }
 
 function logout() {
     stopNotificationPolling();
+    stopEventTimersUpdate();
     lastNotificationCount = 0;
     knownNotificationIds.clear();
     localStorage.removeItem('rf_session');
