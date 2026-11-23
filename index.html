@@ -95,7 +95,14 @@
         </div>
     </div>
     
-    <div id="announcementsBlock" style="margin-bottom:10px;display:none;"></div>
+    <div id="eventTimersBlock" style="margin-bottom:10px;">
+    <div class="panel-title">⏰ Расписание мероприятий</div>
+    <div class="event-timers-container" id="eventTimersContainer">
+        <div style="text-align:center;padding:20px;color:var(--text-dim);grid-column:1/-1;">
+            <span class="loader"></span> Загрузка таймеров...
+        </div>
+    </div>
+</div>
     
     <div id="guestBanner" class="guest-banner hidden">
         <div style="flex:1;">👁 <b>Вы в гостевом режиме</b>. <a href="#" onclick="showUpgradeToPlayerModal();return false;" style="color:var(--accent);font-weight:700;">Стать игроком →</a></div>
@@ -682,7 +689,7 @@
             <button class="tab-btn hidden" id="tabAdminUsers" onclick="switchAdminTab('users',event)">👥 Юзеры</button>
             <button class="tab-btn" id="tabAdminSettings" onclick="switchAdminTab('settings',event)">⚙ Настройки</button>
             <button class="tab-btn" id="tabAdminFeatures" onclick="switchAdminTab('features',event)">⚙️ Функции</button>
-            <button class="tab-btn" id="tabAdminAnnouncements" onclick="switchAdminTab('announcements',event)">📢 Объявл.</button>
+            <button class="tab-btn" id="tabAdminTimers" onclick="switchAdminTab('timers',event)">⏰ Таймеры</button>
             <button class="tab-btn" id="tabAdminLog" onclick="switchAdminTab('log',event)">📝 Лог</button>
             <button class="tab-btn" id="tabAdminMissing" onclick="switchAdminTab('missing',event)">📋 Пробелы</button>
             <button class="tab-btn" id="tabAdminExport" onclick="switchAdminTab('export',event)">📤 Экспорт</button>
@@ -871,26 +878,42 @@
             </div>
         </div>
         <div id="adminFeaturesContent" class="hidden"><div class="panel-title">⚙️ Функции сайта</div><div id="featuresList"></div></div>
-        <div id="adminAnnouncementsContent" class="hidden">
-            <div class="panel-title">📢 Объявления</div>
-            <div class="add-item-form">
-                <div class="form-row">
-                    <div class="form-group"><label>Заголовок</label><input type="text" id="newAnnouncementTitle" required placeholder="ВАЖНО!"></div>
-                    <div class="form-group"><label>Тип</label>
-                        <select id="newAnnouncementType">
-                            <option value="info">🔵 Информация</option>
-                            <option value="event">🟡 Событие</option>
-                            <option value="important">🔴 Важно</option>
-                            <option value="success">🟢 Успех</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group"><label>Сообщение</label><textarea id="newAnnouncementMessage" placeholder="Текст объявления..."></textarea></div>
-                <button type="button" class="submit-btn dkp-btn" onclick="createAnnouncement()">📢 Создать</button>
-            </div>
-            <div id="adminAnnouncementsList"></div>
-            <div id="announcementsMessage" class="message"></div>
+<div id="adminTimersContent" class="hidden">
+    <div class="panel-title">⏰ Управление таймерами</div>
+    <div style="background:var(--bg-soft);border:1px solid var(--border);padding:10px;border-radius:var(--radius-sm);margin-bottom:10px;">
+        <div style="font-size:11px;font-weight:700;margin-bottom:8px;color:var(--accent);font-family:var(--font-display);">➕ Создать таймер</div>
+        <div class="form-row">
+            <div class="form-group"><label>Название</label><input type="text" id="newTimerName" required placeholder="Мероприятие..."></div>
+            <div class="form-group"><label>Время (ЧЧ:ММ)</label><input type="time" id="newTimerTime" required value="20:00"></div>
         </div>
+        <div class="form-row">
+            <div class="form-group"><label>День недели</label>
+                <select id="newTimerDayOfWeek">
+                    <option value="0">Воскресенье</option>
+                    <option value="1">Понедельник</option>
+                    <option value="2">Вторник</option>
+                    <option value="3">Среда</option>
+                    <option value="4">Четверг</option>
+                    <option value="5">Пятница</option>
+                    <option value="6">Суббота</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Тип</label>
+                <select id="newTimerType">
+                    <option value="weekly">Еженедельно</option>
+                    <option value="biweekly">Каждые 2 недели</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id="newTimerBaseDateGroup" style="display:none;">
+            <label>Базовая дата (для двухнедельного)</label>
+            <input type="date" id="newTimerBaseDate" value="2026-11-22">
+        </div>
+        <button type="button" class="submit-btn dkp-btn" onclick="createEventTimer()">➕ Создать таймер</button>
+    </div>
+    <div id="adminTimersList"></div>
+    <div id="adminTimersMessage" class="message"></div>
+</div>
         <div id="adminLogContent" class="hidden">
             <div class="panel-title">📝 Лог действий</div>
             <div style="display:flex;gap:6px;margin-bottom:8px;">
@@ -962,7 +985,50 @@
 <div id="editAnnouncementModal" class="modal-overlay hidden" onclick="closeEditAnnouncementModal()"><div class="modal-content" style="max-width:460px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeEditAnnouncementModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:10px;font-size:13px;">✎ ОБЪЯВЛЕНИЕ</h3><input type="hidden" id="editAnnouncementId"><div class="form-group"><label>Заголовок</label><input type="text" id="editAnnouncementTitle"></div><div class="form-group"><label>Тип</label><select id="editAnnouncementType"><option value="info">🔵 Информация</option><option value="event">🟡 Событие</option><option value="important">🔴 Важно</option><option value="success">🟢 Успех</option></select></div><div class="form-group"><label>Сообщение</label><textarea id="editAnnouncementMessage"></textarea></div><button type="button" class="submit-btn" onclick="saveEditAnnouncement()">💾 Сохранить</button><div id="editAnnouncementMsg" class="message"></div></div></div>
 <div id="iconModal" class="modal-overlay hidden" onclick="closeIconModal()"><div class="modal-content" style="max-width:400px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeIconModal()">✕</button><h3 id="iconModalTitle" style="color:var(--accent);font-family:var(--font-display);margin-bottom:10px;font-size:13px;">🖼 ИКОНКА</h3><div id="iconPreview" style="text-align:center;margin-bottom:10px;min-height:70px;display:flex;align-items:center;justify-content:center;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px dashed var(--border);"><div style="color:var(--text-dim);">Загрузка...</div></div><div style="border:2px dashed var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center;cursor:pointer;background:var(--bg-soft);margin:8px 0;" onclick="document.getElementById('iconFileInput').click()"><div style="font-size:20px;margin-bottom:4px;">📤</div><div style="color:var(--text-main);font-size:11px;font-weight:600;">Выберите изображение</div><div id="iconSizeHint" style="color:var(--text-dim);font-size:9px;margin-top:2px;">JPG, PNG</div><input type="file" id="iconFileInput" accept="image/*" style="display:none;" onchange="handleIconFileSelect(event)"></div><div style="display:flex;gap:4px;margin-top:10px;"><button class="btn-remove" onclick="deleteCurrentIcon()" style="flex:1;padding:5px;">🗑 Удалить</button></div></div></div>
 <div id="screenshotZoomModal" class="screenshot-zoom-modal hidden"><button class="zoom-close-btn" onclick="closeScreenshotZoom()">✕</button><div class="zoom-hint">Esc для закрытия</div><div class="zoom-image-container" onclick="event.stopPropagation()"><img id="zoomedImage" src="" alt=""></div><div class="zoom-controls" onclick="event.stopPropagation()"><button class="zoom-btn" onclick="zoomImage(-0.3)">−</button><button class="zoom-btn" onclick="zoomImage(0)">⊙</button><button class="zoom-btn" onclick="zoomImage(0.3)">+</button><button class="zoom-btn zoom-close-btn-small" onclick="closeScreenshotZoom()">✕</button></div></div>
-<div id="viewPlayerModal" class="modal-overlay hidden" onclick="closeViewPlayerModal()"><div class="modal-content" style="max-width:700px;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeViewPlayerModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:10px;font-size:14px;">👤 Кабинет: <span id="viewPlayerNick" style="color:var(--dkp);"></span></h3><div id="viewPlayerContent"></div></div></div>
+<div id="editTimerModal" class="modal-overlay hidden" onclick="closeEditTimerModal()">
+    <div class="modal-content" style="max-width:500px;" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeEditTimerModal()">✕</button>
+        <h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:12px;font-size:14px;">✎ Редактирование таймера</h3>
+        <input type="hidden" id="editTimerId">
+        <div class="timer-edit-form">
+            <div class="form-group"><label>Название</label><input type="text" id="editTimerName" required></div>
+            <div class="form-row-2">
+                <div class="form-group"><label>Время (ЧЧ:ММ)</label><input type="time" id="editTimerTime" required></div>
+                <div class="form-group"><label>День недели</label>
+                    <select id="editTimerDayOfWeek">
+                        <option value="0">Воскресенье</option>
+                        <option value="1">Понедельник</option>
+                        <option value="2">Вторник</option>
+                        <option value="3">Среда</option>
+                        <option value="4">Четверг</option>
+                        <option value="5">Пятница</option>
+                        <option value="6">Суббота</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group"><label>Тип</label>
+                <select id="editTimerType" onchange="toggleEditTimerBiweekly()">
+                    <option value="weekly">Еженедельно</option>
+                    <option value="biweekly">Каждые 2 недели</option>
+                </select>
+            </div>
+            <div class="biweekly-row" id="editTimerBiweeklyRow" style="display:none;">
+                <label>📅 Базовая дата:</label>
+                <input type="date" id="editTimerBaseDate">
+            </div>
+            <div class="biweekly-row">
+                <label>✅ Активен:</label>
+                <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;margin:0;">
+                    <input type="checkbox" id="editTimerActive" checked>
+                    <span style="font-size:11px;">Показывать на сайте</span>
+                </label>
+            </div>
+            <button type="button" class="submit-btn" onclick="saveEditTimer()">💾 Сохранить</button>
+            <div id="editTimerMessage" class="message"></div>
+        </div>
+    </div>
+</div>
+    <div id="viewPlayerModal" class="modal-overlay hidden" onclick="closeViewPlayerModal()"><div class="modal-content" style="max-width:700px;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeViewPlayerModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:10px;font-size:14px;">👤 Кабинет: <span id="viewPlayerNick" style="color:var(--dkp);"></span></h3><div id="viewPlayerContent"></div></div></div>
 
 <!-- 📜 ПОДКЛЮЧЕНИЕ МОДУЛЕЙ -->
 <script src="js/config.js"></script>
@@ -979,7 +1045,7 @@
 <script src="js/guild.js"></script>
 <script src="js/guild-admin.js"></script>
 <script src="js/notifications.js"></script>
-<script src="js/announcements.js"></script>
+<script src="js/timers.js"></script>
 <script src="js/ocr.js"></script>
 <script src="js/admin.js"></script>
 <script src="js/analytics.js"></script>
