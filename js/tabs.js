@@ -2,177 +2,210 @@
 // 🗂️ ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
 // ============================================================
 
-function switchMainTab(tab, event) {
-    document.querySelectorAll('#mainTabs .tab-btn').forEach(function(btn) {
-        btn.classList.remove('active');
-    });
-
-    if (event && event.target) {
-        event.target.classList.add('active');
-    }
-
+function switchMainTab(t, e) {
+    document.querySelectorAll('#mainTabs .tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (e && e.target) e.target.classList.add('active');
+    
     const tabs = ['home', 'cabinet', 'dkp', 'auction', 'queue', 'calendar', 'players', 'guilds', 'analytics', 'info', 'guildAdmin', 'admin'];
-
-    for (const t of tabs) {
-        const content = document.getElementById(t + 'Content');
-        if (content) {
-            if (t === tab) content.classList.remove('hidden');
-            else content.classList.add('hidden');
+    for (let i = 0; i < tabs.length; i++) {
+        const c = document.getElementById(tabs[i] + 'Content');
+        if (c) {
+            if (tabs[i] === t) c.classList.remove('hidden');
+            else c.classList.add('hidden');
         }
     }
-
-    const isAdmin = currentRole === 'Админ' || currentRole === 'Модератор';
-
-    const tabAuctionCreate = document.getElementById('tabAuctionCreate');
-    if (tabAuctionCreate) tabAuctionCreate.classList.toggle('hidden', !isAdmin);
-
+    
+    const tabCreate = document.getElementById('tabAuctionCreate');
+    if (tabCreate) {
+        if (currentRole === 'Админ' || currentRole === 'Модератор') tabCreate.classList.remove('hidden');
+        else tabCreate.classList.add('hidden');
+    }
     const tabQueueAdd = document.getElementById('tabQueueAdd');
-    if (tabQueueAdd) tabQueueAdd.classList.toggle('hidden', !isAdmin);
-
-    loadTabData(tab);
-}
-
-function loadTabData(tab) {
-    switch (tab) {
-        case 'home':
-            if (typeof loadPublicTops === 'function') loadPublicTops();
-            if (typeof loadAnnouncements === 'function') loadAnnouncements();
-            if (typeof loadTodayActivity === 'function') loadTodayActivity();
-            if (typeof loadWeeklyActivity === 'function') loadWeeklyActivity();
-            if (typeof loadEventStats === 'function') loadEventStats();
-            if (typeof loadRecentWinners === 'function') loadRecentWinners();
-            break;
-
-        case 'cabinet':
-            if (typeof loadPlayerData === 'function') loadPlayerData();
-            if (typeof loadPlayerItems === 'function') loadPlayerItems();
-            if (typeof loadPlayerSkills === 'function') loadPlayerSkills();
-            if (typeof loadCharacterScreenshots === 'function') loadCharacterScreenshots();
-            break;
-
-        case 'dkp':
-            if (typeof loadMyDkp === 'function') loadMyDkp();
-            if (typeof loadPlayerLootHistory === 'function') loadPlayerLootHistory();
-            break;
-
-        case 'auction':
-            if (typeof loadAuctions === 'function') loadAuctions();
-            break;
-
-        case 'queue':
-            if (typeof loadQueueItems === 'function') loadQueueItems();
-            break;
-
-        case 'calendar':
-            if (typeof loadCalendarPlayers === 'function') loadCalendarPlayers();
-            if (typeof loadCalendar === 'function') loadCalendar();
-            break;
-
-        case 'players':
-            if (typeof loadAllPlayers === 'function') loadAllPlayers();
-            break;
-
-        case 'guilds':
-            if (typeof loadMyGuild === 'function') loadMyGuild();
-            if (typeof loadGuilds === 'function') loadGuilds();
-            if (typeof loadGuildsRating === 'function') loadGuildsRating();
-            break;
-
-        case 'analytics':
-            if (typeof loadAnalytics === 'function') loadAnalytics();
-            break;
-
-        case 'info':
-            if (typeof loadInfoContent === 'function') loadInfoContent();
-            break;
-
-        case 'guildAdmin':
-            if (typeof loadGuildAdmin === 'function') loadGuildAdmin();
-            break;
-
-        case 'admin':
-            if (typeof loadPendingPlayers === 'function') loadPendingPlayers();
-            if (typeof loadPendingSkills === 'function') loadPendingSkills();
-            if (typeof loadAdminAnnouncements === 'function') loadAdminAnnouncements();
-            break;
+    if (tabQueueAdd) {
+        if (currentRole === 'Админ' || currentRole === 'Модератор') tabQueueAdd.classList.remove('hidden');
+        else tabQueueAdd.classList.add('hidden');
+    }
+    
+    if (t === 'home') { loadPublicTops(); loadAnnouncements(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadRecentWinners(); }
+    if (t === 'players') loadAllPlayers();
+    if (t === 'dkp') {
+        loadMyDkp();
+        loadEventsForSelect();
+        if (currentDkpMode === 'guild') loadGuildDkp();
+        if (currentRole === 'Гость') {
+            const submitTab = document.getElementById('tabDkpSubmit');
+            if (submitTab) submitTab.classList.add('hidden');
+        }
+    }
+    if (t === 'auction') { loadActiveAuctions(); loadRecentWinners(); loadAuctionSectionsDynamic(); }
+    if (t === 'queue') { loadQueueItems(); loadPlayersForQueue(); loadAllItemsForQueueSelect(); }
+    if (t === 'calendar') loadCalendarPlayers();
+    if (t === 'cabinet') {
+        loadMyLootHistory();
+        renderMmorpgInventory();
+        loadUserEmail();
+        loadPlayerLevel();
+        loadDailyBonus();
+        loadAchievements();
+        loadPersonalStats();
+        loadFriends();
+        loadCosmeticsShop();
+        loadTwinksInfo();
+        loadCharacterScreenshots();
+    }
+    if (t === 'guilds') {
+        loadMyGuild();
+        loadGuilds();
+        loadGuildsRating();
+        if (currentRole === 'Админ') loadInactiveGuilds();
+    }
+    if (t === 'analytics') loadAnalytics();
+    if (t === 'info') loadInfoContent();
+    if (t === 'guildAdmin') {
+        if (window._myGuild && (window._myGuild.role === 'leader' || window._myGuild.role === 'officer')) {
+            loadGuildAdmin();
+        } else {
+            alert('⛔ Доступ только для лидеров и офицеров');
+            const homeBtn = document.querySelector('#mainTabs .tab-btn[data-tab="home"]');
+            switchMainTab('home', { target: homeBtn });
+        }
+    }
+    if (t === 'admin') {
+        loadPendingPlayers();
+        if (currentRole === 'Админ' || currentRole === 'Модератор') loadAllUsers();
     }
 }
 
-function switchAuctionTab(tab, event) {
-    document.querySelectorAll('#auctionTabs .tab-btn').forEach(function(btn) {
-        btn.classList.remove('active');
-    });
-
-    if (event && event.target) event.target.classList.add('active');
-
-    const contents = ['auctionList', 'auctionCreate', 'auctionHistory', 'auctionSettings'];
-    for (const c of contents) {
-        const el = document.getElementById(c + 'Content');
-        if (el) el.classList.toggle('hidden', c !== tab);
-    }
-
-    if (tab === 'auctionList' && typeof loadAuctions === 'function') loadAuctions();
-    if (tab === 'auctionHistory' && typeof loadAuctionHistory === 'function') loadAuctionHistory();
-    if (tab === 'auctionSettings' && typeof loadAuctionSettings === 'function') loadAuctionSettings();
+function switchDkpTab(t, e) {
+    document.querySelectorAll('#dkpGlobalContent > .tabs .tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (e && e.target) e.target.classList.add('active');
+    const my = document.getElementById('dkpMyContent');
+    if (my) my.classList.toggle('hidden', t !== 'my');
+    const submit = document.getElementById('dkpSubmitContent');
+    if (submit) submit.classList.toggle('hidden', t !== 'submit');
+    const rating = document.getElementById('dkpRatingContent');
+    if (rating) rating.classList.toggle('hidden', t !== 'rating');
+    if (t === 'my') loadMyDkp();
+    if (t === 'submit') loadEventsForSelect();
+    if (t === 'rating') loadDkpRating();
 }
 
-function switchDkpTab(tab, event) {
-    document.querySelectorAll('#dkpTabs .tab-btn').forEach(function(btn) {
-        btn.classList.remove('active');
-    });
+function switchDkpMode(mode) {
+    currentDkpMode = mode;
+    const globalTab = document.getElementById('dkpModeGlobal');
+    const guildTab = document.getElementById('dkpModeGuild');
+    const globalContent = document.getElementById('dkpGlobalContent');
+    const guildContent = document.getElementById('dkpGuildContent');
+    
+    if (globalTab) globalTab.classList.toggle('active', mode === 'global');
+    if (guildTab) guildTab.classList.toggle('active', mode === 'guild');
+    if (globalContent) globalContent.classList.toggle('hidden', mode !== 'global');
+    if (guildContent) guildContent.classList.toggle('hidden', mode !== 'guild');
+    
+    if (mode === 'guild') loadGuildDkp();
+    else loadMyDkp();
+}
 
-    if (event && event.target) event.target.classList.add('active');
+function switchAuctionTab(t, e) {
+    document.querySelectorAll('#auctionContent > .tabs .tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (e && e.target) e.target.classList.add('active');
+    const active = document.getElementById('auctionActiveContent');
+    if (active) active.classList.toggle('hidden', t !== 'active');
+    const completed = document.getElementById('auctionCompletedContent');
+    if (completed) completed.classList.toggle('hidden', t !== 'completed');
+    const create = document.getElementById('auctionCreateContent');
+    if (create) create.classList.toggle('hidden', t !== 'create');
+    if (t === 'active') loadActiveAuctions();
+    if (t === 'completed') loadCompletedAuctions();
+    if (t === 'create') { loadPlayersForAuction(); loadAuctionSectionsDynamic(); toggleAuctionTypeFields(); }
+}
 
-    const contents = ['dkpBalance', 'dkpSubmit', 'dkpHistory', 'dkpSettings'];
-    for (const c of contents) {
-        const el = document.getElementById(c + 'Content');
-        if (el) el.classList.toggle('hidden', c !== tab);
+function switchQueueTab(t, e) {
+    document.querySelectorAll('#queueContent > .tabs .tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (e && e.target) e.target.classList.add('active');
+    const list = document.getElementById('queueListContent');
+    if (list) list.classList.toggle('hidden', t !== 'list');
+    const add = document.getElementById('queueAddContent');
+    if (add) add.classList.toggle('hidden', t !== 'add');
+    const loot = document.getElementById('queueMyLootContent');
+    if (loot) loot.classList.toggle('hidden', t !== 'myloot');
+    if (t === 'list') loadQueueItems();
+    if (t === 'add') { loadPlayersForQueue(); loadAllItemsForQueueSelect(); }
+    if (t === 'myloot') { loadMyUnifiedLootStats(); loadMyUnifiedLootHistory(); }
+}
+
+function switchAdminTab(t, e) {
+    document.querySelectorAll('#adminContent > .tabs .tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (e && e.target) e.target.classList.add('active');
+    
+    const tabs = ['players','skillsPending','equipmentPending','dkpPending','events','dkpAdjust','skills','items','users','settings','features','announcements','log','missing','export','twinks'];
+    for (let i = 0; i < tabs.length; i++) {
+        const c = document.getElementById('admin' + tabs[i].charAt(0).toUpperCase() + tabs[i].slice(1) + 'Content');
+        if (c) c.classList.toggle('hidden', tabs[i] !== t);
     }
+    
+    if (t === 'skills') loadAdminSkills();
+    if (t === 'skillsPending') loadPendingSkills();
+    if (t === 'equipmentPending') loadPendingEquipment();
+    if (t === 'dkpPending') loadPendingDkp();
+    if (t === 'events') loadAdminEvents();
+    if (t === 'items') { loadEquipmentSectionsDynamic(); loadAdminItems(); }
+    if (t === 'users') { loadAllUsers(); loadAuctionDeletionRequests(); }
+    if (t === 'settings') { loadAllSettings(); loadSiteBackgroundSettings(); loadProfessionIconsAdmin(); }
+    if (t === 'features') loadAdminFeatures();
+    if (t === 'announcements') loadAdminAnnouncements();
+    if (t === 'log') loadActionLog();
+    if (t === 'missing') loadMissingItemNames();
+    if (t === 'twinks') loadAdminTwinksList();
+}
 
-    if (tab === 'dkpBalance' && typeof loadMyDkp === 'function') loadMyDkp();
-    if (tab === 'dkpHistory' && typeof loadPlayerLootHistory === 'function') loadPlayerLootHistory();
+function switchGuildAdminTab(tab, event) {
+    const tabs = ['members', 'dkp', 'events', 'pending', 'settings', 'invites'];
+    for (const t of tabs) {
+        const btn = document.getElementById('tabGuildAdmin' + t.charAt(0).toUpperCase() + t.slice(1));
+        const content = document.getElementById('guildAdmin' + t.charAt(0).toUpperCase() + t.slice(1) + 'Content');
+        if (btn) btn.classList.toggle('active', t === tab);
+        if (content) content.classList.toggle('hidden', t !== tab);
+    }
+    if (tab === 'members') loadGuildAdminMembers();
+    else if (tab === 'dkp') loadGuildDkpRanking();
+    else if (tab === 'events') loadGuildEvents();
+    else if (tab === 'pending') loadGuildPendingDkp();
+    else if (tab === 'settings') loadGuildAdminSettings();
+    else if (tab === 'invites') loadGuildPendingInvitations();
+}
+
+// ============================================================
+// 🛡️ ФОРМЫ КАБИНЕТА
+// ============================================================
+
+function showEditForm() {
+    const am = document.getElementById('approvedMessage'); if (am) am.classList.add('hidden');
+    const ag = document.getElementById('approvedDataGrid'); if (ag) ag.classList.add('hidden');
+    const inv = document.getElementById('mmorpgInventoryView'); if (inv) inv.classList.add('hidden');
+    const f = document.getElementById('playerDataForm'); if (f) f.classList.remove('hidden');
+    const csb = document.getElementById('characterScreenshotsBlock'); if (csb) csb.classList.remove('hidden');
 }
 
 function showSkillsEditForm() {
-    const am = document.getElementById('skillsApprovedMessage');
-    if (am) am.classList.add('hidden');
-    const al = document.getElementById('approvedSkillsList');
-    if (al) al.classList.add('hidden');
-    const f = document.getElementById('skillsForm');
-    if (f) f.classList.remove('hidden');
+    const am = document.getElementById('skillsApprovedMessage'); if (am) am.classList.add('hidden');
+    const al = document.getElementById('approvedSkillsList'); if (al) al.classList.add('hidden');
+    const f = document.getElementById('skillsForm'); if (f) f.classList.remove('hidden');
 }
 
 function showEquipmentEditForm() {
-    const inv = document.getElementById('mmorpgInventoryView');
-    if (inv) inv.classList.add('hidden');
-    const am = document.getElementById('equipmentApprovedMessage');
-    if (am) am.classList.add('hidden');
-    const f = document.getElementById('equipmentForm');
-    if (f) f.classList.remove('hidden');
-
-    if (typeof buildEquipmentTabs === 'function') buildEquipmentTabs();
-    if (equipmentSections && equipmentSections.length > 0 && !currentEquipmentSection) {
-        selectEquipmentSection(equipmentSections[0]);
-    } else if (typeof renderEquipmentItems === 'function') {
-        renderEquipmentItems();
-    }
+    const inv = document.getElementById('mmorpgInventoryView'); if (inv) inv.classList.add('hidden');
+    const am = document.getElementById('equipmentApprovedMessage'); if (am) am.classList.add('hidden');
+    const f = document.getElementById('equipmentForm'); if (f) f.classList.remove('hidden');
+    buildEquipmentTabs();
+    if (equipmentSections.length > 0 && !currentEquipmentSection) selectEquipmentSection(equipmentSections[0]);
+    else renderEquipmentItems();
 }
 
 function backToInventory() {
-    const f = document.getElementById('equipmentForm');
-    if (f) f.classList.add('hidden');
+    const f = document.getElementById('equipmentForm'); if (f) f.classList.add('hidden');
     const inv = document.getElementById('mmorpgInventoryView');
-    if (inv) {
-        inv.classList.remove('hidden');
-        if (typeof renderMmorpgInventory === 'function') renderMmorpgInventory();
-    }
+    if (inv) { inv.classList.remove('hidden'); renderMmorpgInventory(); }
     const am = document.getElementById('equipmentApprovedMessage');
     if (am && myPlayerItems && myPlayerItems.status === 'approved') am.classList.remove('hidden');
 }
-
-window.switchMainTab = switchMainTab;
-window.switchAuctionTab = switchAuctionTab;
-window.switchDkpTab = switchDkpTab;
-window.showSkillsEditForm = showSkillsEditForm;
-window.showEquipmentEditForm = showEquipmentEditForm;
-window.backToInventory = backToInventory;
