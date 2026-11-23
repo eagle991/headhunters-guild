@@ -9,18 +9,14 @@ async function initApp() {
     if (session) {
         currentUser = session.user;
         currentRole = session.role;
-        if (typeof AppState !== 'undefined') {
-            AppState.currentUser = currentUser;
-            AppState.currentRole = currentRole;
-        }
         showMainScreen();
         await loadInitialData();
     } else {
-        showAuthScreen();
+        if (typeof showAuthScreen === 'function') showAuthScreen();
     }
 
     startBackgroundTasks();
-    initDragAndDrop();
+    if (typeof initDragAndDrop === 'function') initDragAndDrop();
 
     console.log('%c✅ Приложение готово', 'color: #10b981;');
 }
@@ -54,7 +50,6 @@ function showMainScreen() {
     if (main) main.classList.add('active');
 
     updateHeader();
-    if (typeof updateThemeButton === 'function') updateThemeButton();
 }
 
 function updateHeader() {
@@ -66,26 +61,22 @@ function updateHeader() {
 
     const isAdmin = currentRole === 'Админ' || currentRole === 'Модератор';
 
-    const adminElements = document.querySelectorAll('.admin-only');
+    // Показ всех админских элементов
+    const adminElements = document.querySelectorAll('.admin-only, #tabAdmin, #tabGuildAdmin');
     adminElements.forEach(function(el) {
-        el.style.display = isAdmin ? '' : 'none';
+        if (el) el.style.display = isAdmin ? '' : 'none';
     });
 
-    const adminTab = document.getElementById('tabAdmin');
-    if (adminTab) {
-        adminTab.style.display = isAdmin ? '' : 'none';
-    }
-
-    const guildAdminTab = document.getElementById('tabGuildAdmin');
-    if (guildAdminTab) {
-        guildAdminTab.style.display = isAdmin ? '' : 'none';
-    }
+    // Показ кнопок создания
+    const createButtons = document.querySelectorAll('#tabAuctionCreate, #tabQueueAdd');
+    createButtons.forEach(function(el) {
+        if (el) el.classList.toggle('hidden', !isAdmin);
+    });
 }
 
 async function loadInitialData() {
     try {
         const tasks = [];
-        if (typeof loadSiteFeatures === 'function') tasks.push(loadSiteFeatures());
         if (typeof loadMyDkp === 'function') tasks.push(loadMyDkp());
         if (typeof loadMyGuild === 'function') tasks.push(loadMyGuild());
         if (typeof loadNotifications === 'function') tasks.push(loadNotifications());
@@ -95,29 +86,13 @@ async function loadInitialData() {
     }
 }
 
-async function loadSiteFeatures() {
-    try {
-        if (typeof api !== 'function') return;
-        const res = await api('getSiteFeatures');
-        if (res.success) {
-            siteFeatures = res.features || {};
-            if (typeof AppState !== 'undefined') AppState.siteFeatures = siteFeatures;
-        }
-    } catch (e) {
-        console.error('loadSiteFeatures error:', e);
-    }
-}
-
 function startBackgroundTasks() {
     if (typeof checkForUpdates === 'function') {
         setInterval(checkForUpdates, 5 * 60 * 1000);
     }
 
-    if (typeof notificationPollingInterval !== 'undefined' && notificationPollingInterval) {
-        clearInterval(notificationPollingInterval);
-    }
-
     if (typeof loadNotifications === 'function' && typeof NOTIFICATION_POLL_INTERVAL !== 'undefined') {
+        if (notificationPollingInterval) clearInterval(notificationPollingInterval);
         notificationPollingInterval = setInterval(loadNotifications, NOTIFICATION_POLL_INTERVAL);
     }
 }
@@ -133,13 +108,6 @@ function forceReload() {
     location.reload();
 }
 
-function updateThemeButton() {
-    const btn = document.getElementById('themeToggle');
-    if (!btn) return;
-    const isDark = document.body.classList.contains('dark-theme');
-    btn.innerText = isDark ? '☀️' : '🌙';
-}
-
 function logout() {
     if (!confirm('Выйти из аккаунта?')) return;
 
@@ -147,12 +115,7 @@ function logout() {
     currentUser = null;
     currentRole = null;
 
-    if (typeof AppState !== 'undefined') {
-        AppState.currentUser = null;
-        AppState.currentRole = null;
-    }
-
-    if (typeof notificationPollingInterval !== 'undefined' && notificationPollingInterval) {
+    if (notificationPollingInterval) {
         clearInterval(notificationPollingInterval);
         notificationPollingInterval = null;
     }
@@ -160,65 +123,7 @@ function logout() {
     if (typeof showAuthScreen === 'function') showAuthScreen();
 }
 
-function initDragAndDrop() {
-    const uploadArea = document.getElementById('screenshotUploadArea');
-    if (uploadArea) {
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', function() {
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-
-            const files = Array.from(e.dataTransfer.files).filter(function(f) {
-                return f.type.startsWith('image/');
-            });
-
-            if (files.length > 0 && typeof addScreenshots === 'function') {
-                addScreenshots(files);
-            }
-        });
-    }
-
-    for (let i = 1; i <= 2; i++) {
-        const block = document.getElementById('screenshotBlock' + i);
-        if (!block) continue;
-
-        block.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            block.style.borderColor = 'var(--accent)';
-            block.style.background = 'var(--accent-soft)';
-        });
-
-        block.addEventListener('dragleave', function() {
-            block.style.borderColor = '';
-            block.style.background = '';
-        });
-
-        block.addEventListener('drop', function(e) {
-            e.preventDefault();
-            block.style.borderColor = '';
-            block.style.background = '';
-
-            const files = Array.from(e.dataTransfer.files).filter(function(f) {
-                return f.type.startsWith('image/');
-            });
-
-            if (files.length > 0 && typeof handleCharacterScreenshotDrop === 'function') {
-                handleCharacterScreenshotDrop(files[0], i);
-            }
-        });
-    }
-}
-
 window.forceReload = forceReload;
-window.updateThemeButton = updateThemeButton;
 window.logout = logout;
 window.initApp = initApp;
 window.updateHeader = updateHeader;
