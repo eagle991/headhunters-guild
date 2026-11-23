@@ -1,5 +1,5 @@
 /* ============================================================
-   🎨 RF ONLINE NEXT v17.20 — ПОЛНЫЕ СТИЛИ
+   🎨 RF ONLINE NEXT v17.20 — CLASSIC DESIGN
    ============================================================ */
 
 :root {
@@ -76,6 +76,8 @@ body[data-theme="dark"] .top-tab-btn.active { color:#000; }
 .top-item.rank-3 { border-left:3px solid var(--bronze); }
 .top-rank { font-family:var(--font-display); font-size:12px; font-weight:900; min-width:26px; text-align:center; color:var(--text-dim); }
 .top-rank.rank-1 { color:var(--gold); }
+.top-rank.rank-2 { color:var(--silver); }
+.top-rank.rank-3 { color:var(--bronze); }
 .top-nick { flex:1; font-family:var(--font-display); color:var(--text-main); font-size:10px; font-weight:600; display:flex; align-items:center; gap:4px; }
 .top-item.rank-1 .top-nick { color:var(--gold); }
 .top-value { font-family:var(--font-display); font-size:11px; font-weight:700; color:var(--success); }
