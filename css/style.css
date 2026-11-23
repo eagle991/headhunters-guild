@@ -950,3 +950,258 @@ body[data-theme="dark"] input:checked + .toggle-slider:before { background-color
     .guild-stats { grid-template-columns:1fr 1fr; }
     .public-title { font-size:22px; }
 }
+/* ============================================================
+   ⏰ ТАЙМЕРЫ МЕРОПРИЯТИЙ
+   ============================================================ */
+
+.event-timers-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.event-timer-card {
+  background: var(--bg-panel);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.event-timer-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+}
+
+.event-timer-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.event-timer-card.status-active {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+.event-timer-card.status-active::before {
+  background: var(--success);
+  animation: pulseBar 1.5s ease-in-out infinite;
+}
+@keyframes pulseBar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.event-timer-card.status-passed {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+  opacity: 0.75;
+}
+.event-timer-card.status-passed::before {
+  background: var(--danger);
+}
+
+.event-timer-card.status-upcoming {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.event-timer-card.status-upcoming::before {
+  background: var(--accent);
+}
+
+.event-timer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.event-timer-name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  flex: 1;
+  line-height: 1.3;
+}
+
+.event-timer-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.event-timer-status-badge.active {
+  background: var(--success);
+  color: #fff;
+  border: 1px solid var(--success);
+  animation: pulseBadge 1.5s ease-in-out infinite;
+}
+@keyframes pulseBadge {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+}
+
+.event-timer-status-badge.passed {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.event-timer-status-badge.upcoming {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.event-timer-schedule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.event-timer-schedule .schedule-icon {
+  font-size: 14px;
+}
+
+.event-timer-schedule .schedule-time {
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 13px;
+}
+
+.event-timer-schedule .schedule-day {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.event-timer-schedule .schedule-biweekly {
+  font-size: 9px;
+  padding: 1px 6px;
+  background: var(--warning-soft);
+  color: var(--warning);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+}
+
+.event-timer-countdown {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.event-timer-countdown .countdown-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.event-timer-countdown .countdown-value {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+
+.event-timer-card.status-active .countdown-value {
+  color: var(--success);
+  animation: pulseCountdown 1s ease-in-out infinite;
+}
+@keyframes pulseCountdown {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.event-timer-card.status-passed .countdown-value {
+  color: var(--danger);
+}
+
+.event-timer-countdown .countdown-next {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  font-family: var(--font-display);
+}
+
+.event-timer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  color: var(--text-dim);
+  padding-top: 6px;
+  border-top: 1px dashed var(--border);
+}
+
+.timer-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.timer-edit-form .form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.timer-edit-form .biweekly-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.timer-edit-form .biweekly-row label {
+  margin: 0;
+  font-size: 11px;
+  flex: 1;
+}
+
+.timer-edit-form .biweekly-row input[type="date"] {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .event-timers-container {
+    grid-template-columns: 1fr;
+  }
+  .event-timer-countdown .countdown-value {
+    font-size: 18px;
+  }
+  .timer-edit-form .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
