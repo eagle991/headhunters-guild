@@ -64,10 +64,22 @@ function updateHeader() {
     if (nickEl) nickEl.innerText = currentUser || '—';
     if (roleEl && typeof getRoleBadge === 'function') roleEl.innerHTML = getRoleBadge(currentRole);
 
+    const isAdmin = currentRole === 'Админ' || currentRole === 'Модератор';
+
     const adminElements = document.querySelectorAll('.admin-only');
     adminElements.forEach(function(el) {
-        el.style.display = (currentRole === 'Админ' || currentRole === 'Модератор') ? '' : 'none';
+        el.style.display = isAdmin ? '' : 'none';
     });
+
+    const adminTab = document.getElementById('tabAdmin');
+    if (adminTab) {
+        adminTab.style.display = isAdmin ? '' : 'none';
+    }
+
+    const guildAdminTab = document.getElementById('tabGuildAdmin');
+    if (guildAdminTab) {
+        guildAdminTab.style.display = isAdmin ? '' : 'none';
+    }
 }
 
 async function loadInitialData() {
@@ -205,10 +217,10 @@ function initDragAndDrop() {
     }
 }
 
-// Экспорт глобально
 window.forceReload = forceReload;
 window.updateThemeButton = updateThemeButton;
 window.logout = logout;
 window.initApp = initApp;
+window.updateHeader = updateHeader;
 
 document.addEventListener('DOMContentLoaded', initApp);
