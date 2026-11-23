@@ -1,5 +1,5 @@
 // ============================================================
-// 📸 OCR СКРИНШОТОВ ПЕРСОНАЖА
+// 📸 OCR СКРИНШОТОВ ПЕРСОНАЖА (12 вариантов обработки)
 // ============================================================
 
 async function loadCharacterScreenshots() {
@@ -204,6 +204,7 @@ async function convertToGrayscale(base64, scale) {
 }
 
 async function invertImage(base64, scale) {
+
     if (!scale) scale = 3;
     return new Promise(function(resolve) {
         const img = new Image();
