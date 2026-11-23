@@ -5,24 +5,21 @@
 async function initApp() {
     console.log('%c🚀 Инициализация RF Online Next', 'color: #2563eb; font-weight: bold;');
 
-    // Проверяем сохранённую сессию
     const session = loadSession();
     if (session) {
         currentUser = session.user;
         currentRole = session.role;
-        AppState.currentUser = currentUser;
-        AppState.currentRole = currentRole;
-
+        if (typeof AppState !== 'undefined') {
+            AppState.currentUser = currentUser;
+            AppState.currentRole = currentRole;
+        }
         showMainScreen();
         await loadInitialData();
     } else {
         showAuthScreen();
     }
 
-    // Запускаем фоновые процессы
     startBackgroundTasks();
-
-    // Инициализируем drag & drop
     initDragAndDrop();
 
     console.log('%c✅ Приложение готово', 'color: #10b981;');
@@ -34,9 +31,8 @@ function loadSession() {
         if (!raw) return null;
 
         const session = JSON.parse(raw);
-
-        // Сессия действительна 7 дней
         const maxAge = 7 * 24 * 60 * 60 * 1000;
+
         if (Date.now() - session.timestamp > maxAge) {
             localStorage.removeItem('rf_session');
             return null;
@@ -58,17 +54,16 @@ function showMainScreen() {
     if (main) main.classList.add('active');
 
     updateHeader();
+    if (typeof updateThemeButton === 'function') updateThemeButton();
 }
 
 function updateHeader() {
     const nickEl = document.getElementById('headerNick');
     const roleEl = document.getElementById('headerRole');
-    const dkpEl = document.getElementById('userDkpBadge');
 
     if (nickEl) nickEl.innerText = currentUser || '—';
-    if (roleEl) roleEl.innerHTML = getRoleBadge(currentRole);
+    if (roleEl && typeof getRoleBadge === 'function') roleEl.innerHTML = getRoleBadge(currentRole);
 
-    // Показ/скрытие админских элементов
     const adminElements = document.querySelectorAll('.admin-only');
     adminElements.forEach(function(el) {
         el.style.display = (currentRole === 'Админ' || currentRole === 'Модератор') ? '' : 'none';
@@ -77,12 +72,12 @@ function updateHeader() {
 
 async function loadInitialData() {
     try {
-        await Promise.all([
-            loadSiteFeatures(),
-            loadMyDkp(),
-            loadMyGuild(),
-            loadNotifications()
-        ]);
+        const tasks = [];
+        if (typeof loadSiteFeatures === 'function') tasks.push(loadSiteFeatures());
+        if (typeof loadMyDkp === 'function') tasks.push(loadMyDkp());
+        if (typeof loadMyGuild === 'function') tasks.push(loadMyGuild());
+        if (typeof loadNotifications === 'function') tasks.push(loadNotifications());
+        await Promise.all(tasks);
     } catch (e) {
         console.error('Initial data load error:', e);
     }
@@ -90,10 +85,11 @@ async function loadInitialData() {
 
 async function loadSiteFeatures() {
     try {
+        if (typeof api !== 'function') return;
         const res = await api('getSiteFeatures');
         if (res.success) {
             siteFeatures = res.features || {};
-            AppState.siteFeatures = siteFeatures;
+            if (typeof AppState !== 'undefined') AppState.siteFeatures = siteFeatures;
         }
     } catch (e) {
         console.error('loadSiteFeatures error:', e);
@@ -101,16 +97,20 @@ async function loadSiteFeatures() {
 }
 
 function startBackgroundTasks() {
-    // Проверка обновлений каждые 5 минут
-    setInterval(checkForUpdates, 5 * 60 * 1000);
+    if (typeof checkForUpdates === 'function') {
+        setInterval(checkForUpdates, 5 * 60 * 1000);
+    }
 
-    // Опрос уведомлений
-    if (notificationPollingInterval) clearInterval(notificationPollingInterval);
-    notificationPollingInterval = setInterval(loadNotifications, NOTIFICATION_POLL_INTERVAL);
+    if (typeof notificationPollingInterval !== 'undefined' && notificationPollingInterval) {
+        clearInterval(notificationPollingInterval);
+    }
+
+    if (typeof loadNotifications === 'function' && typeof NOTIFICATION_POLL_INTERVAL !== 'undefined') {
+        notificationPollingInterval = setInterval(loadNotifications, NOTIFICATION_POLL_INTERVAL);
+    }
 }
 
 function forceReload() {
-    // Сохраняем сессию перед перезагрузкой
     if (currentUser && currentRole) {
         localStorage.setItem('rf_session', JSON.stringify({
             user: currentUser,
@@ -121,26 +121,32 @@ function forceReload() {
     location.reload();
 }
 
+function updateThemeButton() {
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    const isDark = document.body.classList.contains('dark-theme');
+    btn.innerText = isDark ? '☀️' : '🌙';
+}
+
 function logout() {
     if (!confirm('Выйти из аккаунта?')) return;
 
     localStorage.removeItem('rf_session');
     currentUser = null;
     currentRole = null;
-    AppState.currentUser = null;
-    AppState.currentRole = null;
 
-    if (notificationPollingInterval) {
+    if (typeof AppState !== 'undefined') {
+        AppState.currentUser = null;
+        AppState.currentRole = null;
+    }
+
+    if (typeof notificationPollingInterval !== 'undefined' && notificationPollingInterval) {
         clearInterval(notificationPollingInterval);
         notificationPollingInterval = null;
     }
 
-    showAuthScreen();
+    if (typeof showAuthScreen === 'function') showAuthScreen();
 }
-
-// ============================================================
-// 🖱️ DRAG & DROP ДЛЯ СКРИНШОТОВ
-// ============================================================
 
 function initDragAndDrop() {
     const uploadArea = document.getElementById('screenshotUploadArea');
@@ -168,7 +174,6 @@ function initDragAndDrop() {
         });
     }
 
-    // Блоки скриншотов персонажа
     for (let i = 1; i <= 2; i++) {
         const block = document.getElementById('screenshotBlock' + i);
         if (!block) continue;
@@ -200,5 +205,10 @@ function initDragAndDrop() {
     }
 }
 
-// Запуск при загрузке страницы
+// Экспорт глобально
+window.forceReload = forceReload;
+window.updateThemeButton = updateThemeButton;
+window.logout = logout;
+window.initApp = initApp;
+
 document.addEventListener('DOMContentLoaded', initApp);
