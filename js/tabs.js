@@ -24,24 +24,10 @@ function switchMainTab(tab, event) {
     const isAdmin = currentRole === 'Админ' || currentRole === 'Модератор';
 
     const tabAuctionCreate = document.getElementById('tabAuctionCreate');
-    if (tabAuctionCreate) {
-        tabAuctionCreate.classList.toggle('hidden', !isAdmin);
-    }
+    if (tabAuctionCreate) tabAuctionCreate.classList.toggle('hidden', !isAdmin);
 
     const tabQueueAdd = document.getElementById('tabQueueAdd');
-    if (tabQueueAdd) {
-        tabQueueAdd.classList.toggle('hidden', !isAdmin);
-    }
-
-    const tabAdmin = document.getElementById('tabAdmin');
-    if (tabAdmin) {
-        tabAdmin.style.display = isAdmin ? '' : 'none';
-    }
-
-    const tabGuildAdmin = document.getElementById('tabGuildAdmin');
-    if (tabGuildAdmin) {
-        tabGuildAdmin.style.display = isAdmin ? '' : 'none';
-    }
+    if (tabQueueAdd) tabQueueAdd.classList.toggle('hidden', !isAdmin);
 
     loadTabData(tab);
 }
@@ -117,16 +103,12 @@ function switchAuctionTab(tab, event) {
         btn.classList.remove('active');
     });
 
-    if (event && event.target) {
-        event.target.classList.add('active');
-    }
+    if (event && event.target) event.target.classList.add('active');
 
     const contents = ['auctionList', 'auctionCreate', 'auctionHistory', 'auctionSettings'];
     for (const c of contents) {
         const el = document.getElementById(c + 'Content');
-        if (el) {
-            el.classList.toggle('hidden', c !== tab);
-        }
+        if (el) el.classList.toggle('hidden', c !== tab);
     }
 
     if (tab === 'auctionList' && typeof loadAuctions === 'function') loadAuctions();
@@ -139,16 +121,12 @@ function switchDkpTab(tab, event) {
         btn.classList.remove('active');
     });
 
-    if (event && event.target) {
-        event.target.classList.add('active');
-    }
+    if (event && event.target) event.target.classList.add('active');
 
     const contents = ['dkpBalance', 'dkpSubmit', 'dkpHistory', 'dkpSettings'];
     for (const c of contents) {
         const el = document.getElementById(c + 'Content');
-        if (el) {
-            el.classList.toggle('hidden', c !== tab);
-        }
+        if (el) el.classList.toggle('hidden', c !== tab);
     }
 
     if (tab === 'dkpBalance' && typeof loadMyDkp === 'function') loadMyDkp();
@@ -156,15 +134,21 @@ function switchDkpTab(tab, event) {
 }
 
 function showSkillsEditForm() {
-    document.getElementById('skillsApprovedMessage')?.classList.add('hidden');
-    document.getElementById('approvedSkillsList')?.classList.add('hidden');
-    document.getElementById('skillsForm')?.classList.remove('hidden');
+    const am = document.getElementById('skillsApprovedMessage');
+    if (am) am.classList.add('hidden');
+    const al = document.getElementById('approvedSkillsList');
+    if (al) al.classList.add('hidden');
+    const f = document.getElementById('skillsForm');
+    if (f) f.classList.remove('hidden');
 }
 
 function showEquipmentEditForm() {
-    document.getElementById('mmorpgInventoryView')?.classList.add('hidden');
-    document.getElementById('equipmentApprovedMessage')?.classList.add('hidden');
-    document.getElementById('equipmentForm')?.classList.remove('hidden');
+    const inv = document.getElementById('mmorpgInventoryView');
+    if (inv) inv.classList.add('hidden');
+    const am = document.getElementById('equipmentApprovedMessage');
+    if (am) am.classList.add('hidden');
+    const f = document.getElementById('equipmentForm');
+    if (f) f.classList.remove('hidden');
 
     if (typeof buildEquipmentTabs === 'function') buildEquipmentTabs();
     if (equipmentSections && equipmentSections.length > 0 && !currentEquipmentSection) {
@@ -175,17 +159,15 @@ function showEquipmentEditForm() {
 }
 
 function backToInventory() {
-    document.getElementById('equipmentForm')?.classList.add('hidden');
+    const f = document.getElementById('equipmentForm');
+    if (f) f.classList.add('hidden');
     const inv = document.getElementById('mmorpgInventoryView');
     if (inv) {
         inv.classList.remove('hidden');
         if (typeof renderMmorpgInventory === 'function') renderMmorpgInventory();
     }
-
-    const approvedMsg = document.getElementById('equipmentApprovedMessage');
-    if (approvedMsg && myPlayerItems && myPlayerItems.status === 'approved') {
-        approvedMsg.classList.remove('hidden');
-    }
+    const am = document.getElementById('equipmentApprovedMessage');
+    if (am && myPlayerItems && myPlayerItems.status === 'approved') am.classList.remove('hidden');
 }
 
 window.switchMainTab = switchMainTab;
