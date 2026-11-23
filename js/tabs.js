@@ -26,7 +26,7 @@ function switchMainTab(t, e) {
         else tabQueueAdd.classList.add('hidden');
     }
     
-    if (t === 'home') { loadPublicTops(); loadAnnouncements(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadRecentWinners(); }
+    if (t === 'home') { loadPublicTops(); loadEventTimers(); loadTodayActivity(); loadWeeklyActivity(); loadEventStats(); loadRecentWinners(); }
     if (t === 'players') loadAllPlayers();
     if (t === 'dkp') {
         loadMyDkp();
@@ -138,7 +138,7 @@ function switchAdminTab(t, e) {
     document.querySelectorAll('#adminContent > .tabs .tab-btn').forEach(function(b) { b.classList.remove('active'); });
     if (e && e.target) e.target.classList.add('active');
     
-    const tabs = ['players','skillsPending','equipmentPending','dkpPending','events','dkpAdjust','skills','items','users','settings','features','announcements','log','missing','export','twinks'];
+    const tabs = ['players','skillsPending','equipmentPending','dkpPending','events','dkpAdjust','skills','items','users','settings','features','timers','log','missing','export','twinks'];
     for (let i = 0; i < tabs.length; i++) {
         const c = document.getElementById('admin' + tabs[i].charAt(0).toUpperCase() + tabs[i].slice(1) + 'Content');
         if (c) c.classList.toggle('hidden', tabs[i] !== t);
@@ -153,7 +153,7 @@ function switchAdminTab(t, e) {
     if (t === 'users') { loadAllUsers(); loadAuctionDeletionRequests(); }
     if (t === 'settings') { loadAllSettings(); loadSiteBackgroundSettings(); loadProfessionIconsAdmin(); }
     if (t === 'features') loadAdminFeatures();
-    if (t === 'announcements') loadAdminAnnouncements();
+    if (t === 'timers') loadAdminTimers();
     if (t === 'log') loadActionLog();
     if (t === 'missing') loadMissingItemNames();
     if (t === 'twinks') loadAdminTwinksList();
@@ -176,7 +176,7 @@ function switchGuildAdminTab(tab, event) {
 }
 
 // ============================================================
-// 🛡️ ФОРМЫ КАБИНЕТА (единственные определения)
+// 🛡️ ФОРМЫ КАБИНЕТА
 // ============================================================
 
 function showEditForm() {
