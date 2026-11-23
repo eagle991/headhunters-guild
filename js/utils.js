@@ -166,27 +166,48 @@ function getProfessionIconHtml(profession, size) {
     return '<div class="profession-icon" title="' + escapeHtml(profession) + '">' + emoji + '</div>';
 }
 
+// ✅ ИСПРАВЛЕННАЯ ФУНКЦИЯ — ЕДИНСТВЕННАЯ В ПРОЕКТЕ
 async function loadAndDisplayIcon(type, id, containerId, color) {
     try {
-        let action, params = {};
-        if (type === 'skill') { action = 'getSkillIcon'; params.skillName = id; }
-        else if (type === 'item') { action = 'getItemIcon'; params.itemId = id; }
-        else if (type === 'event') { action = 'getEventIcon'; params.eventId = id; }
-        else return;
+        let action = '';
+        let payload = {};
+        
+        if (type === 'skill') {
+            action = 'getSkillIcon';
+            payload = { action: action, skillName: id };
+        } else if (type === 'item') {
+            action = 'getItemIcon';
+            payload = { action: action, itemId: Number(id) };
+        } else if (type === 'event') {
+            action = 'getEventIcon';
+            payload = { action: action, eventId: id };
+        } else {
+            return;
+        }
+        
         const r = await fetch(SCRIPT_URL, {
             method: 'POST',
-            body: JSON.stringify({ action: action, ...params }),
+            body: JSON.stringify(payload),
             redirect: 'follow'
         });
         const res = await r.json();
         const c = document.getElementById(containerId);
-        if (c && res.success && res.iconData) {
+        
+        if (!c) {
+            console.warn('Контейнер не найден:', containerId);
+            return;
+        }
+        
+        if (res.success && res.iconData) {
             c.innerHTML = '<img src="' + res.iconData + '" style="width:100%;height:100%;object-fit:cover;border-radius:3px;">';
             c.style.border = '2px solid ' + (color ? getIconBorderColor(color) : 'var(--border)');
-        } else if (c) {
+        } else {
             c.innerHTML = '<span class="icon-placeholder" style="font-size:7px;">Нет</span>';
+            c.style.border = '2px solid ' + (color ? getIconBorderColor(color) : 'var(--border)');
         }
-    } catch (e) { console.error('Icon error:', e); }
+    } catch (e) {
+        console.error('Ошибка загрузки иконки:', type, id, e);
+    }
 }
 
 async function loadAllPlayersBioColors() {
