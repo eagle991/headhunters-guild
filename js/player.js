@@ -399,10 +399,9 @@ async function viewPlayerCabinet(nickname) {
     content.innerHTML = '<div style="text-align:center;padding:16px;color:var(--accent);">Загрузка...</div>';
     modal.classList.remove('hidden');
     try {
-        const [dataRes, skillsRes, itemsRes] = await Promise.all([
+        const [dataRes, skillsRes] = await Promise.all([
             fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerData', nickname: nickname }), redirect: 'follow' }).then(r => r.json()),
-            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerSkills', nickname: nickname }), redirect: 'follow' }).then(r => r.json()),
-            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerItems', nickname: nickname }), redirect: 'follow' }).then(r => r.json())
+            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerSkills', nickname: nickname }), redirect: 'follow' }).then(r => r.json())
         ]);
         let html = '';
         const colorMap = { 'Белый': '#94a3b8', 'Зеленый': 'var(--success)', 'Синий': 'var(--accent)', 'Фиолетовый': '#6b4aa8', 'Желтый': 'var(--gold)', 'Красный': 'var(--danger)' };
