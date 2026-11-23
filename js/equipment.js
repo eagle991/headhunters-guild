@@ -6,17 +6,14 @@ async function loadPlayerItems() {
     if (!currentUser) return;
 
     try {
-        // Загружаем разделы
         const sr = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEquipmentSections' }), redirect: 'follow' });
         const sres = await sr.json();
         if (sres.success) equipmentSections = sres.sections || [];
 
-        // Загружаем предметы
         const ir = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItems' }), redirect: 'follow' });
         const ires = await ir.json();
         if (ires.success) allItems = ires.items || [];
 
-        // Загружаем выбор игрока
         const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerItems', nickname: currentUser }), redirect: 'follow' });
         const res = await r.json();
 
@@ -47,7 +44,7 @@ async function loadPlayerItems() {
                 if (f) f.classList.add('hidden');
                 if (am) am.classList.remove('hidden');
                 if (inv) inv.classList.remove('hidden');
-                if (typeof renderMmorpgInventory === 'function') renderMmorpgInventory();
+                renderMmorpgInventory();
             } else {
                 if (ss) ss.innerHTML = '<span class="status-badge status-pending">На проверке</span>';
                 if (f) f.classList.remove('hidden');
@@ -63,6 +60,58 @@ async function loadPlayerItems() {
     } catch (e) {
         console.error('loadPlayerItems error:', e);
     }
+}
+
+function renderMmorpgInventory() {
+    const container = document.getElementById('mmorpgInventoryView');
+    if (!container) return;
+
+    const sections = equipmentSections || [];
+    if (sections.length === 0) {
+        container.innerHTML = '<div class="empty-state">Нет разделов экипировки</div>';
+        return;
+    }
+
+    let html = '<div class="mmorpg-character">';
+    html += '<div class="character-info">';
+    html += '<div class="character-name">' + escapeHtml(currentUser) + '</div>';
+    if (myPlayerData) {
+        html += '<div class="character-stats-mini">';
+        html += '<span>БМ: ' + (myPlayerData.bm || '—') + '</span>';
+        html += '<span>Ур: ' + (myPlayerData.level || '—') + '</span>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    html += '<div class="equipment-grid">';
+    for (let i = 0; i < sections.length; i++) {
+        const sec = sections[i];
+        const selected = playerItemSelections[sec];
+        let itemName = '—';
+        let itemMeta = '';
+
+        if (selected && selected.id) {
+            const item = allItems.find(function(it) { return it.id === selected.id; });
+            if (item) {
+                itemName = item.name;
+                itemMeta = (item.tier || '') + ' ' + (item.color || '');
+            } else if (selected.name) {
+                itemName = selected.name;
+            }
+        }
+
+        html += '<div class="equipment-slot" onclick="showEquipmentEditForm()">';
+        html += '<div class="slot-label">' + escapeHtml(sec) + '</div>';
+        html += '<div class="slot-item-name">' + escapeHtml(itemName) + '</div>';
+        if (itemMeta) html += '<div class="slot-item-meta">' + escapeHtml(itemMeta) + '</div>';
+        html += '</div>';
+    }
+    html += '</div>';
+
+    html += '<button class="btn-primary" onclick="showEquipmentEditForm()" style="margin-top:12px;">✎ Изменить экипировку</button>';
+    html += '</div>';
+
+    container.innerHTML = html;
 }
 
 function buildEquipmentTabs() {
@@ -111,7 +160,7 @@ function renderEquipmentItems() {
     }
 
     if (items.length === 0) {
-        container.innerHTML = '<div class="empty-state">Нет предметов</div>';
+        container.innerHTML = '<div class="empty-state">Нет предметов в этом разделе</div>';
         return;
     }
 
@@ -194,7 +243,7 @@ function backToInventory() {
     const inv = document.getElementById('mmorpgInventoryView');
     if (inv) {
         inv.classList.remove('hidden');
-        if (typeof renderMmorpgInventory === 'function') renderMmorpgInventory();
+        renderMmorpgInventory();
     }
 
     const am = document.getElementById('equipmentApprovedMessage');
@@ -262,8 +311,8 @@ async function deleteEquipmentSection(name) {
     }
 }
 
-// Экспорт
 window.loadPlayerItems = loadPlayerItems;
+window.renderMmorpgInventory = renderMmorpgInventory;
 window.buildEquipmentTabs = buildEquipmentTabs;
 window.selectEquipmentSection = selectEquipmentSection;
 window.renderEquipmentItems = renderEquipmentItems;
