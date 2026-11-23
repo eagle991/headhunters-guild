@@ -117,7 +117,7 @@ function calculateNextEvent(timer) {
 
 function getTimerStatus(timer, now) {
     const nextEvent = calculateNextEvent(timer);
-    const eventDurationMs = 2 * 60 * 60 * 1000; // 2 часа длительность события
+    const eventDurationMs = (timerSettings.eventDurationMinutes || 120) * 60 * 1000;
     
     // 🟢 ПРОВЕРКА: ИДЁТ ЛИ СОБЫТИЕ СЕЙЧАС?
     if (now >= nextEvent && now < new Date(nextEvent.getTime() + eventDurationMs)) {
@@ -246,86 +246,94 @@ function getTimeUntil(targetDate, now) {
 // ⚙️ АДМИНКА ТАЙМЕРОВ
 // ============================================================
 
-async function loadAdminTimers() {
-    const list = document.getElementById('adminTimersList');
-    if (!list) return;
-    list.innerHTML = '<div style="text-align:center;padding:16px;color:var(--accent);">Загрузка...</div>';
-    
+// ============================================================
+// ⚙️ ГЛОБАЛЬНЫЕ НАСТРОЙКИ ТАЙМЕРОВ
+// ============================================================
+
+let timerSettings = {
+    eventDurationMinutes: 120,
+    showPassedTimers: true,
+    sortActiveFirst: true,
+    pulseAnimation: true,
+    statusColorActive: '#10b981',
+    statusColorPassed: '#ef4444',
+    statusColorUpcoming: '#2563eb',
+    enableNotifications: true
+};
+
+async function loadTimerSettings() {
     try {
         const r = await fetch(SCRIPT_URL, {
             method: 'POST',
-            body: JSON.stringify({ action: 'getEventTimers' }),
+            body: JSON.stringify({ action: 'getTimerSettings' }),
             redirect: 'follow'
         });
         const res = await r.json();
-        
-        if (res.success && res.timers && res.timers.length > 0) {
-            let html = '';
-            for (let i = 0; i < res.timers.length; i++) {
-                const t = res.timers[i];
-                const typeLabel = t.isBiweekly ? '🔁 Каждые 2 недели' : '📅 Еженедельно';
-                const statusBadge = t.active !== false
-                    ? '<span style="color:var(--success);font-size:8px;">✅ Активен</span>'
-                    : '<span style="color:var(--text-dim);font-size:8px;">⚠️ Скрыт</span>';
-                
-                html += '<div style="background:var(--bg-soft);border:1px solid var(--border);border-left:4px solid var(--accent);padding:8px;border-radius:var(--radius-sm);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">';
-                html += '<div style="flex:1;">';
-                html += '<div style="font-family:var(--font-display);font-size:12px;font-weight:700;color:var(--text-main);margin-bottom:3px;">⏰ ' + escapeHtml(t.name) + ' ' + statusBadge + '</div>';
-                html += '<div style="font-size:10px;color:var(--text-dim);">';
-                html += '🕐 ' + escapeHtml(t.time) + ' | ';
-                html += '📅 ' + DAYS_OF_WEEK[t.dayOfWeek] + ' | ';
-                html += typeLabel;
-                if (t.isBiweekly && t.baseDate) {
-                    html += ' | 📆 от ' + escapeHtml(t.baseDate);
-                }
-                html += '</div>';
-                html += '<div style="font-size:9px;color:var(--text-dim);margin-top:2px;">👤 ' + escapeHtml(t.createdBy || '—') + ' | 📅 ' + escapeHtml(t.createdAt) + '</div>';
-                html += '</div>';
-                html += '<div style="display:flex;gap:4px;">';
-                html += '<button class="btn-edit" style="width:auto;margin-top:0;padding:3px 6px;" onclick="openEditTimerModal(\'' + escapeForOnclick(t.id) + '\',\'' + escapeForOnclick(t.name) + '\',\'' + escapeForOnclick(t.time) + '\',' + t.dayOfWeek + ',' + (t.isBiweekly ? 'true' : 'false') + ',\'' + escapeForOnclick(t.baseDate || '') + '\',' + (t.active !== false) + ')">✎</button>';
-                html += '<button class="btn-remove" onclick="deleteEventTimer(\'' + escapeForOnclick(t.id) + '\')">🗑</button>';
-                html += '</div>';
-                html += '</div>';
-            }
-            list.innerHTML = html;
-        } else {
-            list.innerHTML = '<div class="empty-state">Нет таймеров</div>';
+        if (res.success && res.settings) {
+            timerSettings = res.settings;
+            applyTimerSettingsToForm();
+            applyTimerSettingsToStyles();
         }
     } catch (e) {
-        list.innerHTML = '<div class="empty-state">❌ Ошибка</div>';
+        console.error('Ошибка загрузки настроек таймеров:', e);
     }
 }
 
-async function createEventTimer() {
-    const name = document.getElementById('newTimerName').value.trim();
-    const time = document.getElementById('newTimerTime').value;
-    const dayOfWeek = Number(document.getElementById('newTimerDayOfWeek').value);
-    const type = document.getElementById('newTimerType').value;
-    const baseDate = document.getElementById('newTimerBaseDate').value;
-    const msg = document.getElementById('adminTimersMessage');
+function applyTimerSettingsToForm() {
+    const duration = document.getElementById('timerEventDuration');
+    const showPassed = document.getElementById('timerShowPassed');
+    const sortActive = document.getElementById('timerSortActiveFirst');
+    const pulse = document.getElementById('timerPulseAnimation');
+    const enableNotif = document.getElementById('timerEnableNotifications');
+    const colorActive = document.getElementById('timerColorActive');
+    const colorPassed = document.getElementById('timerColorPassed');
+    const colorUpcoming = document.getElementById('timerColorUpcoming');
     
-    if (!name || !time) {
-        if (msg) { msg.className = 'message error'; msg.innerText = '❌ Заполните все поля'; msg.style.display = 'block'; }
-        return;
-    }
+    if (duration) duration.value = timerSettings.eventDurationMinutes;
+    if (showPassed) showPassed.checked = timerSettings.showPassedTimers;
+    if (sortActive) sortActive.checked = timerSettings.sortActiveFirst;
+    if (pulse) pulse.checked = timerSettings.pulseAnimation;
+    if (enableNotif) enableNotif.checked = timerSettings.enableNotifications;
+    if (colorActive) colorActive.value = timerSettings.statusColorActive;
+    if (colorPassed) colorPassed.value = timerSettings.statusColorPassed;
+    if (colorUpcoming) colorUpcoming.value = timerSettings.statusColorUpcoming;
+}
+
+function applyTimerSettingsToStyles() {
+    const root = document.documentElement;
+    root.style.setProperty('--timer-color-active', timerSettings.statusColorActive);
+    root.style.setProperty('--timer-color-passed', timerSettings.statusColorPassed);
+    root.style.setProperty('--timer-color-upcoming', timerSettings.statusColorUpcoming);
     
-    if (type === 'biweekly' && !baseDate) {
-        if (msg) { msg.className = 'message error'; msg.innerText = '❌ Укажите базовую дату'; msg.style.display = 'block'; }
-        return;
+    if (!timerSettings.pulseAnimation) {
+        root.style.setProperty('--timer-pulse', 'none');
+    } else {
+        root.style.setProperty('--timer-pulse', '');
     }
+}
+
+async function saveTimerSettings() {
+    const msg = document.getElementById('timerSettingsMessage');
+    
+    const settings = {
+        eventDurationMinutes: Number(document.getElementById('timerEventDuration').value) || 120,
+        showPassedTimers: document.getElementById('timerShowPassed').checked,
+        sortActiveFirst: document.getElementById('timerSortActiveFirst').checked,
+        pulseAnimation: document.getElementById('timerPulseAnimation').checked,
+        enableNotifications: document.getElementById('timerEnableNotifications').checked,
+        statusColorActive: document.getElementById('timerColorActive').value,
+        statusColorPassed: document.getElementById('timerColorPassed').value,
+        statusColorUpcoming: document.getElementById('timerColorUpcoming').value
+    };
     
     try {
         const r = await fetch(SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify({
-                action: 'createEventTimer',
-                name: name,
-                time: time,
-                dayOfWeek: dayOfWeek,
-                isBiweekly: type === 'biweekly',
-                baseDate: type === 'biweekly' ? baseDate : '',
-                createdBy: currentUser,
-                role: currentRole
+                action: 'saveTimerSettings',
+                role: currentRole,
+                savedBy: currentUser,
+                ...settings
             }),
             redirect: 'follow'
         });
@@ -335,9 +343,9 @@ async function createEventTimer() {
             if (res.success) {
                 msg.className = 'message success';
                 msg.innerText = '✅ ' + res.message;
-                document.getElementById('newTimerName').value = '';
-                loadAdminTimers();
-                loadEventTimers();
+                timerSettings = settings;
+                applyTimerSettingsToStyles();
+                renderEventTimers();
             } else {
                 msg.className = 'message error';
                 msg.innerText = '❌ ' + res.message;
@@ -348,112 +356,6 @@ async function createEventTimer() {
     }
     
     if (msg) { msg.style.display = 'block'; setTimeout(function() { msg.style.display = 'none'; }, 3000); }
-}
-
-function openEditTimerModal(id, name, time, dayOfWeek, isBiweekly, baseDate, active) {
-    document.getElementById('editTimerId').value = id;
-    document.getElementById('editTimerName').value = name;
-    document.getElementById('editTimerTime').value = time;
-    document.getElementById('editTimerDayOfWeek').value = dayOfWeek;
-    document.getElementById('editTimerType').value = isBiweekly ? 'biweekly' : 'weekly';
-    document.getElementById('editTimerBaseDate').value = baseDate || '';
-    document.getElementById('editTimerActive').checked = active;
-    toggleEditTimerBiweekly();
-    
-    const msg = document.getElementById('editTimerMessage');
-    if (msg) { msg.style.display = 'none'; msg.className = 'message'; }
-    
-    document.getElementById('editTimerModal').classList.remove('hidden');
-}
-
-function closeEditTimerModal() {
-    document.getElementById('editTimerModal').classList.add('hidden');
-}
-
-function toggleEditTimerBiweekly() {
-    const type = document.getElementById('editTimerType').value;
-    const row = document.getElementById('editTimerBiweeklyRow');
-    if (row) row.style.display = type === 'biweekly' ? 'flex' : 'none';
-}
-
-async function saveEditTimer() {
-    const id = document.getElementById('editTimerId').value;
-    const name = document.getElementById('editTimerName').value.trim();
-    const time = document.getElementById('editTimerTime').value;
-    const dayOfWeek = Number(document.getElementById('editTimerDayOfWeek').value);
-    const type = document.getElementById('editTimerType').value;
-    const baseDate = document.getElementById('editTimerBaseDate').value;
-    const active = document.getElementById('editTimerActive').checked;
-    const msg = document.getElementById('editTimerMessage');
-    
-    if (!name || !time) {
-        if (msg) { msg.className = 'message error'; msg.innerText = '❌ Заполните все поля'; msg.style.display = 'block'; }
-        return;
-    }
-    
-    try {
-        const r = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                action: 'updateEventTimer',
-                id: id,
-                name: name,
-                time: time,
-                dayOfWeek: dayOfWeek,
-                isBiweekly: type === 'biweekly',
-                baseDate: type === 'biweekly' ? baseDate : '',
-                active: active,
-                role: currentRole
-            }),
-            redirect: 'follow'
-        });
-        const res = await r.json();
-        
-        if (msg) {
-            if (res.success) {
-                msg.className = 'message success';
-                msg.innerText = '✅ ' + res.message;
-                msg.style.display = 'block';
-                setTimeout(function() {
-                    closeEditTimerModal();
-                    loadAdminTimers();
-                    loadEventTimers();
-                }, 1000);
-            } else {
-                msg.className = 'message error';
-                msg.innerText = '❌ ' + res.message;
-                msg.style.display = 'block';
-            }
-        }
-    } catch (e) {
-        if (msg) { msg.className = 'message error'; msg.innerText = '❌ Ошибка'; msg.style.display = 'block'; }
-    }
-}
-
-async function deleteEventTimer(id) {
-    if (!confirm('Удалить таймер?')) return;
-    try {
-        const r = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                action: 'deleteEventTimer',
-                id: id,
-                deletedBy: currentUser,
-                role: currentRole
-            }),
-            redirect: 'follow'
-        });
-        const res = await r.json();
-        if (res.success) {
-            alert('✅ ' + res.message);
-            loadAdminTimers();
-            loadEventTimers();
-        } else {
-            alert('❌ ' + res.message);
-        }
-    } catch (e) {
-        alert('❌ Ошибка: ' + e.message);
-    }
 }
 
 // ============================================================
