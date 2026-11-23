@@ -4,239 +4,203 @@
 
 async function loadCalendarPlayers() {
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAllPlayersForValidation' }), redirect: 'follow' });
-        const res = await r.json();
-        const s = document.getElementById('calendarPlayerFilter');
-        if (res.success && s) {
-            const cv = s.value;
+        const res = await api('getAllPlayersForValidation');
+        const select = document.getElementById('calendarPlayerFilter');
+
+        if (res.success && select) {
+            const currentValue = select.value;
             let html = '<option value="">Все</option>';
-            for (let i = 0; i < res.nicks.length; i++) html += '<option value="' + escapeHtml(res.nicks[i]) + '">' + escapeHtml(res.nicks[i]) + '</option>';
-            s.innerHTML = html;
-            s.value = cv;
+
+            for (const nick of (res.nicks || [])) {
+                html += '<option value="' + escapeHtml(nick) + '">' + escapeHtml(nick) + '</option>';
+            }
+
+            select.innerHTML = html;
+            select.value = currentValue;
         }
-        const t = new Date();
-        const ma = new Date();
-        ma.setDate(t.getDate() - 30);
-        const si = document.getElementById('calendarStartDate');
-        const ei = document.getElementById('calendarEndDate');
-        if (si && !si.value) si.value = ma.toISOString().split('T')[0];
-        if (ei && !ei.value) ei.value = t.toISOString().split('T')[0];
-    } catch (e) {}
+
+        // Установка дат по умолчанию
+        const today = new Date();
+        const monthAgo = new Date();
+        monthAgo.setDate(today.getDate() - 30);
+
+        const startInput = document.getElementById('calendarStartDate');
+        const endInput = document.getElementById('calendarEndDate');
+
+        if (startInput && !startInput.value) startInput.value = monthAgo.toISOString().split('T')[0];
+        if (endInput && !endInput.value) endInput.value = today.toISOString().split('T')[0];
+
+    } catch (e) {
+        console.error('loadCalendarPlayers error:', e);
+    }
 }
 
 async function loadCalendar() {
-    const s = document.getElementById('calendarStartDate').value;
-    const e = document.getElementById('calendarEndDate').value;
-    const p = document.getElementById('calendarPlayerFilter').value;
-    if (!s || !e) { alert('Выберите даты'); return; }
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAttendance', startDate: s, endDate: e, nickname: p || null }), redirect: 'follow' });
-        const res = await r.json();
-        if (res.success) renderCalendar(res.records, s, e, p);
-        else alert('Ошибка: ' + res.message);
-    } catch (e) { alert('Ошибка'); }
-}
+    const start = document.getElementById('calendarStartDate')?.value;
+    const end = document.getElementById('calendarEndDate')?.value;
+    const player = document.getElementById('calendarPlayerFilter')?.value || '';
+    const container = document.getElementById('calendarContent');
 
-async function loadMyCalendar() {
-    const s = document.getElementById('calendarStartDate').value;
-    const e = document.getElementById('calendarEndDate').value;
-    if (!s || !e) { alert('Выберите даты'); return; }
-    document.getElementById('calendarPlayerFilter').value = currentUser;
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAttendance', startDate: s, endDate: e, nickname: currentUser }), redirect: 'follow' });
-        const res = await r.json();
-        if (res.success) renderCalendar(res.records, s, e, currentUser);
-        else alert('Ошибка: ' + res.message);
-    } catch (e) { alert('Ошибка'); }
-}
-
-function renderCalendar(recs, sd, ed, pf) {
-    const g = document.getElementById('calendarGrid');
-    const s = document.getElementById('calendarStats');
-    if (!recs || recs.length === 0) {
-        if (g) g.innerHTML = '<div class="empty-state">Нет данных</div>';
-        if (s) s.innerHTML = '';
+    if (!start || !end) {
+        alert('Выберите даты');
         return;
     }
-    const gr = {};
-    for (let i = 0; i < recs.length; i++) {
-        const r = recs[i];
-        if (!gr[r.date]) gr[r.date] = {};
-        if (!gr[r.date][r.eventName]) gr[r.date][r.eventName] = { attended: [], missed: [], eventDkp: r.eventDkp };
-        if (r.status === 'attended') gr[r.date][r.eventName].attended.push({ nickname: r.nickname, dkpEarned: r.dkpEarned });
-        else gr[r.date][r.eventName].missed.push(r.nickname);
-    }
-    let ta = 0, tm = 0, td = 0;
-    for (let i = 0; i < recs.length; i++) {
-        const r = recs[i];
-        if (r.status === 'attended') { ta++; td += r.dkpEarned; }
-        else tm++;
-    }
-    const te = Object.keys(gr).reduce(function(sum, d) { return sum + Object.keys(gr[d]).length; }, 0);
-    const ar = ta + tm > 0 ? Math.round((ta / (ta + tm)) * 100) : 0;
-    if (s) s.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:4px;margin-bottom:10px;"><div class="data-item"><div class="data-label">Период</div><div class="data-value" style="font-size:9px;">' + sd + ' — ' + ed + '</div></div><div class="data-item"><div class="data-label">Мероприятий</div><div class="data-value">' + te + '</div></div><div class="data-item"><div class="data-label">Посещений</div><div class="data-value" style="color:var(--success);">' + ta + '</div></div><div class="data-item"><div class="data-label">Пропусков</div><div class="data-value" style="color:var(--danger);">' + tm + '</div></div><div class="data-item"><div class="data-label">Посещ.</div><div class="data-value" style="color:var(--dkp);">' + ar + '%</div></div><div class="data-item"><div class="data-label">DKP</div><div class="data-value" style="color:var(--dkp);">' + td.toFixed(1) + '</div></div></div>';
-    const ds = Object.keys(gr).sort();
-    if (g) {
-        let html = '';
-        for (let i = 0; i < ds.length; i++) {
-            const d = ds[i];
-            const evs = gr[d];
-            let eh = '';
-            for (const n in evs) {
-                const da = evs[n];
-                eh += '<div class="calendar-event"><div class="calendar-event-title">🏆 ' + escapeHtml(n) + ' (+' + da.eventDkp + ')</div>';
-                if (da.attended.length > 0) {
-                    eh += '<div style="margin-bottom:3px;"><div class="calendar-label attended">✓ (' + da.attended.length + '):</div><div class="calendar-players">';
-                    for (let j = 0; j < da.attended.length; j++) {
-                        const p = da.attended[j];
-                        eh += '<span class="calendar-nick-attended">' + escapeHtml(p.nickname) + ' (+' + p.dkpEarned + ')</span>';
-                    }
-                    eh += '</div></div>';
-                }
-                if (da.missed.length > 0) {
-                    eh += '<div><div class="calendar-label missed">✕ (' + da.missed.length + '):</div><div class="calendar-players">';
-                    for (let j = 0; j < da.missed.length; j++) eh += '<span class="calendar-nick-missed">' + escapeHtml(da.missed[j]) + '</span>';
-                    eh += '</div></div>';
-                }
-                eh += '</div>';
-            }
-            html += '<div class="calendar-day"><div class="calendar-date">📅 ' + d + '</div>' + eh + '</div>';
+
+    if (container) container.innerHTML = '<div style="text-align:center;padding:16px;color:var(--accent);">Загрузка...</div>';
+
+    try {
+        const res = await api('getCalendar', {
+            startDate: start,
+            endDate: end,
+            player: player
+        });
+
+        if (res.success) {
+            renderCalendar(res.events || []);
+        } else {
+            if (container) container.innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
         }
-        g.innerHTML = html;
+    } catch (e) {
+        if (container) container.innerHTML = '<div class="empty-state">Ошибка</div>';
     }
 }
 
-// ============================================================
-// 📊 АКТИВНОСТЬ
-// ============================================================
+function renderCalendar(events) {
+    const container = document.getElementById('calendarContent');
+    if (!container) return;
+
+    if (!events || events.length === 0) {
+        container.innerHTML = '<div class="empty-state">Нет событий за выбранный период</div>';
+        return;
+    }
+
+    // Группировка по датам
+    const grouped = {};
+    for (const event of events) {
+        const date = event.date || 'Без даты';
+        if (!grouped[date]) grouped[date] = [];
+        grouped[date].push(event);
+    }
+
+    let html = '';
+    const dates = Object.keys(grouped).sort().reverse();
+
+    for (const date of dates) {
+        html += '<div class="calendar-day">';
+        html += '<div class="calendar-date">' + escapeHtml(date) + '</div>';
+
+        for (const event of grouped[date]) {
+            html += '<div class="calendar-event">';
+            html += '<div class="calendar-event-title">' + escapeHtml(event.title || 'Событие') + '</div>';
+            if (event.player) {
+                html += '<div class="calendar-event-player">' + escapeHtml(event.player) + '</div>';
+            }
+            if (event.description) {
+                html += '<div class="calendar-event-desc">' + escapeHtml(event.description) + '</div>';
+            }
+            html += '</div>';
+        }
+
+        html += '</div>';
+    }
+
+    container.innerHTML = html;
+}
 
 async function loadTodayActivity() {
+    const container = document.getElementById('todayActivity');
+    if (!container) return;
+
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getTodayActivity' }), redirect: 'follow' });
-        const res = await r.json();
-        const b = document.getElementById('todayActivityBlock');
-        if (!b) return;
-        if (res.success && res.events.length > 0) {
-            let html = '';
-            for (let i = 0; i < res.events.length; i++) {
-                const e = res.events[i];
-                html += '<div class="player-card" style="margin-bottom:6px;"><div class="player-card-header"><div style="display:flex;align-items:center;gap:8px;flex:1;"><div><div class="player-nick" style="color:var(--dkp);">🏆 ' + escapeHtml(e.name) + '</div><div style="font-size:10px;color:var(--dkp);font-weight:700;">+' + e.eventDkp + ' DKP</div></div></div></div>';
-                html += '<div style="margin-bottom:4px;"><div style="font-size:9px;color:var(--success);margin-bottom:2px;font-weight:700;">✓ Были (' + e.attended.length + '):</div><div style="display:flex;flex-wrap:wrap;gap:2px;">';
-                for (let j = 0; j < e.attended.length; j++) {
-                    const p = e.attended[j];
-                    html += '<span class="submission-nick-tag" style="background:var(--success-soft);border-color:var(--success);color:var(--success);">' + renderPlayerNickWithBioColor(p.nickname, null, true, true) + ' (+' + p.dkpEarned + ')</span>';
-                }
-                html += '</div></div>';
-                if (e.missed.length > 0) {
-                    html += '<div><div style="font-size:9px;color:var(--danger);margin-bottom:2px;font-weight:700;">✕ Пропустили (' + e.missed.length + '):</div><div style="display:flex;flex-wrap:wrap;gap:2px;">';
-                    for (let j = 0; j < e.missed.length; j++) html += '<span class="submission-nick-tag" style="background:var(--danger-soft);border-color:var(--danger);color:var(--danger);">' + renderPlayerNickWithBioColor(e.missed[j], null, true, true) + '</span>';
-                    html += '</div></div>';
-                }
+        const res = await api('getTodayActivity');
+
+        if (res.success && res.activity && res.activity.length > 0) {
+            let html = '<div class="activity-list">';
+            for (const a of res.activity) {
+                html += '<div class="activity-item">';
+                html += '<span class="activity-player">' + escapeHtml(a.player) + '</span>';
+                html += '<span class="activity-action">' + escapeHtml(a.action) + '</span>';
                 html += '</div>';
             }
-            b.innerHTML = html;
-        } else b.innerHTML = '<div class="empty-state">Сегодня нет мероприятий</div>';
-    } catch (e) { const b = document.getElementById('todayActivityBlock'); if (b) b.innerHTML = '<div class="empty-state">Ошибка</div>'; }
+            html += '</div>';
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '<div class="empty-state">Нет активности сегодня</div>';
+        }
+    } catch (e) {
+        container.innerHTML = '<div class="empty-state">Ошибка</div>';
+    }
 }
 
 async function loadWeeklyActivity() {
+    const container = document.getElementById('weeklyActivity');
+    if (!container) return;
+
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getWeeklyActivity' }), redirect: 'follow' });
-        const res = await r.json();
-        const b = document.getElementById('weeklyActivityBlock');
-        if (!b) return;
-        if (res.success && res.days.length > 0) {
-            let html = '';
-            for (let i = 0; i < res.days.length; i++) {
-                const d = res.days[i];
-                let eh = '';
-                for (const n in d.events) {
-                    const e = d.events[n];
-                    eh += '<div style="margin-bottom:4px;padding:6px;background:var(--bg-soft);border-radius:var(--radius-sm);border-left:2px solid var(--dkp);"><div style="font-size:10px;color:var(--dkp);font-weight:700;">🏆 ' + escapeHtml(e.name) + ' (+' + e.eventDkp + ')</div><div style="font-size:9px;color:var(--success);">✓ ' + e.attended.length + ' | ✕ ' + e.missed.length + '</div></div>';
-                }
-                html += '<div style="margin-bottom:10px;"><div style="font-size:11px;color:var(--accent);font-family:var(--font-display);margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);font-weight:700;">📅 ' + d.date + '</div>' + eh + '</div>';
+        const res = await api('getWeeklyActivity');
+
+        if (res.success && res.activity && res.activity.length > 0) {
+            let html = '<div class="activity-list">';
+            for (const a of res.activity) {
+                html += '<div class="activity-item">';
+                html += '<span class="activity-player">' + escapeHtml(a.player) + '</span>';
+                html += '<span class="activity-count">' + (a.count || 0) + '</span>';
+                html += '</div>';
             }
-            b.innerHTML = html;
-        } else b.innerHTML = '<div class="empty-state">На неделе нет мероприятий</div>';
-    } catch (e) { const b = document.getElementById('weeklyActivityBlock'); if (b) b.innerHTML = '<div class="empty-state">Ошибка</div>'; }
+            html += '</div>';
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '<div class="empty-state">Нет данных</div>';
+        }
+    } catch (e) {
+        container.innerHTML = '<div class="empty-state">Ошибка</div>';
+    }
 }
 
 async function loadEventStats() {
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getEventStats' }), redirect: 'follow' });
-        const res = await r.json();
-        const b = document.getElementById('eventStatsBlock');
-        if (!b) return;
-        if (res.success && res.stats.length > 0) {
-            let html = '<div class="event-stats-grid">';
-            for (let i = 0; i < res.stats.length; i++) {
-                const s = res.stats[i];
-                const mb = Math.max(s.month, s.week, 1);
-                const mp = (s.month / mb) * 100;
-                const wp = (s.week / mb) * 100;
-                html += '<div class="event-stat-card"><div class="event-stat-header"><div style="flex:1;"><div class="event-stat-name">' + escapeHtml(s.name) + '</div><div class="event-stat-total">Всего: ' + s.total + '</div></div></div><div class="progress-row"><div class="progress-label"><span>Месяц</span><span style="color:var(--accent);">' + s.month + '</span></div><div class="progress-track"><div class="progress-fill month" style="width:' + mp + '%;"></div></div></div><div class="progress-row"><div class="progress-label"><span>Неделя</span><span style="color:var(--success);">' + s.week + '</span></div><div class="progress-track"><div class="progress-fill week" style="width:' + wp + '%;"></div></div></div><div class="event-stat-footer"><span class="attended">✓ ' + s.attended + '</span><span class="missed">✕ ' + s.missed + '</span></div></div>';
-            }
-            html += '</div>';
-            b.innerHTML = html;
-        } else b.innerHTML = '<div class="empty-state">Статистика недоступна</div>';
-    } catch (e) { const b = document.getElementById('eventStatsBlock'); if (b) b.innerHTML = '<div class="empty-state">Ошибка</div>'; }
-}
+    const container = document.getElementById('eventStats');
+    if (!container) return;
 
-// ============================================================
-// 🏆 ПОСЛЕДНИЕ ПОБЕДИТЕЛИ (единственное определение)
-// ============================================================
+    try {
+        const res = await api('getEventStats');
+
+        if (res.success && res.stats) {
+            const s = res.stats;
+            container.innerHTML = `
+                <div class="data-grid">
+                    <div class="data-item"><div class="data-label">Событий</div><div class="data-value">${s.totalEvents || 0}</div></div>
+                    <div class="data-item"><div class="data-label">Участников</div><div class="data-value">${s.totalParticipants || 0}</div></div>
+                    <div class="data-item"><div class="data-label">Средняя посещаемость</div><div class="data-value">${s.avgAttendance || 0}%</div></div>
+                </div>`;
+        } else {
+            container.innerHTML = '<div class="empty-state">Нет данных</div>';
+        }
+    } catch (e) {
+        container.innerHTML = '<div class="empty-state">Ошибка</div>';
+    }
+}
 
 async function loadRecentWinners() {
-    try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getAuctionHistory', limit: 10 }), redirect: 'follow' });
-        const res = await r.json();
-        if (!res.success) return;
-        recentAuctionHistory = res.history || [];
-        const hb = document.getElementById('recentWinnersBlock');
-        if (hb) {
-            if (recentAuctionHistory.length > 0) {
-                let html = '';
-                for (let i = 0; i < recentAuctionHistory.length; i++) {
-                    const h = recentAuctionHistory[i];
-                    const bc = getIconBorderColor(h.itemColor);
-                    const gb = h.itemGiven ? '<span class="given-badge given" style="font-size:8px;">✅</span>' : '<span class="given-badge not-given" style="font-size:8px;">⚠️</span>';
-                    html += '<div class="history-winner-card"><div class="winner-icon" style="border-color:' + bc + ';" id="winnerIcon_' + h.id + '"><span class="icon-placeholder" style="font-size:6px;">...</span></div><div class="winner-info"><div class="winner-nick"><span class="nick-with-color" style="cursor:pointer;" onclick="viewPlayerCabinet(\'' + escapeForOnclick(h.winner) + '\')">' + escapeHtml(h.winner) + '</span><span style="font-size:9px;color:var(--text-dim);margin-left:4px;">— аукцион #' + h.auctionNumber + '</span></div><div class="winner-item">' + escapeHtml(h.itemName) + ' (' + escapeHtml(h.itemSection) + ', ' + escapeHtml(h.itemTier) + ', ' + escapeHtml(h.itemColor) + ')</div><div style="font-size:9px;color:var(--text-dim);margin-top:1px;">' + escapeHtml(h.winDate) + '</div></div><div class="winner-amount">' + h.winAmount + ' DKP</div>' + gb + '</div>';
-                }
-                hb.innerHTML = html;
-                for (let i = 0; i < recentAuctionHistory.length; i++) {
-                    const h = recentAuctionHistory[i];
-                    loadAuctionItemIcon(h.id, h.itemName, h.itemSection, h.itemColor, 'winnerIcon_' + h.id);
-                }
-            } else hb.innerHTML = '<div class="empty-state">Пока нет победителей</div>';
-        }
-        const ab = document.getElementById('auctionRecentWins');
-        if (ab) ab.innerHTML = hb ? hb.innerHTML : '';
-    } catch (e) {}
-}
+    const container = document.getElementById('recentWinners');
+    if (!container) return;
 
-// ============================================================
-// 🎁 ИСТОРИЯ ЛУТА (единственное определение)
-// ============================================================
-
-async function loadMyLootHistory() {
-    if (!currentUser) return;
-    const b = document.getElementById('myLootHistory');
-    if (!b) return;
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getPlayerUnifiedLootHistory', nickname: currentUser }), redirect: 'follow' });
-        const res = await r.json();
-        if (!res.success || !res.history || res.history.length === 0) { b.innerHTML = '<div class="empty-state">Вы ещё ничего не получали</div>'; return; }
-        let html = '';
-        for (let i = 0; i < res.history.length; i++) {
-            const h = res.history[i];
-            const sb = h.type === 'auction' ? '<span class="source-badge auction">🔨 Аукцион</span>' : '<span class="source-badge queue">📦 Очередь</span>';
-            html += '<div class="loot-item ' + (h.itemGiven ? 'given' : 'not-given') + '"><div class="loot-info"><div class="loot-name">' + escapeHtml(h.itemName) + '</div><div class="loot-date">' + escapeHtml(h.itemSection) + ' | ' + escapeHtml(h.itemTier) + ' | ' + escapeHtml(h.itemColor);
-            if (h.itemEnhancement > 0) html += ' +' + h.itemEnhancement;
-            html += ' | ' + escapeHtml(h.date) + '</div><div style="margin-top:2px;">' + sb + '</div></div>';
-            if (h.type === 'auction') html += '<div class="loot-amount">' + h.amount + ' DKP</div>';
-            else html += '<div class="loot-amount" style="color:var(--success);">Бесплатно</div>';
-            html += '</div>';
+        const res = await api('getRecentWinners');
+
+        if (res.success && res.winners && res.winners.length > 0) {
+            let html = '';
+            for (const w of res.winners) {
+                html += '<div class="winner-item">';
+                html += '<div class="winner-nick">' + escapeHtml(w.nickname) + '</div>';
+                html += '<div class="winner-item-name">' + escapeHtml(w.itemName) + '</div>';
+                html += '<div class="winner-date">' + escapeHtml(w.date || '') + '</div>';
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '<div class="empty-state">Нет победителей</div>';
         }
-        b.innerHTML = html;
-    } catch (e) { b.innerHTML = '<div class="empty-state">Ошибка</div>'; }
+    } catch (e) {
+        container.innerHTML = '<div class="empty-state">Ошибка</div>';
+    }
 }
