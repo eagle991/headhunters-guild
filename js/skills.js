@@ -98,17 +98,29 @@ function buildSkillsForm() {
 
 async function loadApprovedSkillIconWithColor(n, containerId, borderColor) {
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkillIcon', skillName: n }), redirect: 'follow' });
+        const r = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'getSkillIcon', skillName: n }),
+            redirect: 'follow'
+        });
         const res = await r.json();
         const c = document.getElementById(containerId);
-        if (c && res.success && res.iconData) {
+        
+        if (!c) {
+            console.warn('Контейнер навыка не найден:', containerId);
+            return;
+        }
+        
+        if (res.success && res.iconData) {
             c.innerHTML = '<img src="' + res.iconData + '" style="width:100%;height:100%;object-fit:cover;">';
             c.style.border = '2px solid ' + borderColor;
-        } else if (c) {
+        } else {
             c.innerHTML = '<span class="icon-placeholder" style="font-size:8px;">Нет</span>';
             c.style.border = '2px solid ' + borderColor;
         }
-    } catch (e) {}
+    } catch (e) {
+        console.error('Ошибка загрузки иконки навыка:', n, e);
+    }
 }
 
 function toggleSkill(el, n) {
@@ -181,18 +193,30 @@ async function loadAdminSkills() {
 
 async function loadSkillIconWithColor(n, borderColor) {
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getSkillIcon', skillName: n }), redirect: 'follow' });
+        const r = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'getSkillIcon', skillName: n }),
+            redirect: 'follow'
+        });
         const res = await r.json();
         const sn = n.replace(/[^a-zA-Z0-9а-яА-Я]/g, '_');
         const c = document.getElementById('skillIcon_' + sn);
-        if (c && res.success && res.iconData) {
+        
+        if (!c) {
+            console.warn('Контейнер иконки навыка не найден:', 'skillIcon_' + sn);
+            return;
+        }
+        
+        if (res.success && res.iconData) {
             c.innerHTML = '<img src="' + res.iconData + '" style="width:100%;height:100%;object-fit:cover;">';
             c.style.border = '2px solid ' + borderColor;
-        } else if (c) {
+        } else {
             c.innerHTML = '<span class="icon-placeholder">Нет</span>';
             c.style.border = '2px solid ' + borderColor;
         }
-    } catch (e) {}
+    } catch (e) {
+        console.error('Ошибка загрузки иконки навыка:', n, e);
+    }
 }
 
 async function setSkillColor(n, c) {
