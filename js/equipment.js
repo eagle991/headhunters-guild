@@ -280,16 +280,30 @@ function renderAdminItems() {
 
 async function loadItemIcon(id) {
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getItemIcon', itemId: id }), redirect: 'follow' });
+        const r = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'getItemIcon', itemId: Number(id) }),
+            redirect: 'follow'
+        });
         const res = await r.json();
         const c = document.getElementById('itemIcon_' + id);
-        if (c && res.success && res.iconData) {
+        
+        if (!c) {
+            console.warn('Контейнер предмета не найден:', 'itemIcon_' + id);
+            return;
+        }
+        
+        if (res.success && res.iconData) {
             const it = allItems.find(function(x) { return x.id === id; });
             const bc = it ? getIconBorderColor(it.color) : 'var(--border)';
             c.innerHTML = '<img src="' + res.iconData + '" style="width:100%;height:100%;object-fit:cover;border-radius:3px;">';
             c.style.border = '2px solid ' + bc;
-        } else if (c) c.innerHTML = '<span class="icon-placeholder">Нет</span>';
-    } catch (e) {}
+        } else {
+            c.innerHTML = '<span class="icon-placeholder">Нет</span>';
+        }
+    } catch (e) {
+        console.error('Ошибка загрузки иконки предмета:', id, e);
+    }
 }
 
 async function addItem(e) {
