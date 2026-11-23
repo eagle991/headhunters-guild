@@ -11,9 +11,7 @@
 </head>
 <body data-theme="light">
 
-<!-- ============================================================
-     🏠 ПУБЛИЧНЫЙ ЭКРАН
-     ============================================================ -->
+<!-- 🏠 ПУБЛИЧНЫЙ ЭКРАН -->
 <div id="publicScreen" class="screen active">
     <div class="public-hero">
         <div class="public-hero-content">
@@ -22,7 +20,6 @@
             <button class="login-link" onclick="showAuthScreen()">▶ Войти в систему</button>
         </div>
     </div>
-    
     <div id="publicTopContainer" style="display:none;margin-bottom:14px;">
         <div class="top-tabs-container">
             <div class="top-tabs-header">
@@ -36,14 +33,11 @@
             <div class="top-tabs-body" id="publicTopList"><div class="top-tabs-loading"><span class="loader"></span> Загрузка...</div></div>
         </div>
     </div>
-    
     <div id="publicLoginPrompt" style="text-align:center;padding:30px;color:var(--text-dim);font-family:var(--font-display);font-size:12px;">🔒 Топы доступны после входа</div>
     <div class="footer">© RF Online Next | v17.20</div>
 </div>
 
-<!-- ============================================================
-     🔐 ЭКРАН АВТОРИЗАЦИИ
-     ============================================================ -->
+<!-- 🔐 ЭКРАН АВТОРИЗАЦИИ -->
 <div id="authScreen" class="screen">
     <div class="auth-container">
         <div class="auth-title">RF Online</div>
@@ -77,9 +71,7 @@
     </div>
 </div>
 
-<!-- ============================================================
-     🏠 ГЛАВНЫЙ ЭКРАН
-     ============================================================ -->
+<!-- 🏠 ГЛАВНЫЙ ЭКРАН -->
 <div id="mainScreen" class="screen">
     <div class="header-bar">
         <div class="user-info">
@@ -100,16 +92,6 @@
                 <span class="theme-label">Темная</span>
             </button>
             <button class="logout-btn" onclick="logout()">⏻ Выход</button>
-        </div>
-    </div>
-    
-    <div id="guildSelectorBlock" class="guild-selector hidden">
-        <div class="guild-selector-label">🎯 Текущая гильдия:</div>
-        <select class="guild-selector-select" id="currentGuildSelect" onchange="onGuildSelectChange()"><option value="">— Не выбрана —</option></select>
-        <button class="guild-pin-btn" id="guildPinBtn" onclick="toggleGuildPin()" title="Закрепить">📌 Закрепить</button>
-        <div class="current-guild-info hidden" id="currentGuildInfo">
-            <span id="currentGuildIcon">🏰</span>
-            <span id="currentGuildName">—</span>
         </div>
     </div>
     
@@ -358,7 +340,6 @@
 
     <!-- 🔨 АУКЦИОН -->
     <div id="auctionContent" class="panel hidden">
-        <div class="info-hint" id="auctionGuildModeHint" style="display:none;">🏰 Режим: <b id="auctionGuildModeName">—</b></div>
         <div class="tabs">
             <button class="tab-btn active" id="tabAuctionActive" onclick="switchAuctionTab('active',event)">🔨 Активные</button>
             <button class="tab-btn" id="tabAuctionCompleted" onclick="switchAuctionTab('completed',event)">✅ Завершённые</button>
@@ -445,7 +426,6 @@
                         <label>Выберите навык</label>
                         <select id="auctionTargetSkill" style="width:100%;"><option value="">— Загрузка... —</option></select>
                     </div>
-                    <div id="skillInfo" style="font-size:10px;color:var(--text-dim);margin-top:6px;padding:6px;background:var(--bg-panel);border-radius:var(--radius-sm);border:1px solid var(--border);">💡 Если "Повторная покупка навыков" выключена — игроки с навыком не смогут ставить.</div>
                 </div>
                 <div class="form-row" style="margin-top:10px;">
                     <div class="form-group"><label>Начальная цена (DKP)</label><input type="number" id="auctionStartPrice" required placeholder="100" min="1"></div>
@@ -481,12 +461,6 @@
         </div>
         <div id="queueListContent">
             <div class="panel-title">📋 Очередь выдачи</div>
-            <div style="margin-bottom:8px;padding:6px;background:var(--bg-soft);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:10px;">
-                <b>Приоритет:</b> 
-                <span style="color:var(--success);">● Высокий</span> | 
-                <span style="color:var(--warning);">● Средний</span> | 
-                <span style="color:var(--danger);">● Низкий</span>
-            </div>
             <div id="queueItemsList"></div>
         </div>
         <div id="queueAddContent" class="hidden">
@@ -759,17 +733,6 @@
                 <div class="form-group"><label>Новый навык</label><input type="text" id="newSkillName" required placeholder="Название..."></div>
                 <button type="submit" class="submit-btn">+ Добавить</button>
             </form>
-            <div style="background:var(--bg-soft);padding:8px;border-radius:var(--radius-sm);margin-bottom:10px;border:1px solid var(--border);">
-                <div style="font-size:10px;color:var(--text-dim);margin-bottom:6px;font-weight:700;">🎨 Цвета навыков:</div>
-                <div style="display:flex;flex-wrap:wrap;gap:4px;font-size:9px;">
-                    <span style="padding:2px 6px;background:var(--bg-panel);border:1px solid var(--border);border-radius:3px;">⚪ Белый</span>
-                    <span style="padding:2px 6px;background:var(--success-soft);border:1px solid var(--success);color:var(--success);border-radius:3px;">🟢 Зеленый</span>
-                    <span style="padding:2px 6px;background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent);border-radius:3px;">🔵 Синий</span>
-                    <span style="padding:2px 6px;background:#ede9fe;border:1px solid #6b4aa8;color:#6b4aa8;border-radius:3px;">🟣 Фиолетовый</span>
-                    <span style="padding:2px 6px;background:var(--warning-soft);border:1px solid var(--gold);color:var(--gold);border-radius:3px;">🟡 Желтый</span>
-                    <span style="padding:2px 6px;background:var(--danger-soft);border:1px solid var(--danger);color:var(--danger);border-radius:3px;">🔴 Красный</span>
-                </div>
-            </div>
             <div id="adminSkillsList"></div>
             <div id="adminSkillsMessage" class="message"></div>
         </div>
@@ -859,15 +822,6 @@
                 <div class="settings-row" style="margin-top:8px;border-top:1px solid var(--border);padding-top:8px;">
                     <div class="settings-label">✨ Повторная покупка навыков:</div>
                     <div class="settings-value"><label class="toggle-switch"><input type="checkbox" id="allowRepeatSkillPurchase"><span class="toggle-slider"></span></label></div>
-                </div>
-                <div style="font-size:9px;color:var(--text-dim);padding:6px 8px;background:#ede9fe;border-radius:var(--radius-sm);border-left:3px solid #6b4aa8;margin-bottom:8px;">
-                    <b style="color:#6b4aa8;">✨ Для аукционов типа "Навык":</b><br>
-                    • <b>ВЫКЛ</b> — игроки с навыком НЕ могут ставить<br>
-                    • <b>ВКЛ</b> — все могут, но приоритет выше у тех, у кого навыка НЕТ
-                </div>
-                <div style="padding:8px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:var(--radius-sm);margin:8px 0;font-size:10px;">
-                    <div style="font-weight:700;color:var(--accent);margin-bottom:4px;font-family:var(--font-display);">📊 ПОВТОРНАЯ ПОКУПКА:</div>
-                    <div style="color:var(--text-dim);line-height:1.5;">• <b>1-я покупка</b>: ×1.0<br>• <b>2-я покупка</b>: ×<span id="previewBaseCoef">1.5</span><br>• <b>3-я покупка</b>: ×<span id="previewCoef3">3.0</span><br>• <b>4-я покупка</b>: ×<span id="previewCoef4">4.5</span><br>• <b>5-я покупка</b>: ×<span id="previewCoef5">6.0</span><br>• <b>6-я покупка</b>: <span style="color:var(--success);">СБРОС → ×1.0</span></div>
                 </div>
                 <button class="submit-btn" style="margin-top:8px;" onclick="saveAuctionSettings()">💾 Сохранить</button>
                 <div id="auctionSettingsMessage" class="message"></div>
@@ -981,17 +935,14 @@
     </div>
 </div>
 
-<!-- ============================================================
-     🪟 МОДАЛЬНЫЕ ОКНА
-     ============================================================ -->
-
+<!-- 🪟 МОДАЛЬНЫЕ ОКНА -->
 <div id="imageModal" class="modal-overlay hidden" onclick="closeImageModal()"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeImageModal()">✕</button><img id="modalImage" src="" alt=""></div></div>
 <div id="bidModal" class="modal-overlay hidden" onclick="closeBidModal()"><div class="modal-content" style="max-width:560px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeBidModal()">✕</button><div id="bidModalContent"></div></div></div>
 <div id="notificationsModal" class="modal-overlay hidden" onclick="closeNotificationsModal()"><div class="modal-content" style="max-width:460px;max-height:80vh;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeNotificationsModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:10px;font-size:14px;">🔔 УВЕДОМЛЕНИЯ</h3><div style="display:flex;gap:4px;margin-bottom:10px;"><button class="submit-btn" style="flex:1;" onclick="markAllNotificationsRead()">✓ Прочитано все</button></div><div id="notificationsList" style="max-height:60vh;overflow-y:auto;"></div></div></div>
 <div id="toastNotification" class="toast-notification hidden"><div class="toast-icon">🔔</div><div class="toast-content"><div class="toast-title" id="toastTitle">Новое уведомление</div><div class="toast-message" id="toastMessage"></div></div><button class="toast-close" onclick="hideToast()">✕</button></div>
 <div id="upgradeModal" class="modal-overlay hidden" onclick="closeUpgradeModal()"><div class="modal-content" style="max-width:420px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeUpgradeModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:10px;font-size:13px;">⬆️ СТАТЬ ИГРОКОМ</h3><div style="padding:8px;background:var(--bg-soft);border-radius:var(--radius-sm);margin-bottom:10px;font-size:10px;">Ваш аккаунт <b style="color:var(--accent);" id="upgradeNick"></b> будет повышен.</div><div class="form-group"><label>Ключ доступа</label><input type="password" id="upgradeKey" placeholder="Пусто = Игрок"></div><button type="button" class="submit-btn" onclick="upgradeToPlayer()">⬆️ Повысить</button><div id="upgradeMessage" class="message"></div></div></div>
 <div id="banModal" class="modal-overlay hidden" onclick="closeBanModal()"><div class="modal-content" style="max-width:420px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeBanModal()">✕</button><h3 style="color:var(--danger);font-family:var(--font-display);margin-bottom:10px;font-size:13px;">🚫 БЛОКИРОВКА</h3><input type="hidden" id="banNickname"><div style="padding:8px;background:var(--danger-soft);border-radius:var(--radius-sm);margin-bottom:10px;font-size:10px;color:var(--danger);">Пользователь <b id="banNicknameDisplay"></b> будет заблокирован.</div><div class="form-group"><label>Причина</label><textarea id="banReason"></textarea></div><button type="button" class="submit-btn" style="background:var(--danger);border-color:var(--danger);" onclick="confirmBanUser()">🚫 Заблокировать</button><div id="banMessage" class="message"></div></div></div>
-<div id="createGuildModal" class="modal-overlay hidden" onclick="closeCreateGuildModal()"><div class="modal-content" style="max-width:500px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeCreateGuildModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:12px;font-size:14px;">🏰 Создание гильдии</h3><div style="padding:8px;background:var(--success-soft);border:1px solid var(--success);border-radius:var(--radius-sm);margin-bottom:10px;font-size:10px;color:var(--success);">✅ Создание БЕСПЛАТНО</div><div class="form-group"><label>Название</label><input type="text" id="newGuildName" maxlength="30"></div><div class="form-group"><label>Описание</label><textarea id="newGuildDescription" maxlength="200"></textarea></div><div class="form-group"><label>🖼️ Эмблема (необязательно)</label><div class="emblem-upload-area" id="emblemUploadArea" onclick="document.getElementById('guildEmblemInput').click()"><div id="emblemPreviewContainer"><div style="font-size:32px;margin-bottom:4px;">🖼️</div><div style="color:var(--text-main);font-size:11px;font-weight:600;">Нажмите или перетащите</div><div class="emblem-hint">PNG, JPG • Макс. 500 КБ</div></div><input type="file" id="guildEmblemInput" accept="image/*" style="display:none;" onchange="handleGuildEmblemSelect(event)"></div><input type="hidden" id="guildEmblemData"></div><div class="form-group"><label>Или выберите эмодзи:</label><select id="newGuildIcon"><option value="">— Без эмодзи —</option><option value="🏰">🏰 Замок</option><option value="⚔️">⚔️ Мечи</option><option value="🛡️">🛡️ Щит</option><option value="🐉">🐉 Дракон</option><option value="🦅">🦅 Орёл</option><option value="🐺">🐺 Волк</option><option value="🔥">🔥 Огонь</option><option value="❄️">❄️ Лёд</option><option value="⚡">⚡ Молния</option><option value="🌟">🌟 Звезда</option><option value="💀">💀 Череп</option><option value="👑">👑 Корона</option></select></div><button class="submit-btn" onclick="createGuild_v17_12()">🏰 Создать гильдию</button><div id="createGuildMessage" class="message"></div></div></div>
+<div id="createGuildModal" class="modal-overlay hidden" onclick="closeCreateGuildModal()"><div class="modal-content" style="max-width:500px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeCreateGuildModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:12px;font-size:14px;">🏰 Создание гильдии</h3><div style="padding:8px;background:var(--success-soft);border:1px solid var(--success);border-radius:var(--radius-sm);margin-bottom:10px;font-size:10px;color:var(--success);">✅ Создание БЕСПЛАТНО</div><div class="form-group"><label>Название</label><input type="text" id="newGuildName" maxlength="30"></div><div class="form-group"><label>Описание</label><textarea id="newGuildDescription" maxlength="200"></textarea></div><div class="form-group"><label>🖼️ Эмблема (необязательно)</label><div class="emblem-upload-area" id="emblemUploadArea" onclick="document.getElementById('guildEmblemInput').click()"><div id="emblemPreviewContainer"><div style="font-size:32px;margin-bottom:4px;">🖼️</div><div style="color:var(--text-main);font-size:11px;font-weight:600;">Нажмите или перетащите</div><div class="emblem-hint">PNG, JPG • Макс. 500 КБ • 64×64 px</div></div><input type="file" id="guildEmblemInput" accept="image/*" style="display:none;" onchange="handleGuildEmblemSelect(event)"></div><input type="hidden" id="guildEmblemData"></div><div class="form-group"><label>Или выберите эмодзи:</label><select id="newGuildIcon"><option value="">— Без эмодзи —</option><option value="🏰">🏰 Замок</option><option value="⚔️">⚔️ Мечи</option><option value="🛡️">🛡️ Щит</option><option value="🐉">🐉 Дракон</option><option value="🦅">🦅 Орёл</option><option value="🐺">🐺 Волк</option><option value="🔥">🔥 Огонь</option><option value="❄️">❄️ Лёд</option><option value="⚡">⚡ Молния</option><option value="🌟">🌟 Звезда</option><option value="💀">💀 Череп</option><option value="👑">👑 Корона</option></select></div><button class="submit-btn" onclick="createGuild_v17_12()">🏰 Создать гильдию</button><div id="createGuildMessage" class="message"></div></div></div>
 <div id="guildInfoModal" class="modal-overlay hidden" onclick="closeGuildInfoModal()"><div class="modal-content" style="max-width:700px;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeGuildInfoModal()">✕</button><div id="guildInfoContent"><div class="loading-overlay"><span class="loader"></span> Загрузка...</div></div></div></div>
 <div id="editGuildModal" class="modal-overlay hidden" onclick="closeEditGuildModal()"><div class="modal-content" style="max-width:500px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeEditGuildModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:12px;font-size:14px;">✏️ Редактирование</h3><input type="hidden" id="editGuildId"><div class="form-group"><label>Название</label><input type="text" id="editGuildName" maxlength="30"></div><div class="form-group"><label>Описание</label><textarea id="editGuildDescription" maxlength="200"></textarea></div><div class="form-group"><label>Иконка</label><select id="editGuildIcon"><option value="🏰">🏰 Замок</option><option value="⚔️">⚔️ Мечи</option><option value="🛡️">🛡️ Щит</option><option value="🐉">🐉 Дракон</option><option value="🦅">🦅 Орёл</option><option value="🐺">🐺 Волк</option><option value="🔥">🔥 Огонь</option><option value="❄️">❄️ Лёд</option><option value="⚡">⚡ Молния</option><option value="🌟">🌟 Звезда</option></select></div><button class="submit-btn" style="margin-top:12px;" onclick="saveGuildEdit()">💾 Сохранить</button><div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);"><button class="submit-btn" style="background:var(--gradient-danger);border-color:var(--danger);" onclick="deleteCurrentGuild()">🗑 Удалить гильдию</button></div><div id="editGuildMessage" class="message"></div></div></div>
 <div id="inviteToGuildModal" class="modal-overlay hidden" onclick="closeInviteToGuildModal()"><div class="modal-content" style="max-width:500px;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeInviteToGuildModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:12px;font-size:14px;">📨 Пригласить</h3><input type="hidden" id="inviteGuildId"><div class="form-group"><label>Ник игрока</label><input type="text" id="invitePlayerName" list="guildInvitePlayersList"><datalist id="guildInvitePlayersList"></datalist></div><button class="submit-btn" onclick="sendGuildInvitation()">📨 Отправить</button><div id="inviteToGuildMessage" class="message"></div></div></div>
@@ -1013,9 +964,7 @@
 <div id="screenshotZoomModal" class="screenshot-zoom-modal hidden"><button class="zoom-close-btn" onclick="closeScreenshotZoom()">✕</button><div class="zoom-hint">Esc для закрытия</div><div class="zoom-image-container" onclick="event.stopPropagation()"><img id="zoomedImage" src="" alt=""></div><div class="zoom-controls" onclick="event.stopPropagation()"><button class="zoom-btn" onclick="zoomImage(-0.3)">−</button><button class="zoom-btn" onclick="zoomImage(0)">⊙</button><button class="zoom-btn" onclick="zoomImage(0.3)">+</button><button class="zoom-btn zoom-close-btn-small" onclick="closeScreenshotZoom()">✕</button></div></div>
 <div id="viewPlayerModal" class="modal-overlay hidden" onclick="closeViewPlayerModal()"><div class="modal-content" style="max-width:700px;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeViewPlayerModal()">✕</button><h3 style="color:var(--accent);font-family:var(--font-display);margin-bottom:10px;font-size:14px;">👤 Кабинет: <span id="viewPlayerNick" style="color:var(--dkp);"></span></h3><div id="viewPlayerContent"></div></div></div>
 
-<!-- ============================================================
-     📜 ПОДКЛЮЧЕНИЕ МОДУЛЕЙ (порядок важен!)
-     ============================================================ -->
+<!-- 📜 ПОДКЛЮЧЕНИЕ МОДУЛЕЙ -->
 <script src="js/config.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/auth.js"></script>
