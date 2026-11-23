@@ -880,6 +880,85 @@
         <div id="adminFeaturesContent" class="hidden"><div class="panel-title">⚙️ Функции сайта</div><div id="featuresList"></div></div>
 <div id="adminTimersContent" class="hidden">
     <div class="panel-title">⏰ Управление таймерами</div>
+    
+    <!-- ГЛОБАЛЬНЫЕ НАСТРОЙКИ -->
+    <div class="settings-card" style="margin-bottom:12px;">
+        <div class="settings-card-title">⚙️ Глобальные настройки таймеров</div>
+        
+        <div class="settings-row">
+            <div class="settings-label">⏱️ Длительность события (мин):</div>
+            <div class="settings-value">
+                <input type="number" id="timerEventDuration" min="15" max="480" value="120" style="width:80px;">
+            </div>
+        </div>
+        
+        <div class="settings-row">
+            <div class="settings-label">👁️ Показывать прошедшие:</div>
+            <div class="settings-value">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="timerShowPassed" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="settings-row">
+            <div class="settings-label">📊 Сортировать активные первыми:</div>
+            <div class="settings-value">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="timerSortActiveFirst" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="settings-row">
+            <div class="settings-label">✨ Пульсирующая анимация:</div>
+            <div class="settings-value">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="timerPulseAnimation" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="settings-row">
+            <div class="settings-label">🔔 Уведомления о событиях:</div>
+            <div class="settings-value">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="timerEnableNotifications" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+            <div style="font-size:10px;color:var(--text-dim);margin-bottom:6px;font-weight:700;">🎨 Цвета статусов:</div>
+            <div class="settings-row">
+                <div class="settings-label">🟢 Активное:</div>
+                <div class="settings-value">
+                    <input type="color" id="timerColorActive" value="#10b981" style="width:60px;height:30px;cursor:pointer;">
+                </div>
+            </div>
+            <div class="settings-row">
+                <div class="settings-label">🔴 Прошедшее:</div>
+                <div class="settings-value">
+                    <input type="color" id="timerColorPassed" value="#ef4444" style="width:60px;height:30px;cursor:pointer;">
+                </div>
+            </div>
+            <div class="settings-row">
+                <div class="settings-label">🔵 Ожидаемое:</div>
+                <div class="settings-value">
+                    <input type="color" id="timerColorUpcoming" value="#2563eb" style="width:60px;height:30px;cursor:pointer;">
+                </div>
+            </div>
+        </div>
+        
+        <button class="submit-btn" style="margin-top:10px;" onclick="saveTimerSettings()">💾 Сохранить настройки</button>
+        <div id="timerSettingsMessage" class="message"></div>
+    </div>
+    
+    <!-- СОЗДАНИЕ ТАЙМЕРА -->
     <div style="background:var(--bg-soft);border:1px solid var(--border);padding:10px;border-radius:var(--radius-sm);margin-bottom:10px;">
         <div style="font-size:11px;font-weight:700;margin-bottom:8px;color:var(--accent);font-family:var(--font-display);">➕ Создать таймер</div>
         <div class="form-row">
@@ -911,6 +990,8 @@
         </div>
         <button type="button" class="submit-btn dkp-btn" onclick="createEventTimer()">➕ Создать таймер</button>
     </div>
+    
+    <!-- СПИСОК ТАЙМЕРОВ -->
     <div id="adminTimersList"></div>
     <div id="adminTimersMessage" class="message"></div>
 </div>
