@@ -1205,3 +1205,141 @@ body[data-theme="dark"] input:checked + .toggle-slider:before { background-color
     grid-template-columns: 1fr;
   }
 }
+/* ============================================================
+   ⚙️ НАСТРОЙКИ ТАЙМЕРОВ
+   ============================================================ */
+
+.timer-settings-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.timer-settings-title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.timer-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+}
+
+.timer-settings-row:hover {
+  background: var(--bg-hover);
+}
+
+.timer-settings-label {
+  font-size: 11px;
+  color: var(--text-main);
+  font-weight: 600;
+  flex: 1;
+}
+
+.timer-settings-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timer-settings-value input[type="number"] {
+  width: 80px;
+  padding: 4px 6px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-family: var(--font-display);
+  font-size: 12px;
+}
+
+.timer-settings-value input[type="color"] {
+  width: 50px;
+  height: 30px;
+  padding: 2px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.timer-settings-color-preview {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.timer-settings-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.timer-settings-section-title {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+/* CSS переменные для динамических цветов */
+:root {
+  --timer-color-active: #10b981;
+  --timer-color-passed: #ef4444;
+  --timer-color-upcoming: #2563eb;
+  --timer-pulse: pulseBadge 1.5s ease-in-out infinite;
+}
+
+.event-timer-card.status-active {
+  border-color: var(--timer-color-active, var(--success));
+}
+.event-timer-card.status-active::before {
+  background: var(--timer-color-active, var(--success));
+}
+.event-timer-card.status-active .countdown-value {
+  color: var(--timer-color-active, var(--success));
+}
+
+.event-timer-card.status-passed {
+  border-color: var(--timer-color-passed, var(--danger));
+}
+.event-timer-card.status-passed::before {
+  background: var(--timer-color-passed, var(--danger));
+}
+.event-timer-card.status-passed .countdown-value {
+  color: var(--timer-color-passed, var(--danger));
+}
+
+.event-timer-card.status-upcoming {
+  border-color: var(--timer-color-upcoming, var(--accent));
+}
+.event-timer-card.status-upcoming::before {
+  background: var(--timer-color-upcoming, var(--accent));
+}
+
+/* Отключение пульсации если настроено */
+.no-pulse .event-timer-status-badge.active,
+.no-pulse .event-timer-card.status-active::before,
+.no-pulse .event-timer-card.status-active .countdown-value {
+  animation: none !important;
+}
