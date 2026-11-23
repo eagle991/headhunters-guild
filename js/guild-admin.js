@@ -4,90 +4,219 @@
 
 async function loadGuildAdmin() {
     if (!window._myGuild) {
-        document.getElementById('guildAdminContent').innerHTML = '<div class="info-hint warning">⚠️ Вы не состоите в гильдии</div>';
+        const content = document.getElementById('guildAdminContent');
+        if (content) content.innerHTML = '<div class="info-hint warning">⚠️ Вы не состоите в гильдии</div>';
         return;
     }
-    document.getElementById('guildAdminName').innerText = window._myGuild.name;
-    document.getElementById('guildAdminRole').innerText = window._myGuild.role === 'leader' ? '👑 Лидер' : (window._myGuild.role === 'officer' ? '⭐ Офицер' : '👤 Участник');
+
+    const nameEl = document.getElementById('guildAdminName');
+    const roleEl = document.getElementById('guildAdminRole');
+
+    if (nameEl) nameEl.innerText = window._myGuild.name || '—';
+    if (roleEl) {
+        roleEl.innerText = window._myGuild.role === 'leader' ? '👑 Лидер'
+                         : window._myGuild.role === 'officer' ? '⭐ Офицер'
+                         : '👤 Участник';
+    }
+
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getGuildInfo', guildId: window._myGuild.id }), redirect: 'follow' });
-        const res = await r.json();
-        if (res.success) document.getElementById('guildAdminMembersCount').innerText = res.members.length;
-    } catch (e) {}
+        const res = await api('getGuildInfo', { guildId: window._myGuild.id });
+        const countEl = document.getElementById('guildAdminMembersCount');
+        if (res.success && countEl) {
+            countEl.innerText = (res.members || []).length;
+        }
+    } catch (e) {
+        console.error('loadGuildAdmin error:', e);
+    }
+
     switchGuildAdminTab('members', null);
+}
+
+function switchGuildAdminTab(tab, event) {
+    document.querySelectorAll('#guildAdminTabs .tab-btn').forEach(function(btn) {
+        btn.classList.remove('active');
+    });
+
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+
+    const contents = ['members', 'settings', 'dkp', 'invites'];
+    for (const c of contents) {
+        const el = document.getElementById('guildAdmin' + capitalize(c) + 'Content');
+        if (el) {
+            el.classList.toggle('hidden', c !== tab);
+        }
+    }
+
+    if (tab === 'members') loadGuildAdminMembers();
+    if (tab === 'settings') loadGuildAdminSettings();
+    if (tab === 'dkp') loadGuildAdminDkp();
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 async function loadGuildAdminMembers() {
     const list = document.getElementById('guildAdminMembersList');
-    if (!list) return;
+    if (!list || !window._myGuild) return;
+
     list.innerHTML = '<div style="text-align:center;padding:16px;color:var(--accent);">Загрузка...</div>';
+
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getGuildInfo', guildId: window._myGuild.id }), redirect: 'follow' });
-        const res = await r.json();
-        if (!res.success) { list.innerHTML = '<div class="empty-state">❌ ' + res.message + '</div>'; return; }
-        const members = res.members;
-        const myRole = window._myGuild.role;
-        const isLeader = myRole === 'leader';
-        const isOfficer = myRole === 'officer';
-        const officersCount = members.filter(m => m.role === 'officer').length;
+        const res = await api('getGuildInfo', { guildId: window._myGuild.id });
+
+        if (!res.success) {
+            list.innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
+            return;
+        }
+
+        const members = res.members || [];
+        if (members.length === 0) {
+            list.innerHTML = '<div class="empty-state">Нет участников</div>';
+            return;
+        }
+
         let html = '';
         for (const m of members) {
-            const roleLabel = m.role === 'leader' ? '👑 Лидер' : m.role === 'officer' ? '⭐ Офицер' : '👤 Участник';
-            const roleClass = m.role;
-            html += '<div class="guild-member-item"><span class="guild-member-role ' + roleClass + '">' + roleLabel + '</span><span style="flex:1;font-weight:600;font-family:var(--font-display);font-size:11px;cursor:pointer;color:var(--text-main);" onclick="viewPlayerCabinet(\'' + escapeForOnclick(m.name) + '\')">' + escapeHtml(m.name) + '</span><span style="font-size:10px;color:var(--text-dim);">Ур. ' + m.level + '</span><span style="font-size:10px;color:var(--accent);font-weight:700;">' + m.bm.toLocaleString('ru-RU') + ' БМ</span>';
-            if (m.name !== currentUser) {
-                html += '<div class="member-actions">';
-                if (isLeader) {
-                    if (m.role === 'member' && officersCount < 4) html += '<button class="member-action-btn" onclick="promoteToOfficer(\'' + escapeForOnclick(window._myGuild.id) + '\', \'' + escapeForOnclick(m.name) + '\')" title="Назначить офицером">⭐</button>';
-                    if (m.role === 'officer') html += '<button class="member-action-btn danger" onclick="demoteFromOfficer(\'' + escapeForOnclick(window._myGuild.id) + '\', \'' + escapeForOnclick(m.name) + '\')" title="Снять офицера">📉</button>';
-                    html += '<button class="member-action-btn" onclick="transferLeadership(\'' + escapeForOnclick(window._myGuild.id) + '\', \'' + escapeForOnclick(m.name) + '\')" title="Передать лидерство">👑</button>';
+            const roleIcon = m.role === 'leader' ? '👑' : m.role === 'officer' ? '⭐' : '👤';
+            const isLeader = window._myGuild.role === 'leader';
+
+            html += '<div class="guild-member-card">';
+            html += '<div class="guild-member-info">';
+            html += '<span class="guild-member-role">' + roleIcon + '</span>';
+            html += '<span class="guild-member-nick">' + escapeHtml(m.nickname) + '</span>';
+            html += '</div>';
+
+            if (isLeader && m.role !== 'leader') {
+                html += '<div class="guild-member-actions">';
+                if (m.role !== 'officer') {
+                    html += '<button class="btn-edit" onclick="promoteMember(\'' + escapeForOnclick(m.nickname) + '\')">⭐</button>';
                 }
-                if ((isLeader || (isOfficer && m.role === 'member')) && m.role !== 'leader') html += '<button class="member-action-btn danger" onclick="kickFromGuild(\'' + escapeForOnclick(window._myGuild.id) + '\', \'' + escapeForOnclick(m.name) + '\')" title="Исключить">🚫</button>';
+                html += '<button class="btn-remove" onclick="kickMember(\'' + escapeForOnclick(m.nickname) + '\')">✕</button>';
                 html += '</div>';
             }
+
             html += '</div>';
         }
-        list.innerHTML = html || '<div class="empty-state">Нет участников</div>';
-    } catch (e) { list.innerHTML = '<div class="empty-state">❌ Ошибка</div>'; }
+
+        list.innerHTML = html;
+    } catch (e) {
+        list.innerHTML = '<div class="empty-state">❌ Ошибка</div>';
+    }
+}
+
+async function promoteMember(nickname) {
+    if (!confirm('Повысить ' + nickname + ' до офицера?')) return;
+
+    try {
+        const res = await api('promoteGuildMember', {
+            guildId: window._myGuild.id,
+            nickname: nickname,
+            requester: currentUser
+        });
+
+        if (res.success) {
+            alert('✅ ' + (res.message || 'Повышен'));
+            loadGuildAdminMembers();
+        } else {
+            alert('❌ ' + (res.message || 'Ошибка'));
+        }
+    } catch (e) {
+        alert('❌ Ошибка');
+    }
+}
+
+async function kickMember(nickname) {
+    if (!confirm('Исключить ' + nickname + ' из гильдии?')) return;
+
+    try {
+        const res = await api('kickGuildMember', {
+            guildId: window._myGuild.id,
+            nickname: nickname,
+            requester: currentUser
+        });
+
+        if (res.success) {
+            alert('✅ ' + (res.message || 'Исключён'));
+            loadGuildAdminMembers();
+        } else {
+            alert('❌ ' + (res.message || 'Ошибка'));
+        }
+    } catch (e) {
+        alert('❌ Ошибка');
+    }
 }
 
 async function loadGuildAdminSettings() {
-    const panel = document.getElementById('guildAdminSettingsPanel');
-    if (!panel) return;
+    const panel = document.getElementById('guildAdminSettingsContent');
+    if (!panel || !window._myGuild) return;
+
     panel.innerHTML = '<div style="text-align:center;padding:16px;color:var(--accent);">Загрузка...</div>';
+
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getGuildSettings', guildId: window._myGuild.id }), redirect: 'follow' });
-        const res = await r.json();
-        if (!res.success) { panel.innerHTML = '<div class="empty-state">❌ ' + res.message + '</div>'; return; }
-        const s = res.settings;
-        let html = '<div class="guild-settings-grid">';
-        html += '<div class="guild-setting-item"><div class="guild-setting-label">💰 DKP за мероприятие</div><div class="guild-setting-value"><input type="number" id="guildSettingDkpPerEvent" value="' + s.dkp_per_event + '" min="0"></div></div>';
-        html += '<div class="guild-setting-item"><div class="guild-setting-label">📉 Отрицательный баланс</div><div class="guild-setting-value"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="guildSettingAllowNegative"' + (s.allow_negative_balance ? ' checked' : '') + '><span style="font-size:11px;">Разрешить</span></label></div></div>';
-        html += '<div class="guild-setting-item"><div class="guild-setting-label">🔨 Аукционы гильдии</div><div class="guild-setting-value"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="guildSettingAuctionEnabled"' + (s.guild_auction_enabled ? ' checked' : '') + '><span style="font-size:11px;">Включить</span></label></div></div>';
-        html += '<div class="guild-setting-item"><div class="guild-setting-label">📸 Требовать скриншоты</div><div class="guild-setting-value"><label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="guildSettingRequireScreenshots"' + (s.require_screenshots ? ' checked' : '') + '><span style="font-size:11px;">Требовать</span></label></div></div>';
-        html += '</div>';
-        html += '<button class="submit-btn" style="margin-top:12px;" onclick="saveGuildAdminSettings()">💾 Сохранить</button>';
+        const res = await api('getGuildSettings', { guildId: window._myGuild.id });
+        const settings = res.settings || {};
+
+        let html = '<div class="settings-form">';
+        html += '<div class="form-group"><label>DKP за событие</label>';
+        html += '<input type="number" id="guildSettingDkpPerEvent" value="' + (settings.dkp_per_event || 100) + '"></div>';
+
+        html += '<div class="form-group"><label><input type="checkbox" id="guildSettingAllowNegative"' + (settings.allow_negative_balance ? ' checked' : '') + '> Разрешить отрицательный баланс</label></div>';
+
+        html += '<div class="form-group"><label><input type="checkbox" id="guildSettingAuctionEnabled"' + (settings.guild_auction_enabled ? ' checked' : '') + '> Гильдейские аукционы</label></div>';
+
+        html += '<div class="form-group"><label><input type="checkbox" id="guildSettingRequireScreenshots"' + (settings.require_screenshots ? ' checked' : '') + '> Требовать скриншоты</label></div>';
+
+        html += '<button class="btn-primary" onclick="saveGuildAdminSettings()">💾 Сохранить</button>';
         html += '<div id="guildAdminSettingsMessage" class="message"></div>';
+        html += '</div>';
+
         panel.innerHTML = html;
-    } catch (e) { panel.innerHTML = '<div class="empty-state">❌ Ошибка</div>'; }
+    } catch (e) {
+        panel.innerHTML = '<div class="empty-state">❌ Ошибка</div>';
+    }
 }
 
 async function saveGuildAdminSettings() {
     const msg = document.getElementById('guildAdminSettingsMessage');
-    if (msg) { msg.className = 'message'; msg.innerText = '⏳ Сохранение...'; msg.style.display = 'block'; }
+
+    if (msg) {
+        msg.className = 'message';
+        msg.innerText = '⏳ Сохранение...';
+        msg.style.display = 'block';
+    }
+
     const settings = {
-        dkp_per_event: Number(document.getElementById('guildSettingDkpPerEvent').value) || 100,
-        allow_negative_balance: document.getElementById('guildSettingAllowNegative').checked,
-        guild_auction_enabled: document.getElementById('guildSettingAuctionEnabled').checked,
-        require_screenshots: document.getElementById('guildSettingRequireScreenshots').checked
+        dkp_per_event: Number(document.getElementById('guildSettingDkpPerEvent')?.value) || 100,
+        allow_negative_balance: document.getElementById('guildSettingAllowNegative')?.checked || false,
+        guild_auction_enabled: document.getElementById('guildSettingAuctionEnabled')?.checked || false,
+        require_screenshots: document.getElementById('guildSettingRequireScreenshots')?.checked || false
     };
+
     try {
-        const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'saveGuildSettings', guildId: window._myGuild.id, requester: currentUser, settings: settings }), redirect: 'follow' });
-        const res = await r.json();
+        const res = await api('saveGuildSettings', {
+            guildId: window._myGuild.id,
+            requester: currentUser,
+            settings: settings
+        });
+
         if (msg) {
-            if (res.success) { msg.className = 'message success'; msg.innerText = '✅ ' + res.message; }
-            else { msg.className = 'message error'; msg.innerText = '❌ ' + res.message; }
+            if (res.success) {
+                msg.className = 'message success';
+                msg.innerText = '✅ ' + (res.message || 'Сохранено');
+            } else {
+                msg.className = 'message error';
+                msg.innerText = '❌ ' + (res.message || 'Ошибка');
+            }
             setTimeout(() => { msg.style.display = 'none'; }, 2000);
         }
-    } catch (e) { if (msg) { msg.className = 'message error'; msg.innerText = '❌ Ошибка'; msg.style.display = 'block'; } }
+    } catch (e) {
+        if (msg) {
+            msg.className = 'message error';
+            msg.innerText = '❌ Ошибка';
+            msg.style.display = 'block';
+        }
+    }
 }
