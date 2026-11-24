@@ -3,7 +3,7 @@
 // ============================================================
 
 const APP_VERSION = '17.20';
-const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbxvElzCTJmhLu7knDxr-zmsusce-Kde_dWkUhgGPP0fQfuCX2EuGferIPgGBGqrJ9IP/exec';
+const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbwZ2np1XdgdFSsZfAN4FfIOAooR8pKchjjgWE3Oug22c6UcmasKIBMAikWrbmBefSa8/exec';
 const SCRIPT_URL = SCRIPT_URL_BASE + '?v=' + APP_VERSION + '&_t=' + Date.now();
 const ADMIN_KEY = 'ADMIN_SECRET_2026';
 const MOD_KEY = 'MOD_SECRET_2026';
